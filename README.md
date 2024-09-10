@@ -7,7 +7,8 @@ Este proyecto es un juego multiplataforma que utiliza varias tecnologías modern
 El proyecto está organizado en varias carpetas principales:
 
 - **`backend/`**: Contiene el código fuente del backend en Spring Boot.
-- **`frontend/`**: Contiene el código fuente del frontend en React y React Native.
+- **`frontend/`**: Contiene el código fuente del frontend en React.
+- **`mobile/`**: Contiene el código fuente mobile en React Native.
 - **`database/`**: Contiene scripts y configuraciones para la base de datos.
 - **`deploy/`**: Contiene configuraciones y scripts para el despliegue en Railway y Vercel.
 
