@@ -3,11 +3,11 @@ version = 1
 
 [build]
   # Comando para compilar tu aplicación
-  command = "cd backend && ./mvnw clean package"
+  command = "cd backend/ && ./mvnw clean package"
 
 [serve]
   # Comando para ejecutar tu aplicación
-  command = "cd backend && ./mvnw spring-boot:run"
+  command = "cd backend/ && ./mvnw spring-boot:run"
 
 # Opcional: puedes establecer el entorno en producción o desarrollo
 [env]
