@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "mode_game")
-public class ModeGame {
+public class GameMode {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

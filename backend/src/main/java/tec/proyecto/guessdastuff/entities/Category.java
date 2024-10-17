@@ -35,6 +35,6 @@ public class Category {
     private String description;
 
     @ManyToMany(mappedBy = "categories") // La relación inversa
-    private List<ModeGame> modeGames = new ArrayList<>();
+    private List<GameMode> GamesMode = new ArrayList<>();
 
 }
