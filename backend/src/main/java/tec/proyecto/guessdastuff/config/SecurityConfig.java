@@ -35,9 +35,9 @@ public class SecurityConfig {
                 .disable())                                                                                     // Disable CSRF for stateless APIs
             .authorizeHttpRequests(authRequest ->
               authRequest
-                .requestMatchers("/auth/**").permitAll()                                            // Allow endpoints for Register and Login
-                .requestMatchers("/api/user/**").hasRole("USER")                               // Allow endpoints only for ROLE_USER
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")                             // Allow endpoints only for ROLE_Admin
+                .requestMatchers("/auth/*").permitAll()                                            // Allow endpoints for Register and Login
+                .requestMatchers("/api/user/*").hasRole("USER")                               // Allow endpoints only for ROLE_USER
+                .requestMatchers("*/api/admin/*").hasRole("ADMIN")                             // Allow endpoints only for ROLE_Admin
                 .anyRequest().authenticated()                                                                   // Protect all other endpoints
                 )
             .sessionManagement(sessionManager->
