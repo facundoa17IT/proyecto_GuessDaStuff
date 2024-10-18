@@ -18,7 +18,6 @@ import tec.proyecto.guessdastuff.services.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "http://localhost:5173/")
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor

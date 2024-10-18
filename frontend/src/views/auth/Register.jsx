@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
 import idle from '../../assets/profile-icon-placeholder.png';
 import { MdDriveFolderUpload } from "react-icons/md";
-
+import axiosInstance from '../../AxiosConfig';
 export const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -33,7 +33,7 @@ export const Register = () => {
     const register = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:2024/auth/register', {
+            const response = await axiosInstance.post('/auth/register', {
                 username,
                 password,
                 email,

@@ -10,14 +10,34 @@ import axiosInstance from '../AxiosConfig';
 const StartGame = () => {
     const testWelcome = async () => {
         try {
-            await axios.get('http://localhost:2024/api/welcome', {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem('token')}`,  // Add the token to the Authorization header
-                },
-              });
-            console.log('Welcome User!');
+            await axiosInstance.get('/api/welcome');
+            alert('Bienvenido usuario autenticado!');
+            console.log('Bienvenido usuario autenticado!');
         } catch (error) {
-            console.error('Error!');
+            alert('Error necesitas estar autenticado!');
+            console.error('Error necesitas estar autenticado!');
+        }
+    }
+
+    const testAdmin = async () => {
+        try {
+            await axiosInstance.get('/api/admin');
+            alert('Bienvenido Admin!');
+            console.log('Bienvenido Admin!');
+        } catch (error) {
+            alert('Error necesitas estar autenticado con ROLE_ADMIN!');
+            console.error('Error necesitas estar autenticado con ROLE_ADMIN!');
+        }
+    }
+
+    const testPlayer = async () => {
+        try {
+            await axiosInstance.get('/api/user');
+            alert('Bienvenido Jugador!');
+            console.log('Bienvenido Jugador!');
+        } catch (error) {
+            alert('Error necesitas estar autenticado con ROLE_USER!');
+            console.error('Error necesitas estar autenticado con ROLE_USER!');
         }
     }
 
@@ -25,8 +45,18 @@ const StartGame = () => {
         <div>
             <div className='home-page-header'>
                 <AppLogo />
+
+                {/* Testing */}
+                <div style={{}}>
+                    <h3 style={{ marginBottom: '0' }}>Test de Autenticacion</h3>
+                    <div>
+                        <button onClick={testWelcome}>General</button>
+                        <button onClick={testAdmin}>Admin</button>
+                        <button onClick={testPlayer}>Jugador</button>
+                    </div>
+                </div>
+
                 <LogoutButton />
-                <button onClick={testWelcome}>Enter</button>
             </div>
         </div>
     );

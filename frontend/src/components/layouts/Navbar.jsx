@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
@@ -20,10 +20,6 @@ const Navbar = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
     const { role } = useRole();  // Access the role from context
-
-    useEffect(() => {
-        console.log(role);  // For debugging
-    }, [role]);
 
     if (isMobile) return null;
 
@@ -49,17 +45,17 @@ const Navbar = () => {
                             {role === 'ROLE_USER' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="game-stats-management" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <PiChartBarFill style={{ marginRight: '5px' }} />Estadisticas
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="comunidad" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <FaUsers style={{ marginRight: '5px' }} />Comunidad
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="profile" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <FaUserCircle style={{ marginRight: '5px' }} />Perfil
                                         </Link>
                                     </li>
@@ -69,22 +65,22 @@ const Navbar = () => {
                             {role === 'ROLE_ADMIN' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="admin/game-content-management" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <BsDatabaseFillGear style={{ marginRight: '5px' }} />Contenido
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="admin/user-management" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <FaUserCog style={{ marginRight: '5px' }} />Usuarios
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="admin/game-matches-management" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <BsCollectionPlayFill style={{ marginRight: '5px' }} />Partidas
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="game-stats-management" className="nav-links">
+                                        <Link to="" className="nav-links">
                                             <PiChartBarFill style={{ marginRight: '5px' }} />Estadisticas
                                         </Link>
                                     </li>
