@@ -1,5 +1,7 @@
 package tec.proyecto.guessdastuff.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import tec.proyecto.guessdastuff.auth.JwtAuthenticationFilter;
 
@@ -27,24 +30,30 @@ public class SecurityConfig {
     private final AuthenticationProvider authProvider;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(csrf -> 
-                csrf
-                .disable())                                                                                     // Disable CSRF for stateless APIs
-            .authorizeHttpRequests(authRequest ->
-              authRequest
-                .requestMatchers("/auth/*").permitAll()                                            // Allow endpoints for Register and Login
-                .requestMatchers("/api/user/*").hasRole("USER")                               // Allow endpoints only for ROLE_USER
-                .requestMatchers("*/api/admin/*").hasRole("ADMIN")                             // Allow endpoints only for ROLE_Admin
-                .anyRequest().authenticated()                                                                   // Protect all other endpoints
+
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
+                .cors(cors -> cors // Enable CORS with custom configuration
+                        .configurationSource(request -> {
+                            CorsConfiguration config = new CorsConfiguration();
+                            config.setAllowedOrigins(List.of("http://localhost:5173")); // Set allowed origins
+                            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Set allowed methods
+                            config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Set allowed headers
+                            config.setAllowCredentials(true); // Allow cookies to be included in requests
+                            return config;
+                        }))
+                .authorizeHttpRequests(authRequest -> authRequest
+                        .requestMatchers("/auth/**").permitAll() // Allow endpoints for Register and Login
+                        .requestMatchers("/api/user/**").hasRole("USER") // Allow endpoints only for ROLE_USER
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Allow endpoints only for ROLE_ADMIN
+                        .anyRequest().authenticated() // Protect all other endpoints
                 )
-            .sessionManagement(sessionManager->
-                sessionManager 
-                  .sessionCreationPolicy(SessionCreationPolicy.STATELESS))                                      // No sessions
-            .authenticationProvider(authProvider)                                                               // Custom authentication provider
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)  // Add JWT filter
-            .build();
+                .sessionManagement(
+                        sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
+                )
+                .authenticationProvider(authProvider) // Custom authentication provider
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+                .build();
     }
 }
