@@ -32,6 +32,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+
                 .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
                 .cors(cors -> cors // Enable CORS with custom configuration
                         .configurationSource(request -> {
