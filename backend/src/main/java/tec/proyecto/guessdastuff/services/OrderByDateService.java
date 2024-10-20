@@ -1,4 +1,4 @@
-package tec.proyecto.guessdastuff.services;
+/*package tec.proyecto.guessdastuff.services;
 
 import java.util.Optional;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class OrderByDateService {
     @Autowired
     DateConverter dateConverter;
 
-    /* EL ID PARA EL MODO DE JUEGO SE LO PASO HARCODEADO PORQUE ES EL 1 EN LA BD*/
+    /* EL ID PARA EL MODO DE JUEGO SE LO PASO HARCODEADO PORQUE ES EL 1 EN LA BD
 
     public ResponseEntity<?> createODBIndividual (DtoOrderByDate dtoOrderByDate) throws GameModeException{
 
@@ -178,3 +178,4 @@ public class OrderByDateService {
     }
     
 }
+*/

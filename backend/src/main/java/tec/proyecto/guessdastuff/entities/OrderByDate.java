@@ -3,42 +3,15 @@ package tec.proyecto.guessdastuff.entities;
 import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @Entity
-@Table
-(name = "order_by_date")
-public class OrderByDate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Long idOrderByDate;
-
-    @ManyToOne
-    @JoinColumn(name = "id_modegame", nullable = false)
-    private GameMode gameMode;
-
-    @ManyToOne
-    @JoinColumn(name = "id_category", nullable = false)
-    private Category category;
-    
-    @Column
-    private String event;
-
-    @Column
-    private String infoEvent;
+@Table(name = "games")
+public class OrderByDate extends Game {
 
     @Column
     private LocalDate startDate;
@@ -47,12 +20,17 @@ public class OrderByDate {
     private LocalDate endDate;
 
     @Column
-    private String hint1;
+    String event; 
 
     @Column
-    private String hint2;
+    String infoEvent;
 
-    @Column
-    private String hint3;
-
+    public OrderByDate(Long id, GameMode idGameMode, Category idCategory, String event, String infoEvent, LocalDate startDate, LocalDate endDate, String hint1, String hint2, String hint3) {
+        super(id, idGameMode, idCategory, hint1, hint2, hint3); // Llama al constructor de la clase padre
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.event = event;
+        this.infoEvent = infoEvent;
+    }
+    
 }
