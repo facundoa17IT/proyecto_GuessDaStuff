@@ -1,0 +1,34 @@
+package tec.proyecto.guessdastuff.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import tec.proyecto.guessdastuff.services.*;
+import tec.proyecto.guessdastuff.dtos.*;
+
+@CrossOrigin(origins = "http://localhost:5173/")
+@RequestMapping("/api/user/game")
+@RestController
+public class PlayController {
+    
+    @Autowired
+    PlayService playService;
+
+    // LOAD GAME
+    @PostMapping("/loadGame")
+    public ResponseEntity<DtoLoadGameRS> loadGame(@RequestBody DtoLoadGameRQ dtoLoadGameRq) {
+        try {
+            DtoLoadGameRS response = playService.loadGame(dtoLoadGameRq);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+
+}
