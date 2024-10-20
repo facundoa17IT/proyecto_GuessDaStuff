@@ -9,7 +9,7 @@ import tec.proyecto.guessdastuff.entities.Category;
 public class CategoryConverter {
     
     public Category toEntity(DtoCategory dt){
-        Category category = new Category(null,dt.getName(), dt.getUrlIcon(), dt.getDescription(), null);
+        Category category = new Category(null,dt.getName(), dt.getUrlIcon(), dt.getDescription());
         return category;
     }
 
