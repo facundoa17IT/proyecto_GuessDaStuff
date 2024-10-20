@@ -40,17 +40,17 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+*/
     // ORDER WORD
     @PostMapping("/OWIndividual")
     public ResponseEntity<?> createOWIndividual(@RequestBody DtoOrderWord dtoOrderWord){
         try {
-            return ResponseEntity.ok(gameService.createODBIndividual(dtoOrderWord));
+            return ResponseEntity.ok(gameService.createOWIndividual(dtoOrderWord));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+/* 
     @PostMapping("/OWMasive")
     public ResponseEntity<?> createOWMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
@@ -59,17 +59,17 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+*/
     // GUESS PHRASE
     @PostMapping("/GPIndividual")
     public ResponseEntity<?> createGPIndividual(@RequestBody DtoGuessPhrase dtoGuessPhrase){
         try {
-            return ResponseEntity.ok(gameService.createODBIndividual(dtoGuessPhrase));
+            return ResponseEntity.ok(gameService.createGPIndividual(dtoGuessPhrase));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+/* 
     @PostMapping("/GPMasive")
     public ResponseEntity<?> createGPMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {

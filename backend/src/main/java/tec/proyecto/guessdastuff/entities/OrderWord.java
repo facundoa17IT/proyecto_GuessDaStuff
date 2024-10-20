@@ -9,6 +9,10 @@ import jakarta.persistence.Table;
 public class OrderWord extends Game {
 
     @Column
-    private String Word;
+    private String word;
 
+    public OrderWord(Long id, GameMode idGameMode, Category idCategory, String word, String hint1, String hint2, String hint3) {
+        super(id, idGameMode, idCategory, hint1, hint2, hint3); // Llama al constructor de la clase padre
+        this.word = word;
+    }
 }
