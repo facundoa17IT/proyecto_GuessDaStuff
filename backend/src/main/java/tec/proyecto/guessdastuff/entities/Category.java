@@ -1,13 +1,11 @@
 package tec.proyecto.guessdastuff.entities;
 
-import java.util.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,8 +31,5 @@ public class Category {
 
     @Column
     private String description;
-
-    @ManyToMany(mappedBy = "categories") // La relación inversa
-    private List<GameMode> GamesMode = new ArrayList<>();
 
 }
