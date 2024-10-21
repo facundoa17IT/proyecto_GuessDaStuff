@@ -31,10 +31,10 @@ public class PlayController {
     }
 
     // INIT GAME
-    @PostMapping("/loadGame")
-    public ResponseEntity<DtoLoadGameResponse> initGame(@RequestBody DtoLoadGameRequest dtoLoadGameRequest) {
+    @PostMapping("/initGame")
+    public ResponseEntity<DtoInitGameResponse> initGame(@RequestBody DtoInitGameRequest dtoInitGameRequest) {
         try {
-            DtoLoadGameResponse response = playService.loadGame(dtoLoadGameRequest);
+            DtoInitGameResponse response = playService.initGame(dtoInitGameRequest);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
