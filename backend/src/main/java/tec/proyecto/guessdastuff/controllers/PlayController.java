@@ -21,14 +21,23 @@ public class PlayController {
 
     // LOAD GAME
     @PostMapping("/loadGame")
-    public ResponseEntity<DtoLoadGameRS> loadGame(@RequestBody DtoLoadGameRQ dtoLoadGameRq) {
+    public ResponseEntity<DtoLoadGameResponse> loadGame(@RequestBody DtoLoadGameRequest dtoLoadGameRequest) {
         try {
-            DtoLoadGameRS response = playService.loadGame(dtoLoadGameRq);
+            DtoLoadGameResponse response = playService.loadGame(dtoLoadGameRequest);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
-
+    // INIT GAME
+    @PostMapping("/loadGame")
+    public ResponseEntity<DtoLoadGameResponse> initGame(@RequestBody DtoLoadGameRequest dtoLoadGameRequest) {
+        try {
+            DtoLoadGameResponse response = playService.loadGame(dtoLoadGameRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 }

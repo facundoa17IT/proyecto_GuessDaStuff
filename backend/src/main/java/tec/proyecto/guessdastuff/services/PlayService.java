@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 
 import tec.proyecto.guessdastuff.dtos.*;
 import tec.proyecto.guessdastuff.repositories.PlayRepository;
-import java.sql.Array;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +16,8 @@ public class PlayService {
     @Autowired
     private PlayRepository playRepository;
 
-    public DtoLoadGameRS loadGame(DtoLoadGameRQ dtoLoadGameRq) {
-        List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRq.getCategories());
+    public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
+        List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
         
         Map<String, List<String>> categoriesMap = new HashMap<>();
 
@@ -31,6 +29,6 @@ public class PlayService {
             categoriesMap.put(category, gameModes);
         }
 
-        return new DtoLoadGameRS(categoriesMap);
+        return new DtoLoadGameResponse(categoriesMap);
     }
 }
