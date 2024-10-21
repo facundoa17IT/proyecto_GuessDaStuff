@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "bc289c1c-15a3-4667-a8dc-7605a0653e46",
+		"_postman_id": "0c420d44-c20f-4a25-9d14-f0516242fb0a",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37753331"
+		"_exporter_id": "34327432"
 	},
 	"item": [
 		{
@@ -65,7 +65,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"matt122133\",\r\n    \"email\" : \"matutambasco@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"role\" : 0\r\n}",
+					"raw": "{\r\n    \"username\" : \"user\",\r\n    \"email\" : \"user@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"role\" : 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -105,7 +105,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"matt122133\",\r\n    \"password\" : \"1234\"\r\n}",
+					"raw": "{\r\n    \"username\" : \"user\",\r\n    \"password\" : \"1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -120,6 +120,276 @@
 					"path": [
 						"auth",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddCategory",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"123 wos\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"urlIcon\": \"http:AVIONES.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/category/api/admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"category",
+						"api",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "loadGame",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categories\": [\"1\",\"2\",\"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/user/game/loadGame",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"user",
+						"game",
+						"loadGame"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderByDate-Individual",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_Category\": 2,\r\n    \"event\": \"PRUEBA 2\",\r\n    \"infoEvent\": \"AVIONES GUERREROS\",\r\n    \"startDate\": {\r\n        \"anio\": 2025,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2025,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/admin/ODBIndividual",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"admin",
+						"ODBIndividual"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderByDate-Masive",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idCategory",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Usuario/Desktop/Test-Excel.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/admin/ODBMasive",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"admin",
+						"ODBMasive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderWord-Individual",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "••••••"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"EjemploPalabra\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/admin/OWIndividual",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"admin",
+						"OWIndividual"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GuessPhrase-Individual",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "••••••"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:2024/api/admin/GPIndividual",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "2024",
+					"path": [
+						"api",
+						"admin",
+						"GPIndividual"
 					]
 				}
 			},
