@@ -1,6 +1,7 @@
 package tec.proyecto.guessdastuff.services;
 
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,15 @@ public class CategoryService {
         return ResponseEntity.ok("Categoria con id " + category.getId() + " creada correctamente"); 
         
     }
+
+    public List<Category> getCategory() throws CategoryException {
+        List<Category> categoryResponse = categoryRepository.findAll();
+        if (categoryResponse == null || categoryResponse.isEmpty()) {
+            throw new CategoryException("No existen categorías con el filtro proporcionado.");
+        }
+        return categoryResponse;
+    }
+    
 
 
 }
