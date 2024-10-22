@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import tec.proyecto.guessdastuff.enums.ERole;
 import tec.proyecto.guessdastuff.enums.EStatus;
+import tec.proyecto.guessdastuff.exceptions.UserException;
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.dtos.DtoAuthResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoginRequest;
@@ -36,7 +37,7 @@ public class AuthService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    public DtoAuthResponse login(DtoLoginRequest request) {
+    public DtoAuthResponse login(DtoLoginRequest request) throws UserException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails userDetail = userRepository.findByUsername(request.getUsername()).orElseThrow();
         
@@ -48,6 +49,11 @@ public class AuthService {
         //Busco al usuario logueado para actualizar su estado a ONLINE
         Optional<User> user = userRepository.findByUsername(request.getUsername());
         User userEnt = user.get();
+
+        if (userEnt.getStatus().equals(EStatus.BLOCKED) || userEnt.getStatus().equals(EStatus.DELETED)) {
+            throw new  UserException("El usuario " + userEnt.getUsername() + " se encuentra bloqueado o eliminado. Por favor contactese con el administrador.");
+        }
+
         userEnt.setStatus(EStatus.ONLINE);
         userRepository.save(userEnt);
 

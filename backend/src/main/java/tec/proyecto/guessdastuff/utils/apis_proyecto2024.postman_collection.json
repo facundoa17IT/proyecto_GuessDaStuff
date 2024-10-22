@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "dd4b984f-36a6-4431-83ee-1586ca7e8cba",
+		"_postman_id": "2c4bf825-555c-4304-9f97-ef1b567339c3",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26511696"
@@ -547,6 +547,125 @@
 							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"coso\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"coso2\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"coso3\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"coso4\",\n        \"urlIcon\": \"http:AVIONES4.com\",\n        \"description\": \"AVIONES DE METAL4\"\n    }\n]"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "EditUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"urlPerfil\": \"admin_PERFIL_URL\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\":{\r\n        \"anio\":1998,\r\n        \"mes\":2,\r\n        \"dia\":5\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/editUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"editUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:2024/api/admin/listUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserByNickname",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/sas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"sas"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

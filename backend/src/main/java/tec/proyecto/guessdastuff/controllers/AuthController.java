@@ -12,6 +12,7 @@ import tec.proyecto.guessdastuff.dtos.DtoAuthResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoginRequest;
 import tec.proyecto.guessdastuff.dtos.DtoRegisterRequest;
 import tec.proyecto.guessdastuff.entities.User;
+import tec.proyecto.guessdastuff.exceptions.UserException;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
 import tec.proyecto.guessdastuff.services.AuthService;
 
@@ -26,29 +27,35 @@ public class AuthController {
     private final UserRepository userRepository;
 
     @PostMapping("login")
-    public ResponseEntity<DtoAuthResponse> login(@RequestBody DtoLoginRequest request) {
-        Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
+    public ResponseEntity<?> login(@RequestBody DtoLoginRequest request) throws UserException {
+        try {
+            Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
 
-        if (!userOptional.isPresent()) {
-            DtoAuthResponse errorResponse = DtoAuthResponse.builder()
-                    .message("Usuario incorrecto!")
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            if (!userOptional.isPresent()) {
+                DtoAuthResponse errorResponse = DtoAuthResponse.builder()
+                        .message("Usuario incorrecto!")
+                        .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+    
+            User user = userOptional.get();
+            boolean isPasswordValid = authService.checkPassword(request.getPassword(), user.getPassword());
+    
+            if (!isPasswordValid) {
+                DtoAuthResponse errorResponse = DtoAuthResponse.builder()
+                        .message("Contraseña incorrecta!")
+                        .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+    
+            // Generate and return authentication token
+            DtoAuthResponse response = authService.login(request);
+            return ResponseEntity.ok(response); 
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
-        User user = userOptional.get();
-        boolean isPasswordValid = authService.checkPassword(request.getPassword(), user.getPassword());
-
-        if (!isPasswordValid) {
-            DtoAuthResponse errorResponse = DtoAuthResponse.builder()
-                    .message("Contraseña incorrecta!")
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
-
-        // Generate and return authentication token
-        DtoAuthResponse response = authService.login(request);
-        return ResponseEntity.ok(response);
+     
     }
 
     @PostMapping("register")

@@ -12,6 +12,7 @@ import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
 import tec.proyecto.guessdastuff.dtos.DtoUser;
 import tec.proyecto.guessdastuff.entities.User;
+import tec.proyecto.guessdastuff.enums.EStatus;
 import tec.proyecto.guessdastuff.exceptions.UserException;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
 
@@ -33,8 +34,8 @@ public class UserService {
     public ResponseEntity<?> findUserByNickname(String username) throws UserException{
 
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if(userOpt.isPresent()){
-            throw new UserException("El usuario " + username + "no existe!");
+        if(!userOpt.isPresent()){
+            throw new UserException("El usuario " + username + " no existe!");
         }
 
         DtoUser dtoUser = userConverter.toDto(userOpt.get());
@@ -58,8 +59,8 @@ public class UserService {
     public ResponseEntity<?> editUser(DtoUser dtoEditUser) throws UserException{
 
         Optional<User> userOpt = userRepository.findByUsername(dtoEditUser.getUsername());
-        if(userOpt.isPresent()){
-            throw new UserException("El usuario " + dtoEditUser.getUsername() + "no existe!");
+        if(!userOpt.isPresent()){
+            throw new UserException("El usuario " + dtoEditUser.getUsername() + " no existe!");
         }
 
         User userEnt = userOpt.get();
@@ -79,4 +80,17 @@ public class UserService {
 
     }
     
+    public ResponseEntity<?> deleteUser(String username) throws UserException{
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if(!userOpt.isPresent()){
+            throw new UserException("El usuario " + username + " no existe!");
+        }
+
+        User user = userOpt.get();
+        user.setStatus(EStatus.DELETED);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("El usuario " + username + " ha sido eliminado de forma exitosa!");
+    }
+
 }

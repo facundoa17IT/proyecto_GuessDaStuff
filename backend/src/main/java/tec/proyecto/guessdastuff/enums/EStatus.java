@@ -5,5 +5,6 @@ public enum EStatus {
     OFFLINE,
     BLOCKED,
     PLAYING,
-    REGISTERED
+    REGISTERED,
+    DELETED
 }
