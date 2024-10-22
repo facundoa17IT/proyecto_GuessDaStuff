@@ -1,11 +1,555 @@
 {
 	"info": {
-		"_postman_id": "b07375d1-3555-4bc4-b191-2c0872317e8d",
+		"_postman_id": "dd4b984f-36a6-4431-83ee-1586ca7e8cba",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37753331"
+		"_exporter_id": "26511696"
 	},
 	"item": [
+		{
+			"name": "AddTitle",
+			"item": [
+				{
+					"name": "OrderByDate-Individual",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_Category\": 1,\r\n    \"event\": \"PRUEBA 3\",\r\n    \"infoEvent\": \"AVIONES GUERREROS  3\",\r\n    \"startDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"ODBIndividual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OrderByDate-Masive",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idCategory",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Test-Excel.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/ODBMasive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"ODBMasive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OrderWord-Individual",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "••••••"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"EjemploPalabra\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/OWIndividual",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"OWIndividual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OrderWord-Masive",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idCategory",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/EXCEL-OW.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/OWMasive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"OWMasive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GuessPhrase-Individual",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "••••••"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/GPIndividual",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"GPIndividual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GuessPhrase-Masive",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idCategory",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/EXCEL-GP.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:2024/api/admin/GPMasive",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"api",
+								"admin",
+								"GPMasive"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "AddCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"123 wos\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"urlIcon\": \"http:AVIONES.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/category/api/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"category",
+								"api",
+								"admin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "AddCategory",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"coso4\",\r\n    \"description\": \"AVIONES DE METAL4\",\r\n    \"urlIcon\": \"http:AVIONES4.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/admin",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"admin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 04:00:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"Categoria con id 4 creada correctamente\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "GetCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"123 wos\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"urlIcon\": \"http:AVIONES.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:2024/category/api/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "2024",
+							"path": [
+								"category",
+								"api",
+								"admin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetCategory All",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "filter",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 04:00:20 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"coso\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"coso2\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"coso3\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"coso4\",\n        \"urlIcon\": \"http:AVIONES4.com\",\n        \"description\": \"AVIONES DE METAL4\"\n    }\n]"
+						}
+					]
+				}
+			]
+		},
 		{
 			"name": "welcome",
 			"protocolProfileBehavior": {
@@ -50,15 +594,6 @@
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{BASE_URL}}/api/welcome",
 							"host": [
@@ -485,275 +1020,6 @@
 			]
 		},
 		{
-			"name": "AddCategory",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"123 wos\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"urlIcon\": \"http:AVIONES.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:2024/category/api/admin",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "2024",
-					"path": [
-						"category",
-						"api",
-						"admin"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "AddCategory",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"coso4\",\r\n    \"description\": \"AVIONES DE METAL4\",\r\n    \"urlIcon\": \"http:AVIONES4.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"category",
-								"api",
-								"admin"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Vary",
-							"value": "Origin"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Method"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Headers"
-						},
-						{
-							"key": "X-Content-Type-Options",
-							"value": "nosniff"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "0"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, no-store, max-age=0, must-revalidate"
-						},
-						{
-							"key": "Pragma",
-							"value": "no-cache"
-						},
-						{
-							"key": "Expires",
-							"value": "0"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "DENY"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Date",
-							"value": "Tue, 22 Oct 2024 04:00:09 GMT"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=60"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"headers\": {},\n    \"body\": \"Categoria con id 4 creada correctamente\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
-				}
-			]
-		},
-		{
-			"name": "GetCategory",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"123 wos\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"urlIcon\": \"http:AVIONES.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:2024/category/api/admin",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "2024",
-					"path": [
-						"category",
-						"api",
-						"admin"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "GetCategory All",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "filter",
-								"value": "",
-								"type": "text",
-								"disabled": true
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{BASE_URL}}/category/api/user",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"category",
-								"api",
-								"user"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Vary",
-							"value": "Origin"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Method"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Headers"
-						},
-						{
-							"key": "X-Content-Type-Options",
-							"value": "nosniff"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "0"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, no-store, max-age=0, must-revalidate"
-						},
-						{
-							"key": "Pragma",
-							"value": "no-cache"
-						},
-						{
-							"key": "Expires",
-							"value": "0"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "DENY"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Date",
-							"value": "Tue, 22 Oct 2024 04:00:20 GMT"
-						},
-						{
-							"key": "Keep-Alive",
-							"value": "timeout=60"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						}
-					],
-					"cookie": [],
-					"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"coso\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"coso2\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"coso3\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"coso4\",\n        \"urlIcon\": \"http:AVIONES4.com\",\n        \"description\": \"AVIONES DE METAL4\"\n    }\n]"
-				}
-			]
-		},
-		{
 			"name": "loadGame",
 			"request": {
 				"auth": {
@@ -831,188 +1097,6 @@
 						"user",
 						"game",
 						"initGame"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "OrderByDate-Individual",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id_Category\": 1,\r\n    \"event\": \"PRUEBA 3\",\r\n    \"infoEvent\": \"AVIONES GUERREROS  3\",\r\n    \"startDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"admin",
-						"ODBIndividual"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "OrderByDate-Masive",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "idCategory",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Usuario/Desktop/Test-Excel.xlsx"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:2024/api/admin/ODBMasive",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "2024",
-					"path": [
-						"api",
-						"admin",
-						"ODBMasive"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "OrderWord-Individual",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "••••••"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"EjemploPalabra\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:2024/api/admin/OWIndividual",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "2024",
-					"path": [
-						"api",
-						"admin",
-						"OWIndividual"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GuessPhrase-Individual",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "••••••"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:2024/api/admin/GPIndividual",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "2024",
-					"path": [
-						"api",
-						"admin",
-						"GPIndividual"
 					]
 				}
 			},
