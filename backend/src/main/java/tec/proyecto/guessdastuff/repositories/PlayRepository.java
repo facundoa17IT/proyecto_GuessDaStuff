@@ -1,5 +1,6 @@
 package tec.proyecto.guessdastuff.repositories;
 
+import org.antlr.v4.runtime.atn.SemanticContext.AND;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -31,5 +32,39 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
     List<Object[]> findGamesByCategoriesAndModes(Integer cat1, String mod1, Integer cat2, String mod2, Integer cat3, String mod3);
 
 
-    //crear 3 query findOBD(integer cat) devolver la info
+    // Consulta para obtener una tupla aleatoria entre las que coinciden
+    @Query(value = "WITH selected_events AS ( " +
+                   "SELECT * FROM games WHERE id_game_mode = 'OBD' AND id_category = :idCategory " +
+                   "AND start_date IS DISTINCT FROM end_date " +
+                   "ORDER BY RANDOM() LIMIT 1) " +
+                   "SELECT * FROM games " +
+                   "WHERE id_game_mode = 'OBD' AND id_category = :idCategory " +
+                   "AND start_date IS DISTINCT FROM end_date " +
+                   "AND NOT EXISTS ( " +
+                   "SELECT 1 FROM selected_events se WHERE " +
+                   "games.start_date BETWEEN se.start_date AND se.end_date OR " +
+                   "games.end_date BETWEEN se.start_date AND se.end_date OR " +
+                   "(games.start_date <= se.start_date AND games.end_date >= se.end_date)) " +
+                   "ORDER BY RANDOM() LIMIT 3", 
+           nativeQuery = true)
+           List<Object[]> findOBD(Integer idCategory);
+
+        @Query(value = "SELECT * " +
+                "FROM games " +
+                "WHERE id_game_mode = 'OW' " +
+                "AND id_category = :idCategory " +
+                "ORDER BY RANDOM() " +
+                "LIMIT 1;", 
+        nativeQuery = true)
+        List<Object[]> findOW(Integer idCategory);
+
+        @Query(value = "SELECT * " +
+                "FROM games " +
+                "WHERE id_game_mode = 'GP' " +
+                "AND id_category = :idCategory " +
+                "ORDER BY RANDOM() " +
+                "LIMIT 1;", 
+        nativeQuery = true)
+        List<Object[]> findGP(Integer idCategory);
+
 }
