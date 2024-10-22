@@ -31,7 +31,7 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-/* 
+
     @PostMapping("/ODBMasive")
     public ResponseEntity<?> createOBDMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
@@ -40,7 +40,7 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-*/
+
     // ORDER WORD
     @PostMapping("/OWIndividual")
     public ResponseEntity<?> createOWIndividual(@RequestBody DtoOrderWord dtoOrderWord){
@@ -50,16 +50,16 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-/* 
+ 
     @PostMapping("/OWMasive")
     public ResponseEntity<?> createOWMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
-            return ResponseEntity.ok(gameService.createOBDMasive(idCategory, file));
+            return ResponseEntity.ok(gameService.createOWMasive(idCategory, file));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-*/
+
     // GUESS PHRASE
     @PostMapping("/GPIndividual")
     public ResponseEntity<?> createGPIndividual(@RequestBody DtoGuessPhrase dtoGuessPhrase){
@@ -69,14 +69,14 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-/* 
+
     @PostMapping("/GPMasive")
     public ResponseEntity<?> createGPMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
-            return ResponseEntity.ok(gameService.createOBDMasive(idCategory, file));
+            return ResponseEntity.ok(gameService.createGPMasive(idCategory, file));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-      */
+      
 }

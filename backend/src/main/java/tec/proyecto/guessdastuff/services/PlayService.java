@@ -59,14 +59,17 @@ public class PlayService {
 
  
      */
-   
+    
+    /* 
         List<Object[]> result = playRepository.findGamesByCategoriesAndModes(
             dtoInitGameRequest.getCat1(), dtoInitGameRequest.getMod1(),
             dtoInitGameRequest.getCat2(), dtoInitGameRequest.getMod2(),
             dtoInitGameRequest.getCat3(), dtoInitGameRequest.getMod3()
         );
+        
+    
 
-        Map<String, DtoInitGameResponse.GameModeInfo> gameModesMap = new HashMap<>();
+      
 
         for (Object[] row : result) {
             String gameId = String.valueOf(row[0]); // Asegúrate de convertir correctamente
@@ -89,6 +92,9 @@ public class PlayService {
             }
             gameModesMap.get(gameMode).getInfoGame().add(gameInfo);
         }
+        */
+
+        Map<String, DtoInitGameResponse.GameModeInfo> gameModesMap = new HashMap<>();
 
         return new DtoInitGameResponse(gameModesMap);
     }
