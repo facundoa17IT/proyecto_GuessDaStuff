@@ -45,7 +45,7 @@ public class SecurityConfig {
                         }))
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers("/auth/**").permitAll() // Allow endpoints for Register and Login
-                        .requestMatchers("/api/user/**").hasRole("USER") // Allow endpoints only for ROLE_USER
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // Allow endpoints only for ROLE_USER AND ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Allow endpoints only for ROLE_ADMIN
                         .anyRequest().authenticated() // Protect all other endpoints
                 )

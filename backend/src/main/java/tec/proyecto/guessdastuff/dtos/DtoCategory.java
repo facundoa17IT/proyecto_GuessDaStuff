@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 public class DtoCategory {
     
     private String name;
+
     private String description;
+
     private String urlIcon;
 
+    private boolean active;
 }

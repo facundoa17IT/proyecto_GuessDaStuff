@@ -32,4 +32,7 @@ public class Category {
     @Column
     private String description;
 
+    @Column
+    private boolean active;
+
 }

@@ -9,8 +9,13 @@ import tec.proyecto.guessdastuff.entities.Category;
 public class CategoryConverter {
     
     public Category toEntity(DtoCategory dt){
-        Category category = new Category(null,dt.getName(), dt.getUrlIcon(), dt.getDescription());
+        Category category = new Category(null,dt.getName(), dt.getUrlIcon(), dt.getDescription(), dt.isActive());
         return category;
+    }
+
+    public DtoCategory toDto(Category category){
+        DtoCategory dtoCategory = new DtoCategory(category.getName(), category.getDescription(), category.getUrlIcon(), category.isActive());
+        return dtoCategory;
     }
 
 }
