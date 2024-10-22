@@ -1,5 +1,6 @@
 package tec.proyecto.guessdastuff.entities;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import tec.proyecto.guessdastuff.enums.ERole;
-
+import tec.proyecto.guessdastuff.enums.EStatus;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -31,15 +32,35 @@ public class User implements UserDetails{
     @Column(name = "username")
     private String username;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "urlPerfil")
+    private String urlPerfil;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "birthday")
+    private LocalDate birthday;
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private ERole role;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EStatus status;
+
+    @Column(name = "atCreate")
+    private LocalDate atCreate;
+
+    @Column(name = "atUpdate")
+    private LocalDate atUpdate;
+
     
     // UserDetails overrides
 
