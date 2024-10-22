@@ -3,6 +3,7 @@ package tec.proyecto.guessdastuff.dtos;
 import java.util.Map;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,13 +19,13 @@ public class DtoInitGameResponse {
     @Data
     public static class GameModeInfo {
         private String name;
-        private String category;
         private List<GameInfo> infoGame;
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
+    @Builder
     public static class GameInfo {
         private String id;
         private String idModeGame;

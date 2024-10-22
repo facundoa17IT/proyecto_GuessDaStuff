@@ -4,24 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class DtoInitGameRequest {
-
+    
     private String userId; // ID del usuario
-
-    private parCatMod parCatMod1;  
-    private parCatMod parCatMod2;  
-    private parCatMod parCatMod3;   
+    private List<ParCatMod> parCatMod; // Lista de ParCatMod
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Data
-    public static class  parCatMod {
+    public static class ParCatMod {
         private Integer cat;  
         private String mod;   
     }
-    
 }
-
