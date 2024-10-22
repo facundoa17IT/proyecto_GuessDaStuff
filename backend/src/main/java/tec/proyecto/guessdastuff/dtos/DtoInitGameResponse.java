@@ -37,5 +37,9 @@ public class DtoInitGameResponse {
         private String startDate;
         private String endDate;
         private String infoEvent;
+        private String word;
+        private String correct_word;
+        private String phrase;
+
     }
 }
