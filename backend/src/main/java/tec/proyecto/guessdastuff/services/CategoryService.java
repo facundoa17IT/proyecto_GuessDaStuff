@@ -32,13 +32,13 @@ public class CategoryService {
         return ResponseEntity.ok("Categoria con id " + category.getId() + " creada correctamente"); 
     }
 
-    public ResponseEntity<?> getCategoryByName(String name) throws CategoryException{
+    public DtoCategory getCategoryByName(String name) throws CategoryException{
         Optional<Category> categoryOpt = categoryRepository.findByName(name);
         if (!categoryOpt.isPresent()){
             throw new CategoryException("No existe una categoria con nombre " + name);
         }
         DtoCategory  dtoCategory = categoryConverter.toDto(categoryOpt.get());
-        return ResponseEntity.ok(dtoCategory);
+        return dtoCategory;
     }
 
     public List<Category> getCategory() throws CategoryException {
@@ -49,12 +49,12 @@ public class CategoryService {
         return categoryResponse;
     }
 
-    public ResponseEntity<?> getActiveCategories() throws CategoryException{
+    public List<Category> getActiveCategories() throws CategoryException{
         List<Category> categoriesActives = categoryRepository.findAll().stream().filter(Category:: isActive).toList();
         if (categoriesActives.isEmpty()) {
             throw new CategoryException("No hay categorias activas"); 
         }
-        return ResponseEntity.ok(categoriesActives);
+        return categoriesActives;
     }
 
     public ResponseEntity<?> editCategory(DtoCategory dtoCategory) throws CategoryException{

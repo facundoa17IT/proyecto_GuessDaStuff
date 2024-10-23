@@ -31,7 +31,7 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<?> findUserByNickname(String username) throws UserException{
+    public DtoUser findUserByNickname(String username) throws UserException{
 
         Optional<User> userOpt = userRepository.findByUsername(username);
         if(!userOpt.isPresent()){
@@ -40,10 +40,10 @@ public class UserService {
 
         DtoUser dtoUser = userConverter.toDto(userOpt.get());
 
-        return ResponseEntity.ok(dtoUser);
+        return dtoUser;
     }
 
-    public ResponseEntity<?> listUsers(){
+    public List<DtoUser> listUsers(){
 
         List<User> listUsers = userRepository.findAll();
         List<DtoUser> dtoUsers = new ArrayList<>();
@@ -52,7 +52,7 @@ public class UserService {
             dtoUsers.add(userConverter.toDto(user));
         }
 
-        return ResponseEntity.ok(dtoUsers);
+        return dtoUsers;
 
     }
 
