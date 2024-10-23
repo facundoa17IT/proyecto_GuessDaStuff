@@ -10,6 +10,36 @@
 			"name": "AddTitle",
 			"item": [
 				{
+					"name": "List Titles of Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/listTitles/3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"listTitles",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "OrderByDate-Individual",
 					"request": {
 						"auth": {
@@ -117,7 +147,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"EjemploPalabra\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+							"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"POLOLO\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -666,14 +696,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/sas",
+							"raw": "{{BASE_URL}}/api/admin/admin",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
 								"admin",
-								"sas"
+								"admin"
 							]
 						}
 					},
@@ -990,7 +1020,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"user\",\r\n    \"password\" : \"1234\"\r\n}",
+					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1211,7 +1241,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"categories\": [\"1\",\"2\",\"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+					"raw": "{\n    \"categories\": [\"3\",\"4\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1250,7 +1280,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        },\r\n        {\r\n            \"cat\": 4,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OW\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        },\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"OW\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

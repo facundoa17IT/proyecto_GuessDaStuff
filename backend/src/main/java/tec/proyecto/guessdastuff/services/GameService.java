@@ -4,8 +4,11 @@ import java.util.Optional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.HashMap;
 import java.time.ZoneId;
 
 import org.apache.poi.ss.usermodel.*;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
+import tec.proyecto.guessdastuff.dtos.DtoListTitles;
 import tec.proyecto.guessdastuff.dtos.DtoOrderByDate;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
 import tec.proyecto.guessdastuff.entities.Category;
@@ -44,6 +48,27 @@ public class GameService {
 
     @Autowired
     DateConverter dateConverter;
+
+    public DtoListTitles listTitlesOfCategory(Long idCategory) throws GameModeException {
+        List<Object[]> result = gameRepository.listTitlesOfCategory(idCategory);
+    
+        if (result.isEmpty()) {
+            throw new GameModeException("Para la categoria ingresada no existen titulos");
+        }
+
+        // Se utiliza Map<String, List<String>> para almacenar varios títulos por cada modo de juego
+        Map<String, List<String>> titlesMap = new HashMap<>();
+
+        for (Object[] row : result) {
+            String gameMode = (String) row[0];
+            String title = (String) row[1];
+        
+            // computeIfAbsent para obtener la lista existente o crear una nueva si no existe
+            titlesMap.computeIfAbsent(gameMode, k -> new ArrayList<>()).add(title);
+        }
+
+        return new DtoListTitles(titlesMap);
+}
 
     /***** INDIVIDUAL *****/
     public ResponseEntity<?> createODBIndividual (DtoOrderByDate dtoOrderByDate) throws GameModeException{

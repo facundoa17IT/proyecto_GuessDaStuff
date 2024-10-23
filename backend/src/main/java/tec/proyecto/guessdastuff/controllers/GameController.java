@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,15 @@ public class GameController {
 
     @Autowired
     GameService gameService;
+
+    @GetMapping(path = "/listTitles/{idCategory}")
+    public ResponseEntity<?> listTitlesOfCategory(@PathVariable Long idCategory){
+        try {
+            return ResponseEntity.ok(gameService.listTitlesOfCategory(idCategory));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     // ORDER BY DATE
     @PostMapping("/ODBIndividual")
