@@ -64,7 +64,6 @@ public class CategoryService {
         List<Category> categoriesAvailables = categoryRepository.findAll()
                                                                 .stream()
                                                                 .filter(category -> category.getStatus().equals(ECategoryStatus.INITIALIZED) || category.getStatus().equals(ECategoryStatus.EMPTY)).toList();
-    
         return categoriesAvailables;
     }
 

@@ -321,7 +321,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_Category\": 5,\n    \"word\": \"POLOLO\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+							"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"LOKI\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1391,6 +1391,119 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"name\": \"coso\",\n    \"description\": \"AVIONES DE METAL\",\n    \"urlIcon\": \"http:AVIONES.com\",\n    \"active\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "GetAvailableCategories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"user",
+								"availableCategories"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetAvailableCategories",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user",
+										"availableCategories"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 23:42:45 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"JUEGOS\",\n        \"urlIcon\": \"http:JUEGOS.com\",\n        \"description\": \"JUEGOS DE NIÑOS\",\n        \"status\": \"EMPTY\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"PAISES\",\n        \"urlIcon\": \"http:PAISES.com\",\n        \"description\": \"PAISES\",\n        \"status\": \"INITIALIZED\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"BANDERAS\",\n        \"urlIcon\": \"http:BANDERAS.com\",\n        \"description\": \"BANDERAS DE NIÑOS\",\n        \"status\": \"INITIALIZED\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"CANCIONES\",\n        \"urlIcon\": \"http:CANCIONES.com\",\n        \"description\": \"CANCIONES\",\n        \"status\": \"INITIALIZED\"\n    }\n]"
 						}
 					]
 				}
