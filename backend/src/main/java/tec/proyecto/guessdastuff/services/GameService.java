@@ -29,6 +29,7 @@ import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
 import tec.proyecto.guessdastuff.entities.OrderByDate;
 import tec.proyecto.guessdastuff.entities.OrderWord;
+import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.enums.EGameMode;
 import tec.proyecto.guessdastuff.exceptions.GameModeException;
 import tec.proyecto.guessdastuff.repositories.CategoryRepository;
@@ -84,8 +85,8 @@ public class GameService {
 
         Category categoryEntidad = categoryOpt.get();
 
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
 
@@ -117,8 +118,8 @@ public class GameService {
 
         Category categoryEntidad = categoryOpt.get();
 
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
 
@@ -141,8 +142,8 @@ public class GameService {
 
         Category categoryEntidad = categoryOpt.get();
 
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
 
@@ -167,8 +168,8 @@ public class GameService {
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
         
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
         
@@ -259,8 +260,8 @@ public class GameService {
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
 
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
 
@@ -321,8 +322,8 @@ public class GameService {
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
 
-        if(!categoryEntidad.isActive()){
-            categoryEntidad.setActive(true);
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
             categoryRepository.save(categoryEntidad);
         }
         
@@ -369,4 +370,5 @@ public class GameService {
         }
         return ResponseEntity.ok("Se cargaron correctamente las palabras para la categoria " + categoryEntidad.getName() + " y modo de juego " + gameModeEnt.getName());
     }
+
 }

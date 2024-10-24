@@ -45,9 +45,9 @@ public class CategoryController {
     }
 
     @GetMapping("/api/user")
-    public ResponseEntity<?> getCategory() throws CategoryException{
+    public ResponseEntity<?> getAllCategories() throws CategoryException{
         try {
-            return ResponseEntity.ok(categoryService.getCategory());
+            return ResponseEntity.ok(categoryService.getAllCategories());
         } catch (Exception e) {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -66,6 +66,15 @@ public class CategoryController {
     public ResponseEntity<?> getActiveCategories() throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.getActiveCategories());
+        } catch (Exception e) {
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/api/user/availableCategories")
+    public ResponseEntity<?> getAvailableCategories() throws CategoryException{
+        try {
+            return ResponseEntity.ok(categoryService.getAvailabeCategories());
         } catch (Exception e) {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

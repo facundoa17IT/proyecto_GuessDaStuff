@@ -512,7 +512,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+							"raw": "{\n    \"id_Category\": 4,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -699,7 +699,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"categoriaSinActive\",\r\n    \"description\": \"PEFUMES DE HOMBRE\",\r\n    \"urlIcon\": \"http:PEFUMES.com\"\r\n}",
+							"raw": "{\r\n    \"name\": \"PAISES\",\r\n    \"description\": \"PAISES\",\r\n    \"urlIcon\": \"http:PAISES.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -828,7 +828,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"coso3\",\r\n    \"urlIcon\": \"http:AVIONES.com\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"active\": true\r\n}",
+							"raw": "{\r\n    \"name\": \"PERFUMES\",\r\n    \"urlIcon\": \"PEFUMES.URL\",\r\n    \"description\": \"PERFUMES DE NIÑO v2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -958,7 +958,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin/delete/coso3",
+							"raw": "{{BASE_URL}}/category/api/admin/delete/PERFUMES",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -967,7 +967,7 @@
 								"api",
 								"admin",
 								"delete",
-								"coso3"
+								"PERFUMES"
 							]
 						}
 					},
@@ -1297,7 +1297,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/coso",
+							"raw": "{{BASE_URL}}/category/api/user/PERFUMES",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1305,7 +1305,7 @@
 								"category",
 								"api",
 								"user",
-								"coso"
+								"PERFUMES"
 							]
 						}
 					},
@@ -2126,7 +2126,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"POLOLO\",\r\n    \"email\" : \"agiroldi45@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
+					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

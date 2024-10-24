@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import tec.proyecto.guessdastuff.converters.CategoryConverter;
 import tec.proyecto.guessdastuff.dtos.DtoCategory;
 import tec.proyecto.guessdastuff.entities.Category;
+import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.exceptions.CategoryException;
 import tec.proyecto.guessdastuff.repositories.CategoryRepository;
 
@@ -41,7 +42,7 @@ public class CategoryService {
         return category;
     }
 
-    public List<Category> getCategory() throws CategoryException {
+    public List<Category> getAllCategories() throws CategoryException {
         List<Category> categoryResponse = categoryRepository.findAll();
         if (categoryResponse == null || categoryResponse.isEmpty()) {
             throw new CategoryException("No existen categorías con el filtro proporcionado.");
@@ -49,12 +50,22 @@ public class CategoryService {
         return categoryResponse;
     }
 
+    //Lista de categorias con status INITIALIZED, son las que contienen al menos un modo de juego y las que se deben mostrar al querer comenzar una partida
     public List<Category> getActiveCategories() throws CategoryException{
-        List<Category> categoriesActives = categoryRepository.findAll().stream().filter(Category:: isActive).toList();
+        List<Category> categoriesActives = categoryRepository.findAll().stream().filter(category -> category.getStatus().equals(ECategoryStatus.INITIALIZED)).toList();
         if (categoriesActives.isEmpty()) {
             throw new CategoryException("No hay categorias activas"); 
         }
         return categoriesActives;
+    }
+
+    //Lista de categorias disponibles para ser agregadas en modos de juegos, son aquellas que tienen estado INITIALIZED O EMPTY
+    public List<Category> getAvailabeCategories() throws CategoryException{
+        List<Category> categoriesAvailables = categoryRepository.findAll()
+                                                                .stream()
+                                                                .filter(category -> category.getStatus().equals(ECategoryStatus.INITIALIZED) || category.getStatus().equals(ECategoryStatus.EMPTY)).toList();
+    
+        return categoriesAvailables;
     }
 
     public ResponseEntity<?> editCategory(DtoCategory dtoCategory) throws CategoryException{
@@ -65,7 +76,6 @@ public class CategoryService {
         Category category = categoryOpt.get();
         category.setDescription(dtoCategory.getDescription());
         category.setUrlIcon(dtoCategory.getUrlIcon());
-        category.setActive(dtoCategory.isActive());
         categoryRepository.save(category);
 
         return ResponseEntity.ok("La categoria " + category.getName() + " ha sido editada correctamente!");
@@ -77,7 +87,7 @@ public class CategoryService {
             throw new CategoryException("No existe una categoria con nombre " + name);
         }
         Category category = categoryOpt.get();
-        category.setActive(false);
+        category.setStatus(ECategoryStatus.DELETED);
         categoryRepository.save(category);
         return ResponseEntity.ok("La categoria " + name + " ha sido eliminada de forma exitosa!");
     }

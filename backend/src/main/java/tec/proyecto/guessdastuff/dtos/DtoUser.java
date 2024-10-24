@@ -18,7 +18,7 @@ public class DtoUser {
     private String email;
 
     @Builder.Default
-    private String urlPerfil  = "urlDelMacaco";
+    private String urlPerfil  = "urlDoMacaco";
 
     private String country;
 
