@@ -47,7 +47,6 @@ export const Register = () => {
                 country,
                 birthday: formattedBirthday // Enviar la fecha en el formato correcto
             });
-            console.dir({ response }, { depth: null });
             console.log('Registration successful!');
 
             navigate('/login');
