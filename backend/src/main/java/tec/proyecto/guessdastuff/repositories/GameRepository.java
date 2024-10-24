@@ -17,7 +17,8 @@ public interface GameRepository extends JpaRepository<Game, Long>{
                WHEN g.id_game_mode = 'OBD' THEN g.event 
                WHEN g.id_game_mode = 'GP' THEN g.phrase 
                ELSE g.word 
-           END AS titulo
+           END AS titulo,
+           g.id
     FROM games g
     INNER JOIN game_mode gm ON g.id_game_mode = gm.name
     WHERE g.id_category = :idCategory

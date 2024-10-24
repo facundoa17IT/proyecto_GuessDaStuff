@@ -10,4 +10,9 @@ import tec.proyecto.guessdastuff.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String nombre);
+
+    Optional<User> findByEmail(String email);
+    
+    Optional<User> findByResetToken(String resetToken);
+
 }

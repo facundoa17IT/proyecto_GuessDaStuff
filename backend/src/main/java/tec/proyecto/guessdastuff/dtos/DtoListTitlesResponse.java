@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DtoListTitles {
+public class DtoListTitlesResponse {
     
-    private Map<String, List<String>> titlesOfCategory;
+    private Map<String, List<DtoTitleWithId>> titlesOfCategory;
     
 }

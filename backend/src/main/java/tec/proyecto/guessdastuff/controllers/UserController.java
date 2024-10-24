@@ -61,4 +61,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PutMapping("/blockUser/{username}")
+    public ResponseEntity<?> blockUser(@PathVariable String username){
+        try {
+            return ResponseEntity.ok(userService.blockUser(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/unblockUser/{username}")
+    public ResponseEntity<?> unblockUser(@PathVariable String username){
+        try {
+            return ResponseEntity.ok(userService.unblockUser(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

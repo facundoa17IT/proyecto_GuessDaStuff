@@ -20,9 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
-import tec.proyecto.guessdastuff.dtos.DtoListTitles;
+import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
 import tec.proyecto.guessdastuff.dtos.DtoOrderByDate;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
+import tec.proyecto.guessdastuff.dtos.DtoTitleWithId;
 import tec.proyecto.guessdastuff.entities.Category;
 import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
@@ -49,7 +50,7 @@ public class GameService {
     @Autowired
     DateConverter dateConverter;
 
-    public DtoListTitles listTitlesOfCategory(Long idCategory) throws GameModeException {
+    public DtoListTitlesResponse listTitlesOfCategory(Long idCategory) throws GameModeException {
         List<Object[]> result = gameRepository.listTitlesOfCategory(idCategory);
     
         if (result.isEmpty()) {
@@ -57,17 +58,20 @@ public class GameService {
         }
 
         // Se utiliza Map<String, List<String>> para almacenar varios títulos por cada modo de juego
-        Map<String, List<String>> titlesMap = new HashMap<>();
+        Map<String, List<DtoTitleWithId>> titlesMap = new HashMap<>();
 
         for (Object[] row : result) {
             String gameMode = (String) row[0];
             String title = (String) row[1];
+            Long id  = ((Number) row[2]).longValue();
+
+            DtoTitleWithId titleWithId = new DtoTitleWithId(title, id);
         
             // computeIfAbsent para obtener la lista existente o crear una nueva si no existe
-            titlesMap.computeIfAbsent(gameMode, k -> new ArrayList<>()).add(title);
+            titlesMap.computeIfAbsent(gameMode, k -> new ArrayList<>()).add(titleWithId);
         }
 
-        return new DtoListTitles(titlesMap);
+        return new DtoListTitlesResponse(titlesMap);
 }
 
     /***** INDIVIDUAL *****/

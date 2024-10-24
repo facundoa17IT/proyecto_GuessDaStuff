@@ -60,6 +60,9 @@ public class User implements UserDetails{
 
     @Column(name = "atUpdate")
     private LocalDate atUpdate;
+    
+    @Column(name = "resetToken")
+    private String resetToken;
 
     
     // UserDetails overrides
