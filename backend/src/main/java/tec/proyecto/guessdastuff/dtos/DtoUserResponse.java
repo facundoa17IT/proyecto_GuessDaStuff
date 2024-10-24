@@ -3,6 +3,8 @@ package tec.proyecto.guessdastuff.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tec.proyecto.guessdastuff.enums.ERole;
+import tec.proyecto.guessdastuff.enums.EStatus;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,9 @@ public class DtoUserResponse {
     private String country;
 
     private DtoDate birthday;
+
+    private ERole role;
+
+    private EStatus status;
+
 }

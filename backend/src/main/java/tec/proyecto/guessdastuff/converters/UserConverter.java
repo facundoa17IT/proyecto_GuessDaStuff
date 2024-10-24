@@ -18,7 +18,7 @@ public class UserConverter {
         DtoDate birthday = new DtoDate(user.getBirthday().getYear(), user.getBirthday().getMonthValue(), user.getBirthday().getDayOfMonth() );
 
         
-        DtoUserResponse dtoUser = new DtoUserResponse(user.getUsername(), user.getEmail(), user.getUrlPerfil(), user.getCountry(), birthday);
+        DtoUserResponse dtoUser = new DtoUserResponse(user.getUsername(), user.getEmail(), user.getUrlPerfil(), user.getCountry(), birthday, user.getRole(), user.getStatus());
 
         return dtoUser;
     }
