@@ -1,69 +1,76 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
-import idle from '../../assets/profile-icon-placeholder.png';
-import { MdDriveFolderUpload } from "react-icons/md";
 import axiosInstance from '../../AxiosConfig';
+import ReactFlagsSelect from "react-flags-select";
+import CustomDatePicker from '../../components/ui/CustomDatePicker';
+
 export const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    const [role, setRole] = useState(0);
-    
-    const navigate = useNavigate();
+    const [country, setCountry] = useState('');
+    const [birthday, setBirthday] = useState();
 
-    const [imagePreview, setImagePreview] = useState(null);
-
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
+    const handleDateChange = (date) => {
+        setBirthday(date);
     };
+
+    const navigate = useNavigate();
 
     const onClose = () => {
         navigate("/")
     }
 
+    // Método auxiliar para formatear la fecha
+    const formatDate = (date) => {
+        if (!date) return null; // Manejo de fecha nula
+
+        const parsedDate = new Date(date);
+        return {
+            anio: parsedDate.getFullYear(),
+            mes: parsedDate.getMonth() + 1,  // Los meses en JavaScript van de 0 a 11, por eso se suma 1
+            dia: parsedDate.getDate()
+        };
+    };
+
     const register = async (event) => {
         event.preventDefault();
+
+        // Formatear la fecha de cumpleaños usando el método auxiliar
+        const formattedBirthday = formatDate(birthday);
         try {
             const response = await axiosInstance.post('/auth/register', {
                 username,
                 password,
                 email,
-                role
+                country,
+                birthday: formattedBirthday // Enviar la fecha en el formato correcto
             });
+            console.dir({ response }, { depth: null });
             console.log('Registration successful!');
-            console.log(response.data);
 
             navigate('/login');
         } catch (error) {
-            console.error('Error registering:', error.response.data.message);
+            console.error('Error registering:', error.response?.data?.message || error.message);
         }
-    };
-
-    const goToLogIn = () => {
-        navigate('/login');
     };
 
     return (
         <Modal showModal={true} onConfirm={register} closeModal={onClose} title="Registrarse">
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '325px', margin: '5px' }}>
-                <img src={imagePreview ? imagePreview : idle} alt="Profile Preview" style={{ width: '120px', height: '80px', borderRadius: '50%', border: '2px solid var(--border-color)' }} />
-                <label style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', border: '2px solid var(--border-color)', backgroundColor: 'var(--secondary-bg-color)', padding: '10px' }} htmlFor="file-upload" className="custom-file-upload">
-                    <MdDriveFolderUpload style={{ fontSize: '20px', marginRight: '5px' }} />Seleccionar Imagen
-                </label>
-                <input id="file-upload" type="file" accept="image/*" onChange={handleImageUpload} />
+                <ReactFlagsSelect
+                    selected={country}
+                    onSelect={(code) => setCountry(code)}
+                    placeholder="País"
+                    searchPlaceholder="Buscar"
+                    searchable
+                />
+                <CustomDatePicker selectedDate={birthday} handleDateChange={handleDateChange} />
             </div>
-            <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)}/>
+            <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
             <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Modal>
     );
 };
