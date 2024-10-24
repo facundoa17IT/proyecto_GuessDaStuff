@@ -26,10 +26,10 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/{username}")
-    public ResponseEntity<?> findUserByNickname(@PathVariable String username){
+    @GetMapping("/{username}")
+    public ResponseEntity<?> findUserByUsername(@PathVariable String username){
         try {
-            return ResponseEntity.ok(userService.findUserByNickname(username));
+            return ResponseEntity.ok(userService.findUserByUsername(username));
         } catch (Exception e) {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -44,7 +44,7 @@ public class UserController {
         }
     }
     
-    @PutMapping(path = "/deleteUser/{username}")
+    @PutMapping("/deleteUser/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username){
         try {
             return ResponseEntity.ok(userService.deleteUser(username));

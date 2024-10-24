@@ -17,5 +17,6 @@ public class DtoCategory {
 
     private String urlIcon;
 
-    private boolean active;
+    @Builder.Default
+    private boolean active  = false;
 }

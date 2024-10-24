@@ -17,9 +17,11 @@ public class DtoRegisterRequest {
 
     String email;
     
-    int role; // 0 = ROLE_USER | 1 = ROLE_ADMIN
+    @Builder.Default
+    int role = 0;
 
-    private String urlPerfil;
+    @Builder.Default
+    private String urlPerfil = "urlDelMacaco";
 
     private String country;
 

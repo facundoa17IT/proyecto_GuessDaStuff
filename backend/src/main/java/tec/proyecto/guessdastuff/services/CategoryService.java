@@ -32,13 +32,13 @@ public class CategoryService {
         return ResponseEntity.ok("Categoria con id " + category.getId() + " creada correctamente"); 
     }
 
-    public DtoCategory getCategoryByName(String name) throws CategoryException{
+    public Category getCategoryByName(String name) throws CategoryException{
         Optional<Category> categoryOpt = categoryRepository.findByName(name);
         if (!categoryOpt.isPresent()){
             throw new CategoryException("No existe una categoria con nombre " + name);
         }
-        DtoCategory  dtoCategory = categoryConverter.toDto(categoryOpt.get());
-        return dtoCategory;
+        Category category = categoryOpt.get();
+        return category;
     }
 
     public List<Category> getCategory() throws CategoryException {

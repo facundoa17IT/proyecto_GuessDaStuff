@@ -24,7 +24,7 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @GetMapping(path = "/listTitles/{idCategory}")
+    @GetMapping("/listTitles/{idCategory}")
     public ResponseEntity<?> listTitlesOfCategory(@PathVariable Long idCategory){
         try {
             return ResponseEntity.ok(gameService.listTitlesOfCategory(idCategory));

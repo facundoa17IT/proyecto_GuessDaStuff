@@ -80,6 +80,10 @@ public class GameService {
 
         Category categoryEntidad = categoryOpt.get();
 
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
 
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OBD.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
@@ -109,6 +113,11 @@ public class GameService {
 
         Category categoryEntidad = categoryOpt.get();
 
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
+
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OW.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
@@ -127,6 +136,11 @@ public class GameService {
         }
 
         Category categoryEntidad = categoryOpt.get();
+
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
 
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.GP.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
@@ -148,6 +162,11 @@ public class GameService {
 
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
+        
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
         
         // Abre el archivo Excel
         try (Workbook workbook = new XSSFWorkbook(archivo.getInputStream())) {
@@ -235,7 +254,12 @@ public class GameService {
 
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
-        
+
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
+
         // Abre el archivo Excel
         try (Workbook workbook = new XSSFWorkbook(archivo.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0); // Asume que las titulos están en la primera hoja
@@ -292,6 +316,11 @@ public class GameService {
 
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
         Category categoryEntidad = categoryOpt.get();
+
+        if(!categoryEntidad.isActive()){
+            categoryEntidad.setActive(true);
+            categoryRepository.save(categoryEntidad);
+        }
         
         // Abre el archivo Excel
         try (Workbook workbook = new XSSFWorkbook(archivo.getInputStream())) {

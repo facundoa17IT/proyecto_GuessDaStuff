@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
 import tec.proyecto.guessdastuff.dtos.DtoUser;
+import tec.proyecto.guessdastuff.dtos.DtoUserResponse;
 import tec.proyecto.guessdastuff.entities.User;
 import tec.proyecto.guessdastuff.enums.EStatus;
 import tec.proyecto.guessdastuff.exceptions.UserException;
@@ -31,25 +32,24 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public DtoUser findUserByNickname(String username) throws UserException{
+    public DtoUserResponse findUserByUsername(String username) throws UserException{
 
         Optional<User> userOpt = userRepository.findByUsername(username);
         if(!userOpt.isPresent()){
             throw new UserException("El usuario " + username + " no existe!");
         }
-
-        DtoUser dtoUser = userConverter.toDto(userOpt.get());
+        DtoUserResponse dtoUser = userConverter.toDtoResponse(userOpt.get());
 
         return dtoUser;
     }
 
-    public List<DtoUser> listUsers(){
+    public List<DtoUserResponse> listUsers(){
 
         List<User> listUsers = userRepository.findAll();
-        List<DtoUser> dtoUsers = new ArrayList<>();
+        List<DtoUserResponse> dtoUsers = new ArrayList<>();
 
         for(User user : listUsers){
-            dtoUsers.add(userConverter.toDto(user));
+            dtoUsers.add(userConverter.toDtoResponse(user));
         }
 
         return dtoUsers;
