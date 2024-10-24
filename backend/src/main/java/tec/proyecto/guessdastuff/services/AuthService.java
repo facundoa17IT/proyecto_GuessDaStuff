@@ -68,7 +68,7 @@ public class AuthService {
 
     public DtoAuthResponse register(DtoRegisterRequest request) {
         ERole[] rolValues = ERole.values(); // 0 = ROLE_USER | 1 = ROLE_ADMIN
-        LocalDate birhdate = dateConverter.toLocalDate(request.getBirthday());
+        LocalDate birthdate = dateConverter.toLocalDate(request.getBirthday());
 
         User user = User.builder()
             .username(request.getUsername())
@@ -77,7 +77,7 @@ public class AuthService {
             .role(rolValues[request.getRole()])
             .urlPerfil(request.getUrlPerfil())
             .country(request.getCountry())
-            .birthday(birhdate)
+            .birthday(birthdate)
             .status(EStatus.REGISTERED)
             .atCreate(LocalDate.now())
             .atUpdate(LocalDate.now())

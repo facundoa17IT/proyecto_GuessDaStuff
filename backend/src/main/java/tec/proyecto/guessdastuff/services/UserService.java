@@ -13,6 +13,7 @@ import tec.proyecto.guessdastuff.converters.UserConverter;
 import tec.proyecto.guessdastuff.dtos.DtoUser;
 import tec.proyecto.guessdastuff.dtos.DtoUserResponse;
 import tec.proyecto.guessdastuff.entities.User;
+import tec.proyecto.guessdastuff.enums.ERole;
 import tec.proyecto.guessdastuff.enums.EStatus;
 import tec.proyecto.guessdastuff.exceptions.UserException;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
@@ -93,4 +94,30 @@ public class UserService {
         return ResponseEntity.ok("El usuario " + username + " ha sido eliminado de forma exitosa!");
     }
 
+    public ResponseEntity<?> addAdmin (DtoUser dtoUser) throws UserException{
+
+        Optional<User> userOpt = userRepository.findByUsername(dtoUser.getUsername());
+
+        if(userOpt.isPresent()){
+            throw new UserException("El admin " + dtoUser.getUsername() + " ya existe!");
+        }
+
+        LocalDate birthdate = dateConverter.toLocalDate(dtoUser.getBirthday());
+        User userBuild = User.builder()
+            .username(dtoUser.getUsername())
+            .password(passwordEncoder.encode(dtoUser.getPassword()))
+            .email(dtoUser.getEmail())
+            .role(ERole.ROLE_ADMIN)
+            .urlPerfil(dtoUser.getUrlPerfil())
+            .country(dtoUser.getCountry())
+            .birthday(birthdate)
+            .status(EStatus.REGISTERED)
+            .atCreate(LocalDate.now())
+            .atUpdate(LocalDate.now())
+            .build();
+
+        userRepository.save(userBuild);
+
+        return ResponseEntity.ok("El admin " + dtoUser.getUsername() + " ha sido creado de forma exitosa!");
+    }
 }

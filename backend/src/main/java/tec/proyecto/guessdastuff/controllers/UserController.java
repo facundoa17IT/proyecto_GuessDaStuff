@@ -52,4 +52,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PostMapping("/addAdmin")
+    public ResponseEntity<?> addAdmin(@RequestBody DtoUser dtoUser){
+        try {
+            return ResponseEntity.ok(userService.addAdmin(dtoUser));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
