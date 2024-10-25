@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class DtoGuessPhrase {
 
-    private Long id_GameMode;
+    private String id_GameMode;
 
     private Long id_Category;
 

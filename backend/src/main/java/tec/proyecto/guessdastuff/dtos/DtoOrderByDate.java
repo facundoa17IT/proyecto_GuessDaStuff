@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class DtoOrderByDate {
 
+    private String idGameMode;
+
     private Long id_Category;
     
     private String event;

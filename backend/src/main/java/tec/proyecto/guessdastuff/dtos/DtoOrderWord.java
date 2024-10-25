@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class DtoOrderWord {
     
-   private Long id_GameMode;
+    private String id_GameMode;
 
     private Long id_Category;
 

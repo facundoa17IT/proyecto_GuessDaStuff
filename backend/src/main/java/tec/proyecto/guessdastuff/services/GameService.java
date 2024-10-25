@@ -14,17 +14,20 @@ import java.time.ZoneId;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
+import tec.proyecto.guessdastuff.converters.GameConverter;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
 import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
 import tec.proyecto.guessdastuff.dtos.DtoOrderByDate;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
 import tec.proyecto.guessdastuff.dtos.DtoTitleWithId;
 import tec.proyecto.guessdastuff.entities.Category;
+import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
 import tec.proyecto.guessdastuff.entities.OrderByDate;
@@ -50,6 +53,9 @@ public class GameService {
 
     @Autowired
     DateConverter dateConverter;
+
+    @Autowired
+    GameConverter gameConverter;
 
     public DtoListTitlesResponse listTitlesOfCategory(Long idCategory) throws GameModeException {
         List<Object[]> result = gameRepository.listTitlesOfCategory(idCategory);
@@ -159,7 +165,6 @@ public class GameService {
     }
 
     /***** MASIVO ******/
-    //OrderByDate
     public ResponseEntity<?> createOBDMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
 
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OBD.toString());
@@ -251,7 +256,63 @@ public class GameService {
     
     }
 
-    //GuessPhrase
+    public ResponseEntity<?> createOWMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
+
+        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OW.toString());
+        GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
+
+        Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
+        Category categoryEntidad = categoryOpt.get();
+
+        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
+            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
+            categoryRepository.save(categoryEntidad);
+        }
+        
+        // Abre el archivo Excel
+        try (Workbook workbook = new XSSFWorkbook(archivo.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0); // Asume que las titulos están en la primera hoja
+            Iterator<Row> rows = sheet.iterator();
+
+            // Saltar la primera fila que contiene los nombres de las columnas
+            if (rows.hasNext()) {
+                rows.next(); // Esto avanza a la segunda fila, saltando la primera
+            }
+
+            while(rows.hasNext()){
+                Row currentRow = rows.next();
+
+                OrderWord OW = new OrderWord();
+
+                OW.setIdGameMode(gameModeEnt);
+                OW.setIdCategory(categoryEntidad);
+
+                //Las columnas deben ir en el siguiente orden: word, hint1, hint2, hint3
+
+                if(currentRow.getCell(0) != null){
+                    OW.setWord(currentRow.getCell(0).getStringCellValue());
+                }
+
+                //Hint1
+                if(currentRow.getCell(1) != null){
+                    OW.setHint1(currentRow.getCell(1).getStringCellValue());
+                }
+                //Hint2
+                if(currentRow.getCell(2) != null){
+                    OW.setHint2(currentRow.getCell(2).getStringCellValue());
+                }
+                //Hint3
+                if(currentRow.getCell(3) != null){
+                    OW.setHint3(currentRow.getCell(3).getStringCellValue());
+                }
+
+                gameRepository.save(OW);
+
+            }
+        }
+        return ResponseEntity.ok("Se cargaron correctamente las palabras para la categoria " + categoryEntidad.getName() + " y modo de juego " + gameModeEnt.getName());
+    }
+
     public ResponseEntity<?> createGPMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
 
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.GP.toString());
@@ -313,62 +374,104 @@ public class GameService {
         return ResponseEntity.ok("Se cargaron correctamente las frases para la categoria " + categoryEntidad.getName() + " y modo de juego " + gameModeEnt.getName());
     }
 
-    //OrderWord
-    public ResponseEntity<?> createOWMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
+    /******  GET DATA  ******/
+    public ResponseEntity<?> getDataOfGameMode(Long id) throws GameModeException{
+        
+        Optional<Game> gameOpt = gameRepository.findById(id);
 
-        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OW.toString());
-        GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
+        Game game = gameOpt.get();
 
-        Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
-        Category categoryEntidad = categoryOpt.get();
-
-        if(categoryEntidad.getStatus().equals(ECategoryStatus.EMPTY)){
-            categoryEntidad.setStatus(ECategoryStatus.INITIALIZED);
-            categoryRepository.save(categoryEntidad);
+        if(game instanceof GuessPhrase){
+            GuessPhrase guessPhrase = (GuessPhrase) game;
+            DtoGuessPhrase dtoGuessPhrase = gameConverter.toDtoGuessPhrase(guessPhrase);
+            return ResponseEntity.ok(dtoGuessPhrase);
         }
         
-        // Abre el archivo Excel
-        try (Workbook workbook = new XSSFWorkbook(archivo.getInputStream())) {
-            Sheet sheet = workbook.getSheetAt(0); // Asume que las titulos están en la primera hoja
-            Iterator<Row> rows = sheet.iterator();
-
-            // Saltar la primera fila que contiene los nombres de las columnas
-            if (rows.hasNext()) {
-                rows.next(); // Esto avanza a la segunda fila, saltando la primera
-            }
-
-            while(rows.hasNext()){
-                Row currentRow = rows.next();
-
-                OrderWord OW = new OrderWord();
-
-                OW.setIdGameMode(gameModeEnt);
-                OW.setIdCategory(categoryEntidad);
-
-                //Las columnas deben ir en el siguiente orden: word, hint1, hint2, hint3
-
-                if(currentRow.getCell(0) != null){
-                    OW.setWord(currentRow.getCell(0).getStringCellValue());
-                }
-
-                //Hint1
-                if(currentRow.getCell(1) != null){
-                    OW.setHint1(currentRow.getCell(1).getStringCellValue());
-                }
-                //Hint2
-                if(currentRow.getCell(2) != null){
-                    OW.setHint2(currentRow.getCell(2).getStringCellValue());
-                }
-                //Hint3
-                if(currentRow.getCell(3) != null){
-                    OW.setHint3(currentRow.getCell(3).getStringCellValue());
-                }
-
-                gameRepository.save(OW);
-
-            }
+        if(game instanceof OrderWord){
+            OrderWord orderWord = (OrderWord) game;
+            DtoOrderWord dtoOrderWord = gameConverter.toDtoOrderWord(orderWord);
+            return ResponseEntity.ok(dtoOrderWord);
         }
-        return ResponseEntity.ok("Se cargaron correctamente las palabras para la categoria " + categoryEntidad.getName() + " y modo de juego " + gameModeEnt.getName());
+
+        if(game instanceof OrderByDate){
+            OrderByDate orderByDate = (OrderByDate) game;
+            DtoOrderByDate dtoOrderByDate = gameConverter.toDtoOrderByDate(orderByDate);
+            return ResponseEntity.ok(dtoOrderByDate);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
+        
+    }
+    
+    /******  EDIT  ******/
+    public ResponseEntity<?> editOrderByDate(Long idGame, DtoOrderByDate dtoOrderByDate){
+
+        Optional<Game> gameOpt = gameRepository.findById(idGame);
+
+        Game game = gameOpt.get();
+
+        LocalDate startDate = dateConverter.toLocalDate(dtoOrderByDate.getStartDate());
+        LocalDate enDate = dateConverter.toLocalDate(dtoOrderByDate.getEndDate());
+
+        if(game instanceof OrderByDate){
+            OrderByDate orderByDate = (OrderByDate) game;
+            orderByDate.setEvent(dtoOrderByDate.getEvent());
+            orderByDate.setInfoEvent(dtoOrderByDate.getInfoEvent());
+            orderByDate.setStartDate(startDate);
+            orderByDate.setEndDate(enDate);
+            orderByDate.setHint1(dtoOrderByDate.getHint1());
+            orderByDate.setHint2(dtoOrderByDate.getHint2());
+            orderByDate.setHint3(dtoOrderByDate.getHint3());
+
+            gameRepository.save(orderByDate);
+            return ResponseEntity.ok("El modo de juego " + orderByDate.getIdGameMode().getName() + " con id " + idGame + " ha sido modificado correctamente!");
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
+    }
+
+    public ResponseEntity<?> editOrderWord(Long idGame, DtoOrderWord dtoOrderWord){
+
+        Optional<Game> gameOpt = gameRepository.findById(idGame);
+
+        Game game = gameOpt.get();
+
+        if(game instanceof OrderWord){
+            OrderWord orderWord = (OrderWord) game;
+            orderWord.setWord(dtoOrderWord.getWord());
+            orderWord.setHint1(dtoOrderWord.getHint1());
+            orderWord.setHint2(dtoOrderWord.getHint2());
+            orderWord.setHint3(dtoOrderWord.getHint3());
+
+            gameRepository.save(orderWord);
+
+            return ResponseEntity.ok("El modo de juego " + orderWord.getIdGameMode().getName() + " con id " + idGame + " ha sido modificado correctamente!");
+            
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
+
+    }
+
+    public ResponseEntity<?> editGuessPhrase(Long idGame, DtoGuessPhrase dtoGuessPhrase){
+        Optional<Game> gameOpt = gameRepository.findById(idGame);
+
+        Game game = gameOpt.get();
+
+        if(game instanceof GuessPhrase){
+            GuessPhrase guessPhrase = (GuessPhrase) game;
+            guessPhrase.setPhrase(dtoGuessPhrase.getPhrase());
+            guessPhrase.setCorrectWord(dtoGuessPhrase.getCorrectWord());
+            guessPhrase.setHint1(dtoGuessPhrase.getHint1());
+            guessPhrase.setHint2(dtoGuessPhrase.getHint2());
+            guessPhrase.setHint3(dtoGuessPhrase.getHint3());
+
+            gameRepository.save(guessPhrase);
+
+            return ResponseEntity.ok("El modo de juego " + guessPhrase.getIdGameMode().getName() + " con id " + idGame + " ha sido modificado correctamente!");
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
     }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,15 @@ public class GameController {
 
     @Autowired
     GameService gameService;
+
+    @GetMapping("getDataOfGM/{idGame}")
+    public ResponseEntity<?> getDataOfGameMode(@PathVariable Long idGame){
+        try {
+            return ResponseEntity.ok(gameService.getDataOfGameMode(idGame));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/listTitles/{idCategory}")
     public ResponseEntity<?> listTitlesOfCategory(@PathVariable Long idCategory){
@@ -89,5 +99,32 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-      
+    
+    @PutMapping("/editOrderByDate/{idGame}")
+    public ResponseEntity<?> editOrderByDate(@PathVariable Long idGame, @RequestBody DtoOrderByDate dtoOrderByDate) {
+        try {
+            return ResponseEntity.ok(gameService.editOrderByDate(idGame, dtoOrderByDate));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/editOrderWord/{idGame}")
+    public ResponseEntity<?> editOrderWord(@PathVariable Long idGame, @RequestBody DtoOrderWord dtoOrderWord) {
+        try {
+            return ResponseEntity.ok(gameService.editOrderWord(idGame, dtoOrderWord));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/editGuessPhrase/{idGame}")
+    public ResponseEntity<?> editGuessPhrase(@PathVariable Long idGame, @RequestBody DtoGuessPhrase dtoGuessPhrase) {
+        try {
+            return ResponseEntity.ok(gameService.editGuessPhrase(idGame, dtoGuessPhrase));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

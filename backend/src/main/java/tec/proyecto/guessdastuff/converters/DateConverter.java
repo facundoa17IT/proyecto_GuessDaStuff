@@ -10,5 +10,10 @@ public class DateConverter {
     public LocalDate toLocalDate (DtoDate dtoDate){
         return LocalDate.of(dtoDate.getAnio(), dtoDate.getMes(), dtoDate.getDia());
     }
+
+    public DtoDate tDtoDate (LocalDate localDate){
+        DtoDate dtoDate = new DtoDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth() );
+        return dtoDate;
+    }
     
 }
