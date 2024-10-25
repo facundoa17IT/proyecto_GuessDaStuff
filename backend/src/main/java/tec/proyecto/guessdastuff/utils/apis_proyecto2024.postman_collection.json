@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "dfe13891-aceb-44f6-a53e-a29b50ff7be1",
+		"_postman_id": "ade66569-dea4-44ca-8b2b-0f72016bc400",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26511696"
+		"_exporter_id": "37753331"
 	},
 	"item": [
 		{
@@ -139,7 +139,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id_Category\": 3,\r\n    \"event\": \"coso\",\r\n    \"infoEvent\": \"pasaron cosas\",\r\n    \"startDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+							"raw": "{\r\n    \"id_Category\": 2,\r\n    \"event\": \"Pasaron cosas muy importantes\",\r\n    \"infoEvent\": \"pasaron cosas   muy importantes\",\r\n    \"startDate\": {\r\n        \"anio\": 2000,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2002,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,7 +321,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_Category\": 3,\n    \"word\": \"LOKI\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+							"raw": "{\n    \"id_Category\": 1,\n    \"word\": \"todo  maldito\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -512,7 +512,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id_Category\": 4,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+							"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -699,7 +699,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"CANCIONES\",\r\n    \"description\": \"CANCIONES\",\r\n    \"urlIcon\": \"http:CANCIONES.com\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Musica\",\r\n    \"description\": \"Todo sobre Musica\",\r\n    \"urlIcon\": \"http:CANCIONES.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -828,7 +828,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"PERFUMES\",\r\n    \"urlIcon\": \"PEFUMES.URL\",\r\n    \"description\": \"PERFUMES DE NIÑO v2\"\r\n}",
+							"raw": "{\r\n    \"name\": \"CANCIONES\",\r\n    \"urlIcon\": \"http:CANCIONES.com\",\r\n    \"description\": \"Todo sobre Canciones\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1521,14 +1521,13 @@
 								"method": "POST",
 								"header": [],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "email",
-											"value": "agiroldi45@gmail.com",
-											"type": "text"
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mateo@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									]
+									}
 								},
 								"url": {
 									"raw": "{{BASE_URL}}/auth/forgot-password",
@@ -1572,24 +1571,23 @@
 							"request": {
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":\"cf97bb92-8601-43ba-94e3-9375ebb175dc\",\r\n    \"newPassword\":\"12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "{{BASE_URL}}/auth/reset-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b&newPassword=8080",
+									"raw": "{{BASE_URL}}/auth/reset-password",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"auth",
 										"reset-password"
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "ef14675e-5eda-43ee-b24d-bfe2fbf8600b"
-										},
-										{
-											"key": "newPassword",
-											"value": "8080"
-										}
 									]
 								}
 							},
@@ -2239,7 +2237,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
+					"raw": "{\r\n    \"username\" : \"mateo\",\r\n    \"email\" : \"mateo@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2350,7 +2348,7 @@
 			]
 		},
 		{
-			"name": "Account Login",
+			"name": "Account Login Admin",
 			"event": [
 				{
 					"listen": "test",
@@ -2370,6 +2368,136 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/auth/login",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Account Login Admin",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 22 Oct 2024 03:59:36 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJzdWIiOiJhZG1pbiIsImlhdCI6MTcyOTU2OTU3NiwiZXhwIjoxNzI5NjU1OTc2fQ.ON2fAzJnKxQGgxpXA4T7nzWoO-iq_kVVNIrAtdX2U5U\",\n    \"username\": \"admin\",\n    \"role\": \"[ROLE_ADMIN]\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Account Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"ACCESS_TOKEN\", jsonData.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\" : \"mateo\",\r\n    \"password\" : \"12345\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2476,15 +2604,65 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sInN1YiI6InVzZXIiLCJpYXQiOjE3Mjk1Njk1NTEsImV4cCI6MTcyOTY1NTk1MX0.RQXOhW7aabkfeygxBNCEfJZdpAo8vgdC0VUD6QtEDBM\",\n    \"username\": \"user\",\n    \"role\": \"[ROLE_USER]\"\n}"
+				}
+			]
+		},
+		{
+			"name": "loadGame",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
 				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/api/user/game/loadGame",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"game",
+						"loadGame"
+					]
+				}
+			},
+			"response": [
 				{
-					"name": "Account Login Admin",
+					"name": "loadGame",
 					"originalRequest": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
+							"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2492,13 +2670,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/login",
+							"raw": "{{BASE_URL}}/api/user/game/loadGame",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"auth",
-								"login"
+								"api",
+								"user",
+								"game",
+								"loadGame"
 							]
 						}
 					},
@@ -2552,7 +2732,7 @@
 						},
 						{
 							"key": "Date",
-							"value": "Tue, 22 Oct 2024 03:59:36 GMT"
+							"value": "Fri, 25 Oct 2024 00:32:46 GMT"
 						},
 						{
 							"key": "Keep-Alive",
@@ -2564,53 +2744,9 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJzdWIiOiJhZG1pbiIsImlhdCI6MTcyOTU2OTU3NiwiZXhwIjoxNzI5NjU1OTc2fQ.ON2fAzJnKxQGgxpXA4T7nzWoO-iq_kVVNIrAtdX2U5U\",\n    \"username\": \"admin\",\n    \"role\": \"[ROLE_ADMIN]\"\n}"
+					"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
 				}
 			]
-		},
-		{
-			"name": "loadGame",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"categories\": [\"3\",\"4\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/user/game/loadGame",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"user",
-						"game",
-						"loadGame"
-					]
-				}
-			},
-			"response": []
 		},
 		{
 			"name": "initGame",
@@ -2629,7 +2765,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        },\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"OW\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -2649,7 +2785,99 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "initGame",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/initGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"initGame"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 25 Oct 2024 00:36:16 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"gameModes\": {\n        \"juego_3\": {\n            \"name\": \"Guess Phrase\",\n            \"infoGame\": [\n                {\n                    \"id\": \"4\",\n                    \"idModeGame\": \"GP\",\n                    \"idCategory\": \"3\",\n                    \"event\": null,\n                    \"hint1\": \"Es una ciudad europea\",\n                    \"hint2\": \"Famosa por la Torre Eiffel\",\n                    \"hint3\": \"Comienza con P\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_2\": {\n            \"name\": \"Order By Date\",\n            \"infoGame\": [\n                {\n                    \"id\": \"5\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas muy importantes\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2000-01-01\",\n                    \"endDate\": \"2002-01-28\",\n                    \"infoEvent\": \"pasaron cosas   muy importantes\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                },\n                {\n                    \"id\": \"2\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2010-01-01\",\n                    \"endDate\": \"2012-01-28\",\n                    \"infoEvent\": \"pasaron cosas\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_1\": {\n            \"name\": \"Order Word\",\n            \"infoGame\": [\n                {\n                    \"id\": \"3\",\n                    \"idModeGame\": \"OW\",\n                    \"idCategory\": \"1\",\n                    \"event\": null,\n                    \"hint1\": \"Pista 1\",\n                    \"hint2\": \"Pista 2\",\n                    \"hint3\": \"Pista 3\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": \"todo  maldito\",\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        }\n    }\n}"
+				}
+			]
 		}
 	]
 }

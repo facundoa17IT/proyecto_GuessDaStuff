@@ -127,7 +127,7 @@ public class UserService {
     }
 
     // Genera un enlace de restablecimiento de contraseña y envía un correo electrónico
-    public void processforgot_password(String email) {
+    public void processforgot_password(String email) throws UserException{
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
@@ -137,6 +137,8 @@ public class UserService {
 
             String resetUrl = "http://localhost:8080/auth/reset-password?token=" + token; // Luego modificar x la url correcta
             sendResetPasswordEmail(user.getEmail(), resetUrl);
+        } else {
+            throw new UserException("El usuario con el correo electrónico " + email + " no existe");
         }
     }
 

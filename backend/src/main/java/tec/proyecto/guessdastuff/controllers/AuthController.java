@@ -88,8 +88,12 @@ public class AuthController {
     // Endpoint para solicitar un enlace de restablecimiento de contraseña
     @PostMapping("/forgot-password") 
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-        userService.processforgot_password(email);
-        return ResponseEntity.ok("Password reset link has been sent to your email.");
+        try {
+            userService.processforgot_password(email);
+            return ResponseEntity.ok("Password reset link has been sent to your email.");
+        }catch ( Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     // Endpoint para validar el token de restablecimiento de contraseña
