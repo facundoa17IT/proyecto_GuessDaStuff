@@ -1,6 +1,5 @@
 package tec.proyecto.guessdastuff.dtos;
 
-import java.util.Map;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -11,6 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DtoLoadGameResponse {
-    
-    private Map<String, List<String>> categories; // Mapa que relaciona categorías con listas de modos de juego
+
+    private List<CategoryData> categories; // Lista de categorías con modos de juego
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    public static class CategoryData {
+        private Long id;
+        private String name;
+        private List<String> gameModes;
+    }
+
 }

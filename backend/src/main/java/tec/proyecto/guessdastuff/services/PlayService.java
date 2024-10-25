@@ -20,21 +20,32 @@ public class PlayService {
     @Autowired
     private PlayRepository playRepository;
 
-    public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
-        List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
+   public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
+    List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
+    
+    // Lista para contener las categorías con sus modos de juego
+    List<DtoLoadGameResponse.CategoryData> categoriesList = new ArrayList<>();
+
+    for (Object[] row : result) {
+        Long categoryId = ((Number) row[0]).longValue(); // ID de la categoría
+        String categoryName = (String) row[1]; // Nombre de la categoría
+        String[] gameModesArray = (String[]) row[2]; // Modos de juego como array
         
-        Map<String, List<String>> categoriesMap = new HashMap<>();
-
-        for (Object[] row : result) {
-            String category = (String) row[0];
-            String[] gameModesArray = (String[]) row[1];
-            List<String> gameModes = Arrays.asList(gameModesArray);
-
-            categoriesMap.put(category, gameModes);
-        }
-
-        return new DtoLoadGameResponse(categoriesMap);
+        // Convertimos el array de modos de juego a una lista de strings
+        List<String> gameModes = Arrays.asList(gameModesArray);
+        
+        // Creamos un objeto CategoryData para la categoría actual
+        DtoLoadGameResponse.CategoryData categoryData = new DtoLoadGameResponse.CategoryData(categoryId, categoryName, gameModes);
+        
+        // Añadimos el objeto a la lista
+        categoriesList.add(categoryData);
     }
+
+    // Retornamos la respuesta con la lista de categorías y sus modos de juego
+    return new DtoLoadGameResponse(categoriesList);
+}
+
+
     
     public DtoInitGameResponse initGame(DtoInitGameRequest dtoInitGameRequest) {
 

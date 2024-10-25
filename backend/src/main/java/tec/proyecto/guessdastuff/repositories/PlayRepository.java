@@ -11,12 +11,12 @@ import java.util.List;
 @Repository
 public interface PlayRepository extends JpaRepository<Game, Long> {
 
-    @Query(value = "SELECT c.name AS category, ARRAY_AGG(DISTINCT gm.name) AS game_modes " +
+    @Query(value = "SELECT c.id, c.name AS category, ARRAY_AGG(DISTINCT gm.name) AS game_modes " +
                    "FROM games g " +
                    "JOIN category c ON g.id_category = c.id " +
                    "JOIN game_mode gm ON g.id_game_mode = gm.name " +
                    "WHERE c.id IN (:categories) " +
-                   "GROUP BY c.name", 
+                   "GROUP BY c.name, c.id", 
            nativeQuery = true)
     List<Object[]> loadGameByCategories(List<Integer> categories);
 
