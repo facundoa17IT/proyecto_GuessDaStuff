@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDate;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -95,5 +96,13 @@ public class AuthService {
                 .role(user.getRole().toString())
                 .build(); 
         }
+    }
+
+    public ResponseEntity<?> logout(String username){
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        User user = userOpt.get();
+        user.setStatus(EStatus.OFFLINE);
+        userRepository.save(user);
+        return ResponseEntity.ok("Finalizo la sesion");
     }
 }

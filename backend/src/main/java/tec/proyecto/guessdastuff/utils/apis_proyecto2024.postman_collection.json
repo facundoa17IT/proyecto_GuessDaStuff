@@ -2735,7 +2735,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"mateo\",\r\n    \"password\" : \"12345\"\r\n}",
+							"raw": "{\r\n    \"username\" : \"user\",\r\n    \"password\" : \"1234\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2842,6 +2842,117 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sInN1YiI6InVzZXIiLCJpYXQiOjE3Mjk1Njk1NTEsImV4cCI6MTcyOTY1NTk1MX0.RQXOhW7aabkfeygxBNCEfJZdpAo8vgdC0VUD6QtEDBM\",\n    \"username\": \"user\",\n    \"role\": \"[ROLE_USER]\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout-User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/auth/logout/user",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"logout",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout-User",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/auth/logout/user",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"logout",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Oct 2024 23:49:18 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"Finalizo la sesion\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
 						}
 					]
 				}
