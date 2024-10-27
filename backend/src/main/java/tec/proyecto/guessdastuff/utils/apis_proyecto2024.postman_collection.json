@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f2f2276c-3691-47a7-8c9b-cd1bc9a16552",
+		"_postman_id": "877794f8-f332-4efb-9db9-2878ccc97266",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26511696"
+		"_exporter_id": "37753331"
 	},
 	"item": [
 		{
@@ -3232,6 +3232,41 @@
 							"body": "{\n    \"gameModes\": {\n        \"juego_3\": {\n            \"name\": \"Guess Phrase\",\n            \"infoGame\": [\n                {\n                    \"id\": \"4\",\n                    \"idModeGame\": \"GP\",\n                    \"idCategory\": \"3\",\n                    \"event\": null,\n                    \"hint1\": \"Es una ciudad europea\",\n                    \"hint2\": \"Famosa por la Torre Eiffel\",\n                    \"hint3\": \"Comienza con P\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_2\": {\n            \"name\": \"Order By Date\",\n            \"infoGame\": [\n                {\n                    \"id\": \"5\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas muy importantes\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2000-01-01\",\n                    \"endDate\": \"2002-01-28\",\n                    \"infoEvent\": \"pasaron cosas   muy importantes\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                },\n                {\n                    \"id\": \"2\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2010-01-01\",\n                    \"endDate\": \"2012-01-28\",\n                    \"infoEvent\": \"pasaron cosas\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_1\": {\n            \"name\": \"Order Word\",\n            \"infoGame\": [\n                {\n                    \"id\": \"3\",\n                    \"idModeGame\": \"OW\",\n                    \"idCategory\": \"1\",\n                    \"event\": null,\n                    \"hint1\": \"Pista 1\",\n                    \"hint2\": \"Pista 2\",\n                    \"hint3\": \"Pista 3\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": \"todo  maldito\",\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        }\n    }\n}"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Poblar DB",
+			"item": [
+				{
+					"name": "loadData",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/loadData",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"loadData"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
