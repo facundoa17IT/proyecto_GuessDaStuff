@@ -45,8 +45,6 @@ public class PlayService {
     return new DtoLoadGameResponse(categoriesList);
 }
 
-
-    
     public DtoInitGameResponse initGame(DtoInitGameRequest dtoInitGameRequest) {
 
         List<ParCatMod> parCatModeList = dtoInitGameRequest.getParCatMod();

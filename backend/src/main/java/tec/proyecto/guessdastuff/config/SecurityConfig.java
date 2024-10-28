@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll() // Allow endpoints for Register and Login
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // Allow endpoints only for ROLE_USER AND ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Allow endpoints only for ROLE_ADMIN
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**" ).permitAll()  
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
                 .sessionManagement(
