@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => localStorage.getItem('role') || 'ROLE_GUESS');
-  
+
   // Sync role with localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('role', role);

@@ -32,6 +32,7 @@ export const CategoryDetails = () => {
     const [formData, setFormData] = useState({});
 
     const [selectedGameMode, setSelectedGameMode] = useState('');
+    const [selectedGameModeId, setSelectedGameModeId] = useState();
 
     const uiSchema = {
         id_Category: {
@@ -105,9 +106,11 @@ export const CategoryDetails = () => {
         console.log(gameModeKey);
         console.log(index);
         console.log(item.title);
+        console.log(item.id);
+        setSelectedGameModeId(item.id);
         setSelectedGameMode(gameModeKey);
-        if (selectedItem?.id) {
-            axiosInstance.get(`/api/admin/getDataOfGM/${selectedItem.id}`)
+        if (item?.id) {
+            axiosInstance.get(`/api/admin/getDataOfGM/${item.id}`)
                 .then(response => {
                     const data = response.data.body;
                     setFormData(data);
@@ -125,7 +128,6 @@ export const CategoryDetails = () => {
                     console.error("Error fetching data:", error);
                 });
         }
-        //setJsonSchemaForm(gameModeKey);
     };
     
     const setJsonSchemaForm = () => {
@@ -167,7 +169,7 @@ export const CategoryDetails = () => {
             else console.log("error");
         }
         try {
-            const response = await axiosInstance.post(`/api/admin/edit${gameMode}`, formData);
+            const response = await axiosInstance.put(`/api/admin/edit${gameMode}/${selectedGameModeId}`, formData);
             console.log('Data edited successfully!', response.data);
             setFormData({});
             navigate(-1);
