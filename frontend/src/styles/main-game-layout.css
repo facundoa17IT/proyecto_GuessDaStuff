@@ -1,0 +1,84 @@
+/****** Main Game Layout ******/
+
+.main-game-layout-cointainer {
+    display: flex;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background-color: var(--background-color);
+    max-width: 100%;
+    height: 60vh; /* probando */
+    margin: 0 300px;
+    justify-content: flex-start;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.main-game-layout-cointainer h1 {
+    margin-top: 0;
+}
+
+.main-game-layout-cointainer h2 {
+    /* font-size: 5em; */
+    /* line-height: 1.1; */
+    margin-top: 0;
+}
+
+.main-game-layout-cointainer p {
+    font-size: 1.25em;
+    line-height: 1.1;
+}
+
+.game-layout-subtitle {
+    margin-top: 0;
+}
+
+/***** Sub Containers (Game Layout) *****/
+
+.left-div,
+.middle-div,
+.right-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+    /* Allows each div to grow equally */
+    /* flex-grow: 1; */
+    /* flex-basis: 0; /*Ensures all divs start at the same width, ignoring content */
+
+}
+
+.middle-div {
+    flex-grow: 2;    /* Grow more than other flex siblings */
+    flex-shrink: 1;  /* Allow shrinking if necessary */
+    flex-basis: 0;   /* Start from 0 width, and grow from there */
+}
+
+.left-div {
+    border-right: 2px solid var(--border-color);
+    flex-grow: 1;
+    flex-basis: 0;
+    position: relative; /* For back button */
+}
+
+.right-div {
+    border-left: 2px solid var(--border-color);
+    flex-grow: 1;
+    flex-basis: 0;
+}
+.back-btn {
+    position: absolute;
+    top: 0px;
+    left: 25px;
+    padding: 10px;
+
+}
+
+/* Styles for screens up to 1366px wide */
+@media (max-width: 1366px) {
+    /***** Home Page Header *****/
+
+    .main-game-layout-cointainer {
+        height: 75vh;
+        margin: 0 50px;
+    }
+}

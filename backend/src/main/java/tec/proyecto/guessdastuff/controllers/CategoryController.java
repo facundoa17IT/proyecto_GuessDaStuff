@@ -19,14 +19,13 @@ import tec.proyecto.guessdastuff.services.CategoryService;
 
 @CrossOrigin(origins = "http://localhost:5173/")
 @RestController
-@RequestMapping("/category")
 @RequiredArgsConstructor
 public class CategoryController {
 
     @Autowired
     CategoryService categoryService;
     
-    @PostMapping("/api/admin")
+    @PostMapping("/auth/categories")
     public ResponseEntity<?> addCategory(@RequestBody DtoCategory dtoCategory){
         try {
             return ResponseEntity.ok(categoryService.addCategory(dtoCategory));
@@ -35,7 +34,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/api/user/{name}")
+    @GetMapping("/auth/categories/{name}")
     public ResponseEntity<?> getCategoryByName(@PathVariable String name) throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.getCategoryByName(name));
@@ -44,7 +43,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/api/user")
+    @GetMapping("/auth/categories")
     public ResponseEntity<?> getAllCategories() throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.getAllCategories());
@@ -53,7 +52,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/api/admin/edit")
+    @PutMapping("/auth/categories")
     public ResponseEntity<?> editCategory(@RequestBody DtoCategory dtoCategory) throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.editCategory(dtoCategory));
@@ -62,7 +61,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/api/user/activeCategories")
+    @GetMapping("/auth/activeCategories")
     public ResponseEntity<?> getActiveCategories() throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.getActiveCategories());
@@ -80,7 +79,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/api/admin/delete/{name}")
+    @PutMapping("/auth/categories/{name}")
     public ResponseEntity<?> deleteCategory(@PathVariable String name)  throws CategoryException{
         try {
             return ResponseEntity.ok(categoryService.deleteCategory(name));

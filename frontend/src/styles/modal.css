@@ -27,7 +27,7 @@
   /* Allows for dynamic height based on content */
 }
 
-.modal-content button {
+.modal-content button:not(.data-picker-btn) {
   width: 160px;
   margin: 10px;
 }
@@ -38,10 +38,6 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-}
-
-.modal-header h2 {
-  margin: 5px 0px 5px 0px !important;
 }
 
 .modal-body {
@@ -65,6 +61,7 @@
 
 .modal-content h2 {
   font-size: 1.8em;
+  margin: 5px 0px 5px 0px !important;
 }
 
 @media (max-width: 1366px) {

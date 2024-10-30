@@ -9,8 +9,8 @@ const Layout = () => {
     return (
         <div>
             <Navbar />
-            <FadeTransition>
-                <Outlet duration={0.5} />
+            <FadeTransition duration={0.5}>
+                <Outlet />
             </FadeTransition>
             <WordsFooter />
         </div>
