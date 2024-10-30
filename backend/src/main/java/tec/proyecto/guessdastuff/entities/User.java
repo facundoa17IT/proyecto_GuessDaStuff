@@ -29,10 +29,10 @@ public class User implements UserDetails{
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "username")
+    @Column(unique = true, name = "username")
     private String username;
 
-    @Column(name = "email")
+    @Column(unique= true, name = "email")
     private String email;
 
     @Column(name = "password")

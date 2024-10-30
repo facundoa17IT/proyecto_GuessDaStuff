@@ -109,8 +109,6 @@ public class PlayService {
     return new DtoLoadGameResponse(categoriesList);
 }
 
-
-    
     public DtoInitGameResponse initGame(DtoInitGameRequest dtoInitGameRequest) {
 
         List<ParCatMod> parCatModeList = dtoInitGameRequest.getParCatMod();
@@ -223,7 +221,8 @@ public class PlayService {
                             .hint1((String) row[7]) // hint1
                             .hint2((String) row[8]) // hint2
                             .hint3((String) row[9]) // hint3
-                            .word((String) row[13])
+                            .correct_word((String) row[5])
+                            .phrase((String) row[12])
                             .build();
                         List<GameInfo> gameInfoList3 = new ArrayList<>(); 
                         gameInfoList3.add(gameInfo3);
