@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "877794f8-f332-4efb-9db9-2878ccc97266",
+		"_postman_id": "d6b48a2b-c18c-4a28-9673-003a3fb212a9",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37753331"
+		"_exporter_id": "34327432"
 	},
 	"item": [
 		{
@@ -2844,117 +2844,6 @@
 							"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sInN1YiI6InVzZXIiLCJpYXQiOjE3Mjk1Njk1NTEsImV4cCI6MTcyOTY1NTk1MX0.RQXOhW7aabkfeygxBNCEfJZdpAo8vgdC0VUD6QtEDBM\",\n    \"username\": \"user\",\n    \"role\": \"[ROLE_USER]\"\n}"
 						}
 					]
-				},
-				{
-					"name": "Logout-User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/auth/logout/user",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"auth",
-								"logout",
-								"user"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Logout-User",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/auth/logout/user",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"auth",
-										"logout",
-										"user"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Method"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Headers"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Sat, 26 Oct 2024 23:49:18 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"headers\": {},\n    \"body\": \"Finalizo la sesion\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
-						}
-					]
 				}
 			]
 		},
@@ -2962,7 +2851,7 @@
 			"name": "Individual Game",
 			"item": [
 				{
-					"name": "loadGame",
+					"name": "1- loadGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -3103,7 +2992,7 @@
 					]
 				},
 				{
-					"name": "initGame",
+					"name": "2- initGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -3119,7 +3008,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"userId\":\"1001\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3232,20 +3121,27 @@
 							"body": "{\n    \"gameModes\": {\n        \"juego_3\": {\n            \"name\": \"Guess Phrase\",\n            \"infoGame\": [\n                {\n                    \"id\": \"4\",\n                    \"idModeGame\": \"GP\",\n                    \"idCategory\": \"3\",\n                    \"event\": null,\n                    \"hint1\": \"Es una ciudad europea\",\n                    \"hint2\": \"Famosa por la Torre Eiffel\",\n                    \"hint3\": \"Comienza con P\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_2\": {\n            \"name\": \"Order By Date\",\n            \"infoGame\": [\n                {\n                    \"id\": \"5\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas muy importantes\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2000-01-01\",\n                    \"endDate\": \"2002-01-28\",\n                    \"infoEvent\": \"pasaron cosas   muy importantes\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                },\n                {\n                    \"id\": \"2\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2010-01-01\",\n                    \"endDate\": \"2012-01-28\",\n                    \"infoEvent\": \"pasaron cosas\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_1\": {\n            \"name\": \"Order Word\",\n            \"infoGame\": [\n                {\n                    \"id\": \"3\",\n                    \"idModeGame\": \"OW\",\n                    \"idCategory\": \"1\",\n                    \"event\": null,\n                    \"hint1\": \"Pista 1\",\n                    \"hint2\": \"Pista 2\",\n                    \"hint3\": \"Pista 3\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": \"todo  maldito\",\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        }\n    }\n}"
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "Poblar DB",
-			"item": [
+				},
 				{
-					"name": "loadData",
+					"name": "3- setear Inicio Partida",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -3256,17 +3152,405 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/loadData",
+							"raw": "{{BASE_URL}}/api/user/game/initPlayGame?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"auth",
-								"loadData"
+								"api",
+								"user",
+								"game",
+								"initPlayGame"
+							],
+							"query": [
+								{
+									"key": "idGameSingle",
+									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa"
+								}
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "4- playGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idGameSingle\" : \"0295afbd-540e-40ce-872c-60bc60ca55aa\",\n    \"idUser\": \"1001\",\n    \"response\": \"BUFON\",\n    \"idGame\": 1032, // Multiplayer\n    \"time_playing\" : 16.6\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/playGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"playGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "4- finishPlayGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idGameSingle",
+									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/finishPlayGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"finishPlayGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
 				}
 			]
 		}
