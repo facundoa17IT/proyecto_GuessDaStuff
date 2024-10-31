@@ -1,18 +1,23 @@
 /** React **/
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom'; // Importa useNavigate
 import axiosInstance from '../AxiosConfig';
 /** Main Layout **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
+import GuessPhrase from '../components/ui/GuessPhrase';
+import OrderWord from '../components/ui/OrderWord';
 
 const GameMatchView = () => {
     const location = useLocation();
+    const navigate = useNavigate(); // Hook para navegación
     const { initGameBody } = location.state || {};
     const { initGameData, setinitGameData } = useContext(LoadGameContext);
 
     const [currentHeader, setCurrentheader] = useState('');
     const [gameContent, setGameContent] = useState(null);
+    const [currentGameIndex, setCurrentGameIndex] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(7); // Tiempo de 7 segundos para cada fase
 
     useEffect(() => {
         // Log de salida en el formato deseado
@@ -24,24 +29,61 @@ const GameMatchView = () => {
             .catch(error => {
                 console.error('Error adding category:', error);
             });
-
     }, [initGameBody]);
-
 
     useEffect(() => {
         if (Object.keys(initGameData).length > 0) {
             console.log(initGameData);
-            setGameContent(renderGame);
+            const interval = setInterval(() => {
+                setCurrentGameIndex(prevIndex => {
+                    const gameKeys = Object.keys(initGameData);
+
+                    // Si hemos pasado por todas las fases, navegamos a StartGame
+                    if (prevIndex + 1 >= gameKeys.length) {
+                        clearInterval(interval); 
+                        navigate('/start-game'); 
+                        return prevIndex; 
+                    }
+
+                    return (prevIndex + 1) % gameKeys.length; // Cambia al siguiente juego
+                });
+
+                setTimeRemaining(7); // Resetea el temporizador
+            }, 7000); // Cambia cada 7 segundos
+
+            return () => clearInterval(interval); // Limpia el intervalo al desmontar
         }
-    }, [initGameData]);
+    }, [initGameData, navigate]);
+
+    useEffect(() => {
+        let timer;
+        if (timeRemaining > 0) {
+            timer = setTimeout(() => setTimeRemaining(timeRemaining - 1), 1000);
+        } else {
+            // Cuando el tiempo se acabe, pasa al siguiente juego
+            setCurrentGameIndex(prevIndex => {
+                const gameKeys = Object.keys(initGameData);
+                if (prevIndex + 1 >= gameKeys.length) {
+                    navigate('/start-game'); // Navega a StartGame.jsx
+                    return prevIndex; // Mantener el índice en el último valor
+                }
+                return (prevIndex + 1) % gameKeys.length; // Cambia al siguiente juego
+            });
+        }
+
+        return () => clearTimeout(timer);
+    }, [timeRemaining, navigate, initGameData]);
+
+    useEffect(() => {
+        if (Object.keys(initGameData).length > 0) {
+            setGameContent(renderGame());
+        }
+    }, [currentGameIndex, initGameData]);
 
     const renderGame = () => {
-        // if (error) return <Text>{error}</Text>;
-        // if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
-
         if (initGameData) {
             const gameKeys = Object.keys(initGameData);
-            const currentGameKey = gameKeys[0]; // este valor debe ser asignado dinamicamente cuando cambia de fase
+            const currentGameKey = gameKeys[currentGameIndex]; // Cambia dinámicamente
             const gameInfo = initGameData[currentGameKey].infoGame[0];
 
             if (gameInfo) {
@@ -51,27 +93,31 @@ const GameMatchView = () => {
                 switch (idModeGame) {
                     case 'OW':
                         setCurrentheader("Ordena la Palabra");
-                        GameComponent = <>Cargar Componente OW...</>;
+                        GameComponent = <OrderWord OWinfo={gameInfo}/>;
                         break;
                     case 'GP':
                         setCurrentheader("Adivina la Frase");
-                        GameComponent = <>Cargar Componente GP...</>;
+                        GameComponent = <GuessPhrase GPinfo={gameInfo}/>;
                         break;
-
+                    case 'OBD':
+                        setCurrentheader("Ordenar por Fecha");
+                        GameComponent = <p>hola.</p>;
+                        break;
                     default:
-                        GameComponent = <Text>Modo de juego no reconocido.</Text>;
+                        GameComponent = <p>Modo de juego no reconocido.</p>;
                 }
 
                 return (
-                    <>
+                    <div>
                         {GameComponent}
-                    </>
+                        <p>Tiempo restante: {timeRemaining} segundos</p>
+                    </div>
                 );
             } else {
-                return <>Aún no fue implementado.</>;
+                return <p>Aún no fue implementado.</p>;
             }
         } else {
-            return <>Juego terminado. Volviendo a inicio...</>;
+            return <p>Juego terminado. Volviendo a inicio...</p>;
         }
     };
 
