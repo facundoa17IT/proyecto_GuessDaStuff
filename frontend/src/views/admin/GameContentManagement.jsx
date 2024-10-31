@@ -28,7 +28,7 @@ const GameContentManagement = () => {
     const gameModesListId = "gameModesList";
     const gameModes = [
         { id: 1, name: "Ordena la Palabra" },
-        { id: 2, name: "Ordena la fecha" },
+        //{ id: 2, name: "Ordena la fecha" },
         { id: 3, name: "Adivina la Frase" }
     ]
 

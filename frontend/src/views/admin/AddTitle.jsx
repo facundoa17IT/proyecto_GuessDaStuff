@@ -19,7 +19,10 @@ export const AddTitle = () => {
 
     const [selectedAvailableCategory, setSelectedAvailableCategory] = useState('');
     const [availableCategories, setAvailableCategories] = useState([]);
-    const [selectedAddType, setSelectedAddType] = useState([]);
+    const [selectedAddType, setSelectedAddType] = useState('');
+
+    const [file, setFile] = useState(null);
+    const [canUploadFile, setCanUploadFile] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [modalContent, setModalContent] = useState(null);
@@ -37,13 +40,22 @@ export const AddTitle = () => {
 
     // Update modal with category titles list
     useEffect(() => {
-        if (selectedAddType == "individual" && selectedItem) {
-            setJsonSchemaForm();
-
-            if (schema) {
-                setModalContent(() => renderAddIndividualTitleForm());
+        if (selectedAddType !== ''){
+            if (selectedAddType == "Individual" && selectedItem) {
+                setJsonSchemaForm();
+    
+                if (schema) {
+                    setModalContent(() => renderAddIndividualTitleForm());
+                }
+            }
+            else if (selectedAddType == "Masiva" && selectedItem) {
+                setModalContent(() => renderAddMasiveTitle());
+            }
+            else {
+                console.log("Error con el tipo de carga seleccionada!");
             }
         }
+        
     }, [selectedAddType, schema]);
 
     // Initialize Content 
@@ -57,6 +69,13 @@ export const AddTitle = () => {
                 console.error('Error fetching categories:', error);
             });
     }, []);
+
+    // Trigger upload on button click 
+    useEffect(() => {
+        if (canUploadFile) {
+            uploadFile(file, selectedAvailableCategory);
+        };
+    }, [canUploadFile]);
 
     // Update with Available Categories
     useEffect(() => {
@@ -75,15 +94,23 @@ export const AddTitle = () => {
         }
     }, [selectedAvailableCategory]);
 
-    const setJsonSchemaForm = () => {
-        if (selectedItem?.id) {
-            const { id } = selectedItem;
-            if (id === 1) setSchema(gameModesSchemas.OW);
-            else if (id === 2) setSchema(gameModesSchemas.OBD);
-            else if (id === 3) setSchema(gameModesSchemas.GP);
-            else console.log("error");
+    const getGameModeById = (id) => {
+        switch (id) {
+            case 1: return 'OW';
+            case 2: return 'OBD';
+            case 3: return 'GP';
+            default:
+                console.log("error");
+                return null;
         }
+    };
+
+    const setJsonSchemaForm = () => {
+    const gameMode = getGameModeById(selectedItem?.id);
+    if (gameMode) {
+        setSchema(gameModesSchemas[gameMode]);
     }
+};
 
     const onClose = () => {
         setIsModalOpen(!isModalOpen);
@@ -102,21 +129,17 @@ export const AddTitle = () => {
 
     const handleAddGameModoToCategory = async ({ formData }) => {
         console.log(formData);
-        let individualEndpoint = "";
-        if (selectedItem?.id) {
-            const { id } = selectedItem;
-            if (id === 1) individualEndpoint = 'OWIndividual';
-            else if (id === 2) individualEndpoint = 'OBDIndividual';
-            else if (id === 3) individualEndpoint = 'GPIndividual';
-            else console.log("error");
-        }
-        try {
-            const response = await axiosInstance.post(`/api/admin/${individualEndpoint}`, formData);
-            console.log('Data submitted successfully!', response.data);
-            setFormData({});
-            navigate(-1);
-        } catch (error) {
-            console.error('Error during submission:', error);
+        const gameMode = getGameModeById(selectedItem?.id);
+    
+        if (gameMode) {
+            try {
+                const response = await axiosInstance.post(`/api/admin/${gameMode}Individual`, formData);
+                console.log('Data submitted successfully!', response.data);
+                setFormData({});
+                navigate(-1);
+            } catch (error) {
+                console.error('Error during submission:', error);
+            }
         }
     };
 
@@ -157,8 +180,8 @@ export const AddTitle = () => {
                                 <input
                                     type="radio"
                                     name="modo"
-                                    value="individual"
-                                    checked={selectedAddType == 'individual'}
+                                    value="Individual"
+                                    checked={selectedAddType == 'Individual'}
                                     onChange={handleAddTypeSelection}
                                 />
                                 Individual
@@ -167,8 +190,8 @@ export const AddTitle = () => {
                                 <input
                                     type="radio"
                                     name="modo"
-                                    value="masiva"
-                                    checked={selectedAddType == 'masiva'}
+                                    value="Masiva"
+                                    checked={selectedAddType == 'Masiva'}
                                     onChange={handleAddTypeSelection}
                                 />
                                 Masiva
@@ -182,8 +205,9 @@ export const AddTitle = () => {
 
     const renderAddIndividualTitleForm = () => {
         return (
-            <div>
-                {renderCategoryById()}
+            <>
+            {renderCategoryAndGameModeName()}
+            <div style={{height: '250px',overflowY: 'auto', overflowX: 'hidden'}}>
                 <Form
                     className='form'
                     schema={schema}
@@ -195,23 +219,78 @@ export const AddTitle = () => {
                 >
                 </Form>
             </div>
+            </>
         );
     }
 
-    function renderCategoryById() {
+    const uploadFile = async (file, idCategory) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("idCategory", idCategory);
+    
+        console.log('Selected file:', file.name);
+  
+        const gameMode = getGameModeById(selectedItem?.id);
+    
+        if (gameMode) {
+            try {
+                const response = await axiosInstance.post(`/api/admin/${gameMode}Masive`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                console.log(response.data);
+                navigate(-1);
+            } catch (error) {
+                console.error("Error uploading the file", error);
+            }
+        }
+    };
+    
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleUpload = () => {
+        setCanUploadFile(true);
+    };
+
+    const renderAddMasiveTitle = () => {
+        return (
+            <>
+                {renderCategoryAndGameModeName()}
+                <p>Seleccione un archivo en formato csv o xlsx</p>
+                <input type="file" onChange={handleFileChange} />
+            </>
+        )
+    }
+
+    const renderCategoryAndGameModeName = () => {
         const selectedCategory = availableCategories.find(
             (category) => category.id === Number(selectedAvailableCategory)
         );
-
+    
         if (selectedCategory) {
             console.log(`Selected category: ${selectedCategory.name}`);
         }
-
+    
         return (
             <div>
-                {selectedItem && <p>{selectedItem.name}</p>}
-                {selectedCategory ? (
-                    <p>{selectedCategory.name}</p>
+                {selectedItem && selectedCategory ? (
+                    <table style={{ width: "100%", borderCollapse: "collapse", marginBottom:'15px' }}>
+                        <thead>
+                            <tr>
+                                <th style={{ width: "40%", border: "1px solid black", padding: "5px" }}>Categoría</th>
+                                <th style={{ width: "40%", border: "1px solid black", padding: "5px" }}>Modo de Juego</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style={{ border: "1px solid black", padding: "5px" }}>{selectedCategory.name}</td>
+                                <td style={{ border: "1px solid black", padding: "5px" }}>{selectedItem.name}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 ) : (
                     <p>Category not found</p>
                 )}
@@ -220,8 +299,8 @@ export const AddTitle = () => {
     }
 
     return (
-        <Modal onConfirm={null} showModal={true} closeModal={onClose} title={"Agregar Titulo"}>
-            <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
+        <Modal onConfirm={selectedAddType==="Masiva" ? handleUpload : onClose} showModal={true} closeModal={onClose} title={"Agregar Titulo"}>
+            <div style={{ height: '350px' }}>
                 {modalContent}
             </div>
         </Modal>
