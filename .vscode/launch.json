@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-GuessdastuffApplication<guessdastuff>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "tec.proyecto.guessdastuff.GuessdastuffApplication",
+            "projectName": "guessdastuff",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

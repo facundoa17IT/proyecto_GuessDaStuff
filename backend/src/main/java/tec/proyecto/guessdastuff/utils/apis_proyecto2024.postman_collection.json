@@ -1,129 +1,3558 @@
 {
 	"info": {
-		"_postman_id": "bc289c1c-15a3-4667-a8dc-7605a0653e46",
+		"_postman_id": "d6b48a2b-c18c-4a28-9673-003a3fb212a9",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37753331"
+		"_exporter_id": "34327432"
 	},
 	"item": [
 		{
-			"name": "welcome",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+			"name": "Category",
+			"item": [
+				{
+					"name": "AddCategory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Musica\",\r\n    \"description\": \"Todo sobre Musica\",\r\n    \"urlIcon\": \"http:CANCIONES.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/admin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"admin"
+							]
+						}
+					},
+					"response": [
 						{
-							"key": "token",
-							"value": "{{ACCESS_TOKEN}}",
-							"type": "string"
+							"name": "AddCategory",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"coso4\",\r\n    \"description\": \"AVIONES DE METAL4\",\r\n    \"urlIcon\": \"http:AVIONES4.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/admin",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"admin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 04:00:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"Categoria con id 4 creada correctamente\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
 						}
 					]
 				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Edit-Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"CANCIONES\",\r\n    \"urlIcon\": \"http:CANCIONES.com\",\r\n    \"description\": \"Todo sobre Canciones\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/admin/edit",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"admin",
+								"edit"
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "Edit-Category",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"coso3\",\r\n    \"urlIcon\": \"http:AVIONES.com\",\r\n    \"description\": \"AVIONES DE METAL\",\r\n    \"active\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/admin/edit",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"admin",
+										"edit"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 00:56:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"La categoria coso3 ha sido editada correctamente!\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/api/welcome",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"api",
-						"welcome"
+				{
+					"name": "Delete-Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/admin/delete/PERFUMES",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"admin",
+								"delete",
+								"PERFUMES"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete-Category",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/admin/delete/coso3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"admin",
+										"delete",
+										"coso3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 00:54:55 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"La categoria coso3 ha sido eliminada de forma exitosa!\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "GetActiveCategories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/user/activeCategories",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"user",
+								"activeCategories"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetActiveCategories",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user/activeCategories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user",
+										"activeCategories"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 00:53:47 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"coso\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 2,\n        \"name\": \"coso2\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 3,\n        \"name\": \"coso3\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 4,\n        \"name\": \"coso4\",\n        \"urlIcon\": \"http:AVIONES4.com\",\n        \"description\": \"AVIONES DE METAL4\",\n        \"active\": true\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "GetAllCategories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/user",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetAllCategories",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 00:53:09 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 5,\n        \"name\": \"categoriaSinActive\",\n        \"urlIcon\": \"http:PEFUMES.com\",\n        \"description\": \"PEFUMES DE HOMBRE\",\n        \"active\": false\n    },\n    {\n        \"id\": 1,\n        \"name\": \"coso\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 2,\n        \"name\": \"coso2\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 3,\n        \"name\": \"coso3\",\n        \"urlIcon\": \"http:AVIONES.com\",\n        \"description\": \"AVIONES DE METAL\",\n        \"active\": true\n    },\n    {\n        \"id\": 4,\n        \"name\": \"coso4\",\n        \"urlIcon\": \"http:AVIONES4.com\",\n        \"description\": \"AVIONES DE METAL4\",\n        \"active\": true\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "GetCategoryByName",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/user/PERFUMES",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"user",
+								"PERFUMES"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetCategoryByName",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user/coso",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user",
+										"coso"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 00:56:43 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"coso\",\n    \"description\": \"AVIONES DE METAL\",\n    \"urlIcon\": \"http:AVIONES.com\",\n    \"active\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "GetAvailableCategories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"category",
+								"api",
+								"user",
+								"availableCategories"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetAvailableCategories",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"category",
+										"api",
+										"user",
+										"availableCategories"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 23:42:45 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"JUEGOS\",\n        \"urlIcon\": \"http:JUEGOS.com\",\n        \"description\": \"JUEGOS DE NIÑOS\",\n        \"status\": \"EMPTY\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"PAISES\",\n        \"urlIcon\": \"http:PAISES.com\",\n        \"description\": \"PAISES\",\n        \"status\": \"INITIALIZED\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"BANDERAS\",\n        \"urlIcon\": \"http:BANDERAS.com\",\n        \"description\": \"BANDERAS DE NIÑOS\",\n        \"status\": \"INITIALIZED\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"CANCIONES\",\n        \"urlIcon\": \"http:CANCIONES.com\",\n        \"description\": \"CANCIONES\",\n        \"status\": \"INITIALIZED\"\n    }\n]"
+						}
 					]
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Account Register",
-			"event": [
+			"name": "User",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"matt122133\",\r\n    \"email\" : \"matutambasco@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"role\" : 0\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "Forgot-Password",
+					"item": [
+						{
+							"name": "Forgot-Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"mateo@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/forgot-password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"forgot-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET-ResetPasswordToken",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/auth/reset-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"reset-password"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "ef14675e-5eda-43ee-b24d-bfe2fbf8600b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST-ResetPasswordToken",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":\"cf97bb92-8601-43ba-94e3-9375ebb175dc\",\r\n    \"newPassword\":\"12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/reset-password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
 						}
-					}
-				},
-				"url": {
-					"raw": "{{BASE_URL}}/auth/register",
-					"host": [
-						"{{BASE_URL}}"
-					],
-					"path": [
-						"auth",
-						"register"
 					]
+				},
+				{
+					"name": "EditUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"urlPerfil\": \"admin_PERFIL_URL\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\":{\r\n        \"anio\":1998,\r\n        \"mes\":2,\r\n        \"dia\":5\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/editUser",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"editUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/listUsers",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"listUsers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ListUsers",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/listUsers",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"listUsers"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 02:13:03 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"username\": \"user\",\n        \"email\": \"user@gmail.com\",\n        \"urlPerfil\": \"cososo\",\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1999,\n            \"mes\": 2,\n            \"dia\": 12\n        },\n        \"role\": \"ROLE_USER\",\n        \"status\": \"ONLINE\"\n    },\n    {\n        \"username\": \"admin\",\n        \"email\": \"admin@gmail.com\",\n        \"urlPerfil\": \"cososo\",\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1999,\n            \"mes\": 2,\n            \"dia\": 12\n        },\n        \"role\": \"ROLE_ADMIN\",\n        \"status\": \"ONLINE\"\n    },\n    {\n        \"username\": \"mateo\",\n        \"email\": \"mateo@gmail.com\",\n        \"urlPerfil\": null,\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1999,\n            \"mes\": 12,\n            \"dia\": 14\n        },\n        \"role\": \"ROLE_USER\",\n        \"status\": \"REGISTERED\"\n    },\n    {\n        \"username\": \"angelo\",\n        \"email\": \"angelo@gmail.com\",\n        \"urlPerfil\": \"urlDelMacaco\",\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1999,\n            \"mes\": 12,\n            \"dia\": 14\n        },\n        \"role\": \"ROLE_USER\",\n        \"status\": \"REGISTERED\"\n    },\n    {\n        \"username\": \"admin2\",\n        \"email\": \"admin2@gmail.com\",\n        \"urlPerfil\": \"urlDelMacaco\",\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1980,\n            \"mes\": 12,\n            \"dia\": 1\n        },\n        \"role\": \"ROLE_ADMIN\",\n        \"status\": \"REGISTERED\"\n    },\n    {\n        \"username\": \"admin3\",\n        \"email\": \"admin3@gmail.com\",\n        \"urlPerfil\": \"urlDelMacaco\",\n        \"country\": \"Uruguay\",\n        \"birthday\": {\n            \"anio\": 1984,\n            \"mes\": 12,\n            \"dia\": 1\n        },\n        \"role\": \"ROLE_ADMIN\",\n        \"status\": \"REGISTERED\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "GetUserByUsername",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/user",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetUserByUsername",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/user",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 01:48:22 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"username\": \"user\",\n    \"email\": \"user@gmail.com\",\n    \"urlPerfil\": \"cososo\",\n    \"country\": \"Uruguay\",\n    \"birthday\": {\n        \"anio\": 1999,\n        \"mes\": 2,\n        \"dia\": 12\n    },\n    \"role\": \"ROLE_USER\",\n    \"status\": \"ONLINE\"\n}"
+						}
+					]
+				},
+				{
+					"name": "DeleteUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/deleteUser/userTest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"deleteUser",
+								"userTest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddAdmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin2\",\r\n    \"email\" : \"admin2@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1980,\r\n        \"mes\": 12,\r\n        \"dia\": 1 \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/addAdmin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"addAdmin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "AddAdmin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"admin3\",\r\n    \"email\" : \"admin3@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1984,\r\n        \"mes\": 12,\r\n        \"dia\": 1 \r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/addAdmin",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addAdmin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 02:12:51 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": \"El admin admin3 ha sido creado de forma exitosa!\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "BlockUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/blockUser/userTest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"blockUser",
+								"userTest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UnblockUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/unblockUser/userTest",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"unblockUser",
+								"userTest"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Account Login",
-			"event": [
+			"name": "Game Mode",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"pm.environment.set(\"ACCESS_TOKEN\", jsonData.token);"
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"matt122133\",\r\n    \"password\" : \"1234\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "AddTitle",
+					"item": [
+						{
+							"name": "OrderByDate-Individual",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id_Category\": 2,\r\n    \"event\": \"Pasaron cosas muy importantes\",\r\n    \"infoEvent\": \"pasaron cosas   muy importantes\",\r\n    \"startDate\": {\r\n        \"anio\": 2000,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2002,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"ODBIndividual"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OrderByDate-Individual",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id_Category\": 3,\r\n    \"event\": \"coso\",\r\n    \"infoEvent\": \"pasaron cosas\",\r\n    \"startDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"admin",
+												"ODBIndividual"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 24 Oct 2024 01:06:42 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"headers\": {},\n    \"body\": \"El titulo coso se creo correctamente para la categoria coso3 y modo de juego OBD\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "OrderByDate-Masive",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idCategory",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Usuario/Desktop/Test-Excel.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/ODBMasive",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"ODBMasive"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "OrderWord-Individual",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "••••••"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id_Category\": 1,\n    \"word\": \"todo  maldito\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/OWIndividual",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"OWIndividual"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OrderWord-Individual",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "••••••"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id_Category\": 5,\n    \"word\": \"POLOLO\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/api/admin/OWIndividual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"admin",
+												"OWIndividual"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 24 Oct 2024 01:03:08 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"headers\": {},\n    \"body\": \"La palabra POLOLO se creó correctamente para la categoría categoriaSinActive y modo de juego OW\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "OrderWord-Masive",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idCategory",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Usuario/Desktop/EXCEL-OW.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/OWMasive",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"OWMasive"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GuessPhrase-Individual",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "••••••"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/GPIndividual",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"GPIndividual"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "GuessPhrase-Individual",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "••••••"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"id_Category\": 3,\n    \"phrase\": \"¿Cuál es la capital de Francia?\",\n    \"correctWord\": \"París\",\n    \"hint1\": \"Es una ciudad europea\",\n    \"hint2\": \"Famosa por la Torre Eiffel\",\n    \"hint3\": \"Comienza con P\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URL}}/api/admin/GPIndividual",
+											"host": [
+												"{{BASE_URL}}"
+											],
+											"path": [
+												"api",
+												"admin",
+												"GPIndividual"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Vary",
+											"value": "Origin"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Method"
+										},
+										{
+											"key": "Vary",
+											"value": "Access-Control-Request-Headers"
+										},
+										{
+											"key": "X-Content-Type-Options",
+											"value": "nosniff"
+										},
+										{
+											"key": "X-XSS-Protection",
+											"value": "0"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, no-store, max-age=0, must-revalidate"
+										},
+										{
+											"key": "Pragma",
+											"value": "no-cache"
+										},
+										{
+											"key": "Expires",
+											"value": "0"
+										},
+										{
+											"key": "X-Frame-Options",
+											"value": "DENY"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Date",
+											"value": "Thu, 24 Oct 2024 01:05:34 GMT"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=60"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"headers\": {},\n    \"body\": \"La frase ¿Cuál es la capital de Francia? se creó correctamente para la categoría coso3 y modo de juego GP\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+								}
+							]
+						},
+						{
+							"name": "GuessPhrase-Masive",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "idCategory",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Usuario/Desktop/EXCEL-GP.xlsx"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/GPMasive",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"GPMasive"
+									]
+								}
+							},
+							"response": []
 						}
-					}
+					]
 				},
-				"url": {
-					"raw": "{{BASE_URL}}/auth/login",
-					"host": [
-						"{{BASE_URL}}"
+				{
+					"name": "List Titles of Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/listTitles/3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"listTitles",
+								"3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Titles of Category",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/listTitles/4",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"listTitles",
+										"4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Oct 2024 01:07:04 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"titlesOfCategory\": {\n        \"order phrase\": [\n            \"¿Cuál es la capital de Francia?\"\n        ],\n        \"order word\": [\n            \"EjemploPalabra\"\n        ],\n        \"order by date\": [\n            \"coso\"\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "GetDataOfGameMode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/getDataOfGM/3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"getDataOfGM",
+								"3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetDataOfGameMode",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/admin/getDataOfGM/3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"admin",
+										"getDataOfGM",
+										"3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 19:40:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": {\n        \"idGameMode\": \"OBD\",\n        \"id_Category\": 3,\n        \"event\": \"BANDERA OKOK\",\n        \"infoEvent\": \"BANDERA EDITADA\",\n        \"startDate\": {\n            \"anio\": 1970,\n            \"mes\": 5,\n            \"dia\": 26\n        },\n        \"endDate\": {\n            \"anio\": 2008,\n            \"mes\": 7,\n            \"dia\": 15\n        },\n        \"hint1\": \"HINT 1120\",\n        \"hint2\": \"HINT 2030\",\n        \"hint3\": \"HINT 4200\"\n    },\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "EditOBD",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"event\": \"QUE PERFUME SE USABA DE CHAMACO?\",\r\n        \"infoEvent\": \"LOS PIBES\",\r\n        \"startDate\": {\r\n            \"anio\": 1990,\r\n            \"mes\": 5,\r\n            \"dia\":26\r\n        },\r\n        \"endDate\": {\r\n            \"anio\": 2003,\r\n            \"mes\": 7,\r\n            \"dia\":15\r\n        },\r\n        \"hint1\": \"HINT 1111\",\r\n        \"hint2\": \"HINT 2222\",\r\n        \"hint3\": \"HINT 3333\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/editOrderByDate/2",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"editOrderByDate",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditOW",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"word\": \"PALABRA MODIFY\",\r\n    \"hint1\": \"Pista 11111\",\r\n    \"hint2\": \"Pistaasd 2\",\r\n    \"hint3\": \"Pista asdasd3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/editOrderWord/4",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"editOrderWord",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditGP",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phrase\": \"¿Cuál es la capital de USA?\",\r\n    \"correctWord\": \"Washington\",\r\n    \"hint1\": \"Es una ciudad sensata\",\r\n    \"hint2\": \"Famosa por la sucursal\",\r\n    \"hint3\": \"Comienza con doble b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/editGuessPhrase/9",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"editGuessPhrase",
+								"9"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Session",
+			"item": [
+				{
+					"name": "welcome",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/welcome",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"welcome"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "welcome",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/api/welcome",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"welcome"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain;charset=UTF-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "26"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 03:59:18 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "Welcome you are logged in!"
+						}
+					]
+				},
+				{
+					"name": "Account Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"path": [
-						"auth",
-						"login"
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"mateo\",\r\n    \"email\" : \"mateo@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Account Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"user\",\r\n    \"email\" : \"user@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"role\" : 0,\r\n    \"urlPerfil\":\"cososo\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 2,\r\n        \"dia\": 12 \r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/register",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 03:58:45 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Usuario registrado correctamente!\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzI5NTY5NTI1LCJleHAiOjE3Mjk2NTU5MjV9.eti1uZsdFhM1O_mnV8thjEkE5OM7U1h_zylG3sfQRg0\",\n    \"username\": \"user\",\n    \"role\": \"ROLE_USER\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Account Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"ACCESS_TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Account Login Admin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 03:59:36 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJzdWIiOiJhZG1pbiIsImlhdCI6MTcyOTU2OTU3NiwiZXhwIjoxNzI5NjU1OTc2fQ.ON2fAzJnKxQGgxpXA4T7nzWoO-iq_kVVNIrAtdX2U5U\",\n    \"username\": \"admin\",\n    \"role\": \"[ROLE_ADMIN]\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Account Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"ACCESS_TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"user\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Account Login User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\" : \"user\",\r\n    \"password\" : \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 22 Oct 2024 03:59:11 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sInN1YiI6InVzZXIiLCJpYXQiOjE3Mjk1Njk1NTEsImV4cCI6MTcyOTY1NTk1MX0.RQXOhW7aabkfeygxBNCEfJZdpAo8vgdC0VUD6QtEDBM\",\n    \"username\": \"user\",\n    \"role\": \"[ROLE_USER]\"\n}"
+						}
 					]
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Individual Game",
+			"item": [
+				{
+					"name": "1- loadGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/loadGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"loadGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "2- initGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"1001\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/initGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"initGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "initGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\":\"1234\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OBD\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/initGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"initGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:36:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"gameModes\": {\n        \"juego_3\": {\n            \"name\": \"Guess Phrase\",\n            \"infoGame\": [\n                {\n                    \"id\": \"4\",\n                    \"idModeGame\": \"GP\",\n                    \"idCategory\": \"3\",\n                    \"event\": null,\n                    \"hint1\": \"Es una ciudad europea\",\n                    \"hint2\": \"Famosa por la Torre Eiffel\",\n                    \"hint3\": \"Comienza con P\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_2\": {\n            \"name\": \"Order By Date\",\n            \"infoGame\": [\n                {\n                    \"id\": \"5\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas muy importantes\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2000-01-01\",\n                    \"endDate\": \"2002-01-28\",\n                    \"infoEvent\": \"pasaron cosas   muy importantes\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                },\n                {\n                    \"id\": \"2\",\n                    \"idModeGame\": \"OBD\",\n                    \"idCategory\": \"2\",\n                    \"event\": \"Pasaron cosas\",\n                    \"hint1\": \"H11\",\n                    \"hint2\": \"H22\",\n                    \"hint3\": \"H33\",\n                    \"startDate\": \"2010-01-01\",\n                    \"endDate\": \"2012-01-28\",\n                    \"infoEvent\": \"pasaron cosas\",\n                    \"word\": null,\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        },\n        \"juego_1\": {\n            \"name\": \"Order Word\",\n            \"infoGame\": [\n                {\n                    \"id\": \"3\",\n                    \"idModeGame\": \"OW\",\n                    \"idCategory\": \"1\",\n                    \"event\": null,\n                    \"hint1\": \"Pista 1\",\n                    \"hint2\": \"Pista 2\",\n                    \"hint3\": \"Pista 3\",\n                    \"startDate\": null,\n                    \"endDate\": null,\n                    \"infoEvent\": null,\n                    \"word\": \"todo  maldito\",\n                    \"correct_word\": null,\n                    \"phrase\": null\n                }\n            ]\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "3- setear Inicio Partida",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/initPlayGame?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"initPlayGame"
+							],
+							"query": [
+								{
+									"key": "idGameSingle",
+									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "4- playGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idGameSingle\" : \"0295afbd-540e-40ce-872c-60bc60ca55aa\",\n    \"idUser\": \"1001\",\n    \"response\": \"BUFON\",\n    \"idGame\": 1032, // Multiplayer\n    \"time_playing\" : 16.6\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/playGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"playGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "4- finishPlayGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idGameSingle",
+									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/user/game/finishPlayGame",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"game",
+								"finishPlayGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
 		}
 	]
 }

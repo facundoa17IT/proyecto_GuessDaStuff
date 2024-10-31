@@ -1,0 +1,71 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--background-color);
+  padding: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  width: 400px;
+  max-width: 80vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  /* Allows for dynamic height based on content */
+}
+
+.modal-content button:not(.data-picker-btn) {
+  width: 160px;
+  margin: 10px;
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-body {
+  height: 100%;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-footer {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-content h2 {
+  font-size: 1.8em;
+  margin: 5px 0px 5px 0px !important;
+}
+
+@media (max-width: 1366px) {
+  .modal-content {
+    height: 85vh;
+  }
+}

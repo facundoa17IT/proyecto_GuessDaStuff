@@ -33,4 +33,4 @@ build/
 .vscode/
 
 # Archivos de propiedades de Spring
-/application.properties
+/src/main/resources/application.properties

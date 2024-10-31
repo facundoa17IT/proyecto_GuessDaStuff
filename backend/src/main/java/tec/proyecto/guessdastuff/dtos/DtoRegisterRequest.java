@@ -10,8 +10,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoRegisterRequest {
+
     String username;
+
     String password;
+
     String email;
-    int role; // 0 = ROLE_USER | 1 = ROLE_ADMIN
+    
+    @Builder.Default
+    int role = 0;
+
+    @Builder.Default
+    private String urlPerfil = "urlDelMacaco";
+
+    private String country;
+
+    private DtoDate birthday;
+
 }
