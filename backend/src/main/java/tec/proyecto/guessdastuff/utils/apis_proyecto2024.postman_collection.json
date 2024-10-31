@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d6b48a2b-c18c-4a28-9673-003a3fb212a9",
+		"_postman_id": "86ce1d8b-84ec-431e-8e60-76daceb380bc",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34327432"
+		"_exporter_id": "37753331"
 	},
 	"item": [
 		{
@@ -34,7 +34,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin",
+							"raw": "https://{{BASE_URL}}/category/api/admin",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -163,7 +164,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin/edit",
+							"raw": "https://{{BASE_URL}}/category/api/admin/edit",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -285,7 +287,8 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin/delete/PERFUMES",
+							"raw": "https://{{BASE_URL}}/category/api/admin/delete/PERFUMES",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -400,7 +403,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/activeCategories",
+							"raw": "https://{{BASE_URL}}/category/api/user/activeCategories",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -513,14 +517,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user",
+							"raw": "https://{{BASE_URL}}/auth/categories",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"user"
+								"auth",
+								"categories"
 							]
 						}
 					},
@@ -624,7 +628,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/PERFUMES",
+							"raw": "https://{{BASE_URL}}/category/api/user/PERFUMES",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -737,7 +742,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+							"raw": "https://{{BASE_URL}}/category/api/user/availableCategories",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -857,7 +863,8 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/auth/forgot-password",
+									"raw": "https://{{BASE_URL}}/auth/forgot-password",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -875,7 +882,8 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/auth/reset-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b",
+									"raw": "https://{{BASE_URL}}/auth/reset-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -908,7 +916,8 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/auth/reset-password",
+									"raw": "https://{{BASE_URL}}/auth/reset-password",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -947,7 +956,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editUser",
+							"raw": "https://{{BASE_URL}}/api/admin/editUser",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -976,7 +986,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/listUsers",
+							"raw": "https://{{BASE_URL}}/api/admin/listUsers",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1099,7 +1110,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/user",
+							"raw": "https://{{BASE_URL}}/api/admin/user",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1219,7 +1231,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/deleteUser/userTest",
+							"raw": "https://{{BASE_URL}}/api/admin/deleteUser/userTest",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1258,7 +1271,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/addAdmin",
+							"raw": "https://{{BASE_URL}}/api/admin/addAdmin",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1378,7 +1392,8 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/blockUser/userTest",
+							"raw": "https://{{BASE_URL}}/api/admin/blockUser/userTest",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1408,7 +1423,8 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/unblockUser/userTest",
+							"raw": "https://{{BASE_URL}}/api/admin/unblockUser/userTest",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -1455,7 +1471,8 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+									"raw": "https://{{BASE_URL}}/api/admin/ODBIndividual",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1590,7 +1607,8 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/ODBMasive",
+									"raw": "https://{{BASE_URL}}/api/admin/ODBMasive",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1637,7 +1655,8 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/OWIndividual",
+									"raw": "https://{{BASE_URL}}/api/admin/OWIndividual",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1781,7 +1800,8 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/OWMasive",
+									"raw": "https://{{BASE_URL}}/api/admin/OWMasive",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1828,7 +1848,8 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/GPIndividual",
+									"raw": "https://{{BASE_URL}}/api/admin/GPIndividual",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -1972,7 +1993,8 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/GPMasive",
+									"raw": "https://{{BASE_URL}}/api/admin/GPMasive",
+									"protocol": "https",
 									"host": [
 										"{{BASE_URL}}"
 									],
@@ -2003,7 +2025,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/listTitles/3",
+							"raw": "https://{{BASE_URL}}/api/admin/listTitles/3",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2116,7 +2139,8 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/getDataOfGM/3",
+							"raw": "https://{{BASE_URL}}/api/admin/getDataOfGM/3",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2238,7 +2262,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editOrderByDate/2",
+							"raw": "https://{{BASE_URL}}/api/admin/editOrderByDate/2",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2277,7 +2302,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editOrderWord/4",
+							"raw": "https://{{BASE_URL}}/api/admin/editOrderWord/4",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2316,7 +2342,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editGuessPhrase/9",
+							"raw": "https://{{BASE_URL}}/api/admin/editGuessPhrase/9",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2363,7 +2390,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/welcome",
+							"raw": "https://{{BASE_URL}}/api/welcome",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2483,7 +2511,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/register",
+							"raw": "https://{{BASE_URL}}/auth/register",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2613,7 +2642,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/login",
+							"raw": "https://{{BASE_URL}}/auth/login",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2743,7 +2773,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/login",
+							"raw": "https://{{BASE_URL}}/auth/login",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -2880,7 +2911,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/loadGame",
+							"raw": "https://{{BASE_URL}}/api/user/game/loadGame",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3016,7 +3048,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/initGame",
+							"raw": "https://{{BASE_URL}}/api/user/game/initGame",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3152,7 +3185,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/initPlayGame?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
+							"raw": "https://{{BASE_URL}}/api/user/game/initPlayGame?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3299,7 +3333,8 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/playGame",
+							"raw": "https://{{BASE_URL}}/api/user/game/playGame",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3411,7 +3446,7 @@
 					]
 				},
 				{
-					"name": "4- finishPlayGame",
+					"name": "5- finishPlayGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -3441,7 +3476,8 @@
 							]
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/finishPlayGame",
+							"raw": "https://{{BASE_URL}}/api/user/game/finishPlayGame",
+							"protocol": "https",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3551,6 +3587,42 @@
 							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Poblar DB",
+			"item": [
+				{
+					"name": "loadData",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{BASE_URL}}/auth/loadData",
+							"protocol": "https",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"loadData"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
