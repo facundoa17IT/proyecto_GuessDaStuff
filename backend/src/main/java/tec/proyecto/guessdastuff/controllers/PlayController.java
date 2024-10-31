@@ -40,4 +40,38 @@ public class PlayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+    // PLAY GAME
+    @PostMapping("/playGame")
+    public ResponseEntity<Boolean> playGame(@RequestBody DtoPlayGameRequest dtoPlayGameRequest) {
+        try {
+            Boolean response = playService.playGame(dtoPlayGameRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // Setear tiempo de inicio de partida
+    @PostMapping("/initPlayGame")
+    public ResponseEntity<Boolean> initPlayGame(String idGameSingle) {
+        try {
+            Boolean response = playService.initPlayGame(idGameSingle);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    // Terminar partida
+    @PostMapping("/finishPlayGame")
+    public ResponseEntity<Boolean> finishPlayGame(String idGameSingle) {
+        try {
+            Boolean response = playService.finishPlayGame(idGameSingle);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+    
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class DtoInitGameResponse {
 
     private Map<String, GameModeInfo> gameModes;
+    private String idGameSingle;
 
     @NoArgsConstructor
     @AllArgsConstructor

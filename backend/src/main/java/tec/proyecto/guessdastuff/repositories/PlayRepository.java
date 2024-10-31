@@ -30,8 +30,6 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
        nativeQuery = true)
     List<Object[]> findGamesByCategoriesAndModes(Integer cat1, String mod1, Integer cat2, String mod2, Integer cat3, String mod3);
 
-
-    // Consulta para obtener una tupla aleatoria entre las que coinciden
     @Query(value = "WITH selected_events AS ( " +
                    "SELECT * FROM games WHERE id_game_mode = 'OBD' AND id_category = :idCategory " +
                    "AND start_date IS DISTINCT FROM end_date " +
@@ -46,24 +44,30 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
                    "(games.start_date <= se.start_date AND games.end_date >= se.end_date)) " +
                    "ORDER BY RANDOM() LIMIT 3", 
            nativeQuery = true)
-           List<Object[]> findOBD(Integer idCategory);
+    List<Object[]> findOBD(Integer idCategory);
 
-        @Query(value = "SELECT * " +
+    @Query(value = "SELECT * " +
                 "FROM games " +
                 "WHERE id_game_mode = 'OW' " +
                 "AND id_category = :idCategory " +
                 "ORDER BY RANDOM() " +
                 "LIMIT 1;", 
         nativeQuery = true)
-        List<Object[]> findOW(Integer idCategory);
+    List<Object[]> findOW(Integer idCategory);
 
-        @Query(value = "SELECT * " +
+    @Query(value = "SELECT * " +
                 "FROM games " +
                 "WHERE id_game_mode = 'GP' " +
                 "AND id_category = :idCategory " +
                 "ORDER BY RANDOM() " +
                 "LIMIT 1;", 
         nativeQuery = true)
-        List<Object[]> findGP(Integer idCategory);
+    List<Object[]> findGP(Integer idCategory);
+
+    @Query(value = "SELECT * " +
+        "FROM games " +
+        "WHERE id = :idGame", 
+        nativeQuery = true)
+    Object[] getResultPlayGame(Integer idGame);
 
 }

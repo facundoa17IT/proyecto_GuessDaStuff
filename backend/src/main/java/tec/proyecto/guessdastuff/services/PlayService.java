@@ -7,18 +7,81 @@ import tec.proyecto.guessdastuff.dtos.*;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameRequest.ParCatMod;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse.GameInfo;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse.GameModeInfo;
+import tec.proyecto.guessdastuff.repositories.DataGameSingleRepository;
 import tec.proyecto.guessdastuff.repositories.PlayRepository;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.UUID;
+import java.time.LocalDateTime;
+
+import tec.proyecto.guessdastuff.entities.DataGameSingle;
 
 @Service
 public class PlayService {
 
     @Autowired
     private PlayRepository playRepository;
+
+    @Autowired
+    private DataGameSingleRepository dataGameSingleRepository;
+
+    public boolean initPlayGame(String idGameSingle){
+        dataGameSingleRepository.initPlayGame(idGameSingle);
+    return true;
+    }
+    public boolean finishPlayGame(String idGameSingle){
+        dataGameSingleRepository.finishPlayGame(idGameSingle);
+    return true;
+    }
+    
+   public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
+    //esto va a la tabla DataGame
+    Object[] result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
+    int points = 0;
+    float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
+
+    // Calcular puntos según el tiempo de respuesta
+    if (timePlaying < 8) {
+        points = 5;
+    } else if (timePlaying < 15) {
+        points = 4;
+    } else if (timePlaying < 20) {
+        points = 3;
+    } else if (timePlaying < 25) {
+        points = 2;
+    } else if (timePlaying <= 30) {
+        points = 1;
+    }
+
+    // Acceso unificado a los elementos del resultado
+    Object[] resultArray = (Object[]) result[0]; // Unificar el acceso al array interno
+
+    if (resultArray[10].equals("GP")){ // Asegúrate de que el índice sea correcto
+        if (resultArray[7].equals(dtoPlayGameRequest.getResponse())){
+            if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
+                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+            }
+            return true;
+        } else 
+           return false;
+    } else if (resultArray[10].equals("OW")){ // Asegúrate de que el índice sea correcto
+        if (resultArray[5].equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto
+            if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
+                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+            }
+            return true;
+        } else 
+           return false;
+    }
+    //si es incorrecto;
+    return false; // Retornar false si es incorrecto
+   }
+
 
    public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
     List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
@@ -53,6 +116,12 @@ public class PlayService {
         Map<String, GameModeInfo> responseIntGame = new HashMap<>();
         String keyGame = "juego_";
         int count = 1;
+
+        // Variables para almacenar los IDs de los juegos
+        String idGame1 = null;
+        String idGame2 = null;
+        String idGame3 = null;
+
         for (ParCatMod parCatMod : parCatModeList) {
             switch (parCatMod.getMod()) {
                 case "OBD":
@@ -60,6 +129,8 @@ public class PlayService {
                     List<Object[]> responseObd = playRepository.findOBD(parCatMod.getCat());
                     // Crear una lista de GameInfo para almacenar la información
                     List<GameInfo> gameInfoList = new ArrayList<>(); 
+                    StringBuilder ids = new StringBuilder(); // Usar StringBuilder para concatenar IDs
+
                     for (Object[] itemObd : responseObd) {
                         GameInfo gameInfo = GameInfo.builder()
                             .id(String.valueOf(itemObd[2])) // Convertir el Long a String
@@ -73,16 +144,30 @@ public class PlayService {
                             .endDate(itemObd[0].toString()) // Convertir Date a String (endDate)
                             .infoEvent((String) itemObd[11]) // infoEvent
                             .build();
-                    
+                        
                         // Añadir el objeto a la lista de GameInfo
                         gameInfoList.add(gameInfo);
+                        
+                        // Concatenar el ID del juego
+                        if (ids.length() > 0) {
+                            ids.append(","); // Añadir una coma si ya hay IDs concatenados
+                        }
+                        ids.append(gameInfo.getId()); // Concatenar el ID
                     }
+
                     // Crear el objeto GameModeInfo con la lista de GameInfo
-                    GameModeInfo gameModeInfo = new GameModeInfo(
-                        "Order By Date", gameInfoList
-                    );
+                    GameModeInfo gameModeInfo = new GameModeInfo("Order By Date", gameInfoList);
                     // Añadir el GameModeInfo al mapa de respuesta
-                    responseIntGame.put(keyGame+count, gameModeInfo);
+                    responseIntGame.put(keyGame + count, gameModeInfo);
+                    
+                    // Asignar los IDs concatenados a las variables correspondientes
+                    if (count == 1) {
+                        idGame1 = ids.toString(); // Guardar la concatenación de IDs
+                    } else if (count == 2) {
+                        idGame2 = ids.toString(); // Guardar la concatenación de IDs
+                    } else if (count == 3) {
+                        idGame3 = ids.toString(); // Guardar la concatenación de IDs
+                    }
                     break;
                 case "OW":
                     // Obtener los datos desde el repositorio
@@ -108,7 +193,15 @@ public class PlayService {
                         // Crear el objeto GameModeInfo con la lista de GameInfo
                         GameModeInfo gameModeInfo2 = new GameModeInfo("Order Word", gameInfoList2);
                         // Añadir el GameModeInfo al mapa de respuesta
-                        responseIntGame.put(keyGame+count, gameModeInfo2);
+                        responseIntGame.put(keyGame + count, gameModeInfo2);
+                        // Asignar el id del juego según el valor de count
+                        if (count == 1) {
+                            idGame1 = gameInfo2.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 2) {
+                            idGame2 = gameInfo2.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 3) {
+                            idGame3 = gameInfo2.getId(); // Suponiendo que hay al menos un juego
+                        }
                     }
                     break;
                 case "GP":
@@ -136,7 +229,15 @@ public class PlayService {
                         // Crear el objeto GameModeInfo con la lista de GameInfo
                         GameModeInfo gameModeInfo3 = new GameModeInfo("Guess Phrase", gameInfoList3);
                         // Añadir el GameModeInfo al mapa de respuesta
-                        responseIntGame.put(keyGame+count, gameModeInfo3);
+                        responseIntGame.put(keyGame + count, gameModeInfo3);
+                        // Asignar el id del juego según el valor de count
+                        if (count == 1) {
+                            idGame1 = gameInfo3.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 2) {
+                            idGame2 = gameInfo3.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 3) {
+                            idGame3 = gameInfo3.getId(); // Suponiendo que hay al menos un juego
+                        }
                     }
                     break;
                 default:
@@ -144,10 +245,26 @@ public class PlayService {
                 }
                 count++;
         }
-    
+
+        // Crear y guardar la tupla en la tabla DataGameSingle dentro del bucle
+        DataGameSingle dataGameSingle = new DataGameSingle();
+        dataGameSingle.setId(UUID.randomUUID().toString()); // Generar un ID único
+        dataGameSingle.setIdUser(dtoInitGameRequest.getUserId()); // Asignar el ID del usuario
+        dataGameSingle.setIdDataGame1(idGame1);
+        dataGameSingle.setIdDataGame2(idGame2);
+        dataGameSingle.setIdDataGame3(idGame3);
+        dataGameSingle.setPoints(0); // Asignar puntos iniciales
+        dataGameSingle.setTimePlaying(0); // Asignar tiempo inicial
+        dataGameSingle.setTmstmpInit(LocalDateTime.now()); // Asignar timestamp actual
+        dataGameSingle.setFinish(false); // Inicialmente no está terminado
+
+
+        dataGameSingleRepository.save(dataGameSingle); 
+
         // Crear la respuesta y asignar el mapa de modos de juego
         DtoInitGameResponse dtoInitGameResponse = new DtoInitGameResponse();
         dtoInitGameResponse.setGameModes(responseIntGame);
+        dtoInitGameResponse.setIdGameSingle(dataGameSingle.getId()); // Establecer el ID en la respuesta
     
         return dtoInitGameResponse;
     }
