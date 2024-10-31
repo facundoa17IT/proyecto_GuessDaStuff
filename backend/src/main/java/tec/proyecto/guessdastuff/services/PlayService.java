@@ -43,40 +43,44 @@ public class PlayService {
     int points = 0;
     float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
 
-    // Calcular puntos según el tiempo de respuesta
-    if (timePlaying < 8) {
-        points = 5;
-    } else if (timePlaying < 15) {
-        points = 4;
-    } else if (timePlaying < 20) {
-        points = 3;
-    } else if (timePlaying < 25) {
-        points = 2;
-    } else if (timePlaying <= 30) {
-        points = 1;
-    }
+    if (timePlaying != 0){
+        // Calcular puntos según el tiempo de respuesta
+        if (timePlaying < 8) {
+            points = 5;
+        } else if (timePlaying < 15) {
+            points = 4;
+        } else if (timePlaying < 20) {
+            points = 3;
+        } else if (timePlaying < 25) {
+            points = 2;
+        } else if (timePlaying <= 30) {
+            points = 1;
+        }
+         // Acceso unificado a los elementos del resultado
+        Object[] resultArray = (Object[]) result[0]; // Unificar el acceso al array interno
 
-    // Acceso unificado a los elementos del resultado
-    Object[] resultArray = (Object[]) result[0]; // Unificar el acceso al array interno
-
-    if (resultArray[10].equals("GP")){ // Asegúrate de que el índice sea correcto
-        if (resultArray[7].equals(dtoPlayGameRequest.getResponse())){
-            if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-            }
-            return true;
-        } else 
-           return false;
-    } else if (resultArray[10].equals("OW")){ // Asegúrate de que el índice sea correcto
-        if (resultArray[5].equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto
-            if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-            }
-            return true;
-        } else 
-           return false;
+        if (resultArray[10].equals("GP")){ // Asegúrate de que el índice sea correcto
+            if (resultArray[7].equals(dtoPlayGameRequest.getResponse())){
+                if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
+                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                }
+                return true;
+            } else 
+            return false;
+        } else if (resultArray[10].equals("OW")){ // Asegúrate de que el índice sea correcto
+            if (resultArray[5].equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto
+                if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
+                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                }
+                return true;
+            } else 
+            return false;
+        }
+    } else {
+        dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+        return true; //
     }
     //si es incorrecto;
     return false; // Retornar false si es incorrecto
