@@ -10,7 +10,7 @@ const SlotMachine = () => {
         console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
         setTimeout(() => {
             spin();
-        }, 1000); // 3000 ms para esperar 3 segundos adicionales
+        }, 1000);
     }, []);
 
     // Estado para almacenar el valor de cada slot
@@ -19,6 +19,7 @@ const SlotMachine = () => {
     const [slot3, setSlot3] = useState(loadGameData[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
+    const spinDuration = 3000;
 
     // Función para obtener un elemento aleatorio de un array
     const getRandomItem = (array) => {
@@ -35,9 +36,9 @@ const SlotMachine = () => {
             setSlot1(getRandomItem(loadGameData[0].gameModes)); // Cambia el slot 1 a un modo aleatorio
             setSlot2(getRandomItem(loadGameData[1].gameModes)); // Cambia el slot 2 a un modo aleatorio
             setSlot3(getRandomItem(loadGameData[2].gameModes)); // Cambia el slot 3 a un modo aleatorio
-        }, 100); // Intervalo de 100 ms entre cambios
+        }, spinDuration * 0.05); // Intervalo entre cambios
 
-        // Detener el giro después de 2 segundos
+        // Detener el giro después de spinDuration
         setTimeout(() => {
             clearInterval(spinInterval); // Detiene el intervalo de giro
 
@@ -91,23 +92,35 @@ const SlotMachine = () => {
                     }
                 });
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
-        }, 2000); // Duración del giro (2 segundos)
+        }, spinDuration); // Duración del giro (2 segundos)
     };
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
             <div className="slot-machine"> {/* Contenedor de los slots */}
-                <div className="slot"> {/* Primer slot */}
-                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>{slot1}</div> {/* Mostrar el valor del slot 1 */}
+
+                {/* Tercer slot */}
+                <div className="slot">
+                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>
+                        {slot3}
+                    </div>
                 </div>
-                <div className="slot"> {/* Segundo slot */}
-                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>{slot2}</div> {/* Mostrar el valor del slot 2 */}
+
+                {/* Segundo slot */}
+                <div className="slot">
+                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>
+                        {slot2}
+                    </div>
                 </div>
-                <div className="slot"> {/* Tercer slot */}
-                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>{slot3}</div> {/* Mostrar el valor del slot 3 */}
+
+                {/* Primer slot */}
+                <div className="slot">
+                    <div className={`reel ${isSpinning ? 'spinning' : ''}`}>
+                        {slot1}
+                    </div>
                 </div>
             </div>
-            
+
             <div className="results"> {/* Contenedor para mostrar los resultados */}
                 {results.length > 0 && ( // Si hay resultados
                     <ul>

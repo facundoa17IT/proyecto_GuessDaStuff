@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Cambiar a react-router-dom pa
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 import axiosInstance from '../AxiosConfig'
 import SlotMachine from '../components/ui/SlotMachine';
-
+import MainGameLayout from '../components/layouts/MainGamelayout'
 const SelectionPhase = () => {
 	// const [results, setResults] = useState([]);
 	// const [spinning, setSpinning] = useState(false);
@@ -13,9 +13,12 @@ const SelectionPhase = () => {
 	// const { loadGameData } = useContext(LoadGameContext);
 
 	return (
-		<div>
-			<SlotMachine/>
-		</div>
+		<MainGameLayout
+			middleHeader='Fase de Seleccion'
+			middleContent={
+				<SlotMachine />
+			}
+		/>
 	);
 };
 

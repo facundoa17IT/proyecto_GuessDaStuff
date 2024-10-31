@@ -10,24 +10,16 @@ const GameMatchView = () => {
     const location = useLocation();
     const { initGameBody } = location.state || {};
     const { initGameData, setinitGameData } = useContext(LoadGameContext);
-    
-    const GameModeComponents = {
-        OBD: "Order by Date",
-        OW: "Order Word",
-        GP: "Guess Phrase"
-    };
-    const [gameModeCollection, setGameModeCollection] = useState([]);
+
+    const [currentHeader, setCurrentheader] = useState('');
+    const [gameContent, setGameContent] = useState(null);
 
     useEffect(() => {
         // Log de salida en el formato deseado
         console.log(JSON.stringify(initGameBody, null, 2));
-
         axiosInstance.post("/api/user/game/initGame", initGameBody)
             .then(response => {
-                console.log("Init Game!!")
-                console.log(response.data);
-                setinitGameData(response.data);
-                //window.location.reload();
+                setinitGameData(response.data.gameModes);
             })
             .catch(error => {
                 console.error('Error adding category:', error);
@@ -35,64 +27,59 @@ const GameMatchView = () => {
 
     }, [initGameBody]);
 
-    const getSpecificInfo = (gameModeKey, index, propertyKey = null) => {
-        const gameMode = initGameData.gameModes?.[gameModeKey];
-
-        if (!gameMode) {
-            //console.log(`Game mode ${gameModeKey} not found.`);
-            return null;
-        }
-
-        // Determine the index based on the game mode name
-        let selectedIndex = (gameMode.name === "Order By Date" && index >= 0 && index <= 2) ? index : 0;
-
-        const infoGameItem = gameMode?.infoGame[selectedIndex];
-        if (!infoGameItem) {
-            //console.log(`Index ${selectedIndex} not found in game mode ${gameModeKey}.`);
-            return null;
-        }
-
-        // If propertyKey is provided, return that specific property
-        if (propertyKey) {
-            const property = infoGameItem[propertyKey];
-            if (property === undefined) {
-                console.log(`Property ${propertyKey} not found in item at index ${selectedIndex} of game mode ${gameModeKey}.`);
-                return null;
-            }
-            return property;
-        }
-
-        // If no propertyKey is provided, return the entire infoGame item
-        return infoGameItem;
-    };
-
 
     useEffect(() => {
         if (Object.keys(initGameData).length > 0) {
             console.log(initGameData);
-            // Test the getSpecificInfo function
-            console.log(getSpecificInfo("juego_1", 0, "idModeGame"));
-            console.log(getSpecificInfo("juego_2", 0, "idModeGame"));
-            console.log(getSpecificInfo("juego_3", 0, "idModeGame"));
+            setGameContent(renderGame);
         }
     }, [initGameData]);
+
+    const renderGame = () => {
+        // if (error) return <Text>{error}</Text>;
+        // if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
+
+        if (initGameData) {
+            const gameKeys = Object.keys(initGameData);
+            const currentGameKey = gameKeys[0]; // este valor debe ser asignado dinamicamente cuando cambia de fase
+            const gameInfo = initGameData[currentGameKey].infoGame[0];
+
+            if (gameInfo) {
+                const { idModeGame } = gameInfo;
+                let GameComponent;
+
+                switch (idModeGame) {
+                    case 'OW':
+                        setCurrentheader("Ordena la Palabra");
+                        GameComponent = <>Cargar Componente OW...</>;
+                        break;
+                    case 'GP':
+                        setCurrentheader("Adivina la Frase");
+                        GameComponent = <>Cargar Componente GP...</>;
+                        break;
+
+                    default:
+                        GameComponent = <Text>Modo de juego no reconocido.</Text>;
+                }
+
+                return (
+                    <>
+                        {GameComponent}
+                    </>
+                );
+            } else {
+                return <>Aún no fue implementado.</>;
+            }
+        } else {
+            return <>Juego terminado. Volviendo a inicio...</>;
+        }
+    };
 
     return (
         <MainGameLayout
             canGoBack={false}
-            middleHeader={"Game Mode"}
-            middleContent={
-                <div style={{ width: '100%', height: '80%' }}>
-                    {/* getSpecificInfo("juego_1", 0, "idModeGame") */}
-                    {GameModeComponents
-                        ? (<div><h2>{GameModeComponents["OBD"]}</h2></div>)
-                        : (<div style={{ border: '2px dashed Black', borderRadius: '8px', padding: '90px', marginBottom: '15px' }}>
-                            <h3>Contenido de la partida</h3>
-                        </div>)
-                    }
-                    <button>Adivinar</button>
-                </div>
-            }
+            middleHeader={currentHeader}
+            middleContent={gameContent}
         />
     );
 };
