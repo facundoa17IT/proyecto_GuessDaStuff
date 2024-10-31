@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUser;
 import tec.proyecto.guessdastuff.services.UserService;
 
@@ -54,9 +55,9 @@ public class UserController {
     }
 
     @PostMapping("/addAdmin")
-    public ResponseEntity<?> addAdmin(@RequestBody DtoUser dtoUser){
+    public ResponseEntity<?> addAdmin(@RequestBody DtoAdmin dtoAdmin){
         try {
-            return ResponseEntity.ok(userService.addAdmin(dtoUser));
+            return ResponseEntity.ok(userService.addAdmin(dtoAdmin));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

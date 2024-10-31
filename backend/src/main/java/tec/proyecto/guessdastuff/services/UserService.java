@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
+import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUser;
 import tec.proyecto.guessdastuff.dtos.DtoUserResponse;
 import tec.proyecto.guessdastuff.entities.User;
@@ -99,31 +100,29 @@ public class UserService {
         return ResponseEntity.ok("El usuario " + username + " ha sido eliminado de forma exitosa!");
     }
 
-    public ResponseEntity<?> addAdmin (DtoUser dtoUser) throws UserException{
+    public ResponseEntity<?> addAdmin (DtoAdmin dtoAdmin) throws UserException{
 
-        Optional<User> userOpt = userRepository.findByUsername(dtoUser.getUsername());
+        Optional<User> userOpt = userRepository.findByUsername(dtoAdmin.getUsername());
 
         if(userOpt.isPresent()){
-            throw new UserException("El admin " + dtoUser.getUsername() + " ya existe!");
+            throw new UserException("El admin " + dtoAdmin.getUsername() + " ya existe!");
         }
 
-        LocalDate birthdate = dateConverter.toLocalDate(dtoUser.getBirthday());
         User userBuild = User.builder()
-            .username(dtoUser.getUsername())
-            .password(passwordEncoder.encode(dtoUser.getPassword()))
-            .email(dtoUser.getEmail())
+            .username(dtoAdmin.getUsername())
+            .password(passwordEncoder.encode(dtoAdmin.getPassword()))
+            .email(dtoAdmin.getEmail())
             .role(ERole.ROLE_ADMIN)
-            .urlPerfil(dtoUser.getUrlPerfil())
-            .country(dtoUser.getCountry())
-            .birthday(birthdate)
             .status(EStatus.REGISTERED)
+            .birthday(LocalDate.now()) // hardcoded
+            .country("Uruguay")
             .atCreate(LocalDate.now())
             .atUpdate(LocalDate.now())
             .build();
 
         userRepository.save(userBuild);
 
-        return ResponseEntity.ok("El admin " + dtoUser.getUsername() + " ha sido creado de forma exitosa!");
+        return ResponseEntity.ok("El admin " + dtoAdmin.getUsername() + " ha sido creado de forma exitosa!");
     }
 
     // Genera un enlace de restablecimiento de contraseña y envía un correo electrónico
