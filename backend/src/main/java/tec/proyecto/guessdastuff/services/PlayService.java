@@ -43,17 +43,19 @@ public class PlayService {
     int points = 0;
     float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
 
-    // Calcular puntos según el tiempo de respuesta
-    if (timePlaying < 8) {
-        points = 5;
-    } else if (timePlaying < 15) {
-        points = 4;
-    } else if (timePlaying < 20) {
-        points = 3;
-    } else if (timePlaying < 25) {
-        points = 2;
-    } else if (timePlaying <= 30) {
-        points = 1;
+    if (timePlaying != 0){
+        // Calcular puntos según el tiempo de respuesta
+        if (timePlaying < 8) {
+            points = 5;
+        } else if (timePlaying < 15) {
+            points = 4;
+        } else if (timePlaying < 20) {
+            points = 3;
+        } else if (timePlaying < 25) {
+            points = 2;
+        } else if (timePlaying <= 30) {
+            points = 1;
+        }
     }
 
     // Acceso unificado a los elementos del resultado
