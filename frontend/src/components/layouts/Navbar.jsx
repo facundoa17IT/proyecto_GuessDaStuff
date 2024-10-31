@@ -65,12 +65,12 @@ const Navbar = () => {
                             {role === 'ROLE_ADMIN' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to="admin/game-content-management" className="nav-links">
                                             <BsDatabaseFillGear style={{ marginRight: '5px' }} />Contenido
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to="admin/users-management" className="nav-links">
                                             <FaUserCog style={{ marginRight: '5px' }} />Usuarios
                                         </Link>
                                     </li>

@@ -46,6 +46,11 @@ export const Login = () => {
             // Store user Role in Local Storage & AuthContext
             localStorage.setItem('role', role);
             setRole(role);
+
+            // Get username
+            const jwtUsername = decodedToken.sub;
+            console.log('jwt Username:', jwtUsername);
+            localStorage.setItem('username', jwtUsername);
             
             // Redirect to home page
             navigate('/');
