@@ -142,11 +142,11 @@ public class PlayService {
                             .hint1((String) row[4]) // hint1
                             .hint2((String) row[5]) // hint2
                             .hint3((String) row[6]) // hint3
-                            .randomCorrectWord((String) row[9])
-                            .randomWord1((String) row[10])
-                            .randomWord2((String) row[11])
-                            .randomWord3((String) row[12])
-                            .question((String) row[14])
+                            .randomCorrectWord((String) row[10])
+                            .randomWord1((String) row[11])
+                            .randomWord2((String) row[12])
+                            .randomWord3((String) row[13])
+                            .question((String) row[9])
                             .build();
                         List<GameInfo> gameInfoList1 = new ArrayList<>(); 
                         gameInfoList1.add(gameInfo);
@@ -180,7 +180,7 @@ public class PlayService {
                             .hint1((String) row[4]) // hint1
                             .hint2((String) row[5]) // hint2
                             .hint3((String) row[6]) // hint3
-                            .word((String) row[13])
+                            .word((String) row[14])
                             .build();
                         List<GameInfo> gameInfoList2 = new ArrayList<>(); 
                         gameInfoList2.add(gameInfo2);
