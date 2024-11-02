@@ -1,15 +1,12 @@
 /** React **/
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../utils/AxiosConfig';
+import axiosInstance from '../../../utils/AxiosConfig';
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
-
-/** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import Modal from '../../../components/layouts/Modal';
 
 export const AddCategory = () => {
     const navigate = useNavigate();
@@ -24,21 +21,19 @@ export const AddCategory = () => {
         navigate(-1);
     }
 
-    // Fetch available categories on mount
-    const handleAddCategory = () => {
-        axiosInstance.post("/v1/categories", {
-            name: categoryName,
-            description: categoryDescription
-        }, 
-        { requiresAuth: true })
-            .then(response => {
-                console.log(response.data);
-                navigate(-1);
-            })
-            .catch(error => {
-                console.error('Error adding category:', error);
-            });
-    };
+    const handleAddCategory = async () => {
+        try {
+            const response = await axiosInstance.post("/v1/categories", {
+                name: categoryName,
+                description: categoryDescription
+            }, 
+            { requiresAuth: true });
+            console.log(response.data);
+            navigate(-1); // Navigate back after successfully adding the category
+        } catch (error) {
+            console.error('Error adding category:', error);
+        }
+    };    
 
     return (
         <Modal onConfirm={handleAddCategory} showModal={true} closeModal={onClose} title={"Agregar Categoria"}>

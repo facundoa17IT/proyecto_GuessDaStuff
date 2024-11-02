@@ -33,14 +33,16 @@ const GameContentManagement = () => {
     ]
 
     // Fetch all categories
+    const fetchCategories = async () => {
+        try {
+            const response = await axiosInstance.get('/v1/categories', { requiresAuth: true });
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
     useEffect(() => {
-        axiosInstance.get('/v1/categories', {/** Empty Body **/}, { requiresAuth: true })
-            .then(response => {
-                setCategories(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
+        fetchCategories();
     }, []);
 
     const handleAddNewCategory = () => {

@@ -30,42 +30,48 @@ const StartGame = () => {
         setSelectedGameMode(event.target.value);
     };
 
-    // Fetch available categories when the component mounts
-    useEffect(() => {
-        setLoading(true); // Comienza la carga
+    const fetchActiveCategories = async () => {
+        setLoading(true); // Start loading
         setSelectedCategories([]);
-        axiosInstance.get('/v1/categories-active')
-            .then(response => {
-                setCategories(response.data);
-                setLoading(false); // Finaliza la carga
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-                setLoading(false); // Finaliza la carga incluso si hay error
-            });
-    }, []);
 
-    const handleConfirm = () => {
+        try {
+            const response = await axiosInstance.get('/v1/categories-active');
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        } finally {
+            setLoading(false); // End loading in either case
+        }
+    };
+    useEffect(() => {
+        fetchActiveCategories();
+    }, []);
+    
+
+    const handleConfirm = async () => {
         if (selectedCategories.length < 3) {
-            alert('Por favor seleccion 3 categorias para continuar!');
+            alert('Por favor selecciona 3 categorias para continuar!');
             return;
         }
         const categoryIds = selectedCategories.map(category => category.id);
         console.log(categoryIds);
-
-        axiosInstance.post('/game-single/v1/load-game', {
-            categories: categoryIds,
-            modeGame: selectedGameMode
-        }, { requiresAuth: true })
-            .then(response => {
-                console.log('Response:', response.data.categories);
-                setLoadGameData(response.data.categories);
-                navigate('/selection-phase');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
+        
+        try {
+            const response = await axiosInstance.post('/game-single/v1/load-game', {
+                categories: categoryIds,
+                modeGame: selectedGameMode
+            }, { requiresAuth: true });
+    
+            console.log('Response:', response.data.categories);
+            setLoadGameData(response.data.categories);
+            navigate('/selection-phase');
+        } catch (error) {
+            console.error('Error:', error);
+            // Optionally, you can show an alert or some UI feedback to the user here
+            alert('Ocurrió un error al cargar el juego. Por favor, inténtalo de nuevo.');
+        }
+    };
+    
 
     const handleCloseModal = () => {
         setSelectedCategories([]);

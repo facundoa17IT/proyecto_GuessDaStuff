@@ -35,20 +35,27 @@ const GameMatchView = () => {
         setTimeRemaining(7);    // Reinicia el temporizador
     }, []);
 
-    // Se almacenan los objetos dentro dentro de gameModes (juego_1, juego_2, juego_3)
-    useEffect(() => {
-        console.log(JSON.stringify(initGameBody, null, 2));
-        
-        logObject(initGameBody);
 
-        axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true })
-            .then(response => {
-                setInitGameModes(response.data.gameModes); // Guarda los modos de juego
-            })
-            .catch(error => {
-                console.error('Error obteniendo datos del juego:', error);
-            });
+    const initializeGameModes = async () => {
+        try {
+            console.log(JSON.stringify(initGameBody, null, 2));
+            logObject(initGameBody);
+
+            // Execute the POST request without storing the response
+            const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
+
+            // If the request is successful, save the game modes
+            setInitGameModes(response.data.gameModes);
+        } catch (error) {
+            console.error('Error obteniendo datos del juego:', error);
+            // Optionally, you can provide user feedback here
+            alert('Ocurrió un error al inicializar el juego. Por favor, inténtalo de nuevo.');
+        }
+    };
+    useEffect(() => {
+        initializeGameModes();
     }, [initGameBody]);
+    
 
     // Actualizamos el contenido del juego cada vez que cambie el índice
     useEffect(() => {

@@ -3,13 +3,13 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../utils/AxiosConfig';
+import axiosInstance from '../../../utils/AxiosConfig';
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
+import Modal from '../../../components/layouts/Modal';
 
 /** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import { ListContext } from '../../../contextAPI/ListContext';
 
 export const EditCategory = () => {
     const location = useLocation();
@@ -37,18 +37,18 @@ export const EditCategory = () => {
     }
 
     // Fetch available categories on mount
-    const handleEditCategory = () => {
-        axiosInstance.put(`/v1/categories/edit/${categoryName}`, {
-            name: categoryName,
-            description: categoryDescription,
-        }, { requiresAuth: true })
-            .then(response => {
-                console.log("La categorias se actualizo correctamente!");
-                navigate(-1);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
+    const handleEditCategory = async () => {
+        try {
+            await axiosInstance.put(`/v1/categories/edit/${categoryName}`, {
+                name: categoryName,
+                description: categoryDescription,
+            }, { requiresAuth: true });
+    
+            console.log("La categoría se actualizó correctamente!");
+            navigate(-1);
+        } catch (error) {
+            console.error('Error updating category:', error);
+        }
     };
 
     return (

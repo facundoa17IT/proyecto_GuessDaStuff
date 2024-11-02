@@ -28,32 +28,37 @@ const UsersManagment = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Fetch available categories when the component mounts
-    useEffect(() => {
-        axiosInstance.get('/api/users/v1')
-            .then(response => {
-                setUsers(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
+    // Fetch all users
+    const fetchUsers = async () => {
+        try {
+            const response = await axiosInstance.get('/users/v1', {
+                requiresAuth: true,
             });
+            setUsers(response.data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
-    const handleRegister = () => {
-        try {
-            const response = axiosInstance.post('/users/v1', {
-                username,
-                password,
-                email
-            }, {/** Empty Body **/}, { requiresAuth: true });
-            console.log('Registration successful!');
+    const handleAdminRegister = async () => {
+        const body = { 
+            username, 
+            password, 
+            email 
+        };
 
-           setIsModalOpen(!isModalOpen);
-           location.reload();
+        try {
+            const response = await axiosInstance.post('/users/v1', body, { requiresAuth: true });
+            setIsModalOpen(!isModalOpen);
+            location.reload();
+            console.log('Registration successful!', response);
         } catch (error) {
             console.error('Error registering:', error.response?.data?.message || error.message);
         }
-    }
+    };    
 
     return (
         <>
@@ -76,7 +81,7 @@ const UsersManagment = () => {
                 }
             />
 
-            <Modal showModal={isModalOpen} onConfirm={handleRegister} closeModal={() => setIsModalOpen(!isModalOpen)} title="Registrar Admin">
+            <Modal showModal={isModalOpen} onConfirm={handleAdminRegister} closeModal={() => setIsModalOpen(!isModalOpen)} title="Registrar Admin">
                 <FaTools fontSize={50} style={{ margin: '25px' }} />
                 <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
