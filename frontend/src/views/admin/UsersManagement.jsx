@@ -8,7 +8,7 @@ import Modal from '../../components/layouts/Modal';
 import { FaTools } from "react-icons/fa";
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import { ROLE, STATUS } from '../../utils/constants';
 
 const UsersManagment = () => {
@@ -30,7 +30,7 @@ const UsersManagment = () => {
 
     // Fetch available categories when the component mounts
     useEffect(() => {
-        axiosInstance.get('/api/admin/listUsers')
+        axiosInstance.get('/api/users/v1')
             .then(response => {
                 setUsers(response.data);
             })
@@ -41,11 +41,11 @@ const UsersManagment = () => {
 
     const handleRegister = () => {
         try {
-            const response = axiosInstance.post('/api/admin/addAdmin', {
+            const response = axiosInstance.post('/users/v1', {
                 username,
                 password,
                 email
-            });
+            }, {/** Empty Body **/}, { requiresAuth: true });
             console.log('Registration successful!');
 
            setIsModalOpen(!isModalOpen);

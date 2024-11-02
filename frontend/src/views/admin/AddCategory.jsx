@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 
 /** Components **/
 import Modal from '../../components/layouts/Modal';
@@ -26,10 +26,11 @@ export const AddCategory = () => {
 
     // Fetch available categories on mount
     const handleAddCategory = () => {
-        axiosInstance.post("/auth/categories", {
+        axiosInstance.post("/v1/categories", {
             name: categoryName,
             description: categoryDescription
-        })
+        }, 
+        { requiresAuth: true })
             .then(response => {
                 console.log(response.data);
                 navigate(-1);

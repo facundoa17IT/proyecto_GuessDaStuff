@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import ReactFlagsSelect from "react-flags-select";
 import CustomDatePicker from '../../components/ui/CustomDatePicker';
 
@@ -40,7 +40,7 @@ export const Register = () => {
         // Formatear la fecha de cumpleaños usando el método auxiliar
         const formattedBirthday = formatDate(birthday);
         try {
-            const response = await axiosInstance.post('/auth/register', {
+            const response = await axiosInstance.post('/v1/register', {
                 username,
                 password,
                 email,

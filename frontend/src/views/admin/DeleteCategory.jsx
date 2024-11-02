@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 
 /** Components **/
 import Modal from '../../components/layouts/Modal';
@@ -26,7 +26,7 @@ export const DeleteCategory = () => {
     // Fetch available categories on mount
     const handleDeleteCategory = () => {
         if (selectedItem?.name) {
-            axiosInstance.put(`/auth/categories/${selectedItem.name}`)
+            axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`,{/** Empty Body **/}, { requiresAuth: true })
                 .then(response => {
                     console.log("Categoria eliminada");
                     navigate(-1);

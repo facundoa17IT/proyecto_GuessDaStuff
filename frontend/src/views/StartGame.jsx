@@ -1,6 +1,6 @@
 import { React, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../AxiosConfig';
+import axiosInstance from '../utils/AxiosConfig';
 import Modal from '../components/layouts/Modal';
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
@@ -33,7 +33,8 @@ const StartGame = () => {
     // Fetch available categories when the component mounts
     useEffect(() => {
         setLoading(true); // Comienza la carga
-        axiosInstance.get('/auth/activeCategories')
+        setSelectedCategories([]);
+        axiosInstance.get('/v1/categories-active')
             .then(response => {
                 setCategories(response.data);
                 setLoading(false); // Finaliza la carga
@@ -52,10 +53,10 @@ const StartGame = () => {
         const categoryIds = selectedCategories.map(category => category.id);
         console.log(categoryIds);
 
-        axiosInstance.post('/api/user/game/loadGame', {
+        axiosInstance.post('/game-single/v1/load-game', {
             categories: categoryIds,
             modeGame: selectedGameMode
-        })
+        }, { requiresAuth: true })
             .then(response => {
                 console.log('Response:', response.data.categories);
                 setLoadGameData(response.data.categories);
@@ -75,7 +76,6 @@ const StartGame = () => {
         <div>
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
                 <div style={{ height: '100%' }}>
-                    <hr />
                     <h2>Categorias</h2>
                     {loading ? (
                         <p>Cargando categorías...</p> // Mostrar mientras carga

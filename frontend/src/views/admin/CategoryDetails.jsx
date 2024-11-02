@@ -12,7 +12,7 @@ import validator from '@rjsf/validator-ajv8';
 import { FaEdit } from 'react-icons/fa';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import { gameModesSchemas } from '../../utils/JsonSchemas';
 
 /** Context API **/
@@ -110,7 +110,7 @@ export const CategoryDetails = () => {
         setSelectedGameModeId(item.id);
         setSelectedGameMode(gameModeKey);
         if (item?.id) {
-            axiosInstance.get(`/api/admin/getDataOfGM/${item.id}`)
+            axiosInstance.get(`/game-modes/v1/${item.id}`)
                 .then(response => {
                     const data = response.data.body;
                     setFormData(data);
@@ -169,7 +169,7 @@ export const CategoryDetails = () => {
             else console.log("error");
         }
         try {
-            const response = await axiosInstance.put(`/api/admin/edit${gameMode}/${selectedGameModeId}`, formData);
+            const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, { requiresAuth: true });
             console.log('Data edited successfully!', response.data);
             setFormData({});
             navigate(-1);
@@ -214,7 +214,7 @@ export const CategoryDetails = () => {
     // Get titles of the selected category
     const handleListTitles = () => {
         if (selectedItem?.id) {
-            axiosInstance.get(`/api/admin/listTitles/${selectedItem.id}`)
+            axiosInstance.get(`/game-modes/v1/titles/${selectedItem.id}`)
                 .then(response => {
                     setCategoryTitles(response.data);
                 })

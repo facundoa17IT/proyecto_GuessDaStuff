@@ -18,6 +18,9 @@ import { useRole } from '../contextAPI/AuthContext';
 /** Styles **/
 import '../styles/home.css'
 
+/** Utils **/
+import axiosInstance from '../utils/AxiosConfig';
+
 const HomePage = () => {
 	const { role } = useRole();
 
@@ -28,12 +31,6 @@ const HomePage = () => {
 	const handleStartGame = () => {
 		navigate('/start-game')
 	}
-
-	// useEffect(() => {
-	// 	if (role) {
-	// 		setWelcomeMessage(`Welcome ${role}!`)
-	// 	}
-	// }, [role]);
 
 	const minimalistButtonStyle = {
 		padding: '0',

@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import { gameModesSchemas } from '../../utils/JsonSchemas'
 
 /** Components **/
@@ -61,7 +61,7 @@ export const AddTitle = () => {
     // Initialize Content 
     useEffect(() => {
         setModalContent(() => renderAddTitleToCategory());
-        axiosInstance.get('/api/user/availableCategories')
+        axiosInstance.get('/v1/categories-availables', {/** Empty Body **/}, { requiresAuth: true })
             .then(response => {
                 setAvailableCategories(response.data);
             })
@@ -133,7 +133,7 @@ export const AddTitle = () => {
     
         if (gameMode) {
             try {
-                const response = await axiosInstance.post(`/api/admin/${gameMode}Individual`, formData);
+                const response = await axiosInstance.post(`/game-modes/v1/individual/${gameMode}`, formData, { requiresAuth: true });
                 console.log('Data submitted successfully!', response.data);
                 setFormData({});
                 navigate(-1);
@@ -234,7 +234,7 @@ export const AddTitle = () => {
     
         if (gameMode) {
             try {
-                const response = await axiosInstance.post(`/api/admin/${gameMode}Masive`, formData, {
+                const response = await axiosInstance.post(`/game-modes/v1/masive/${gameMode}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
