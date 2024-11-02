@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "d6b48a2b-c18c-4a28-9673-003a3fb212a9",
+		"_postman_id": "86ce1d8b-84ec-431e-8e60-76daceb380bc",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34327432"
+		"_exporter_id": "37753331"
 	},
 	"item": [
 		{
@@ -34,14 +34,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin",
+							"raw": "{{BASE_URL}}/v1/categories",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"admin"
+								"v1",
+								"categories"
 							]
 						}
 					},
@@ -163,15 +162,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin/edit",
+							"raw": "{{BASE_URL}}/v1/categories/edit/PERFUMES",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"admin",
-								"edit"
+								"v1",
+								"categories",
+								"edit",
+								"PERFUMES"
 							]
 						}
 					},
@@ -285,14 +284,13 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/admin/delete/PERFUMES",
+							"raw": "{{BASE_URL}}/v1/categories/delete/PERFUMES",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"admin",
+								"v1",
+								"categories",
 								"delete",
 								"PERFUMES"
 							]
@@ -400,15 +398,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/activeCategories",
+							"raw": "{{BASE_URL}}/v1/categories-active",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"user",
-								"activeCategories"
+								"v1",
+								"categories-active"
 							]
 						}
 					},
@@ -513,14 +509,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user",
+							"raw": "{{BASE_URL}}/v1/categories",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"user"
+								"v1",
+								"categories"
 							]
 						}
 					},
@@ -624,14 +619,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/PERFUMES",
+							"raw": "{{BASE_URL}}/v1/categories/PERFUMES",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"user",
+								"v1",
+								"categories",
 								"PERFUMES"
 							]
 						}
@@ -737,15 +731,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/category/api/user/availableCategories",
+							"raw": "{{BASE_URL}}/v1/categories-availables",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"category",
-								"api",
-								"user",
-								"availableCategories"
+								"v1",
+								"categories-availables"
 							]
 						}
 					},
@@ -840,89 +832,6 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Forgot-Password",
-					"item": [
-						{
-							"name": "Forgot-Password",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"mateo@gmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{BASE_URL}}/auth/forgot-password",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"auth",
-										"forgot-password"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "GET-ResetPasswordToken",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/auth/reset-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"auth",
-										"reset-password"
-									],
-									"query": [
-										{
-											"key": "token",
-											"value": "ef14675e-5eda-43ee-b24d-bfe2fbf8600b"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "POST-ResetPasswordToken",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"token\":\"cf97bb92-8601-43ba-94e3-9375ebb175dc\",\r\n    \"newPassword\":\"12345\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{BASE_URL}}/auth/reset-password",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"auth",
-										"reset-password"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
 					"name": "EditUser",
 					"request": {
 						"auth": {
@@ -939,7 +848,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"1234\",\r\n    \"email\" : \"admin@gmail.com\",\r\n    \"urlPerfil\": \"admin_PERFIL_URL\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\":{\r\n        \"anio\":1998,\r\n        \"mes\":2,\r\n        \"dia\":5\r\n    }\r\n}",
+							"raw": "{\r\n    \"password\" : \"1234\",\r\n    \"urlPerfil\": \"admin_PERFIL_URL\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -947,14 +856,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editUser",
+							"raw": "{{BASE_URL}}/users/v1/edit/{username}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"editUser"
+								"users",
+								"v1",
+								"edit",
+								"{username}"
 							]
 						}
 					},
@@ -976,14 +886,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/listUsers",
+							"raw": "{{BASE_URL}}/users/v1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"listUsers"
+								"users",
+								"v1"
 							]
 						}
 					},
@@ -1099,14 +1008,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/user",
+							"raw": "{{BASE_URL}}/users/v1/{username}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"user"
+								"users",
+								"v1",
+								"{username}"
 							]
 						}
 					},
@@ -1195,6 +1104,35 @@
 					]
 				},
 				{
+					"name": "ListActiveUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/active",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DeleteUser",
 					"request": {
 						"auth": {
@@ -1207,7 +1145,7 @@
 								}
 							]
 						},
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1219,15 +1157,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/deleteUser/userTest",
+							"raw": "{{BASE_URL}}/users/v1/delete/{username}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"deleteUser",
-								"userTest"
+								"users",
+								"v1",
+								"delete",
+								"{username}"
 							]
 						}
 					},
@@ -1258,14 +1196,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/addAdmin",
+							"raw": "{{BASE_URL}}/users/v1",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"addAdmin"
+								"users",
+								"v1"
 							]
 						}
 					},
@@ -1378,15 +1315,15 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/blockUser/userTest",
+							"raw": "{{BASE_URL}}/users/v1/block/{username}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"blockUser",
-								"userTest"
+								"users",
+								"v1",
+								"block",
+								"{username}"
 							]
 						}
 					},
@@ -1408,15 +1345,15 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/unblockUser/userTest",
+							"raw": "{{BASE_URL}}/users/v1/unblock/{username}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"unblockUser",
-								"userTest"
+								"users",
+								"v1",
+								"unblock",
+								"{username}"
 							]
 						}
 					},
@@ -1431,7 +1368,7 @@
 					"name": "AddTitle",
 					"item": [
 						{
-							"name": "OrderByDate-Individual",
+							"name": "MultipleCoiche-Individual",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1447,7 +1384,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id_Category\": 2,\r\n    \"event\": \"Pasaron cosas muy importantes\",\r\n    \"infoEvent\": \"pasaron cosas   muy importantes\",\r\n    \"startDate\": {\r\n        \"anio\": 2000,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2002,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+									"raw": "{\r\n    \"id_Category\": 2,\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\",\r\n    \"randomWord1\":\"randomWord1\",\r\n    \"randomWord2\":\"randomWord2\",\r\n    \"randomWord3\":\"randomWord3\",\r\n    \"randomCorrectWord\":\"randomCorrectWord\",\r\n    \"question\": \"la pregunta?\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1455,26 +1392,27 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+									"raw": "{{BASE_URL}}/game-modes/v1/individual/MC",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"ODBIndividual"
+										"game-modes",
+										"v1",
+										"individual",
+										"MC"
 									]
 								}
 							},
 							"response": [
 								{
-									"name": "OrderByDate-Individual",
+									"name": "MultipleCoiche-Individual",
 									"originalRequest": {
 										"method": "POST",
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"id_Category\": 3,\r\n    \"event\": \"coso\",\r\n    \"infoEvent\": \"pasaron cosas\",\r\n    \"startDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":1\r\n    },\r\n    \"endDate\": {\r\n        \"anio\": 2026,\r\n        \"mes\": 1,\r\n        \"dia\":28\r\n    },\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\"\r\n}",
+											"raw": "{\r\n    \"id_Category\": 2,\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\",\r\n    \"randomWord1\":\"randomWord1\",\r\n    \"randomWord2\":\"randomWord2\",\r\n    \"randomWord3\":\"randomWord3\",\r\n    \"randomCorrectWord\":\"randomCorrectWord\",\r\n    \"question\": \"la pregunta?\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1482,14 +1420,15 @@
 											}
 										},
 										"url": {
-											"raw": "{{BASE_URL}}/api/admin/ODBIndividual",
+											"raw": "{{BASE_URL}}/game-modes/v1/individual/MC",
 											"host": [
 												"{{BASE_URL}}"
 											],
 											"path": [
-												"api",
-												"admin",
-												"ODBIndividual"
+												"game-modes",
+												"v1",
+												"individual",
+												"MC"
 											]
 										}
 									},
@@ -1543,7 +1482,7 @@
 										},
 										{
 											"key": "Date",
-											"value": "Thu, 24 Oct 2024 01:06:42 GMT"
+											"value": "Sat, 02 Nov 2024 00:34:58 GMT"
 										},
 										{
 											"key": "Keep-Alive",
@@ -1555,12 +1494,12 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n    \"headers\": {},\n    \"body\": \"El titulo coso se creo correctamente para la categoria coso3 y modo de juego OBD\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+									"body": "{\n    \"headers\": {},\n    \"body\": \"El titulo: la pregunta?, se creo correctamente para la categoria Historia y modo de juego MC\",\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
 								}
 							]
 						},
 						{
-							"name": "OrderByDate-Masive",
+							"name": "MultipleChoice-Masive",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1590,14 +1529,14 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/ODBMasive",
+									"raw": "{{BASE_URL}}/v1/masive/MC",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"ODBMasive"
+										"v1",
+										"masive",
+										"MC"
 									]
 								}
 							},
@@ -1629,7 +1568,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"id_Category\": 1,\n    \"word\": \"todo  maldito\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
+									"raw": "{\n    \"id_Category\": 1,\n    \"word\": \"todo  maldito2\",\n    \"hint1\": \"Pista 1\",\n    \"hint2\": \"Pista 2\",\n    \"hint3\": \"Pista 3\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1637,14 +1576,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/OWIndividual",
+									"raw": "{{BASE_URL}}/game-modes/v1/individual/OW",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"OWIndividual"
+										"game-modes",
+										"v1",
+										"individual",
+										"OW"
 									]
 								}
 							},
@@ -1781,14 +1721,15 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/OWMasive",
+									"raw": "{{BASE_URL}}/game-modes/v1/masive/OW",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"OWMasive"
+										"game-modes",
+										"v1",
+										"masive",
+										"OW"
 									]
 								}
 							},
@@ -1828,14 +1769,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/GPIndividual",
+									"raw": "{{BASE_URL}}/game-modes/v1/individual/GP",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"GPIndividual"
+										"game-modes",
+										"v1",
+										"individual",
+										"GP"
 									]
 								}
 							},
@@ -1972,14 +1914,15 @@
 									]
 								},
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/GPMasive",
+									"raw": "{{BASE_URL}}/game-modes/v1/masive/GP",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"GPMasive"
+										"game-modes",
+										"v1",
+										"masive",
+										"GP"
 									]
 								}
 							},
@@ -2003,14 +1946,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/listTitles/3",
+							"raw": "{{BASE_URL}}/game-modes/v1/titles/3",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"listTitles",
+								"game-modes",
+								"v1",
+								"titles",
 								"3"
 							]
 						}
@@ -2022,127 +1965,14 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/api/admin/listTitles/4",
+									"raw": "{{BASE_URL}}/game-modes/v1/titles/3",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
-										"api",
-										"admin",
-										"listTitles",
-										"4"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Method"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Headers"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Thu, 24 Oct 2024 01:07:04 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"titlesOfCategory\": {\n        \"order phrase\": [\n            \"¿Cuál es la capital de Francia?\"\n        ],\n        \"order word\": [\n            \"EjemploPalabra\"\n        ],\n        \"order by date\": [\n            \"coso\"\n        ]\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "GetDataOfGameMode",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{BASE_URL}}/api/admin/getDataOfGM/3",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"api",
-								"admin",
-								"getDataOfGM",
-								"3"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "GetDataOfGameMode",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{BASE_URL}}/api/admin/getDataOfGM/3",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"admin",
-										"getDataOfGM",
+										"game-modes",
+										"v1",
+										"titles",
 										"3"
 									]
 								}
@@ -2197,7 +2027,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Fri, 25 Oct 2024 19:40:42 GMT"
+									"value": "Sat, 02 Nov 2024 00:36:28 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -2209,12 +2039,123 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"headers\": {},\n    \"body\": {\n        \"idGameMode\": \"OBD\",\n        \"id_Category\": 3,\n        \"event\": \"BANDERA OKOK\",\n        \"infoEvent\": \"BANDERA EDITADA\",\n        \"startDate\": {\n            \"anio\": 1970,\n            \"mes\": 5,\n            \"dia\": 26\n        },\n        \"endDate\": {\n            \"anio\": 2008,\n            \"mes\": 7,\n            \"dia\": 15\n        },\n        \"hint1\": \"HINT 1120\",\n        \"hint2\": \"HINT 2030\",\n        \"hint3\": \"HINT 4200\"\n    },\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+							"body": "{\n    \"titlesOfCategory\": {\n        \"Guess Phrase\": [\n            {\n                \"title\": \"¿Cuál es el nombre de la banda que canta Bohemian Rhapsody?\",\n                \"id\": 1044\n            },\n            {\n                \"title\": \"¿Quién canta Thriller?\",\n                \"id\": 1045\n            }\n        ],\n        \"Order Word\": [\n            {\n                \"title\": \"penicilina\",\n                \"id\": 1030\n            },\n            {\n                \"title\": \"candombe\",\n                \"id\": 1033\n            }\n        ],\n        \"Multiple Choice\": [\n            {\n                \"title\": \"¿Cuál fue el descubrimiento de Alexander Fleming?\",\n                \"id\": 1025\n            },\n            {\n                \"title\": \"¿Qué teoría famosa es obra de Einstein?\",\n                \"id\": 1026\n            }\n        ]\n    }\n}"
 						}
 					]
 				},
 				{
-					"name": "EditOBD",
+					"name": "GetDataOfGameMode",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/game-modes/v1/1028",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-modes",
+								"v1",
+								"1028"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GetDataOfGameMode",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/game-modes/v1/1028",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"game-modes",
+										"v1",
+										"1028"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 02 Nov 2024 00:40:57 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"headers\": {},\n    \"body\": {\n        \"idGameMode\": \"MC\",\n        \"id_Category\": 4,\n        \"randomCorrectWord\": \"Olimpiadas 2008\",\n        \"randomWord3\": \"Competencia\",\n        \"randomWord2\": \"Estadio Nacional\",\n        \"randomWord1\": \"Ceremonia\",\n        \"hint1\": \"¿Dónde se llevaron a cabo las Olimpiadas con la participación de Phelps en 2008?\",\n        \"hint2\": \"Evento deportivo destacado\",\n        \"hint3\": \"Récords de medallas\",\n        \"question\": \"Icono de la natación\"\n    },\n    \"statusCode\": \"OK\",\n    \"statusCodeValue\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "EditMC",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -2230,7 +2171,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"event\": \"QUE PERFUME SE USABA DE CHAMACO?\",\r\n        \"infoEvent\": \"LOS PIBES\",\r\n        \"startDate\": {\r\n            \"anio\": 1990,\r\n            \"mes\": 5,\r\n            \"dia\":26\r\n        },\r\n        \"endDate\": {\r\n            \"anio\": 2003,\r\n            \"mes\": 7,\r\n            \"dia\":15\r\n        },\r\n        \"hint1\": \"HINT 1111\",\r\n        \"hint2\": \"HINT 2222\",\r\n        \"hint3\": \"HINT 3333\"\r\n}",
+							"raw": "{\r\n    \"id_Category\": 2,\r\n    \"hint1\": \"H11\",\r\n    \"hint2\": \"H22\",\r\n    \"hint3\": \"H33\",\r\n    \"randomWord1\":\"randomWord1\",\r\n    \"randomWord2\":\"randomWord2\",\r\n    \"randomWord3\":\"randomWord3\",\r\n    \"randomCorrectWord\":\"randomCorrectWord\",\r\n    \"question\": \"la pregunta??\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2238,15 +2179,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editOrderByDate/2",
+							"raw": "{{BASE_URL}}/game-modes/v1/MC/3",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"editOrderByDate",
-								"2"
+								"game-modes",
+								"v1",
+								"MC",
+								"3"
 							]
 						}
 					},
@@ -2277,15 +2218,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editOrderWord/4",
+							"raw": "{{BASE_URL}}/game-modes/v1/OW/{idGame}",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"editOrderWord",
-								"4"
+								"game-modes",
+								"v1",
+								"OW",
+								"{idGame}"
 							]
 						}
 					},
@@ -2308,7 +2249,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"phrase\": \"¿Cuál es la capital de USA?\",\r\n    \"correctWord\": \"Washington\",\r\n    \"hint1\": \"Es una ciudad sensata\",\r\n    \"hint2\": \"Famosa por la sucursal\",\r\n    \"hint3\": \"Comienza con doble b\"\r\n}",
+							"raw": "{\r\n    \"phrase\": \"¿Cuál es la capital de USA?\",\r\n    \"correctWord\": \"Washington\",\r\n    \"hint1\": \"Es una ciudad sensata\",\r\n    \"hint2\": \"Famosa por la sucursal\",\r\n    \"hint3\": \"Comienza con doble bB\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2316,15 +2257,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/editGuessPhrase/9",
+							"raw": "{{BASE_URL}}/game-modes/v1/GP/5",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"admin",
-								"editGuessPhrase",
-								"9"
+								"game-modes",
+								"v1",
+								"GP",
+								"5"
 							]
 						}
 					},
@@ -2335,6 +2276,81 @@
 		{
 			"name": "Session",
 			"item": [
+				{
+					"name": "Forgot-Password",
+					"item": [
+						{
+							"name": "Forgot-Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/v1/forgot-password/{email}",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"v1",
+										"forgot-password",
+										"{email}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET-ValidatePasswordToken",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/v1/validate-password?token=ef14675e-5eda-43ee-b24d-bfe2fbf8600b",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"v1",
+										"validate-password"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "ef14675e-5eda-43ee-b24d-bfe2fbf8600b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST-ResetPasswordToken",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\":\"cf97bb92-8601-43ba-94e3-9375ebb175dc\",\r\n    \"newPassword\":\"12345\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/v1/reset-password",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"v1",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "welcome",
 					"protocolProfileBehavior": {
@@ -2363,12 +2379,11 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/welcome",
+							"raw": "{{BASE_URL}}/welcome",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
 								"welcome"
 							]
 						}
@@ -2483,12 +2498,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/register",
+							"raw": "{{BASE_URL}}/v1/register",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"auth",
+								"v1",
 								"register"
 							]
 						}
@@ -2613,12 +2628,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/login",
+							"raw": "{{BASE_URL}}/v1/login",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"auth",
+								"v1",
 								"login"
 							]
 						}
@@ -2743,12 +2758,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/auth/login",
+							"raw": "{{BASE_URL}}/v1/login",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"auth",
+								"v1",
 								"login"
 							]
 						}
@@ -2844,6 +2859,35 @@
 							"body": "{\n    \"message\": \"User successfully logged in\",\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbeyJhdXRob3JpdHkiOiJST0xFX1VTRVIifV0sInN1YiI6InVzZXIiLCJpYXQiOjE3Mjk1Njk1NTEsImV4cCI6MTcyOTY1NTk1MX0.RQXOhW7aabkfeygxBNCEfJZdpAo8vgdC0VUD6QtEDBM\",\n    \"username\": \"user\",\n    \"role\": \"[ROLE_USER]\"\n}"
 						}
 					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/v1/logout/{username}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"logout",
+								"{username}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -2880,15 +2924,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/loadGame",
+							"raw": "{{BASE_URL}}/game-single/v1/load-game",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"user",
-								"game",
-								"loadGame"
+								"game-single",
+								"v1",
+								"load-game"
 							]
 						}
 					},
@@ -3008,7 +3051,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\":\"1001\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"userId\":\"1001\",\r\n    \"parCatMod\": [\r\n        {\r\n            \"cat\": 1,\r\n            \"mod\": \"MC\"\r\n        },\r\n        {\r\n            \"cat\": 2,\r\n            \"mod\": \"OW\"\r\n        },\r\n        {\r\n            \"cat\": 3,\r\n            \"mod\": \"GP\"\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3016,15 +3059,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/initGame",
+							"raw": "{{BASE_URL}}/game-single/v1/init-game",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"user",
-								"game",
-								"initGame"
+								"game-single",
+								"v1",
+								"init-game"
 							]
 						}
 					},
@@ -3152,15 +3194,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/initPlayGame?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
+							"raw": "{{BASE_URL}}/game-single/v1/init-play-game?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"user",
-								"game",
-								"initPlayGame"
+								"game-single",
+								"v1",
+								"init-play-game"
 							],
 							"query": [
 								{
@@ -3299,15 +3340,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/playGame",
+							"raw": "{{BASE_URL}}/game-single/v1/play-game",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"user",
-								"game",
-								"playGame"
+								"game-single",
+								"v1",
+								"play-game"
 							]
 						}
 					},
@@ -3411,7 +3451,7 @@
 					]
 				},
 				{
-					"name": "4- finishPlayGame",
+					"name": "5- finishPlayGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -3441,15 +3481,14 @@
 							]
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/game/finishPlayGame",
+							"raw": "{{BASE_URL}}/game-single/v1/finish-play-game",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
-								"api",
-								"user",
-								"game",
-								"finishPlayGame"
+								"game-single",
+								"v1",
+								"finish-play-game"
 							]
 						}
 					},
@@ -3551,6 +3590,41 @@
 							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Poblar DB",
+			"item": [
+				{
+					"name": "loadData",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/v1/load-data",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"v1",
+								"load-data"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

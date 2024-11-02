@@ -3,12 +3,11 @@ package tec.proyecto.guessdastuff.converters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import tec.proyecto.guessdastuff.dtos.DtoDate;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
-import tec.proyecto.guessdastuff.dtos.DtoOrderByDate;
+import tec.proyecto.guessdastuff.dtos.DtoMultipleChoice;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
-import tec.proyecto.guessdastuff.entities.OrderByDate;
+import tec.proyecto.guessdastuff.entities.MultipleChoice;
 import tec.proyecto.guessdastuff.entities.OrderWord;
 
 @Component
@@ -30,15 +29,11 @@ public class GameConverter {
         return dtoOrderWord;
     }
 
-    public DtoOrderByDate toDtoOrderByDate(OrderByDate obd){
+    public DtoMultipleChoice toDtoMultipleChoice(MultipleChoice mC){
 
-        DtoDate startDate = dateConverter.tDtoDate(obd.getStartDate());
-        DtoDate endDate = dateConverter.tDtoDate(obd.getEndDate());
-
-        DtoOrderByDate dtoOrderByDate = new DtoOrderByDate(obd.getIdGameMode().getName(), obd.getIdCategory().getId(), obd.getEvent(), obd.getInfoEvent(), 
-                                                           startDate, endDate, obd.getHint1(), obd.getHint2(), obd.getHint3());
+        DtoMultipleChoice dtoMultipleChoice = new DtoMultipleChoice( mC.getIdGameMode().getName(), mC.getIdCategory().getId(), mC.getRandomCorrectWord(),mC.getRandomWord1(),mC.getRandomWord2(),mC.getRandomWord3(), mC.getQuestion(),mC.getHint1(), mC.getHint2(), mC.getHint3());
         
-        return dtoOrderByDate;
+        return dtoMultipleChoice;
     }
 
 }

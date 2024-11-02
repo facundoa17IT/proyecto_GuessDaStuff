@@ -14,7 +14,7 @@ public interface GameRepository extends JpaRepository<Game, Long>{
    @Query(value = """
     SELECT gm.description AS gameMode, 
            CASE 
-               WHEN g.id_game_mode = 'OBD' THEN g.event 
+               WHEN g.id_game_mode = 'MC' THEN g.question 
                WHEN g.id_game_mode = 'GP' THEN g.phrase 
                ELSE g.word 
            END AS titulo,

@@ -37,19 +37,12 @@ public class SecurityConfig {
                 .cors(cors -> cors // Enable CORS with custom configuration
                         .configurationSource(request -> {
                             CorsConfiguration config = new CorsConfiguration();
-                            config.setAllowedOrigins(List.of("http://localhost:5173")); // Set allowed origins
+                            config.setAllowedOrigins(List.of("http://localhost:5173","https://proyectoguessdastuff-production.up.railway.app:8080")); // Set allowed origins
                             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Set allowed methods
                             config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Set allowed headers
                             config.setAllowCredentials(true); // Allow cookies to be included in requests
                             return config;
                         }))
-                .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers("/auth/**").permitAll() // Allow endpoints for Register and Login
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN") // Allow endpoints only for ROLE_USER AND ROLE_ADMIN
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Allow endpoints only for ROLE_ADMIN
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**" ).permitAll()  
-                        .anyRequest().authenticated() // Protect all other endpoints
-                )
                 .sessionManagement(
                         sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
                 )

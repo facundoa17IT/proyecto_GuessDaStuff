@@ -1,6 +1,5 @@
 package tec.proyecto.guessdastuff.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;

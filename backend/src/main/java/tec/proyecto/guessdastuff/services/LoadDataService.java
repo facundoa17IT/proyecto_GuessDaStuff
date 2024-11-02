@@ -23,9 +23,8 @@ public class LoadDataService {
     //insert category
     loadDataRepository.insertCategories();
 
-    //insert OBD
-    loadDataRepository.insertMultipleODB();
-
+    //insert MC
+    loadDataRepository.insertMultipleMC();
 
     //insert OW
     loadDataRepository.insertMultiplesOW();

@@ -128,49 +128,41 @@ public class PlayService {
 
         for (ParCatMod parCatMod : parCatModeList) {
             switch (parCatMod.getMod()) {
-                case "OBD":
+                case "MC":
                     // Obtener los datos desde el repositorio
-                    List<Object[]> responseObd = playRepository.findOBD(parCatMod.getCat());
-                    // Crear una lista de GameInfo para almacenar la información
-                    List<GameInfo> gameInfoList = new ArrayList<>(); 
-                    StringBuilder ids = new StringBuilder(); // Usar StringBuilder para concatenar IDs
-
-                    for (Object[] itemObd : responseObd) {
-                        GameInfo gameInfo = GameInfo.builder()
-                            .id(String.valueOf(itemObd[2])) // Convertir el Long a String
-                            .idModeGame((String) itemObd[10]) // idModeGame
-                            .idCategory(String.valueOf(itemObd[3])) // idCategory
-                            .event((String) itemObd[6]) // event
-                            .hint1((String) itemObd[7]) // hint1
-                            .hint2((String) itemObd[8]) // hint2
-                            .hint3((String) itemObd[9]) // hint3
-                            .startDate(itemObd[1].toString()) // Convertir Date a String (startDate)
-                            .endDate(itemObd[0].toString()) // Convertir Date a String (endDate)
-                            .infoEvent((String) itemObd[11]) // infoEvent
-                            .build();
-                        
-                        // Añadir el objeto a la lista de GameInfo
-                        gameInfoList.add(gameInfo);
-                        
-                        // Concatenar el ID del juego
-                        if (ids.length() > 0) {
-                            ids.append(","); // Añadir una coma si ya hay IDs concatenados
-                        }
-                        ids.append(gameInfo.getId()); // Concatenar el ID
-                    }
-
-                    // Crear el objeto GameModeInfo con la lista de GameInfo
-                    GameModeInfo gameModeInfo = new GameModeInfo("Order By Date", gameInfoList);
-                    // Añadir el GameModeInfo al mapa de respuesta
-                    responseIntGame.put(keyGame + count, gameModeInfo);
+                    List<Object[]> responseMc = playRepository.findMC(parCatMod.getCat());
                     
-                    // Asignar los IDs concatenados a las variables correspondientes
-                    if (count == 1) {
-                        idGame1 = ids.toString(); // Guardar la concatenación de IDs
-                    } else if (count == 2) {
-                        idGame2 = ids.toString(); // Guardar la concatenación de IDs
-                    } else if (count == 3) {
-                        idGame3 = ids.toString(); // Guardar la concatenación de IDs
+                    if (!responseMc.isEmpty()) {
+                        Object[] row = responseMc.get(0); // Obtener la primera fila de resultados
+                        // Crear una lista de GameInfo para almacenar la información
+                        GameInfo gameInfo = GameInfo.builder()
+                            .id(String.valueOf(row[2])) // Convertir el Long a String
+                            .idModeGame((String) row[7]) // idModeGame
+                            .idCategory(String.valueOf(row[1])) // idCategory
+                            .hint1((String) row[4]) // hint1
+                            .hint2((String) row[5]) // hint2
+                            .hint3((String) row[6]) // hint3
+                            .randomCorrectWord((String) row[9])
+                            .randomWord1((String) row[10])
+                            .randomWord2((String) row[11])
+                            .randomWord3((String) row[12])
+                            .question((String) row[14])
+                            .build();
+                        List<GameInfo> gameInfoList1 = new ArrayList<>(); 
+                        gameInfoList1.add(gameInfo);
+
+                        // Crear el objeto GameModeInfo con la lista de GameInfo
+                        GameModeInfo gameModeInfo1 = new GameModeInfo("Multiple Choice", gameInfoList1);
+                        // Añadir el GameModeInfo al mapa de respuesta
+                        responseIntGame.put(keyGame + count, gameModeInfo1);
+                        // Asignar el id del juego según el valor de count
+                        if (count == 1) {
+                            idGame1 = gameInfo.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 2) {
+                            idGame2 = gameInfo.getId(); // Suponiendo que hay al menos un juego
+                        } else if (count == 3) {
+                            idGame3 = gameInfo.getId(); // Suponiendo que hay al menos un juego
+                        }
                     }
                     break;
                 case "OW":
@@ -183,12 +175,11 @@ public class PlayService {
                         // Crear una lista de GameInfo para almacenar la información
                         GameInfo gameInfo2 = GameInfo.builder()
                             .id(String.valueOf(row[2])) // Convertir el Long a String
-                            .idModeGame((String) row[10]) // idModeGame
-                            .idCategory(String.valueOf(row[3])) // idCategory
-                            .event((String) row[6]) // event
-                            .hint1((String) row[7]) // hint1
-                            .hint2((String) row[8]) // hint2
-                            .hint3((String) row[9]) // hint3
+                            .idModeGame((String) row[7]) // idModeGame
+                            .idCategory(String.valueOf(row[1])) // idCategory
+                            .hint1((String) row[4]) // hint1
+                            .hint2((String) row[5]) // hint2
+                            .hint3((String) row[6]) // hint3
                             .word((String) row[13])
                             .build();
                         List<GameInfo> gameInfoList2 = new ArrayList<>(); 
@@ -218,14 +209,13 @@ public class PlayService {
                         // Crear una lista de GameInfo para almacenar la información
                         GameInfo gameInfo3 = GameInfo.builder()
                             .id(String.valueOf(row[2])) // Convertir el Long a String
-                            .idModeGame((String) row[10]) // idModeGame
-                            .idCategory(String.valueOf(row[3])) // idCategory
-                            .event((String) row[6]) // event
-                            .hint1((String) row[7]) // hint1
-                            .hint2((String) row[8]) // hint2
-                            .hint3((String) row[9]) // hint3
-                            .correct_word((String) row[5])
-                            .phrase((String) row[12])
+                            .idModeGame((String) row[7]) // idModeGame
+                            .idCategory(String.valueOf(row[1])) // idCategory
+                            .hint1((String) row[4]) // hint1
+                            .hint2((String) row[5]) // hint2
+                            .hint3((String) row[6]) // hint3
+                            .correct_word((String) row[3])
+                            .phrase((String) row[8])
                             .build();
                         List<GameInfo> gameInfoList3 = new ArrayList<>(); 
                         gameInfoList3.add(gameInfo3);
