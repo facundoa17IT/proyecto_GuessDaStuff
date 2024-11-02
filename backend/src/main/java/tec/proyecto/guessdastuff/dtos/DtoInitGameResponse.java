@@ -31,13 +31,14 @@ public class DtoInitGameResponse {
         private String id;
         private String idModeGame;
         private String idCategory;
-        private String event;
+        private String randomCorrectWord;
         private String hint1;
         private String hint2;
         private String hint3;
-        private String startDate;
-        private String endDate;
-        private String infoEvent;
+        private String randomWord1;
+        private String randomWord2;
+        private String randomWord3;
+        private String question;
         private String word;
         private String correct_word;
         private String phrase;

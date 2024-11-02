@@ -9,18 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DtoUser {
-
-    private String username;
+public class DtoUserRequest {
 
     private String password;
-
-    private String email;
 
     @Builder.Default
     private String urlPerfil  = "urlDoMacaco";
 
-    private String country;
-
-    private DtoDate birthday;
 }

@@ -3,6 +3,7 @@ package tec.proyecto.guessdastuff.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +19,15 @@ import tec.proyecto.guessdastuff.dtos.*;
 
 
 @CrossOrigin(origins = "http://localhost:5173/")
-@RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/api/game-modes")
 @RestController
 public class GameController {
 
     @Autowired
     GameService gameService;
 
-    @GetMapping("getDataOfGM/{idGame}")
+    @GetMapping("/v1/{idGame}")
     public ResponseEntity<?> getDataOfGameMode(@PathVariable Long idGame){
         try {
             return ResponseEntity.ok(gameService.getDataOfGameMode(idGame));
@@ -34,7 +36,7 @@ public class GameController {
         }
     }
 
-    @GetMapping("/listTitles/{idCategory}")
+    @GetMapping("/v1/titles/{idCategory}")
     public ResponseEntity<?> listTitlesOfCategory(@PathVariable Long idCategory){
         try {
             return ResponseEntity.ok(gameService.listTitlesOfCategory(idCategory));
@@ -43,27 +45,25 @@ public class GameController {
         }
     }
 
-    // ORDER BY DATE
-    @PostMapping("/ODBIndividual")
-    public ResponseEntity<?> createODBIndividual(@RequestBody DtoOrderByDate dtoOrderByDate){
+    @PostMapping("/v1/individual/MC")
+    public ResponseEntity<?> createMCIndividual(@RequestBody DtoMultipleChoice dtoMultipleChoice){
         try {
-            return ResponseEntity.ok(gameService.createODBIndividual(dtoOrderByDate));
+            return ResponseEntity.ok(gameService.createMCIndividual(dtoMultipleChoice));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @PostMapping("/ODBMasive")
-    public ResponseEntity<?> createOBDMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
+    @PostMapping("/v1/masive/MC")
+    public ResponseEntity<?> createMCMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
-            return ResponseEntity.ok(gameService.createOBDMasive(idCategory, file));
+            return ResponseEntity.ok(gameService.createMCMasive(idCategory, file));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    // ORDER WORD
-    @PostMapping("/OWIndividual")
+    @PostMapping("/v1/individual/OW")
     public ResponseEntity<?> createOWIndividual(@RequestBody DtoOrderWord dtoOrderWord){
         try {
             return ResponseEntity.ok(gameService.createOWIndividual(dtoOrderWord));
@@ -72,7 +72,7 @@ public class GameController {
         }
     }
  
-    @PostMapping("/OWMasive")
+    @PostMapping("/v1/masive/OW")
     public ResponseEntity<?> createOWMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
             return ResponseEntity.ok(gameService.createOWMasive(idCategory, file));
@@ -81,8 +81,7 @@ public class GameController {
         }
     }
 
-    // GUESS PHRASE
-    @PostMapping("/GPIndividual")
+    @PostMapping("/v1/individual/GP")
     public ResponseEntity<?> createGPIndividual(@RequestBody DtoGuessPhrase dtoGuessPhrase){
         try {
             return ResponseEntity.ok(gameService.createGPIndividual(dtoGuessPhrase));
@@ -91,7 +90,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/GPMasive")
+    @PostMapping("/v1/masive/GP")
     public ResponseEntity<?> createGPMasive(@RequestParam Long idCategory, @RequestParam MultipartFile file){
         try {
             return ResponseEntity.ok(gameService.createGPMasive(idCategory, file));
@@ -100,16 +99,16 @@ public class GameController {
         }
     }
     
-    @PutMapping("/editOrderByDate/{idGame}")
-    public ResponseEntity<?> editOrderByDate(@PathVariable Long idGame, @RequestBody DtoOrderByDate dtoOrderByDate) {
+    @PutMapping("/v1/MC/{idGame}")
+    public ResponseEntity<?> editMultipleCoice(@PathVariable Long idGame, @RequestBody DtoMultipleChoice dtoMultipleChoice) {
         try {
-            return ResponseEntity.ok(gameService.editOrderByDate(idGame, dtoOrderByDate));
+            return ResponseEntity.ok(gameService.editMultipleCoice(idGame, dtoMultipleChoice));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @PutMapping("/editOrderWord/{idGame}")
+    @PutMapping("/v1/OW/{idGame}")
     public ResponseEntity<?> editOrderWord(@PathVariable Long idGame, @RequestBody DtoOrderWord dtoOrderWord) {
         try {
             return ResponseEntity.ok(gameService.editOrderWord(idGame, dtoOrderWord));
@@ -118,7 +117,7 @@ public class GameController {
         }
     }
 
-    @PutMapping("/editGuessPhrase/{idGame}")
+    @PutMapping("/v1/GP/{idGame}")
     public ResponseEntity<?> editGuessPhrase(@PathVariable Long idGame, @RequestBody DtoGuessPhrase dtoGuessPhrase) {
         try {
             return ResponseEntity.ok(gameService.editGuessPhrase(idGame, dtoGuessPhrase));

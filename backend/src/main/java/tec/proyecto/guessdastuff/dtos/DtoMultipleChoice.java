@@ -7,19 +7,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DtoOrderByDate {
+public class DtoMultipleChoice {
 
     private String idGameMode;
 
     private Long id_Category;
     
-    private String event;
+    private String randomCorrectWord;
 
-    private String infoEvent;
+    private String randomWord3;
 
-    private DtoDate startDate;
+    private String randomWord2;
 
-    private DtoDate endDate;
+    private String randomWord1;
 
     private String hint1;
    
@@ -27,4 +27,5 @@ public class DtoOrderByDate {
 
     private String hint3;
 
+    private String question;
 }

@@ -2,14 +2,11 @@ package tec.proyecto.guessdastuff.services;
 
 import java.util.Optional;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.time.ZoneId;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,14 +20,14 @@ import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.GameConverter;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
 import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
-import tec.proyecto.guessdastuff.dtos.DtoOrderByDate;
+import tec.proyecto.guessdastuff.dtos.DtoMultipleChoice;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
 import tec.proyecto.guessdastuff.dtos.DtoTitleWithId;
 import tec.proyecto.guessdastuff.entities.Category;
 import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
-import tec.proyecto.guessdastuff.entities.OrderByDate;
+import tec.proyecto.guessdastuff.entities.MultipleChoice;
 import tec.proyecto.guessdastuff.entities.OrderWord;
 import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.enums.EGameMode;
@@ -82,9 +79,9 @@ public class GameService {
 }
 
     /***** INDIVIDUAL *****/
-    public ResponseEntity<?> createODBIndividual (DtoOrderByDate dtoOrderByDate) throws GameModeException{
+    public ResponseEntity<?> createMCIndividual (DtoMultipleChoice dtoMultipleChoice) throws GameModeException{
 
-        Optional<Category> categoryOpt = categoryRepository.findById(dtoOrderByDate.getId_Category());
+        Optional<Category> categoryOpt = categoryRepository.findById(dtoMultipleChoice.getId_Category());
         if(!categoryOpt.isPresent()){
             throw new GameModeException("La categoria ingresada no existe");
         }
@@ -96,22 +93,15 @@ public class GameService {
             categoryRepository.save(categoryEntidad);
         }
 
-        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OBD.toString());
+        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.MC.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
-        LocalDate startDate = dateConverter.toLocalDate(dtoOrderByDate.getStartDate());
-        LocalDate endDate = dateConverter.toLocalDate(dtoOrderByDate.getEndDate());
+        MultipleChoice mC = new MultipleChoice(null, gameModeEnt, categoryEntidad, dtoMultipleChoice.getRandomCorrectWord(), dtoMultipleChoice.getRandomWord1(), 
+        dtoMultipleChoice.getRandomWord2(),dtoMultipleChoice.getRandomWord3(),dtoMultipleChoice.getQuestion(), dtoMultipleChoice.getHint1(), dtoMultipleChoice.getHint2(), dtoMultipleChoice.getHint3());
 
-        if (startDate != null && endDate != null && !startDate.isBefore(endDate)) {
-            throw new GameModeException("La fecha de inicio debe ser anterior a la fecha de fin para el evento: " + dtoOrderByDate.getEvent());
-        }
+        gameRepository.save(mC);
 
-        OrderByDate odb = new OrderByDate(null, gameModeEnt, categoryEntidad, dtoOrderByDate.getEvent(), dtoOrderByDate.getInfoEvent(), 
-                                          startDate, endDate, dtoOrderByDate.getHint1(), dtoOrderByDate.getHint2(), dtoOrderByDate.getHint3()); // {{ edit_1 }}
-
-        gameRepository.save(odb);
-
-        return ResponseEntity.ok("El titulo " + dtoOrderByDate.getEvent() + " se creo correctamente para la categoria " + categoryEntidad.getName() + 
+        return ResponseEntity.ok("El titulo: " + dtoMultipleChoice.getQuestion() + ", se creo correctamente para la categoria " + categoryEntidad.getName() + 
                                  " y modo de juego " + gameModeEnt.getName());
     
     }
@@ -165,9 +155,9 @@ public class GameService {
     }
 
     /***** MASIVO ******/
-    public ResponseEntity<?> createOBDMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
+    public ResponseEntity<?> createMCMasive (Long idCategory, MultipartFile archivo) throws IOException, GameModeException{
 
-        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OBD.toString());
+        Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.MC.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
         Optional<Category> categoryOpt = categoryRepository.findById(idCategory);
@@ -187,68 +177,57 @@ public class GameService {
             if (rows.hasNext()) {
                 rows.next(); // Esto avanza a la segunda fila, saltando la primera
             }
-
+            
             int rowIndex = 2; // Para contar las filas (empieza en 2 porque se saltó la primera)
-
-            //Inicializo las fechas para poder validar que una sea menor que otra
-            LocalDate startDate = null;
-            LocalDate endDate = null;
-
+            
             while(rows.hasNext()){
                 Row currentRow = rows.next();
-
-                OrderByDate orderByDate = new OrderByDate();
-
-                orderByDate.setIdGameMode(gameModeEnt);
-                orderByDate.setIdCategory(categoryEntidad);
-
+                
+                MultipleChoice multipleChoice = new MultipleChoice();
+                
+                multipleChoice.setIdGameMode(gameModeEnt);
+                multipleChoice.setIdCategory(categoryEntidad);
+                
                 //Las columnas deben ir en el siguiente orden: event, infoEvent, startDate, endDate, hint1, hint2, hint3
-
+                
                 //Evento
                 if(currentRow.getCell(0) != null){
-                    orderByDate.setEvent(currentRow.getCell(0).getStringCellValue());
+                    multipleChoice.setRandomCorrectWord(currentRow.getCell(0).getStringCellValue());
                 }
-
+                
                 //InfoEvent
                 if(currentRow.getCell(1) != null){
-                    orderByDate.setInfoEvent(currentRow.getCell(1).getStringCellValue());
+                    multipleChoice.setRandomWord1(currentRow.getCell(1).getStringCellValue());
                 }
-
+                
                 //StartDate
                 if(currentRow.getCell(2) != null){
-                        // Convertir Date a LocalDate
-                        Date date = currentRow.getCell(2).getDateCellValue();
-                        startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        orderByDate.setStartDate(startDate);
+                    multipleChoice.setRandomWord2(currentRow.getCell(2).getStringCellValue());
                 }
-
+                
                 //EndDate
                 if(currentRow.getCell(3) != null){
-                        // Convertir Date a LocalDate
-                        Date date = currentRow.getCell(3).getDateCellValue();
-                        endDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        orderByDate.setEndDate(endDate);
+                    multipleChoice.setRandomWord3(currentRow.getCell(3).getStringCellValue());
                 }
 
-                // Validar que startDate sea menor que endDate
-                if (startDate != null && endDate != null && !startDate.isBefore(endDate)) {
-                    throw new GameModeException(" En la fila " + rowIndex + " la fecha de inicio debe ser anterior a la fecha de fin para el evento: " + orderByDate.getEvent());
+                if(currentRow.getCell(3) != null){
+                    multipleChoice.setQuestion(currentRow.getCell(3).getStringCellValue()); //verificar
                 }
-
+                
                 //Hint1
                 if(currentRow.getCell(4) != null){
-                    orderByDate.setHint1(currentRow.getCell(4).getStringCellValue());
+                    multipleChoice.setHint1(currentRow.getCell(4).getStringCellValue());
                 }
                 //Hint2
                 if(currentRow.getCell(5) != null){
-                    orderByDate.setHint2(currentRow.getCell(5).getStringCellValue());
+                    multipleChoice.setHint2(currentRow.getCell(5).getStringCellValue());
                 }
                 //Hint3
                 if(currentRow.getCell(6) != null){
-                    orderByDate.setHint3(currentRow.getCell(6).getStringCellValue());
+                    multipleChoice.setHint3(currentRow.getCell(6).getStringCellValue());
                 }
-
-                gameRepository.save(orderByDate);
+                
+                gameRepository.save(multipleChoice);
                 rowIndex++;
             }
         }
@@ -393,10 +372,10 @@ public class GameService {
             return ResponseEntity.ok(dtoOrderWord);
         }
 
-        if(game instanceof OrderByDate){
-            OrderByDate orderByDate = (OrderByDate) game;
-            DtoOrderByDate dtoOrderByDate = gameConverter.toDtoOrderByDate(orderByDate);
-            return ResponseEntity.ok(dtoOrderByDate);
+        if(game instanceof MultipleChoice){
+            MultipleChoice multipleChoice = (MultipleChoice) game;
+            DtoMultipleChoice dtoMultipleChoice = gameConverter.toDtoMultipleChoice(multipleChoice);
+            return ResponseEntity.ok(dtoMultipleChoice);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
@@ -404,27 +383,25 @@ public class GameService {
     }
     
     /******  EDIT  ******/
-    public ResponseEntity<?> editOrderByDate(Long idGame, DtoOrderByDate dtoOrderByDate){
+    public ResponseEntity<?> editMultipleCoice(Long idGame, DtoMultipleChoice dtoMultipleChoice){
 
         Optional<Game> gameOpt = gameRepository.findById(idGame);
 
         Game game = gameOpt.get();
 
-        LocalDate startDate = dateConverter.toLocalDate(dtoOrderByDate.getStartDate());
-        LocalDate enDate = dateConverter.toLocalDate(dtoOrderByDate.getEndDate());
+        if(game instanceof MultipleChoice){
+            MultipleChoice multipleChoice = (MultipleChoice) game;
+            multipleChoice.setRandomCorrectWord(dtoMultipleChoice.getRandomCorrectWord());
+            multipleChoice.setRandomWord1(dtoMultipleChoice.getRandomWord1());
+            multipleChoice.setRandomWord2(dtoMultipleChoice.getRandomWord2());
+            multipleChoice.setRandomWord3(dtoMultipleChoice.getRandomWord3());
+            multipleChoice.setQuestion(dtoMultipleChoice.getQuestion());
+            multipleChoice.setHint1(dtoMultipleChoice.getHint1());
+            multipleChoice.setHint2(dtoMultipleChoice.getHint2());
+            multipleChoice.setHint3(dtoMultipleChoice.getHint3());
 
-        if(game instanceof OrderByDate){
-            OrderByDate orderByDate = (OrderByDate) game;
-            orderByDate.setEvent(dtoOrderByDate.getEvent());
-            orderByDate.setInfoEvent(dtoOrderByDate.getInfoEvent());
-            orderByDate.setStartDate(startDate);
-            orderByDate.setEndDate(enDate);
-            orderByDate.setHint1(dtoOrderByDate.getHint1());
-            orderByDate.setHint2(dtoOrderByDate.getHint2());
-            orderByDate.setHint3(dtoOrderByDate.getHint3());
-
-            gameRepository.save(orderByDate);
-            return ResponseEntity.ok("El modo de juego " + orderByDate.getIdGameMode().getName() + " con id " + idGame + " ha sido modificado correctamente!");
+            gameRepository.save(multipleChoice);
+            return ResponseEntity.ok("El modo de juego " + multipleChoice.getIdGameMode().getName() + " con id " + idGame + " ha sido modificado correctamente!");
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import tec.proyecto.guessdastuff.services.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -35,7 +36,7 @@ public class AuthController {
     @Autowired
     UserService userService;
 
-    @PostMapping("login")
+    @PostMapping("/v1/login")
     public ResponseEntity<?> login(@RequestBody DtoLoginRequest request) throws UserException {
         try {
             Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
@@ -67,7 +68,7 @@ public class AuthController {
      
     }
 
-    @PostMapping("register")
+    @PostMapping("/v1/register")
     public ResponseEntity<DtoAuthResponse> register(@RequestBody DtoRegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             DtoAuthResponse errorResponse = DtoAuthResponse.builder()
@@ -87,9 +88,8 @@ public class AuthController {
         }
     }
 
-    // Endpoint para solicitar un enlace de restablecimiento de contraseña
-    @PostMapping("/forgot-password") 
-    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+    @PostMapping("/v1/forgot-password/{email}") 
+    public ResponseEntity<String> forgotPassword(@PathVariable String email) {
         try {
             userService.processforgot_password(email);
             return ResponseEntity.ok("Password reset link has been sent to your email.");
@@ -98,8 +98,7 @@ public class AuthController {
         }
     }
 
-    // Endpoint para validar el token de restablecimiento de contraseña
-    @GetMapping("/reset-password")
+    @GetMapping("/v1/validate-password")
     public ResponseEntity<String> validateResetToken(@RequestParam String token) {
         if (userService.validatePasswordResetToken(token)) {
             return ResponseEntity.ok("Token is valid. Please provide a new password.");
@@ -108,8 +107,7 @@ public class AuthController {
         }
     }
 
-    // Endpoint para restablecer la contraseña
-    @PostMapping("/reset-password")
+    @PostMapping("/v1/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         String response = userService.updatePassword(token, newPassword);
         if(response == "Token válido"){
@@ -118,8 +116,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
         }
     }  
-
-    @PutMapping("/logout/{username}")
+    
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PutMapping("/v1/logout/{username}")
     public ResponseEntity<?> logout(@PathVariable String username){
         try {
             return ResponseEntity.ok(authService.logout(username));
