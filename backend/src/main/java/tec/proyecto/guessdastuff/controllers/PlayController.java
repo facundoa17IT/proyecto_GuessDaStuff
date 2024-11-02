@@ -12,7 +12,7 @@ import tec.proyecto.guessdastuff.services.*;
 import tec.proyecto.guessdastuff.dtos.*;
 
 @CrossOrigin(origins = "http://localhost:5173/")
-@RequestMapping("/api/user/game")
+@RequestMapping("/api/game-single")
 @RestController
 public class PlayController {
     
@@ -20,7 +20,7 @@ public class PlayController {
     PlayService playService;
 
     // LOAD GAME
-    @PostMapping("/loadGame")
+    @PostMapping("/v1/load-game")
     public ResponseEntity<DtoLoadGameResponse> loadGame(@RequestBody DtoLoadGameRequest dtoLoadGameRequest) {
         try {
             DtoLoadGameResponse response = playService.loadGame(dtoLoadGameRequest);
@@ -31,7 +31,7 @@ public class PlayController {
     }
 
     // INIT GAME
-    @PostMapping("/initGame")
+    @PostMapping("/v1/init-game")
     public ResponseEntity<DtoInitGameResponse> initGame(@RequestBody DtoInitGameRequest dtoInitGameRequest) {
         try {
             DtoInitGameResponse response = playService.initGame(dtoInitGameRequest);
@@ -42,7 +42,7 @@ public class PlayController {
     }
 
     // PLAY GAME
-    @PostMapping("/playGame")
+    @PostMapping("/v1/play-game")
     public ResponseEntity<Boolean> playGame(@RequestBody DtoPlayGameRequest dtoPlayGameRequest) {
         try {
             Boolean response = playService.playGame(dtoPlayGameRequest);
@@ -53,7 +53,7 @@ public class PlayController {
     }
 
     // Setear tiempo de inicio de partida
-    @PostMapping("/initPlayGame")
+    @PostMapping("/v1/init-play-game/{idGameSingle}")
     public ResponseEntity<Boolean> initPlayGame(String idGameSingle) {
         try {
             Boolean response = playService.initPlayGame(idGameSingle);
@@ -64,7 +64,7 @@ public class PlayController {
     }
 
     // Terminar partida
-    @PostMapping("/finishPlayGame")
+    @PostMapping("/v1/finish-play-game")
     public ResponseEntity<Boolean> finishPlayGame(String idGameSingle) {
         try {
             Boolean response = playService.finishPlayGame(idGameSingle);

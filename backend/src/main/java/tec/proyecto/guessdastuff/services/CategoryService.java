@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import tec.proyecto.guessdastuff.converters.CategoryConverter;
 import tec.proyecto.guessdastuff.dtos.DtoCategory;
+import tec.proyecto.guessdastuff.dtos.DtoCategoryRequest;
 import tec.proyecto.guessdastuff.entities.Category;
 import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.exceptions.CategoryException;
@@ -67,10 +68,10 @@ public class CategoryService {
         return categoriesAvailables;
     }
 
-    public ResponseEntity<?> editCategory(DtoCategory dtoCategory) throws CategoryException{
-        Optional<Category> categoryOpt = categoryRepository.findByName(dtoCategory.getName());
+    public ResponseEntity<?> editCategory(String name, DtoCategoryRequest dtoCategory) throws CategoryException{
+        Optional<Category> categoryOpt = categoryRepository.findByName(name);
         if (!categoryOpt.isPresent()){
-            throw new CategoryException("No existe una categoria con nombre " + dtoCategory.getName());
+            throw new CategoryException("No existe una categoria con nombre " + name);
         }
         Category category = categoryOpt.get();
         category.setDescription(dtoCategory.getDescription());

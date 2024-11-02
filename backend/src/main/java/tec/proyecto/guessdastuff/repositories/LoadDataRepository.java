@@ -20,7 +20,7 @@ public interface LoadDataRepository extends JpaRepository<GameMode, Long> {
 
   @Modifying
   @Query(value = "INSERT INTO public.game_mode(description, name, url_icon) VALUES " +
-      "('Order By Date', 'OBD', 'OBD.URL'), " +
+      "('Multiple Choice', 'MC', 'MC.URL'), " +
       "('Guess Phrase', 'GP', 'GP.URL'), " +
       "('Order Word', 'OW', 'OW.URL');", nativeQuery = true)
   void insertGameModes();
@@ -39,45 +39,98 @@ public interface LoadDataRepository extends JpaRepository<GameMode, Long> {
   ///////////////////////////////
 
   @Modifying
-  @Query(value = "INSERT INTO games (end_date, start_date, id, id_category, dtype, event, correct_word, hint1, hint2, hint3, id_game_mode, info_event, phrase, word) VALUES " +
-      "('1977-06-25', '1977-05-25', 1020, 1, 'OrderByDate', 'Lanzamiento de Star Wars', NULL, 'Icono del espacio', 'George Lucas', 'Saga de películas', 'OBD', 'estreno de la primera película de Star Wars', NULL, NULL), " +
-      "('1972-04-15', '1972-03-15', 1021, 1, 'OrderByDate', 'Lanzamiento de El Padrino', NULL, 'Mafia', 'Francis Ford Coppola', 'Adaptación de novela', 'OBD', 'estreno de la película El Padrino', NULL, NULL), " +
-      "('1989-11-10', '1989-11-09', 1022, 2, 'OrderByDate', 'Caída del Muro de Berlín', NULL, 'Guerra Fría', 'Alemania', 'Unificación', 'OBD', 'fin de la división entre Alemania Oriental y Occidental', NULL, NULL), " +
-      "('1969-07-21', '1969-07-20', 1023, 2, 'OrderByDate', 'Llegada del hombre a la luna', NULL, 'NASA', 'Neil Armstrong', 'Apolo 11', 'OBD', 'primer alunizaje del Apolo 11', NULL, NULL), " +
-      "('1945-09-02', '1945-05-08', 1024, 2, 'OrderByDate', 'Fin de la Segunda Guerra Mundial', NULL, 'Aliados', 'Eje', 'Paz Mundial', 'OBD', 'rendición de Alemania y Japón', NULL, NULL), " +
-      "('1928-10-05', '1928-09-28', 1025, 3, 'OrderByDate', 'Descubrimiento de la penicilina', NULL, 'Alexander Fleming', 'Infecciones', 'Antibióticos', 'OBD', 'primer antibiótico efectivo', NULL, NULL), " +
-      "('1905-07-15', '1905-06-30', 1026, 3, 'OrderByDate', 'Publicación de la teoría de la relatividad', NULL, 'Einstein', 'Tiempo y espacio', 'Física moderna', 'OBD', 'Einstein publica la teoría de la relatividad', NULL, NULL), " +
-      "('1970-06-21', '1970-05-31', 1027, 4, 'OrderByDate', 'Mundial de fútbol de 1970', NULL, 'Pelé', 'Brasil', 'Triunfo mundial', 'OBD', 'Brasil gana la Copa del Mundo en México', NULL, NULL), " +
-      "('2008-08-24', '2008-08-08', 1028, 4, 'OrderByDate', 'Juegos Olímpicos de 2008 en Beijing', NULL, 'Beijing', 'Ceremonia espectacular', 'Michael Phelps', 'OBD', 'se celebran los Juegos Olímpicos en China', NULL, NULL);", nativeQuery = true)
-  void insertMultipleODB();
+  @Query(value = "INSERT INTO games (" +
+          "id, " +
+          "id_category, " +
+          "id_game_mode, " +
+          "dtype, " +
+          "hint1, " +
+          "hint2, " +
+          "hint3, " +
+          "random_word1, " +
+          "random_word2, " +
+          "random_word3, " +
+          "random_correct_word, " +
+          "question, " +
+          "phrase, " +
+          "correct_word, " +
+          "word" +
+      ") VALUES " +
+      "(1020, 1, 'MC', 'MultipleChoice', 'Saga de ciencia ficción', 'Batallas espaciales', 'Robots y Jedi', 'Galaxia', 'Espacio', 'Universo', 'Star Wars', '¿Cuál es la película icónica de George Lucas?', NULL, NULL, NULL), " +
+      "(1021, 1, 'MC', 'MultipleChoice', 'Drama familiar', 'Historia de lealtad y traición', 'Premios de cine', 'Familia', 'Cosa Nostra', 'Omertá', 'El Padrino', '¿Cuál es la famosa película de mafias dirigida por Coppola?', NULL, NULL, NULL), " +
+      "(1022, 2, 'MC', 'MultipleChoice', 'Separación histórica', 'Reconstrucción social', 'Simbolismo de libertad', 'Muro', 'Alemania Oriental', 'Alemania Occidental', 'Berlín', '¿Qué ciudad representa la caída de la Guerra Fría?', NULL, NULL, NULL), " +
+      "(1023, 2, 'MC', 'MultipleChoice', 'Exploración espacial', 'Éxito de la misión Apolo', 'Hito para la humanidad', 'Luna', 'Cohete', 'Astronauta', 'Alunizaje', '¿Cuál fue el primer aterrizaje humano en la Luna?', NULL, NULL, NULL), " +
+      "(1024, 2, 'MC', 'MultipleChoice', 'Conflicto global', 'Alianzas internacionales', 'Resolución de paz', 'Victoria', 'Derrota', 'Armisticio', 'Segunda Guerra Mundial', '¿Qué evento histórico tuvo a los Aliados y al Eje como bandos?', NULL, NULL, NULL), " +
+      "(1025, 3, 'MC', 'MultipleChoice', 'Medicamento revolucionario', 'Impacto en la salud mundial', 'Descubrimiento casual', 'Bacterias', 'Infección', 'Curación', 'Penicilina', '¿Cuál fue el descubrimiento de Alexander Fleming?', NULL, NULL, NULL), " +
+      "(1026, 3, 'MC', 'MultipleChoice', 'Principios de la física moderna', 'Conceptos de tiempo y espacio', 'Impacto científico', 'Teoría', 'Espacio', 'Tiempo', 'Relatividad', '¿Qué teoría famosa es obra de Einstein?', NULL, NULL, NULL), " +
+      "(1027, 4, 'MC', 'MultipleChoice', 'Campeonato mundial', 'Evento deportivo histórico', 'Triunfo brasileño', 'Copa', 'Campeón', 'Estadio', 'Mundial 1970', '¿Qué torneo ganó Brasil con Pelé como estrella?', NULL, NULL, NULL), " +
+      "(1028, 4, 'MC', 'MultipleChoice', 'Evento deportivo destacado', 'Récords de medallas', 'Icono de la natación', 'Competencia', 'Estadio Nacional', 'Ceremonia', 'Olimpiadas 2008', '¿Dónde se llevaron a cabo las Olimpiadas con la participación de Phelps en 2008?', NULL, NULL, NULL);",
+      nativeQuery = true)
+  void insertMultipleMC();
+  
+  
 
   ///////////////////////////////
 
   @Modifying
-  @Query(value = "INSERT INTO public.games (end_date, start_date, id, id_category, dtype, correct_word, event, hint1, hint2, hint3, id_game_mode, info_event, phrase, word) VALUES " +
-      "(NULL, NULL, 1030, 3, 'OrderWord', NULL, NULL, 'Descubrimiento de la penicilina', 'Alexander Fleming', 'Antibióticos', 'OW', NULL, NULL, 'penicilina'), " +
-      "(NULL, NULL, 1031, 2, 'OrderWord', NULL, NULL, 'Caída del Muro de Berlín', 'Alemania', 'Unificación', 'OW', NULL, NULL, 'muro de Berlín'), " +
-      "(NULL, NULL, 1033, 3, 'OrderWord', NULL, NULL, 'Género musical uruguayo', 'Percusión', 'Raíces africanas', 'OW', NULL, NULL, 'candombe'), " +
-      "(NULL, NULL, 1034, 4, 'OrderWord', NULL, NULL, 'Mundial de fútbol de 1970', 'Brasil', 'Triunfo mundial', 'OW', NULL, NULL, 'fútbol'), " +
-      "(NULL, NULL, 1032, 1, 'OrderWord', NULL, NULL, 'Lanzamiento de Star Wars', 'George Lucas', 'Saga de películas', 'OW', NULL, NULL, 'Star Wars');",
-      nativeQuery = true)
-  void insertMultiplesOW();  
+@Query(value = "INSERT INTO games (" +
+        "id, " +
+        "id_category, " +
+        "id_game_mode, " +
+        "dtype, " +
+        "hint1, " +
+        "hint2, " +
+        "hint3, " +
+        "random_word1, " +
+        "random_word2, " +
+        "random_word3, " +
+        "random_correct_word, " +
+        "phrase, " +
+        "correct_word, " +
+        "word, " +
+        "question" +
+    ") VALUES " +
+    "(1030, 3, 'OW', 'OrderWord', 'Descubrimiento de la penicilina', 'Alexander Fleming', 'Antibióticos', NULL, NULL, NULL, NULL, NULL, NULL, 'penicilina', NULL), " +
+    "(1031, 2, 'OW', 'OrderWord', 'Caída del Muro de Berlín', 'Alemania', 'Unificación', NULL, NULL, NULL, NULL, NULL, NULL, 'muro de Berlín', NULL), " +
+    "(1033, 3, 'OW', 'OrderWord', 'Género musical uruguayo', 'Percusión', 'Raíces africanas', NULL, NULL, NULL, NULL, NULL, NULL, 'candombe', NULL), " +
+    "(1034, 4, 'OW', 'OrderWord', 'Mundial de fútbol de 1970', 'Brasil', 'Triunfo mundial', NULL, NULL, NULL, NULL, NULL, NULL, 'fútbol', NULL), " +
+    "(1032, 1, 'OW', 'OrderWord', 'Lanzamiento de Star Wars', 'George Lucas', 'Saga de películas', NULL, NULL, NULL, NULL, NULL, NULL, 'Star Wars', NULL);",
+    nativeQuery = true)
+void insertMultiplesOW(); 
   
   ///////////////////////////////
 
   @Modifying
-  @Query(value = "INSERT INTO public.games (end_date, start_date, id, id_category, dtype, correct_word, event, hint1, hint2, hint3, id_game_mode, info_event, phrase, word) VALUES " +
-      "(NULL, NULL, 1040, 1, 'GuessPhrase', '1972', NULL, 'Dirigida por Francis Ford Coppola', 'Protagonizada por Marlon Brando', 'Es una película de gánsteres', 'GP', NULL, '¿En qué año se estrenó El Padrino?', NULL), " +
-      "(NULL, NULL, 1041, 1, 'GuessPhrase', 'Tom Cruise', NULL, 'Protagonista de la saga', 'Es un actor estadounidense', 'Conocido por sus escenas de acción', 'GP', NULL, '¿Cuál es el nombre del actor principal en Misión Imposible?', NULL), " +
-      "(NULL, NULL, 1042, 2, 'GuessPhrase', 'Corriente Alterna', NULL, 'Revolucionó la electricidad', 'Es un tipo de corriente eléctrica', 'Se opone a la corriente directa', 'GP', NULL, '¿Cuál fue el invento más famoso de Nikola Tesla?', NULL), " +
-      "(NULL, NULL, 1043, 2, 'GuessPhrase', 'Mercurio', NULL, 'Es el planeta más pequeño del sistema solar', 'Es rocoso y sin atmósfera', 'No tiene lunas', 'GP', NULL, '¿Cuál es el planeta más cercano al sol?', NULL), " + 
-      "(NULL, NULL, 1044, 3, 'GuessPhrase', 'Queen', NULL, 'Banda británica', 'Freddie Mercury era su vocalista', 'La canción es de los años 70', 'GP', NULL, '¿Cuál es el nombre de la banda que canta Bohemian Rhapsody?', NULL), " + 
-      "(NULL, NULL, 1045, 3, 'GuessPhrase', 'Michael Jackson', NULL, 'Conocido como el Rey del Pop', 'Fue un éxito en los años 80', 'El videoclip tiene temática de terror', 'GP', NULL, '¿Quién canta Thriller?', NULL), " + 
-      "(NULL, NULL, 1046, 4, 'GuessPhrase', 'Burj Khalifa', NULL, 'Se encuentra en Dubái', 'Tiene más de 160 pisos', 'Es una atracción turística famosa', 'GP', NULL, '¿Cuál es el edificio más alto del mundo?', NULL), " + 
-      "(NULL, NULL, 1047, 4, 'GuessPhrase', 'Amazonas', NULL, 'Pasa por Brasil', 'Es conocido por su biodiversidad', 'Desemboca en el Océano Atlántico', 'GP', NULL, '¿Cuál es el río más largo de Sudamérica?', NULL), " + 
-      "(NULL, NULL, 1048, 5, 'GuessPhrase', 'Bob Dylan', NULL, 'Artista estadounidense', 'Reconocido por sus letras poéticas', 'Comienza con B', 'GP', NULL, '¿Quién canta Like a Rolling Stone?', NULL);", 
+  @Query(value = "INSERT INTO games (" +
+          "id, " +
+          "id_category, " +
+          "id_game_mode, " +
+          "dtype, " +
+          "hint1, " +
+          "hint2, " +
+          "hint3, " +
+          "random_word1, " +
+          "random_word2, " +
+          "random_word3, " +
+          "random_correct_word, " +
+          "phrase, " +
+          "correct_word, " +
+          "word, " +
+          "question" +
+      ") VALUES " +
+      "(1040, 1, 'GP', 'GuessPhrase', 'Dirigida por Francis Ford Coppola', 'Protagonizada por Marlon Brando', 'Es una película de gánsteres', NULL, NULL, NULL, NULL, 'Película que popularizó la frase \\\"Le haré una oferta que no podrá rechazar\\\"', 'El Padrino', NULL, NULL), " +
+      "(1041, 1, 'GP', 'GuessPhrase', 'Protagonista de la saga', 'Es un actor estadounidense', 'Conocido por sus escenas de acción', NULL, NULL, NULL, NULL, 'Actor famoso por interpretar a Ethan Hunt en \\\"Misión Imposible\\\"', 'Tom Cruise', NULL, NULL), " +
+      "(1042, 2, 'GP', 'GuessPhrase', 'Revolucionó la electricidad', 'Es un tipo de corriente eléctrica', 'Se opone a la corriente directa', NULL, NULL, NULL, NULL, 'Tipo de corriente que revolucionó el uso de electricidad en el mundo', 'Corriente alterna', NULL, NULL), " +
+      "(1043, 2, 'GP', 'GuessPhrase', 'Es el planeta más pequeño del sistema solar', 'Es rocoso y sin atmósfera', 'No tiene lunas', NULL, NULL, NULL, NULL, 'Planeta que se encuentra más cerca del sol', 'Mercurio', NULL, NULL), " + 
+      "(1044, 3, 'GP', 'GuessPhrase', 'Banda británica', 'Freddie Mercury era su vocalista', 'La canción es de los años 70', NULL, NULL, NULL, NULL, 'Banda que popularizó la canción \\\"Bohemian Rhapsody\\\"', 'Queen', NULL, NULL), " + 
+      "(1045, 3, 'GP', 'GuessPhrase', 'Conocido como el Rey del Pop', 'Fue un éxito en los años 80', 'El videoclip tiene temática de terror', NULL, NULL, NULL, NULL, 'Cantante del éxito musical \\\"Thriller\\\"', 'Michael Jackson', NULL, NULL), " + 
+      "(1046, 4, 'GP', 'GuessPhrase', 'Se encuentra en Dubái', 'Tiene más de 160 pisos', 'Es una atracción turística famosa', NULL, NULL, NULL, NULL, 'Edificio más alto del mundo ubicado en Dubái', 'Burj Khalifa', NULL, NULL), " + 
+      "(1047, 4, 'GP', 'GuessPhrase', 'Pasa por Brasil', 'Es conocido por su biodiversidad', 'Desemboca en el Océano Atlántico', NULL, NULL, NULL, NULL, 'Río más largo de Sudamérica', 'Amazonas', NULL, NULL), " + 
+      "(1048, 5, 'GP', 'GuessPhrase', 'Artista estadounidense', 'Reconocido por sus letras poéticas', 'Comienza con B', NULL, NULL, NULL, NULL, 'Cantante de la famosa canción \\\"Like a Rolling Stone\\\"', 'Bob Dylan', NULL, NULL);", 
       nativeQuery = true)
   void insertMultipleGP();
+  
+  
   
 
 };

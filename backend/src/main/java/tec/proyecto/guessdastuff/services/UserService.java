@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
 import tec.proyecto.guessdastuff.dtos.DtoAdmin;
-import tec.proyecto.guessdastuff.dtos.DtoUser;
+import tec.proyecto.guessdastuff.dtos.DtoUserRequest;
 import tec.proyecto.guessdastuff.dtos.DtoUserResponse;
 import tec.proyecto.guessdastuff.entities.User;
 import tec.proyecto.guessdastuff.enums.ERole;
@@ -63,22 +63,29 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> editUser(DtoUser dtoEditUser) throws UserException{
+    public List<DtoUserResponse> listActiveUsers(){
+        List<User> listUsers = userRepository.findAll().stream().filter(user -> user.getStatus().equals(EStatus.ONLINE)).toList();
+        List<DtoUserResponse> dtoUsers = new ArrayList<>();
 
-        Optional<User> userOpt = userRepository.findByUsername(dtoEditUser.getUsername());
+        for(User user : listUsers){
+            dtoUsers.add(userConverter.toDtoResponse(user));
+        }
+
+        return dtoUsers;
+
+    }
+
+    public ResponseEntity<?> editUser(String username, DtoUserRequest dtoEditUser) throws UserException{
+
+        Optional<User> userOpt = userRepository.findByUsername(username);
         if(!userOpt.isPresent()){
-            throw new UserException("El usuario " + dtoEditUser.getUsername() + " no existe!");
+            throw new UserException("El usuario " + username + " no existe!");
         }
 
         User userEnt = userOpt.get();
 
-        LocalDate birthday = dateConverter.toLocalDate(dtoEditUser.getBirthday());
-
-        userEnt.setEmail(dtoEditUser.getEmail());
         userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
         userEnt.setUrlPerfil(dtoEditUser.getUrlPerfil());
-        userEnt.setCountry(dtoEditUser.getCountry());
-        userEnt.setBirthday(birthday);
         userEnt.setAtUpdate(LocalDate.now());
 
         userRepository.save(userEnt);
