@@ -1,20 +1,73 @@
 package tec.proyecto.guessdastuff.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameRequest;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse;
 import tec.proyecto.guessdastuff.entities.GameMessage;
+import tec.proyecto.guessdastuff.services.PlayMultiService;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:8080/")
+//@CrossOrigin(origins = "http://localhost:5173/")
+@PreAuthorize("hasRole('USER')")
+@RestController
+@RequestMapping("/api/game-multi")
 public class SocketController {
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final PlayMultiService playMultiService;
 
-    public SocketController(SimpMessagingTemplate messagingTemplate) {
+    public SocketController(SimpMessagingTemplate messagingTemplate, PlayMultiService playMultiService) {
         this.messagingTemplate = messagingTemplate;
+        this.playMultiService = playMultiService;
     }
+
+    // Endpoint para crear una nueva partida
+    @PostMapping("/v1/create/{userId}")
+    public String createGame(@PathVariable String userId) {
+        String newGame = playMultiService.createGame(userId);
+        return newGame; // Retornar el ID del juego creado
+    }
+
+    // Endpoint para invitar a un amigo
+    @PostMapping("/v1/invite/{gameId}/")
+    public String inviteFriend(@PathVariable String gameId, @RequestParam String idUser, @RequestParam String friendEmail) {
+        // Lógica para enviar la invitación al amigo
+        playMultiService.inviteFriend(idUser, gameId, friendEmail);
+        return "Invitación enviada a " + friendEmail + " para el juego " + gameId;
+    }
+
+    // Endpoint para iniciar la partida
+    @PostMapping("/v1/start/{gameId}/")
+    public  ResponseEntity<DtoInitGameMultiResponse>  startGame(@PathVariable String gameId, @RequestBody DtoInitGameMultiRequest dtoInitGameMultiRequest) {
+        try {
+            DtoInitGameMultiResponse response = playMultiService.startGame(gameId, dtoInitGameMultiRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+
+    // Terminar partida
+    @PostMapping("/v1/finish-play-game/{idGameMulti}")
+    public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameMulti) {
+        try {
+            Boolean response = playMultiService.finishPlayGame(idGameMulti);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
 
     // Endpoint para manejar mensajes de jugador 1 a jugador 2 y viceversa
     @MessageMapping("/game/{gameId}/{playerId}")
