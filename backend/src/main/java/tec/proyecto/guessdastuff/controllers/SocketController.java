@@ -17,7 +17,7 @@ import tec.proyecto.guessdastuff.services.PlayMultiService;
 
 @CrossOrigin(origins = "http://localhost:8080/")
 //@CrossOrigin(origins = "http://localhost:5173/")
-@PreAuthorize("hasRole('USER')")
+//@PreAuthorize("hasRole('USER')")
 @RestController
 @RequestMapping("/api/game-multi")
 public class SocketController {
@@ -58,10 +58,10 @@ public class SocketController {
 
 
     // Terminar partida
-    @PostMapping("/v1/finish-play-game/{idGameMulti}")
-    public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameMulti) {
+    @PostMapping("/v1/finish-play-game/{idGameMulti}/{idUserWin}")
+    public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameMulti, @PathVariable String idUserWin) {
         try {
-            Boolean response = playMultiService.finishPlayGame(idGameMulti);
+            Boolean response = playMultiService.finishPlayGame(idGameMulti, idUserWin);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

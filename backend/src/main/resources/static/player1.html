@@ -62,7 +62,6 @@
             if (messageContent && stompClient) {
                 const message = { sender: playerId, content: messageContent, type: 'text' };
                 stompClient.send(`/app/game/${gameId}/${playerId}`, {}, JSON.stringify(message));
-                stompClient.send(`/app/game/${gameId}`, {}, JSON.stringify(message)); // Publica también en el canal de juego
                 document.getElementById("messageInput").value = "";
             }
         }

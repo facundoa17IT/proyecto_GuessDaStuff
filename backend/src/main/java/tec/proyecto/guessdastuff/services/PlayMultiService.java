@@ -248,36 +248,49 @@ public class PlayMultiService {
 
     }
     
-    public boolean finishPlayGame(String idGameMulti){
-      
+    public boolean finishPlayGame(String idGameMulti, String idUserWin){
+        dataGameMultiRepository.finishPlayGame(idUserWin, idGameMulti);
+        return true;
+
+      /*
         int puntosUser1 = 0;
         int puntosUser2 = 0;
         Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(idGameMulti);
+        
+        // Manejo de excepciones si no se encuentra el juego
+        if (optionalGame.isEmpty()) {
+            return false; // Retornar false si no se encontró el juego
+        }
+        
         DataGameMulti dataGameMulti = optionalGame.get();
 
-        if (dataGameMulti.getInfoGameMulti1().getIdUserWin() == dataGameMulti.getIdUser1()){
+        if (dataGameMulti.getInfoGameMulti1().getIdUserWin().equals(dataGameMulti.getIdUser1())){
             puntosUser1 += dataGameMulti.getInfoGameMulti1().getPoints();
         } else {
             puntosUser2 += dataGameMulti.getInfoGameMulti1().getPoints();
         }
-        if (dataGameMulti.getInfoGameMulti2().getIdUserWin() == dataGameMulti.getIdUser1()){
+        if (dataGameMulti.getInfoGameMulti2().getIdUserWin().equals(dataGameMulti.getIdUser1())){
             puntosUser1 += dataGameMulti.getInfoGameMulti2().getPoints();
         } else {
             puntosUser2 += dataGameMulti.getInfoGameMulti2().getPoints();
         }
-        if (dataGameMulti.getInfoGameMulti3().getIdUserWin() == dataGameMulti.getIdUser1()){
+        if (dataGameMulti.getInfoGameMulti3().getIdUserWin().equals(dataGameMulti.getIdUser1())){
             puntosUser1 += dataGameMulti.getInfoGameMulti3().getPoints();
         } else {
             puntosUser2 += dataGameMulti.getInfoGameMulti3().getPoints();
         }
         if (puntosUser1 < puntosUser2){
-            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser1(),idGameMulti);
+            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser2(),idGameMulti);
+            return true; 
         }else if (puntosUser1 > puntosUser2){
-            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser2(), idGameMulti);
+            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser1(), idGameMulti);
+            return true; 
         } else {
+
+            //CASO DE USO PARA EL TIRAR UNA MONEDA.
             return false; //empate
         }
-        return false; //empate
+             */
     }
     
 }
