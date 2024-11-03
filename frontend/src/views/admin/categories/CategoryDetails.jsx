@@ -3,8 +3,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
-import { IconButton } from '../../components/layouts/ItemListButtons';
+import Modal from '../../../components/layouts/Modal';
+import { IconButton } from '../../../components/layouts/ItemListButtons';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
 
@@ -12,11 +12,11 @@ import validator from '@rjsf/validator-ajv8';
 import { FaEdit } from 'react-icons/fa';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
-import { gameModesSchemas } from '../../utils/JsonSchemas';
+import axiosInstance from '../../../utils/AxiosConfig';
+import { gameModesSchemas } from '../../../utils/JsonSchemas';
 
 /** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import { ListContext } from '../../../contextAPI/ListContext';
 
 export const CategoryDetails = () => {
     const navigate = useNavigate();
@@ -63,7 +63,7 @@ export const CategoryDetails = () => {
     useEffect(() => {
         if (schema) {
             setJsonSchemaForm();
-            setModalContent(()=>renderEditTitleForm());
+            setModalContent(() => renderEditTitleForm());
         }
     }, [schema]);
 
@@ -101,32 +101,34 @@ export const CategoryDetails = () => {
             </div>
         );
     };
-    
-    const handleEditClick = (gameModeKey, index, item) => {
+
+    const handleEditClick = async (gameModeKey, index, item) => {
         console.log(gameModeKey);
         console.log(index);
         console.log(item.title);
         console.log(item.id);
+        
         setSelectedGameModeId(item.id);
         setSelectedGameMode(gameModeKey);
+        
         if (item?.id) {
-            axiosInstance.get(`/api/admin/getDataOfGM/${item.id}`)
-                .then(response => {
-                    const data = response.data.body;
-                    setFormData(data);
-                    console.log(data);
-                    // Choose schema based on id_Category
-                    if (data.id_GameMode === "OW") {
-                        setSchema(gameModesSchemas.OW);
-                    } else if (data.id_GameMode === "OBD") {
-                        setSchema(gameModesSchemas.OBD);
-                    } else if (data.id_GameMode === "GP") {
-                        setSchema(gameModesSchemas.GP);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                });
+            try {
+                const response = await axiosInstance.get(`/game-modes/v1/${item.id}`, { requiresAuth: true });
+                const data = response.data.body;
+                setFormData(data);
+                console.log(data);
+                
+                // Choose schema based on id_Category
+                if (data.id_GameMode === "OW") {
+                    setSchema(gameModesSchemas.OW);
+                } else if (data.id_GameMode === "OBD") {
+                    setSchema(gameModesSchemas.OBD);
+                } else if (data.id_GameMode === "GP") {
+                    setSchema(gameModesSchemas.GP);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
     };
     
@@ -137,7 +139,7 @@ export const CategoryDetails = () => {
             else if (selectedGameMode === "Guess Phrase") setSchema(gameModesSchemas.GP);
             else console.log("error");
         }
-        else{
+        else {
             console.log("Error bad game mode key");
         }
     }
@@ -163,19 +165,21 @@ export const CategoryDetails = () => {
         console.log(formData);
         let gameMode = "";
         if (selectedGameMode) {
-            if (selectedGameMode === "Order Word") gameMode = 'OrderWord';
-            else if (selectedGameMode === "Order By Date") gameMode = 'OrderByDate';
-            else if (selectedGameMode === "Guess Phrase") gameMode = 'GuessPhrase';
-            else console.log("error");
+            if (selectedGameMode === "Order Word") gameMode = 'OW';
+            else if (selectedGameMode === "Order By Date") gameMode = 'OBD';
+            else if (selectedGameMode === "Guess Phrase") gameMode = 'GP';
+            else console.error("Error al seleccionar Game Mode");
+
+            try {
+                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, {}, { requiresAuth: true });
+                console.log('Data edited successfully!', response.data);
+                setFormData({});
+                navigate(-1);
+            } catch (error) {
+                console.error('Error al editar el titulo:', error);
+            }
         }
-        try {
-            const response = await axiosInstance.put(`/api/admin/edit${gameMode}/${selectedGameModeId}`, formData);
-            console.log('Data edited successfully!', response.data);
-            setFormData({});
-            navigate(-1);
-        } catch (error) {
-            console.error('Error during submission:', error);
-        }
+        else console.error("Error al seleccionar Game Mode");
     };
 
 
@@ -212,16 +216,15 @@ export const CategoryDetails = () => {
     }
 
     // Get titles of the selected category
-    const handleListTitles = () => {
+    const handleListTitles = async () => {
         if (selectedItem?.id) {
-            axiosInstance.get(`/api/admin/listTitles/${selectedItem.id}`)
-                .then(response => {
-                    setCategoryTitles(response.data);
-                })
-                .catch(error => {
-                    setModalContent(<>No hay titulos disponibles</>);
-                    console.error('Error fetching:', error);
-                });
+            try {
+                const response = await axiosInstance.get(`/game-modes/v1/titles/${selectedItem.id}`, { requiresAuth: true });
+                setCategoryTitles(response.data);
+            } catch (error) {
+                setModalContent(<>No hay titulos disponibles</>);
+                console.error('Error fetching:', error);
+            }
         } else {
             console.error('No id found in selectedItem');
         }

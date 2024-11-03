@@ -7,7 +7,7 @@ import MainGameLayout from '../../components/layouts/MainGamelayout';
 import CustomList from '../../components/layouts/CustomList';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import { CATEGORY_STATUS } from '../../utils/constants';
 
 const GameContentManagement = () => {
@@ -33,14 +33,16 @@ const GameContentManagement = () => {
     ]
 
     // Fetch all categories
+    const fetchCategories = async () => {
+        try {
+            const response = await axiosInstance.get('/v1/categories', { requiresAuth: true });
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
     useEffect(() => {
-        axiosInstance.get('/auth/categories')
-            .then(response => {
-                setCategories(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
+        fetchCategories();
     }, []);
 
     const handleAddNewCategory = () => {

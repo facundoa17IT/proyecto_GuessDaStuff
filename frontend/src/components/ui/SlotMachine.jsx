@@ -122,11 +122,11 @@ const SlotMachine = () => {
             </div>
 
             <div className="results"> {/* Contenedor para mostrar los resultados */}
-                {results.length > 0 && ( // Si hay resultados
+                {results.length > 0 && (
                     <ul>
-                        {results.map((result, index) => ( // Mapeo de resultados a lista
+                        {results.slice().reverse().map((result, index) => (
                             <li key={index}>
-                                {result.category}: {result.mode} {/* Mostrar nombre de la categoría y modo */}
+                                {result.category}: {result.mode}
                             </li>
                         ))}
                     </ul>

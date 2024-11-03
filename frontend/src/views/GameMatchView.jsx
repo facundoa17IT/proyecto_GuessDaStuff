@@ -1,96 +1,97 @@
+/** React **/
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Importa useNavigate
-import axiosInstance from '../AxiosConfig';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+/** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
+import GuessPhrase from './game-modes/GuessPhrase';
+import OrderWord from './game-modes/OrderWord';
+import CircleTimer from '../components/ui/CircleTimer';
+import MultipleChoice from './game-modes/MultipleChoice';
+
+/** Utils **/
+import axiosInstance from '../utils/AxiosConfig';
+import { logObject } from '../utils/Helpers';
+
+/** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
-import GuessPhrase from '../components/ui/GuessPhrase';
-import OrderWord from '../components/ui/OrderWord';
 
 const GameMatchView = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { initGameBody } = location.state || {};
-    const { initGameData, setinitGameData } = useContext(LoadGameContext);
 
-    const [currentHeader, setCurrentheader] = useState('');
+    const { initGameBody } = location.state || {};
+    const { initGameModes, setInitGameModes } = useContext(LoadGameContext);
+
+    const [currentHeader, setCurrentHeader] = useState('');
     const [gameContent, setGameContent] = useState(null);
     const [currentGameIndex, setCurrentGameIndex] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(7); // Tiempo de 7 segundos para cada fase
 
-  
-    // Llamada a la API para obtener los datos del juego
+    const [isGameReady, setIsGameReady] = useState(false);
+
     useEffect(() => {
-        console.log(JSON.stringify(initGameBody, null, 2));
         setGameContent(null);  // Limpia el contenido del juego antes de iniciar
         setCurrentGameIndex(0); // Reinicia el índice del juego
         setTimeRemaining(7);    // Reinicia el temporizador
-        
-        axiosInstance.post("/api/user/game/initGame", initGameBody)
-            .then(response => {
-                setinitGameData(response.data.gameModes); // Guarda los modos de juego
-            })
-            .catch(error => {
-                console.error('Error obteniendo datos del juego:', error);
-            });
-    }, [initGameBody, setinitGameData]);
+    }, []);
 
-    // Manejamos el cambio de fases de juego cada 7 segundos
-    useEffect(() => {
-        if (Object.keys(initGameData).length > 0) {
-            const interval = setInterval(() => {
-                setCurrentGameIndex(prevIndex => {
-                    const gameKeys = Object.keys(initGameData);
 
-                    // Si hemos mostrado todos los juegos, redirigimos a StartGame
-                    if (prevIndex + 1 >= gameKeys.length) {
-                        clearInterval(interval); // Limpiar el intervalo
-                        navigate('/start-game'); // Navegación al final
-                        return prevIndex; // Mantenemos el índice en el último valor
-                    }
+    const initializeGameModes = async () => {
+        try {
+            console.log(JSON.stringify(initGameBody, null, 2));
+            logObject(initGameBody);
 
-                    return prevIndex + 1; // Cambiamos al siguiente juego
-                });
+            // Execute the POST request without storing the response
+            const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
 
-                setTimeRemaining(7); // Reiniciamos el temporizador a 7 segundos
-            }, 7000); // Cambio de fase cada 7 segundos
-
-            return () => clearInterval(interval); // Limpiar el intervalo al desmontar
+            // If the request is successful, save the game modes
+            setInitGameModes(response.data.gameModes);
+        } catch (error) {
+            console.error('Error obteniendo datos del juego:', error);
+            // Optionally, you can provide user feedback here
+            alert('Ocurrió un error al inicializar el juego. Por favor, inténtalo de nuevo.');
         }
-    }, [initGameData, navigate]);
-
-    // Manejamos el temporizador de cada fase
+    };
     useEffect(() => {
-        if (timeRemaining > 0) {
-            const timer = setTimeout(() => setTimeRemaining(timeRemaining - 1), 7000);
-            return () => clearTimeout(timer); // Limpiamos el temporizador
-        } else {
-            setCurrentGameIndex(prevIndex => {
-                const gameKeys = Object.keys(initGameData);
-                if (prevIndex + 1 >= gameKeys.length) {
-                    setGameContent(null); // Limpia el contenido antes de navegar
-                    setTimeout(() => {
-                        navigate('/start-game'); // Navegación después de limpiar
-                    }, 200); // Breve retraso para asegurarse de que el contenido se haya limpiado
-                    return prevIndex;
-                }
-                return prevIndex + 1;
-            });
-            setTimeRemaining(7); // Reiniciar el tiempo a 7 segundos
-        }
-    }, [timeRemaining, initGameData, navigate]);
+        initializeGameModes();
+    }, [initGameBody]);
+    
 
     // Actualizamos el contenido del juego cada vez que cambie el índice
     useEffect(() => {
-        if (Object.keys(initGameData).length > 0) {
+        if (Object.keys(initGameModes).length > 0) {
             setGameContent(renderGame());
         }
-    }, [currentGameIndex, initGameData]);
+    }, [currentGameIndex, initGameModes]);
+
+    // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
+    useEffect(() => {
+        if (gameContent) {
+            setIsGameReady(true);
+        }
+    }, [currentGameIndex, initGameModes]);
+
+    const handleNextGameMode = () => {
+        setCurrentGameIndex(prevIndex => {
+            const gameKeys = Object.keys(initGameModes);
+            if (prevIndex + 1 >= gameKeys.length) {
+                setGameContent(null); // Limpia el contenido antes de navegar
+                setTimeout(() => {
+                    navigate('/start-game'); // Navegación después de limpiar
+                }, 200); // Breve retraso para asegurarse de que el contenido se haya limpiado
+                return prevIndex;
+            }
+            return prevIndex + 1;
+        });
+        setTimeRemaining(7); // Reiniciar el tiempo a 7 segundos
+    }
 
     // Renderizar el juego basado en el índice actual
     const renderGame = () => {
-        const gameKeys = Object.keys(initGameData);
+        const gameKeys = Object.keys(initGameModes);
         const currentGameKey = gameKeys[currentGameIndex];
-        const gameInfo = initGameData[currentGameKey]?.infoGame[0]; // Asegúrate de que gameInfo exista
+        const gameInfo = initGameModes[currentGameKey]?.infoGame[0]; // Asegúrate de que gameInfo exista
 
         if (gameInfo) {
             const { idModeGame } = gameInfo;
@@ -99,16 +100,16 @@ const GameMatchView = () => {
             // Cambiamos el componente según el modo de juego
             switch (idModeGame) {
                 case 'OW':
-                    setCurrentheader("Ordena la Palabra");
+                    setCurrentHeader("Ordena la Palabra");
                     GameComponent = <OrderWord OWinfo={gameInfo} />;
                     break;
                 case 'GP':
-                    setCurrentheader("Adivina la Frase");
+                    setCurrentHeader("Adivina la Frase");
                     GameComponent = <GuessPhrase GPinfo={gameInfo} />;
                     break;
-                case 'OBD':
-                    setCurrentheader("Ordenar por Fecha");
-                    GameComponent = <p>Componente para ordenar por fecha no implementado.</p>;
+                case 'MC':
+                    setCurrentHeader("Multiple opcion");
+                    GameComponent = <MultipleChoice MCinfo={gameInfo} />;
                     break;
                 default:
                     GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -130,6 +131,16 @@ const GameMatchView = () => {
             canGoBack={false}
             middleHeader={currentHeader}
             middleContent={gameContent}
+            rightHeader='Stats'
+            rightContent={
+                <CircleTimer
+                    isLooping={true}
+                    loopDelay={0.5}
+                    isPlaying={isGameReady}
+                    duration={timeRemaining}
+                    onTimerComplete={handleNextGameMode}
+                />
+            }
         />
     );
 };

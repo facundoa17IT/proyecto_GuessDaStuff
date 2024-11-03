@@ -21,13 +21,11 @@ import GameContentManagement from '../views/admin/GameContentManagement';
 import UsersManagment from '../views/admin/UsersManagement';
 
 /** Content - Categories **/
-import { CategoryDetails } from '../views/admin/CategoryDetails';
-import { EditCategory } from '../views/admin/EditCategory';
-import { DeleteCategory } from '../views/admin/DeleteCategory';
-import { AddCategory } from '../views/admin/AddCategory';
-
-/** Content - Game Modes**/
-import { AddTitle } from '../views/admin/AddTitle';
+import { CategoryDetails } from '../views/admin/categories/CategoryDetails';
+import { EditCategory } from '../views/admin/categories/EditCategory';
+import { DeleteCategory } from '../views/admin/categories/DeleteCategory';
+import { AddCategory } from '../views/admin/categories/AddCategory';
+import { AddTitle } from '../views/admin/categories/AddTitle';
 
 function AppRouter() {
     const location = useLocation();

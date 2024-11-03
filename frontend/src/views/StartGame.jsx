@@ -1,6 +1,6 @@
 import { React, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../AxiosConfig';
+import axiosInstance from '../utils/AxiosConfig';
 import Modal from '../components/layouts/Modal';
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
@@ -30,41 +30,48 @@ const StartGame = () => {
         setSelectedGameMode(event.target.value);
     };
 
-    // Fetch available categories when the component mounts
-    useEffect(() => {
-        setLoading(true); // Comienza la carga
-        axiosInstance.get('/auth/activeCategories')
-            .then(response => {
-                setCategories(response.data);
-                setLoading(false); // Finaliza la carga
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-                setLoading(false); // Finaliza la carga incluso si hay error
-            });
-    }, []);
+    const fetchActiveCategories = async () => {
+        setLoading(true); // Start loading
+        setSelectedCategories([]);
 
-    const handleConfirm = () => {
+        try {
+            const response = await axiosInstance.get('/v1/categories-active');
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        } finally {
+            setLoading(false); // End loading in either case
+        }
+    };
+    useEffect(() => {
+        fetchActiveCategories();
+    }, []);
+    
+
+    const handleConfirm = async () => {
         if (selectedCategories.length < 3) {
-            alert('Por favor seleccion 3 categorias para continuar!');
+            alert('Por favor selecciona 3 categorias para continuar!');
             return;
         }
         const categoryIds = selectedCategories.map(category => category.id);
         console.log(categoryIds);
-
-        axiosInstance.post('/api/user/game/loadGame', {
-            categories: categoryIds,
-            modeGame: selectedGameMode
-        })
-            .then(response => {
-                console.log('Response:', response.data.categories);
-                setLoadGameData(response.data.categories);
-                navigate('/selection-phase');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
+        
+        try {
+            const response = await axiosInstance.post('/game-single/v1/load-game', {
+                categories: categoryIds,
+                modeGame: selectedGameMode
+            }, { requiresAuth: true });
+    
+            console.log('Response:', response.data.categories);
+            setLoadGameData(response.data.categories);
+            navigate('/selection-phase');
+        } catch (error) {
+            console.error('Error:', error);
+            // Optionally, you can show an alert or some UI feedback to the user here
+            alert('Ocurrió un error al cargar el juego. Por favor, inténtalo de nuevo.');
+        }
+    };
+    
 
     const handleCloseModal = () => {
         setSelectedCategories([]);
@@ -75,7 +82,6 @@ const StartGame = () => {
         <div>
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
                 <div style={{ height: '100%' }}>
-                    <hr />
                     <h2>Categorias</h2>
                     {loading ? (
                         <p>Cargando categorías...</p> // Mostrar mientras carga

@@ -3,16 +3,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
-import { gameModesSchemas } from '../../utils/JsonSchemas'
+import axiosInstance from '../../../utils/AxiosConfig';
+import { gameModesSchemas } from '../../../utils/JsonSchemas'
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
+import Modal from '../../../components/layouts/Modal';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
 
 /** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import { ListContext } from '../../../contextAPI/ListContext';
 
 export const AddTitle = () => {
     const navigate = useNavigate();
@@ -58,17 +58,19 @@ export const AddTitle = () => {
         
     }, [selectedAddType, schema]);
 
-    // Initialize Content 
-    useEffect(() => {
+    const initializeContent = async () => {
         setModalContent(() => renderAddTitleToCategory());
-        axiosInstance.get('/api/user/availableCategories')
-            .then(response => {
-                setAvailableCategories(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
+        try {
+            const response = await axiosInstance.get('/v1/categories-availables', { requiresAuth: true });
+            setAvailableCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+    useEffect(() => {
+        initializeContent();
     }, []);
+    
 
     // Trigger upload on button click 
     useEffect(() => {
@@ -133,7 +135,7 @@ export const AddTitle = () => {
     
         if (gameMode) {
             try {
-                const response = await axiosInstance.post(`/api/admin/${gameMode}Individual`, formData);
+                const response = await axiosInstance.post(`/game-modes/v1/individual/${gameMode}`, formData, { requiresAuth: true });
                 console.log('Data submitted successfully!', response.data);
                 setFormData({});
                 navigate(-1);
@@ -234,7 +236,7 @@ export const AddTitle = () => {
     
         if (gameMode) {
             try {
-                const response = await axiosInstance.post(`/api/admin/${gameMode}Masive`, formData, {
+                const response = await axiosInstance.post(`/game-modes/v1/masive/${gameMode}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },

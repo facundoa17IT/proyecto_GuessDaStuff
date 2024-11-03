@@ -3,7 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../utils/AxiosConfig';
 import {useRole} from '../../contextAPI/AuthContext'
 
 export const Login = () => {
@@ -25,7 +25,7 @@ export const Login = () => {
     const login = async (event) => {
         event.preventDefault();
         try {
-            const response = await axiosInstance.post('/auth/login', {
+            const response = await axiosInstance.post('/v1/login', {
                 username,
                 password,
             });

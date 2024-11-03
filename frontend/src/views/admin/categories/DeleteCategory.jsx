@@ -1,15 +1,15 @@
 /** React **/
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
+import axiosInstance from '../../../utils/AxiosConfig';
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
+import Modal from '../../../components/layouts/Modal';
 
 /** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import { ListContext } from '../../../contextAPI/ListContext';
 
 export const DeleteCategory = () => {
     const navigate = useNavigate();
@@ -24,19 +24,18 @@ export const DeleteCategory = () => {
     }
 
     // Fetch available categories on mount
-    const handleDeleteCategory = () => {
+    const handleDeleteCategory = async () => {
         if (selectedItem?.name) {
-            axiosInstance.put(`/auth/categories/${selectedItem.name}`)
-                .then(response => {
-                    console.log("Categoria eliminada");
-                    navigate(-1);
-                    //window.location.reload();
-                })
-                .catch(error => {
-                    console.error('Error adding category:', error);
-                });
+            try {
+                await axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`, { requiresAuth: true });
+                console.log("Categoría eliminada");
+                navigate(-1);
+            } catch (error) {
+                console.error('Error deleting category:', error);
+            }
         }
     };
+    
 
     return (
         <Modal onConfirm={handleDeleteCategory} showModal={true} closeModal={onClose} title={"Agregar Categoria"}>
