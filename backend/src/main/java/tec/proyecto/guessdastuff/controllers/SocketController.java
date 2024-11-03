@@ -73,6 +73,9 @@ public class SocketController {
     @MessageMapping("/game/{gameId}/{playerId}")
     @SendTo("/game/{gameId}/{playerId}")
     public GameMessage sendToPlayer(GameMessage message) {
+
+        //ir al backend, hacer la magia y volver.
+
         return message; // Este mensaje se enviará a todos los suscriptores del canal de destino
     }
 
