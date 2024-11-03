@@ -7,6 +7,7 @@ import MainGameLayout from '../components/layouts/MainGamelayout';
 import GuessPhrase from './game-modes/GuessPhrase';
 import OrderWord from './game-modes/OrderWord';
 import CircleTimer from '../components/ui/CircleTimer';
+import MultipleChoice from './game-modes/MultipleChoice';
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
@@ -106,9 +107,9 @@ const GameMatchView = () => {
                     setCurrentHeader("Adivina la Frase");
                     GameComponent = <GuessPhrase GPinfo={gameInfo} />;
                     break;
-                case 'OBD':
-                    setCurrentHeader("Ordenar por Fecha");
-                    GameComponent = <p>Componente para ordenar por fecha no implementado.</p>;
+                case 'MC':
+                    setCurrentHeader("Multiple opcion");
+                    GameComponent = <MultipleChoice MCinfo={gameInfo} />;
                     break;
                 default:
                     GameComponent = <p>Modo de juego no reconocido.</p>;
