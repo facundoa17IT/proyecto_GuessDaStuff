@@ -18,6 +18,10 @@ import java.util.UUID;
 import java.time.LocalDateTime;
 
 import tec.proyecto.guessdastuff.entities.DataGameSingle;
+import tec.proyecto.guessdastuff.entities.Game;
+import tec.proyecto.guessdastuff.entities.GuessPhrase;
+import tec.proyecto.guessdastuff.entities.MultipleChoice;
+import tec.proyecto.guessdastuff.entities.OrderWord;
 
 @Service
 public class PlayService {
@@ -39,7 +43,7 @@ public class PlayService {
     
    public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
     //esto va a la tabla DataGame
-    Object[] result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
+    Game result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
     int points = 0;
     float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
 
@@ -57,23 +61,28 @@ public class PlayService {
             points = 1;
         }
          // Acceso unificado a los elementos del resultado
-        Object[] resultArray = (Object[]) result[0]; // Unificar el acceso al array interno
 
-        if (resultArray[10].equals("GP")){ // Asegúrate de que el índice sea correcto
-            if (resultArray[7].equals(dtoPlayGameRequest.getResponse())){
-                if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
-                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                }
+        if ("GP".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+            GuessPhrase guessPhrase = (GuessPhrase) result;  
+            if (guessPhrase.getCorrectWord().equals(dtoPlayGameRequest.getResponse())){
+                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
                 return true;
             } else 
             return false;
-        } else if (resultArray[10].equals("OW")){ // Asegúrate de que el índice sea correcto
-            if (resultArray[5].equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto
-                if (!dtoPlayGameRequest.getIdUser().equals("0")){ // Cambiar != por .equals
-                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                }
+        } else if ("OW".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+            OrderWord orderWord = (OrderWord) result; 
+            if (orderWord.getWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
+                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                return true;
+            } else 
+            return false;
+        } else if ("MC".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+            MultipleChoice multipleChoice = (MultipleChoice) result;
+            if (multipleChoice.getRandomCorrectWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
+                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
                 return true;
             } else 
             return false;
@@ -130,23 +139,22 @@ public class PlayService {
             switch (parCatMod.getMod()) {
                 case "MC":
                     // Obtener los datos desde el repositorio
-                    List<Object[]> responseMc = playRepository.findMC(parCatMod.getCat());
+                    MultipleChoice responseMc = playRepository.findMC(parCatMod.getCat());
                     
-                    if (!responseMc.isEmpty()) {
-                        Object[] row = responseMc.get(0); // Obtener la primera fila de resultados
+                    if (responseMc != null) {// Obtener la primera fila de resultados
                         // Crear una lista de GameInfo para almacenar la información
                         GameInfo gameInfo = GameInfo.builder()
-                            .id(String.valueOf(row[2])) // Convertir el Long a String
-                            .idModeGame((String) row[7]) // idModeGame
-                            .idCategory(String.valueOf(row[1])) // idCategory
-                            .hint1((String) row[4]) // hint1
-                            .hint2((String) row[5]) // hint2
-                            .hint3((String) row[6]) // hint3
-                            .randomCorrectWord((String) row[10])
-                            .randomWord1((String) row[11])
-                            .randomWord2((String) row[12])
-                            .randomWord3((String) row[13])
-                            .question((String) row[9])
+                            .id(responseMc.getId().toString()) // Convertir el Long a String
+                            .idModeGame(responseMc.getIdGameMode().getName()) // idModeGame
+                            .idCategory(responseMc.getIdCategory().getId().toString()) // idCategory
+                            .hint1(responseMc.getHint1()) // hint1
+                            .hint2(responseMc.getHint2()) // hint2
+                            .hint3(responseMc.getHint3()) // hint3
+                            .randomCorrectWord(responseMc.getRandomCorrectWord())
+                            .randomWord1(responseMc.getRandomWord1())
+                            .randomWord2(responseMc.getRandomWord2())
+                            .randomWord3(responseMc.getRandomWord3())
+                            .question(responseMc.getQuestion())
                             .build();
                         List<GameInfo> gameInfoList1 = new ArrayList<>(); 
                         gameInfoList1.add(gameInfo);
@@ -167,20 +175,19 @@ public class PlayService {
                     break;
                 case "OW":
                     // Obtener los datos desde el repositorio
-                    List<Object[]> responseOw = playRepository.findOW(parCatMod.getCat());
+                    OrderWord responseOw = playRepository.findOW(parCatMod.getCat());
                     
-                    if (!responseOw.isEmpty()) {
-                        Object[] row = responseOw.get(0); // Obtener la primera fila de resultados
-                        
+                    if (responseOw != null) {
+
                         // Crear una lista de GameInfo para almacenar la información
                         GameInfo gameInfo2 = GameInfo.builder()
-                            .id(String.valueOf(row[2])) // Convertir el Long a String
-                            .idModeGame((String) row[7]) // idModeGame
-                            .idCategory(String.valueOf(row[1])) // idCategory
-                            .hint1((String) row[4]) // hint1
-                            .hint2((String) row[5]) // hint2
-                            .hint3((String) row[6]) // hint3
-                            .word((String) row[14])
+                            .id(responseOw.getId().toString()) // Convertir el Long a String
+                            .idModeGame(responseOw.getIdGameMode().getName()) // idModeGame
+                            .idCategory(responseOw.getIdCategory().getId().toString()) // idCategory
+                            .hint1(responseOw.getHint1()) // hint1
+                            .hint2(responseOw.getHint2()) // hint2
+                            .hint3(responseOw.getHint3()) // hint3
+                            .word(responseOw.getWord())
                             .build();
                         List<GameInfo> gameInfoList2 = new ArrayList<>(); 
                         gameInfoList2.add(gameInfo2);
@@ -201,21 +208,20 @@ public class PlayService {
                     break;
                 case "GP":
                     // Obtener los datos desde el repositorio
-                    List<Object[]> responseGp = playRepository.findGP(parCatMod.getCat());
+                    GuessPhrase responseGp = playRepository.findGP(parCatMod.getCat());
     
-                    if (!responseGp.isEmpty()) {
-                        Object[] row = responseGp.get(0); // Obtener la primera fila de resultados
+                    if (responseGp !=  null) {
                         
                         // Crear una lista de GameInfo para almacenar la información
                         GameInfo gameInfo3 = GameInfo.builder()
-                            .id(String.valueOf(row[2])) // Convertir el Long a String
-                            .idModeGame((String) row[7]) // idModeGame
-                            .idCategory(String.valueOf(row[1])) // idCategory
-                            .hint1((String) row[4]) // hint1
-                            .hint2((String) row[5]) // hint2
-                            .hint3((String) row[6]) // hint3
-                            .correct_word((String) row[3])
-                            .phrase((String) row[8])
+                            .id(responseGp.getId().toString()) // Convertir el Long a String
+                            .idModeGame(responseGp.getIdGameMode().getName()) // idModeGame
+                            .idCategory(responseGp.getIdCategory().getId().toString()) // idCategory
+                            .hint1(responseGp.getHint1()) // hint1
+                            .hint2(responseGp.getHint2()) // hint2
+                            .hint3(responseGp.getHint3()) // hint3
+                            .correct_word(responseGp.getCorrectWord())
+                            .phrase(responseGp.getPhrase())
                             .build();
                         List<GameInfo> gameInfoList3 = new ArrayList<>(); 
                         gameInfoList3.add(gameInfo3);
@@ -251,9 +257,8 @@ public class PlayService {
         dataGameSingle.setTimePlaying(0); // Asignar tiempo inicial
         dataGameSingle.setTmstmpInit(LocalDateTime.now()); // Asignar timestamp actual
         dataGameSingle.setFinish(false); // Inicialmente no está terminado
-
-
-        dataGameSingleRepository.save(dataGameSingle); 
+        
+        dataGameSingleRepository.save(dataGameSingle);     
 
         // Crear la respuesta y asignar el mapa de modos de juego
         DtoInitGameResponse dtoInitGameResponse = new DtoInitGameResponse();

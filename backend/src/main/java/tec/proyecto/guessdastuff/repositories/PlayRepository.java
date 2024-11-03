@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import tec.proyecto.guessdastuff.entities.Game;
+import tec.proyecto.guessdastuff.entities.GuessPhrase;
+import tec.proyecto.guessdastuff.entities.MultipleChoice;
+import tec.proyecto.guessdastuff.entities.OrderWord;
 
 import java.util.List;
 
@@ -34,7 +37,7 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
                "WHERE id_game_mode = 'MC' AND id_category = :idCategory " +
                "ORDER BY RANDOM() LIMIT 1", 
        nativeQuery = true)
-    List<Object[]> findMC(Integer idCategory);
+    MultipleChoice findMC(Integer idCategory);
 
     @Query(value = "SELECT * " +
                 "FROM games " +
@@ -43,7 +46,7 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
                 "ORDER BY RANDOM() " +
                 "LIMIT 1;", 
         nativeQuery = true)
-    List<Object[]> findOW(Integer idCategory);
+    OrderWord findOW(Integer idCategory);
 
     @Query(value = "SELECT * " +
                 "FROM games " +
@@ -52,12 +55,12 @@ public interface PlayRepository extends JpaRepository<Game, Long> {
                 "ORDER BY RANDOM() " +
                 "LIMIT 1;", 
         nativeQuery = true)
-    List<Object[]> findGP(Integer idCategory);
+    GuessPhrase findGP(Integer idCategory);
 
     @Query(value = "SELECT * " +
         "FROM games " +
         "WHERE id = :idGame", 
         nativeQuery = true)
-    Object[] getResultPlayGame(Integer idGame);
+    Game getResultPlayGame(Integer idGame);
 
 }
