@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player 1</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4">Player 1 - Canal Personal y Canal de Juego</h2>
+        
+        <!-- Canal General de Juego -->
+        <div class="card mb-3">
+            <div class="card-header">Canal de Juego</div>
+            <div class="card-body" id="gameMessages"></div>
+        </div>
+
+        <!-- Canal Personal de Player 1 -->
+        <div class="card mb-3">
+            <div class="card-header">Canal de Player 1</div>
+            <div class="card-body" id="player1Messages"></div>
+        </div>
+
+        <!-- Enviar Mensaje -->
+        <div class="input-group mb-3">
+            <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje">
+            <div class="input-group-append">
+                <button class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    
+    
+    <script>
+        const gameId = "1"; // ID del juego
+        const playerId = "player1"; // ID del jugador
+        let stompClient;
+
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, () => {
+                // Suscribirse al canal de juego
+                stompClient.subscribe(`/game/${gameId}`, (message) => {
+                    displayMessage(JSON.parse(message.body), "gameMessages");
+                });
+
+                // Suscribirse al canal personal de Player 1
+                stompClient.subscribe(`/game/${gameId}/${playerId}`, (message) => {
+                    displayMessage(JSON.parse(message.body), "player1Messages");
+                });
+            });
+        }
+
+        function sendMessage() {
+            const messageContent = document.getElementById("messageInput").value;
+            if (messageContent && stompClient) {
+                const message = { sender: playerId, content: messageContent, type: 'text' };
+                stompClient.send(`/app/game/${gameId}/${playerId}`, {}, JSON.stringify(message));
+                stompClient.send(`/app/game/${gameId}`, {}, JSON.stringify(message)); // Publica también en el canal de juego
+                document.getElementById("messageInput").value = "";
+            }
+        }
+
+        function displayMessage(message, elementId) {
+            const messageElement = document.createElement("div");
+            messageElement.className = "message";
+            messageElement.innerHTML = `<strong>${message.sender}:</strong> ${message.content}`;
+            document.getElementById(elementId).appendChild(messageElement);
+        }
+
+        connect();
+    </script>
+</body>
+</html>
