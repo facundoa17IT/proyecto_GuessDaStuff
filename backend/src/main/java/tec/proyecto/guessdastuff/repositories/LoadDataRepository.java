@@ -39,36 +39,34 @@ public interface LoadDataRepository extends JpaRepository<GameMode, Long> {
   ///////////////////////////////
 
   @Modifying
-  @Query(value = "INSERT INTO games (" +
-          "id, " +
-          "id_category, " +
-          "id_game_mode, " +
-          "dtype, " +
-          "hint1, " +
-          "hint2, " +
-          "hint3, " +
-          "random_word1, " +
-          "random_word2, " +
-          "random_word3, " +
-          "random_correct_word, " +
-          "question, " +
-          "phrase, " +
-          "correct_word, " +
-          "word" +
-      ") VALUES " +
-      "(1020, 1, 'MC', 'MultipleChoice', 'Saga de ciencia ficción', 'Batallas espaciales', 'Robots y Jedi', 'Galaxia', 'Espacio', 'Universo', 'Star Wars', '¿Cuál es la película icónica de George Lucas?', NULL, NULL, NULL), " +
-      "(1021, 1, 'MC', 'MultipleChoice', 'Drama familiar', 'Historia de lealtad y traición', 'Premios de cine', 'Familia', 'Cosa Nostra', 'Omertá', 'El Padrino', '¿Cuál es la famosa película de mafias dirigida por Coppola?', NULL, NULL, NULL), " +
-      "(1022, 2, 'MC', 'MultipleChoice', 'Separación histórica', 'Reconstrucción social', 'Simbolismo de libertad', 'Muro', 'Alemania Oriental', 'Alemania Occidental', 'Berlín', '¿Qué ciudad representa la caída de la Guerra Fría?', NULL, NULL, NULL), " +
-      "(1023, 2, 'MC', 'MultipleChoice', 'Exploración espacial', 'Éxito de la misión Apolo', 'Hito para la humanidad', 'Luna', 'Cohete', 'Astronauta', 'Alunizaje', '¿Cuál fue el primer aterrizaje humano en la Luna?', NULL, NULL, NULL), " +
-      "(1024, 2, 'MC', 'MultipleChoice', 'Conflicto global', 'Alianzas internacionales', 'Resolución de paz', 'Victoria', 'Derrota', 'Armisticio', 'Segunda Guerra Mundial', '¿Qué evento histórico tuvo a los Aliados y al Eje como bandos?', NULL, NULL, NULL), " +
-      "(1025, 3, 'MC', 'MultipleChoice', 'Medicamento revolucionario', 'Impacto en la salud mundial', 'Descubrimiento casual', 'Bacterias', 'Infección', 'Curación', 'Penicilina', '¿Cuál fue el descubrimiento de Alexander Fleming?', NULL, NULL, NULL), " +
-      "(1026, 3, 'MC', 'MultipleChoice', 'Principios de la física moderna', 'Conceptos de tiempo y espacio', 'Impacto científico', 'Teoría', 'Espacio', 'Tiempo', 'Relatividad', '¿Qué teoría famosa es obra de Einstein?', NULL, NULL, NULL), " +
-      "(1027, 4, 'MC', 'MultipleChoice', 'Campeonato mundial', 'Evento deportivo histórico', 'Triunfo brasileño', 'Copa', 'Campeón', 'Estadio', 'Mundial 1970', '¿Qué torneo ganó Brasil con Pelé como estrella?', NULL, NULL, NULL), " +
-      "(1028, 4, 'MC', 'MultipleChoice', 'Evento deportivo destacado', 'Récords de medallas', 'Icono de la natación', 'Competencia', 'Estadio Nacional', 'Ceremonia', 'Olimpiadas 2008', '¿Dónde se llevaron a cabo las Olimpiadas con la participación de Phelps en 2008?', NULL, NULL, NULL);",
-      nativeQuery = true)
-  void insertMultipleMC();
-  
-  
+@Query(value = "INSERT INTO games (" +
+        "id, " +
+        "id_category, " +
+        "id_game_mode, " +
+        "dtype, " +
+        "hint1, " +
+        "hint2, " +
+        "hint3, " +
+        "random_word1, " +
+        "random_word2, " +
+        "random_word3, " +
+        "random_correct_word, " +
+        "question, " +
+        "phrase, " +
+        "correct_word, " +
+        "word" +
+    ") VALUES " +
+    "(1020, 1, 'MC', 'MultipleChoice', 'Saga de ciencia ficción', 'Batallas espaciales', 'Robots y Jedi', 'GALAXIA', 'ESPACIO', 'UNIVERSO', 'STAR WARS', '¿Cuál es la película icónica de George Lucas?', NULL, NULL, NULL), " +
+    "(1021, 1, 'MC', 'MultipleChoice', 'Drama familiar', 'Historia de lealtad y traición', 'Premios de cine', 'FAMILIA', 'COSA NOSTRA', 'OMERTÁ', 'EL PADRINO', '¿Cuál es la famosa película de mafias dirigida por Coppola?', NULL, NULL, NULL), " +
+    "(1022, 2, 'MC', 'MultipleChoice', 'Separación histórica', 'Reconstrucción social', 'Simbolismo de libertad', 'MURO', 'ALEMANIA ORIENTAL', 'ALEMANIA OCCIDENTAL', 'BERLÍN', '¿Qué ciudad representa la caída de la Guerra Fría?', NULL, NULL, NULL), " +
+    "(1023, 2, 'MC', 'MultipleChoice', 'Exploración espacial', 'Éxito de la misión Apolo', 'Hito para la humanidad', 'LUNA', 'COHETE', 'ASTRONAUTA', 'ALUNIZAJE', '¿Cuál fue el primer aterrizaje humano en la Luna?', NULL, NULL, NULL), " +
+    "(1024, 2, 'MC', 'MultipleChoice', 'Conflicto global', 'Alianzas internacionales', 'Resolución de paz', 'VICTORIA', 'DERROTA', 'ARMISTICIO', 'SEGUNDA GUERRA MUNDIAL', '¿Qué evento histórico tuvo a los Aliados y al Eje como bandos?', NULL, NULL, NULL), " +
+    "(1025, 3, 'MC', 'MultipleChoice', 'Medicamento revolucionario', 'Impacto en la salud mundial', 'Descubrimiento casual', 'BACTERIAS', 'INFECCIÓN', 'CURACIÓN', 'PENICILINA', '¿Cuál fue el descubrimiento de Alexander Fleming?', NULL, NULL, NULL), " +
+    "(1026, 3, 'MC', 'MultipleChoice', 'Principios de la física moderna', 'Conceptos de tiempo y espacio', 'Impacto científico', 'TEORÍA', 'ESPACIO', 'TIEMPO', 'RELATIVIDAD', '¿Qué teoría famosa es obra de Einstein?', NULL, NULL, NULL), " +
+    "(1027, 4, 'MC', 'MultipleChoice', 'Campeonato mundial', 'Evento deportivo histórico', 'Triunfo brasileño', 'COPA', 'CAMPEÓN', 'ESTADIO', 'MUNDIAL 1970', '¿Qué torneo ganó Brasil con Pelé como estrella?', NULL, NULL, NULL), " +
+    "(1028, 4, 'MC', 'MultipleChoice', 'Evento deportivo destacado', 'Récords de medallas', 'Icono de la natación', 'COMPETENCIA', 'ESTADIO NACIONAL', 'CEREMONIA', 'OLIMPIADAS 2008', '¿Dónde se llevaron a cabo las Olimpiadas con la participación de Phelps en 2008?', NULL, NULL, NULL);",
+    nativeQuery = true)
+void insertMultipleMC();
 
   ///////////////////////////////
 
@@ -90,11 +88,11 @@ public interface LoadDataRepository extends JpaRepository<GameMode, Long> {
         "word, " +
         "question" +
     ") VALUES " +
-    "(1030, 3, 'OW', 'OrderWord', 'Descubrimiento de la penicilina', 'Alexander Fleming', 'Antibióticos', NULL, NULL, NULL, NULL, NULL, NULL, 'penicilina', NULL), " +
-    "(1031, 2, 'OW', 'OrderWord', 'Caída del Muro de Berlín', 'Alemania', 'Unificación', NULL, NULL, NULL, NULL, NULL, NULL, 'muro de Berlín', NULL), " +
-    "(1033, 3, 'OW', 'OrderWord', 'Género musical uruguayo', 'Percusión', 'Raíces africanas', NULL, NULL, NULL, NULL, NULL, NULL, 'candombe', NULL), " +
-    "(1034, 4, 'OW', 'OrderWord', 'Mundial de fútbol de 1970', 'Brasil', 'Triunfo mundial', NULL, NULL, NULL, NULL, NULL, NULL, 'fútbol', NULL), " +
-    "(1032, 1, 'OW', 'OrderWord', 'Lanzamiento de Star Wars', 'George Lucas', 'Saga de películas', NULL, NULL, NULL, NULL, NULL, NULL, 'Star Wars', NULL);",
+    "(1030, 3, 'OW', 'OrderWord', 'Descubrimiento de la penicilina', 'Alexander Fleming', 'Antibióticos', NULL, NULL, NULL, NULL, NULL, NULL, 'PENICILINA', NULL), " +
+    "(1031, 2, 'OW', 'OrderWord', 'Caída del Muro de Berlín', 'Alemania', 'Unificación', NULL, NULL, NULL, NULL, NULL, NULL, 'MURODEBERLIN', NULL), " +
+    "(1033, 3, 'OW', 'OrderWord', 'Género musical uruguayo', 'Percusión', 'Raíces africanas', NULL, NULL, NULL, NULL, NULL, NULL, 'CANDOMBE', NULL), " +
+    "(1034, 4, 'OW', 'OrderWord', 'Mundial de fútbol de 1970', 'Brasil', 'Triunfo mundial', NULL, NULL, NULL, NULL, NULL, NULL, 'FUTBOL', NULL), " +
+    "(1032, 1, 'OW', 'OrderWord', 'Lanzamiento de Star Wars', 'George Lucas', 'Saga de películas', NULL, NULL, NULL, NULL, NULL, NULL, 'STARWARS', NULL);",
     nativeQuery = true)
 void insertMultiplesOW(); 
   
@@ -118,15 +116,15 @@ void insertMultiplesOW();
           "word, " +
           "question" +
       ") VALUES " +
-      "(1040, 1, 'GP', 'GuessPhrase', 'Dirigida por Francis Ford Coppola', 'Protagonizada por Marlon Brando', 'Es una película de gánsteres', NULL, NULL, NULL, NULL, 'Película que popularizó la frase \\\"Le haré una oferta que no podrá rechazar\\\"', 'El Padrino', NULL, NULL), " +
-      "(1041, 1, 'GP', 'GuessPhrase', 'Protagonista de la saga', 'Es un actor estadounidense', 'Conocido por sus escenas de acción', NULL, NULL, NULL, NULL, 'Actor famoso por interpretar a Ethan Hunt en \\\"Misión Imposible\\\"', 'Tom Cruise', NULL, NULL), " +
-      "(1042, 2, 'GP', 'GuessPhrase', 'Revolucionó la electricidad', 'Es un tipo de corriente eléctrica', 'Se opone a la corriente directa', NULL, NULL, NULL, NULL, 'Tipo de corriente que revolucionó el uso de electricidad en el mundo', 'Corriente alterna', NULL, NULL), " +
-      "(1043, 2, 'GP', 'GuessPhrase', 'Es el planeta más pequeño del sistema solar', 'Es rocoso y sin atmósfera', 'No tiene lunas', NULL, NULL, NULL, NULL, 'Planeta que se encuentra más cerca del sol', 'Mercurio', NULL, NULL), " + 
-      "(1044, 3, 'GP', 'GuessPhrase', 'Banda británica', 'Freddie Mercury era su vocalista', 'La canción es de los años 70', NULL, NULL, NULL, NULL, 'Banda que popularizó la canción \\\"Bohemian Rhapsody\\\"', 'Queen', NULL, NULL), " + 
-      "(1045, 3, 'GP', 'GuessPhrase', 'Conocido como el Rey del Pop', 'Fue un éxito en los años 80', 'El videoclip tiene temática de terror', NULL, NULL, NULL, NULL, 'Cantante del éxito musical \\\"Thriller\\\"', 'Michael Jackson', NULL, NULL), " + 
-      "(1046, 4, 'GP', 'GuessPhrase', 'Se encuentra en Dubái', 'Tiene más de 160 pisos', 'Es una atracción turística famosa', NULL, NULL, NULL, NULL, 'Edificio más alto del mundo ubicado en Dubái', 'Burj Khalifa', NULL, NULL), " + 
-      "(1047, 4, 'GP', 'GuessPhrase', 'Pasa por Brasil', 'Es conocido por su biodiversidad', 'Desemboca en el Océano Atlántico', NULL, NULL, NULL, NULL, 'Río más largo de Sudamérica', 'Amazonas', NULL, NULL), " + 
-      "(1048, 5, 'GP', 'GuessPhrase', 'Artista estadounidense', 'Reconocido por sus letras poéticas', 'Comienza con B', NULL, NULL, NULL, NULL, 'Cantante de la famosa canción \\\"Like a Rolling Stone\\\"', 'Bob Dylan', NULL, NULL);", 
+      "(1040, 1, 'GP', 'GuessPhrase', 'Dirigida por Francis Ford Coppola', 'Protagonizada por Marlon Brando', 'Es una película de gánsteres', NULL, NULL, NULL, NULL, 'Película que popularizó la frase: Le haré una oferta que no podrá rechazar', 'EL PADRINO', NULL, NULL), " +
+      "(1041, 1, 'GP', 'GuessPhrase', 'Protagonista de la saga', 'Es un actor estadounidense', 'Conocido por sus escenas de acción', NULL, NULL, NULL, NULL, 'Actor famoso por interpretar a Ethan Hunt en: Misión Imposible', 'TOM CRUISE', NULL, NULL), " +
+      "(1042, 2, 'GP', 'GuessPhrase', 'Revolucionó la electricidad', 'Es un tipo de corriente eléctrica', 'Se opone a la corriente directa', NULL, NULL, NULL, NULL, 'Tipo de corriente que revolucionó el uso de electricidad en el mundo', 'CORRIENTE ALTERNA', NULL, NULL), " +
+      "(1043, 2, 'GP', 'GuessPhrase', 'Es el planeta más pequeño del sistema solar', 'Es rocoso y sin atmósfera', 'No tiene lunas', NULL, NULL, NULL, NULL, 'Planeta que se encuentra más cerca del sol', 'MERCURIO', NULL, NULL), " + 
+      "(1044, 3, 'GP', 'GuessPhrase', 'Banda británica', 'Freddie Mercury era su vocalista', 'La canción es de los años 70', NULL, NULL, NULL, NULL, 'Banda que popularizó la canción: Bohemian Rhapsody', 'QUEEN', NULL, NULL), " + 
+      "(1045, 3, 'GP', 'GuessPhrase', 'Conocido como el Rey del Pop', 'Fue un éxito en los años 80', 'El videoclip tiene temática de terror', NULL, NULL, NULL, NULL, 'Cantante del éxito musical: Thriller', 'MICHAEL JACKSON', NULL, NULL), " + 
+      "(1046, 4, 'GP', 'GuessPhrase', 'Se encuentra en Dubái', 'Tiene más de 160 pisos', 'Es una atracción turística famosa', NULL, NULL, NULL, NULL, 'Edificio más alto del mundo ubicado en Dubái', 'BURJ KHALIFA', NULL, NULL), " + 
+      "(1047, 4, 'GP', 'GuessPhrase', 'Pasa por Brasil', 'Es conocido por su biodiversidad', 'Desemboca en el Océano Atlántico', NULL, NULL, NULL, NULL, 'Río más largo de Sudamérica', 'AMAZONAS', NULL, NULL), " + 
+      "(1048, 5, 'GP', 'GuessPhrase', 'Artista estadounidense', 'Reconocido por sus letras poéticas', 'Comienza con B', NULL, NULL, NULL, NULL, 'Cantante de la famosa canción: Like a Rolling Stone', 'BOB DYLAN', NULL, NULL);",
       nativeQuery = true)
   void insertMultipleGP();
   
