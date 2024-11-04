@@ -1,5 +1,6 @@
 /** React **/
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /** Components **/
 import MainGameLayout from '../../components/layouts/MainGamelayout';
@@ -12,6 +13,8 @@ import axiosInstance from '../../utils/AxiosConfig';
 import { ROLE, STATUS } from '../../utils/constants';
 
 const UsersManagment = () => {
+    const navigate = useNavigate();
+
     /** Users List**/
     const [users, setUsers] = useState([]);
     const getPlayerName = (player) => player.username;
@@ -20,8 +23,10 @@ const UsersManagment = () => {
         { label: 'Admin', criteria: item => item.role === ROLE.ADMIN },
         { label: 'User', criteria: item => item.role === ROLE.USER },
         { label: 'Blocked', criteria: item => item.role === STATUS.BLOCKED },
+        { label: 'Deleted', criteria: item => item.role === STATUS.DELETED },
     ];
 
+    /** Register Admin */
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -58,7 +63,47 @@ const UsersManagment = () => {
         } catch (error) {
             console.error('Error registering:', error.response?.data?.message || error.message);
         }
-    };    
+    };   
+    
+    const handleUsersListInteraction = (listId, buttonKey, item) => {
+        if (listId === "usersList") {
+            console.log("Users List Interaction");
+            switch (buttonKey) {
+                case 'infoBtn':
+                    console.log('User Info');
+                    navigate("/admin/user-details")
+                    break;
+
+                case 'deleteBtn':
+                    console.log('Delete User');
+                    navigate("/admin/delete-user");
+                    break;
+
+                case 'blockBtn':
+                    console.log('Block User');
+                    if(item.status === "BLOCKED"){
+                        alert("El usuario ya se encuentra bloqueado!");
+                        return;
+                    }
+                    navigate("/admin/block-user");
+                    break;
+
+                case 'unblockBtn':
+                    console.log('Unblock User');
+                    if(item.status === "BLOCKED"){
+                        navigate("/admin/unblock-user");
+                        return;
+                    }
+                    alert("El usuario no ha sido bloqueado previamente!");
+                    break;
+
+                default:
+                    console.warn("Action type not recognized:", buttonKey);
+            }
+        } else {
+            console.log("Error list ID");
+        }
+    };
 
     return (
         <>
@@ -70,13 +115,15 @@ const UsersManagment = () => {
                 middleHeader='Usuarios'
                 middleContent={
                     <CustomList
+                        listId={"usersList"}
                         listContent={users}
                         getItemLabel={getPlayerName}
                         extraColumns={extraColumns}
                         customFilter={customFilter}
-                        buttons={['infoBtn', 'blockBtn', 'deleteBtn']}
+                        buttons={['infoBtn', 'blockBtn', 'unblockBtn', 'deleteBtn']}
                         addNewEntry={true}
                         onAddNewEntry={() => setIsModalOpen(!isModalOpen)}
+                        onButtonInteraction={handleUsersListInteraction}
                     />
                 }
             />

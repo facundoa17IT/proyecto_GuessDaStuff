@@ -26,14 +26,14 @@ const GameMatchView = () => {
     const [currentHeader, setCurrentHeader] = useState('');
     const [gameContent, setGameContent] = useState(null);
     const [currentGameIndex, setCurrentGameIndex] = useState(0);
-    const [timeRemaining, setTimeRemaining] = useState(7); // Tiempo de 7 segundos para cada fase
+    const [timeRemaining, setTimeRemaining] = useState(10);
 
     const [isGameReady, setIsGameReady] = useState(false);
 
     useEffect(() => {
         setGameContent(null);  // Limpia el contenido del juego antes de iniciar
         setCurrentGameIndex(0); // Reinicia el índice del juego
-        setTimeRemaining(7);    // Reinicia el temporizador
+        setTimeRemaining(10);    // Reinicia el temporizador
     }, []);
 
 
@@ -42,10 +42,8 @@ const GameMatchView = () => {
             console.log(JSON.stringify(initGameBody, null, 2));
             logObject(initGameBody);
 
-            // Execute the POST request without storing the response
             const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
 
-            // If the request is successful, save the game modes
             setInitGameModes(response.data.gameModes);
         } catch (error) {
             console.error('Error obteniendo datos del juego:', error);

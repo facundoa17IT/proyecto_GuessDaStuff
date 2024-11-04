@@ -14,6 +14,7 @@ import { FaEdit } from 'react-icons/fa';
 /** Utils **/
 import axiosInstance from '../../../utils/AxiosConfig';
 import { gameModesSchemas } from '../../../utils/JsonSchemas';
+import { renderListItemDetails } from '../../../utils/ReactHelpers';
 
 /** Context API **/
 import { ListContext } from '../../../contextAPI/ListContext';
@@ -56,7 +57,11 @@ export const CategoryDetails = () => {
 
     // Initialize the modal content with List Item Details
     useEffect(() => {
-        setModalContent(() => renderListItemDetails())
+        setModalContent(
+            <>
+                {renderListItemDetails(selectedItem)}
+                <button onClick={() => handleListTitles()}>Titulos</button>
+            </>)
     }, []);
 
     // Update modal edit categories form
@@ -107,35 +112,37 @@ export const CategoryDetails = () => {
         console.log(index);
         console.log(item.title);
         console.log(item.id);
-        
+
         setSelectedGameModeId(item.id);
         setSelectedGameMode(gameModeKey);
-        
+
         if (item?.id) {
             try {
                 const response = await axiosInstance.get(`/game-modes/v1/${item.id}`, { requiresAuth: true });
                 const data = response.data.body;
                 setFormData(data);
                 console.log(data);
-                
+
                 // Choose schema based on id_Category
-                if (data.id_GameMode === "OW") {
+                if (data.idGameMode === "OW") {
                     setSchema(gameModesSchemas.OW);
-                } else if (data.id_GameMode === "OBD") {
-                    setSchema(gameModesSchemas.OBD);
-                } else if (data.id_GameMode === "GP") {
+                } else if (data.idGameMode === "MC") {
+                    setSchema(gameModesSchemas.MC);
+                } else if (data.idGameMode === "GP") {
                     setSchema(gameModesSchemas.GP);
+                } else {
+                    console.log("Bad Id Game Mode");
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         }
     };
-    
+
     const setJsonSchemaForm = () => {
         if (selectedGameMode) {
             if (selectedGameMode === "Order Word") setSchema(gameModesSchemas.OW);
-            else if (selectedGameMode === "Order By Date") setSchema(gameModesSchemas.OBD);
+            else if (selectedGameMode === "Multiple Choice") setSchema(gameModesSchemas.MC);
             else if (selectedGameMode === "Guess Phrase") setSchema(gameModesSchemas.GP);
             else console.log("error");
         }
@@ -166,7 +173,7 @@ export const CategoryDetails = () => {
         let gameMode = "";
         if (selectedGameMode) {
             if (selectedGameMode === "Order Word") gameMode = 'OW';
-            else if (selectedGameMode === "Order By Date") gameMode = 'OBD';
+            else if (selectedGameMode === "Multiple Choice") gameMode = 'MC';
             else if (selectedGameMode === "Guess Phrase") gameMode = 'GP';
             else console.error("Error al seleccionar Game Mode");
 
@@ -181,39 +188,6 @@ export const CategoryDetails = () => {
         }
         else console.error("Error al seleccionar Game Mode");
     };
-
-
-    const renderListItemDetails = () => {
-        return (
-            <div>
-                {selectedItem && <ul style={{ textAlign: 'left' }}>
-                    {Object.entries(selectedItem).map(([key, value]) => (
-                        <li key={key}>
-                            {key === "icon" ? (
-                                <span>
-                                    <strong>{key}:</strong>
-                                    {typeof value === 'string' && value.endsWith('.png') ? (
-                                        <img
-                                            src={value}
-                                            alt={key}
-                                            style={{ width: '30px', height: '30px', marginLeft: '10px' }}
-                                        />
-                                    ) : (
-                                        React.createElement(value, { style: { marginLeft: '10px', fontSize: '30px' } })
-                                    )}
-                                </span>
-                            ) : (
-                                <span>
-                                    <strong>{key}:</strong> {String(value)}
-                                </span>
-                            )}
-                        </li>
-                    ))}
-                </ul>}
-                <button onClick={() => handleListTitles()}>Titulos</button>
-            </div>
-        );
-    }
 
     // Get titles of the selected category
     const handleListTitles = async () => {
@@ -231,7 +205,7 @@ export const CategoryDetails = () => {
     };
 
     return (
-        <Modal onConfirm={null} showModal={true} closeModal={onClose} title="Detalles">
+        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles">
             <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
                 {modalContent}
             </div>

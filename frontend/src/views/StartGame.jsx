@@ -13,6 +13,10 @@ const StartGame = () => {
     const [loading, setLoading] = useState(true); // Estado para indicar que está cargando
 
     const handleCategoryToggle = (category) => {
+        if (selectedCategories.length == 3) {
+            return;
+        }
+
         if (selectedCategories.some((selectedCategory) => selectedCategory.id === category.id)) {
             // Elimina el objeto de la categoría si ya está en la lista
             setSelectedCategories(selectedCategories.filter((selectedCategory) => selectedCategory.id !== category.id));
@@ -67,12 +71,9 @@ const StartGame = () => {
             navigate('/selection-phase');
         } catch (error) {
             console.error('Error:', error);
-            // Optionally, you can show an alert or some UI feedback to the user here
-            alert('Ocurrió un error al cargar el juego. Por favor, inténtalo de nuevo.');
         }
     };
     
-
     const handleCloseModal = () => {
         setSelectedCategories([]);
         navigate('/');

@@ -99,7 +99,7 @@ export const AddTitle = () => {
     const getGameModeById = (id) => {
         switch (id) {
             case 1: return 'OW';
-            case 2: return 'OBD';
+            case 2: return 'MC';
             case 3: return 'GP';
             default:
                 console.log("error");
