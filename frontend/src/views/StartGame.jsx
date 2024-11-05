@@ -58,7 +58,7 @@ const StartGame = () => {
             return;
         }
         const categoryIds = selectedCategories.map(category => category.id);
-        console.log(categoryIds);
+        //console.log(categoryIds);
         
         try {
             const response = await axiosInstance.post('/game-single/v1/load-game', {
@@ -66,7 +66,7 @@ const StartGame = () => {
                 modeGame: selectedGameMode
             }, { requiresAuth: true });
     
-            console.log('Response:', response.data.categories);
+            //console.log('Response:', response.data.categories);
             setLoadGameData(response.data.categories);
             navigate('/selection-phase');
         } catch (error) {

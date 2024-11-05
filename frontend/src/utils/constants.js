@@ -26,7 +26,8 @@ export const PUBLIC_ROUTES = {
     LOGIN: "login",
     START_GAME: "start-game",
     SELECTION_PHASE: "selection-phase",
-    INIT_GAME: "init-game",
+    INIT_GAME: "/init-game",
+    SINGLE_GAME_LOBBY: "single-game-lobby"
 }
 
 export const ADMIN_ROUTES = {

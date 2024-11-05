@@ -7,7 +7,7 @@ const SlotMachine = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
+        //console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
         setTimeout(() => {
             spin();
         }, 1000);
@@ -19,7 +19,7 @@ const SlotMachine = () => {
     const [slot3, setSlot3] = useState(loadGameData[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
-    const spinDuration = 3000;
+    const spinDuration = 1500;
 
     // Función para obtener un elemento aleatorio de un array
     const getRandomItem = (array) => {
@@ -86,7 +86,7 @@ const SlotMachine = () => {
 
             // Espera 3 segundos antes de redirigir
             setTimeout(() => {
-                navigate('/init-game', {
+                navigate('/single-game-lobby', {
                     state: {
                         initGameBody: output
                     }

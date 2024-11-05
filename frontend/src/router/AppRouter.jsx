@@ -15,6 +15,7 @@ import { Login } from '../views/auth/Login';
 import StartGame from '../views/StartGame';
 import SelectionPhase from '../views/SelectionPhase';
 import GameMatchView from '../views/GameMatchView';
+import SingleGameLobby from '../views/SingleGameLobby';
 
 /** Admin Views **/
 import GameContentManagement from '../views/admin/GameContentManagement';
@@ -53,6 +54,7 @@ function AppRouter() {
                 <Route path={PUBLIC_ROUTES.START_GAME} element={<StartGame />} />
                 <Route path={PUBLIC_ROUTES.SELECTION_PHASE} element={<SelectionPhase />} />
                 <Route path={PUBLIC_ROUTES.INIT_GAME} element={<GameMatchView />} />
+                <Route path={PUBLIC_ROUTES.SINGLE_GAME_LOBBY} element={<SingleGameLobby />} />
 
                 {/* Admin Routes */}
                 {/* Categories */}
