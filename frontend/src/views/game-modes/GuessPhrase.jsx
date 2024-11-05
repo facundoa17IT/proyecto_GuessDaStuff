@@ -64,7 +64,16 @@ const GuessPhrase = ({ GPinfo, onCorrect, veryfyAnswer }) => {
 				onChange={(e) => setUserInput(e.target.value)}
 				placeholder="Escribe tu respuesta"
 			/>
-			{resultMessage && <p style={styles.resultMessage}>{resultMessage}</p>}
+				{resultMessage && (
+			<div style={{
+					fontSize: '18px',
+					fontWeight: 'bold', // Para hacer el texto en negrita
+					margin: '10px 0', // Espaciado
+					color: resultMessage.includes('¡Correcto!') ? '#006400' : '#8B0000', // Verde oscuro para correcto, rojo oscuro para incorrecto
+				}}>
+					{resultMessage}
+				</div>
+			)}
 			<button style={styles.verifyButton} onClick={handleAnswer}>
 				Verificar
 			</button>

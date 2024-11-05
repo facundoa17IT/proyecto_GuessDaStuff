@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
+
 // Componente de Multiple Choice
 const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
     const { answer, setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
-    //const [answer, setAnswer] = useState();
     const [resultMessage, setResultMessage] = useState('');
 
     const { question, randomCorrectWord, randomWord1, randomWord2, randomWord3 } = MCinfo;
@@ -24,7 +24,7 @@ const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
         if (isCorrectAnswer !== null) {
             console.log("IS CORRECT ANSWER -> " + isCorrectAnswer);
             handleCheckAnswer(selectedAnswer);
-        };
+        }
     }, [isCorrectAnswer]);
 
     const allOptions = [randomCorrectWord, randomWord1, randomWord2, randomWord3];
@@ -58,39 +58,45 @@ const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
 
     return (
         <div style={styles.container}>
-            <p style={styles.question}>{question}</p>
 
-            {/* Mostramos las opciones como botones */}
-            {allOptions.map((option, index) => (
-                <button
-                    key={index}
-                    style={{
-                        ...styles.optionButton,
-                        ...(selectedAnswer === option && styles.selectedOption), // Estilo para opción seleccionada
-                        ...(confirmedAnswer && option === randomCorrectWord && styles.correctOption), // Estilo para opción correcta
-                        ...(confirmedAnswer &&
-                            selectedAnswer === option &&
-                            selectedAnswer !== randomCorrectWord &&
-                            styles.incorrectOption), // Estilo para opción incorrecta
-                    }}
-                    onClick={() => setSelectedAnswer(option)} // Solo establece la respuesta seleccionada
-                    disabled={confirmedAnswer !== null} // Deshabilitar las opciones después de confirmar
-                >
-                    <span
+            <div style={styles.containerPhrase}>
+                <p style={styles.question}>{question}</p>
+            </div>
+
+            {/* Contenedor para las opciones */}
+            <div style={styles.optionsContainer}>
+                {/* Mostramos las opciones como botones */}
+                {allOptions.map((option, index) => (
+                    <button
+                        key={index}
                         style={{
-                            ...styles.optionText,
-                            ...(selectedAnswer === option && styles.selectedOptionText), // Estilo de texto seleccionado
-                            ...(confirmedAnswer && option === randomCorrectWord && styles.correctOptionText), // Estilo de texto para la opción correcta
+                            ...styles.optionButton,
+                            ...(selectedAnswer === option && styles.selectedOption), // Estilo para opción seleccionada
+                            ...(confirmedAnswer && option === randomCorrectWord && styles.correctOption), // Estilo para opción correcta
                             ...(confirmedAnswer &&
                                 selectedAnswer === option &&
                                 selectedAnswer !== randomCorrectWord &&
-                                styles.incorrectOptionText), // Estilo de texto para la opción incorrecta
+                                styles.incorrectOption), // Estilo para opción incorrecta
                         }}
+                        onClick={() => setSelectedAnswer(option)} // Solo establece la respuesta seleccionada
+                        disabled={confirmedAnswer !== null} // Deshabilitar las opciones después de confirmar
                     >
-                        {option}
-                    </span>
-                </button>
-            ))}
+                        <span
+                            style={{
+                                ...styles.optionText,
+                                ...(selectedAnswer === option && styles.selectedOptionText), // Estilo de texto seleccionado
+                                ...(confirmedAnswer && option === randomCorrectWord && styles.correctOptionText), // Estilo de texto para la opción correcta
+                                ...(confirmedAnswer &&
+                                    selectedAnswer === option &&
+                                    selectedAnswer !== randomCorrectWord &&
+                                    styles.incorrectOptionText), // Estilo de texto para la opción incorrecta
+                            }}
+                        >
+                            {option}
+                        </span>
+                    </button>
+                ))}
+            </div>
 
             {/* Botón de Confirmar Opción con estilos personalizados */}
             <button
@@ -119,22 +125,39 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '20px',
+        marginTop: -30,
     },
+    containerPhrase: {
+		backgroundColor: '#FFF',
+		
+		borderRadius: '8px',
+		borderWidth: '3px',
+		borderColor: '#653532',
+        borderStyle: 'solid',
+		width: '390px',
+		marginBottom: '10px',
+        marginTop: 10,
+	},
+    
     question: {
         fontSize: '20px',
         marginBottom: '20px',
         textAlign: 'center',
     },
+    optionsContainer: {
+        display: 'grid', // Cambia a grid para facilitar la distribución
+        gridTemplateColumns: 'repeat(2, 1fr)', // Dos columnas
+        gap: '10px', // Espacio entre los botones
+        width: '400px', // Ancho completo para el contenedor
+        maxWidth: '600px', // Ancho máximo
+    },
     optionButton: {
         backgroundColor: '#B36F6F',
-        width: '300px',
         padding: '15px',
         borderRadius: '8px',
         borderStyle: 'solid',
         borderWidth: '3px',
         borderColor: '#653532',
-        marginTop: '10px',
         cursor: 'pointer',
         textAlign: 'center',
     },
