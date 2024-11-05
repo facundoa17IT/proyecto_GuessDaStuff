@@ -1,5 +1,10 @@
 package tec.proyecto.guessdastuff.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameMessage {
     private String sender;
     private String content;

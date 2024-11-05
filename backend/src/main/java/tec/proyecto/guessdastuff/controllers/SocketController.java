@@ -2,16 +2,14 @@ package tec.proyecto.guessdastuff.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
-import tec.proyecto.guessdastuff.dtos.DtoInitGameRequest;
-import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse;
 import tec.proyecto.guessdastuff.entities.GameMessage;
 import tec.proyecto.guessdastuff.services.PlayMultiService;
 
@@ -57,6 +55,7 @@ public class SocketController {
     }
 
 
+
     // Terminar partida
     @PostMapping("/v1/finish-play-game/{idGameMulti}/{idUserWin}")
     public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameMulti, @PathVariable String idUserWin) {
@@ -70,7 +69,7 @@ public class SocketController {
 
 
     // Endpoint para manejar mensajes de jugador 1 a jugador 2 y viceversa
-    @MessageMapping("/game/{gameId}/{playerId}")
+   /*  @MessageMapping("/game/{gameId}/{playerId}")
     @SendTo("/game/{gameId}/{playerId}")
     public GameMessage sendToPlayer(GameMessage message) {
 
@@ -79,11 +78,22 @@ public class SocketController {
         return message; // Este mensaje se enviará a todos los suscriptores del canal de destino
     }
 
+
     // Publicar un mensaje en el canal del juego general
-    @MessageMapping("/game/{gameId}")
+    //@MessageMapping("/game/{gameId}")
     @SendTo("/game/{gameId}")
     public GameMessage sendToGameChannel(GameMessage message) {
         return message; // Se envía a todos los suscriptores del canal de juego
+    }*/
+
+    @MessageMapping("/game/{gameId}/{playerId}/notify")
+    public void sendToPlayer(@DestinationVariable String gameId, @DestinationVariable String playerId, GameMessage message) {
+        messagingTemplate.convertAndSend("/game/" + gameId + "/" + playerId, message);
+    }
+
+    @MessageMapping("/game/{gameId}")
+    public void sendToGameChannel(@DestinationVariable String gameId, GameMessage message) {
+        messagingTemplate.convertAndSend("/game/" + gameId, message);
     }
 
     // Métodos para enviar mensajes a canales específicos (ejemplo para uso interno)
@@ -94,4 +104,40 @@ public class SocketController {
     public void sendMessageToGameChannel(String gameId, GameMessage message) {
         messagingTemplate.convertAndSend("/game/" + gameId, message);
     }
+
+
+    @MessageMapping("/game/{gameId}/{playerId}/guess")
+    public void processGuess(@DestinationVariable String gameId, @DestinationVariable String playerId, GameMessage message) {
+        String correctAnswer = playMultiService.getCorrectAnswer(gameId); // Obtener la respuesta correcta
+
+        if (message.getContent().equalsIgnoreCase(correctAnswer)) {
+            GameMessage successMessage = new GameMessage(playerId, "¡Correcto! Has adivinado la respuesta.", "test");
+            messagingTemplate.convertAndSend("/game/" + gameId, successMessage); // Notificar en canal de juego
+            // Opcional: termina el juego
+        } else {
+            GameMessage feedbackMessage = new GameMessage("Sistema", "Respuesta incorrecta, intenta de nuevo.", "test");
+            messagingTemplate.convertAndSend("/game/" + gameId + "/" + playerId, feedbackMessage); // Notificar solo al jugador
+        }
+    }
+
+    @MessageMapping("/game/{gameId}/checkAnswer")
+    public void checkAnswer(@DestinationVariable String gameId, @Payload GameMessage message) {
+        String playerAnswer = message.getContent();
+        String correctAnswer = playMultiService.getCorrectAnswer(gameId);
+
+        GameMessage responseMessage = new GameMessage();
+        responseMessage.setSender("System");
+
+        if (playerAnswer.equalsIgnoreCase(correctAnswer)) {
+            responseMessage.setContent("¡Respuesta correcta! " + message.getSender() + " ha ganado.");
+            // Envía la notificación a ambos jugadores
+            messagingTemplate.convertAndSend("/game/" + gameId, responseMessage);
+        } else {
+            responseMessage.setContent("Respuesta incorrecta. Sigue intentando, " + message.getSender() + "!");
+            // Envía la notificación de error solo al jugador
+            messagingTemplate.convertAndSend("/game/" + gameId + "/" + message.getSender(), responseMessage);
+        }
+    }
+
+
 }

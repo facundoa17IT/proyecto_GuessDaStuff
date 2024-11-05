@@ -31,6 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script>
         const gameId = "1";
+        const playerId = "player1"
         let stompClient;
 
         function connect() {
@@ -52,7 +53,8 @@
             const messageContent = document.getElementById("messageInput").value;
             if (messageContent && stompClient) {
                 const message = { sender: playerId, content: messageContent, type: 'text' };
-                stompClient.send(`/app/game/${gameId}/`, {}, JSON.stringify(message));
+                stompClient.send(`/app/game/${gameId}`, {}, JSON.stringify(message));
+
                 document.getElementById("messageInput").value = "";
             }
         }

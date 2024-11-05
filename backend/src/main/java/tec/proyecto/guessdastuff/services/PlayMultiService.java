@@ -88,7 +88,6 @@ public class PlayMultiService {
         return false; // Retornar false si no se encontró la partida
     }
 
-
     // Iniciar la partida
     public DtoInitGameMultiResponse startGame(String gameId, DtoInitGameMultiRequest dtoInitGameMultiRequest){
 
@@ -293,6 +292,13 @@ public class PlayMultiService {
              */
     }
     
-
+    // Método para obtener la respuesta correcta de una partida
+    public String getCorrectAnswer(String gameId) {
+        // Simulación de recuperación de respuesta desde la base de datos o lógica de negocio
+        // Puedes sustituir este código para obtener la respuesta desde PostgreSQL o tu sistema actual
+        String correctAnswer = "respuesta_correcta";  // Ejemplo de respuesta
+        return correctAnswer;
+    }
+    
     
 }

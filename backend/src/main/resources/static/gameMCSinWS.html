@@ -1,0 +1,46 @@
+GAME MC HTML - ANDANDO OK SIN WS
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Opción Múltiple</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="question"></h2>
+        <ul id="options" class="list-group"></ul>
+        <p id="resultMessage"></p>
+    </div>
+
+    <script>
+        const question = "¿Cuál es la capital de Francia?";
+        const options = [
+            { text: "Berlín", isCorrect: false },
+            { text: "Madrid", isCorrect: false },
+            { text: "París", isCorrect: true },
+            { text: "Roma", isCorrect: false }
+        ];
+
+        document.getElementById("question").innerText = question;
+
+        options.forEach(option => {
+            const optionElement = document.createElement("li");
+            optionElement.className = "list-group-item";
+            optionElement.innerText = option.text;
+            optionElement.onclick = () => selectOption(option);
+            document.getElementById("options").appendChild(optionElement);
+        });
+
+        function selectOption(option) {
+            if (option.isCorrect) {
+                document.getElementById("resultMessage").innerText = "¡Correcto! Has ganado la partida.";
+                // Aquí puedes agregar lógica para notificar a los otros jugadores
+            } else {
+                document.getElementById("resultMessage").innerText = "Incorrecto. Sigue intentando.";
+            }
+        }
+    </script>
+</body>
+</html>
