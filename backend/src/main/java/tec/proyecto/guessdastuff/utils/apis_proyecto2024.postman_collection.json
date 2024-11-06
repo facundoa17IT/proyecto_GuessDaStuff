@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "86ce1d8b-84ec-431e-8e60-76daceb380bc",
+		"_postman_id": "f51f7166-0b5e-497c-8052-dcf902487400",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37753331"
+		"_exporter_id": "34327432"
 	},
 	"item": [
 		{
@@ -3489,6 +3489,878 @@
 								"game-single",
 								"v1",
 								"finish-play-game"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Multiplayer Game",
+			"item": [
+				{
+					"name": "1- CreateGameMulti",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = pm.response.text(); \r",
+									"pm.environment.set(\"ID_GAME_MULTI\", responseData); \r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idUser",
+									"value": "1001",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-multi/v1/create/1001",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-multi",
+								"v1",
+								"create",
+								"1001"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "2- InviteFriend",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idGameSingle\" : \"0295afbd-540e-40ce-872c-60bc60ca55aa\",\n    \"idUser\": \"1001\",\n    \"response\": \"BUFON\",\n    \"idGame\": 1032, // Multiplayer\n    \"time_playing\" : 16.6\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-multi/v1/invite/{{ID_GAME_MULTI}}/?idUser=10054&friendEmail=mevoyadormir@gmail.com",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-multi",
+								"v1",
+								"invite",
+								"{{ID_GAME_MULTI}}",
+								""
+							],
+							"query": [
+								{
+									"key": "idUser",
+									"value": "10054"
+								},
+								{
+									"key": "friendEmail",
+									"value": "mevoyadormir@gmail.com"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "3- loadGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-single/v1/load-game",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-single",
+								"v1",
+								"load-game"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "4- StartGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idPartida\": \"{{ID_GAME_MULTI}}\",\n    \"parCatMod\": [\n        {\n            \"cat\": 1,\n            \"mod\": \"MC\"\n        },\n        {\n            \"cat\": 2,\n            \"mod\": \"OW\"\n        },\n        {\n            \"cat\": 3,\n            \"mod\": \"GP\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-multi/v1/start/{{ID_GAME_MULTI}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-multi",
+								"v1",
+								"start",
+								"{{ID_GAME_MULTI}}",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "6- playGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idGameSingle\" : \"0295afbd-540e-40ce-872c-60bc60ca55aa\",\n    \"idUser\": \"1001\",\n    \"response\": \"BUFON\",\n    \"idGame\": 1032, // Multiplayer\n    \"time_playing\" : 16.6\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-multi/v1/play-game",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-multi",
+								"v1",
+								"play-game"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "loadGame",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/api/user/game/loadGame",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"game",
+										"loadGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "7- finishPlayGame",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/game-multi/v1/finish-play-game/{{ID_GAME_MULTI}}/5555",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-multi",
+								"v1",
+								"finish-play-game",
+								"{{ID_GAME_MULTI}}",
+								"5555"
 							]
 						}
 					},

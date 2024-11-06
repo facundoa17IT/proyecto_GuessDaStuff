@@ -15,19 +15,27 @@ import { Login } from '../views/auth/Login';
 import StartGame from '../views/StartGame';
 import SelectionPhase from '../views/SelectionPhase';
 import GameMatchView from '../views/GameMatchView';
+import SingleGameLobby from '../views/SingleGameLobby';
 
 /** Admin Views **/
 import GameContentManagement from '../views/admin/GameContentManagement';
 import UsersManagment from '../views/admin/UsersManagement';
 
 /** Content - Categories **/
-import { CategoryDetails } from '../views/admin/CategoryDetails';
-import { EditCategory } from '../views/admin/EditCategory';
-import { DeleteCategory } from '../views/admin/DeleteCategory';
-import { AddCategory } from '../views/admin/AddCategory';
+import { CategoryDetails } from '../views/admin/categories/CategoryDetails';
+import { EditCategory } from '../views/admin/categories/EditCategory';
+import { DeleteCategory } from '../views/admin/categories/DeleteCategory';
+import { AddCategory } from '../views/admin/categories/AddCategory';
+import { AddTitle } from '../views/admin/categories/AddTitle';
 
-/** Content - Game Modes**/
-import { AddTitle } from '../views/admin/AddTitle';
+/** Content - Users **/
+import { DeleteUser } from '../views/admin/users/DeleteUser'
+import { UserDetails } from '../views/admin/users/userDetails';
+import { BlockUser } from '../views/admin/users/BlockUser';
+import { UnlockUser } from '../views/admin/users/UnblockUser';
+
+/** Utils */
+import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../utils/constants';
 
 function AppRouter() {
     const location = useLocation();
@@ -39,22 +47,29 @@ function AppRouter() {
                 <Route index element={<HomeView />} />
 
                 {/* Guess Routes */}
-                <Route path="register" element={<Register />} />
-                <Route path="login" element={<Login />} />
+                <Route path={PUBLIC_ROUTES.REGISTER} element={<Register />} />
+                <Route path={PUBLIC_ROUTES.LOGIN} element={<Login />} />
 
                 {/* Player & Guess Routes */}
-                <Route path="start-game" element={<StartGame />} />
-                <Route path="selection-phase" element={<SelectionPhase />} />
-                <Route path="init-game" element={<GameMatchView />} />
+                <Route path={PUBLIC_ROUTES.START_GAME} element={<StartGame />} />
+                <Route path={PUBLIC_ROUTES.SELECTION_PHASE} element={<SelectionPhase />} />
+                <Route path={PUBLIC_ROUTES.INIT_GAME} element={<GameMatchView />} />
+                <Route path={PUBLIC_ROUTES.SINGLE_GAME_LOBBY} element={<SingleGameLobby />} />
 
                 {/* Admin Routes */}
-                <Route path="admin/game-content-management" element={<GameContentManagement />} />
-                <Route path="admin/add-category" element={<AddCategory />} />
-                <Route path="admin/category-details" element={<CategoryDetails />} />
-                <Route path="admin/edit-category" element={<EditCategory />} />
-                <Route path="admin/delete-category" element={<DeleteCategory />} />
-                <Route path="admin/add-title" element={<AddTitle />} />
-                <Route path="admin/users-management" element={<UsersManagment />} />
+                {/* Categories */}
+                <Route path={ADMIN_ROUTES.CONTENT_MANAGEMENT} element={<GameContentManagement />} />
+                <Route path={ADMIN_ROUTES.ADD_CATEGORY} element={<AddCategory />} />
+                <Route path={ADMIN_ROUTES.CATEGORY_DETAILS} element={<CategoryDetails />} />
+                <Route path={ADMIN_ROUTES.EDIT_CATEGORY} element={<EditCategory />} />
+                <Route path={ADMIN_ROUTES.DELETE_CATEGORY} element={<DeleteCategory />} />
+                <Route path={ADMIN_ROUTES.ADD_TITLE} element={<AddTitle />} />
+                {/* Users */}
+                <Route path={ADMIN_ROUTES.USERS_MANAGEMENT} element={<UsersManagment />} />
+                <Route path={ADMIN_ROUTES.USER_DETAILS} element={<UserDetails />} />
+                <Route path={ADMIN_ROUTES.DELETE_USER} element={<DeleteUser />} />
+                <Route path={ADMIN_ROUTES.BLOCK_USER} element={<BlockUser />} />
+                <Route path={ADMIN_ROUTES.UNBLOCK_USER} element={<UnlockUser />} />
             </Route>
         </Routes>
     );

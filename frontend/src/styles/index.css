@@ -138,9 +138,9 @@ textarea {
   display: flex;
 }
 
-input[type="file"] {
+/* input[type="file"] {
   display: none;
-}
+} */
 
 .custom-file-upload {
   margin-left: 10px;
@@ -262,7 +262,7 @@ fieldset{
   border-radius: 8px;
 }
 .form-control{
-  width: 200px !important;
+  width: 250px !important;
   font-size: medium !important;
 }
 /****/

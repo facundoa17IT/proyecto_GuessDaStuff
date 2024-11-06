@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an instance of Axios
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:2024', // API base URL
+  baseURL: 'http://localhost:8080/api', // API base URL
   headers: {
     'Content-Type': 'application/json', // change according header type accordingly
   },
@@ -12,12 +12,15 @@ const axiosInstance = axios.create({
 // Add a request interceptor to include the token in the headers
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log(`Making request to: ${config.baseURL}${config.url}`);
+    console.log(`Making request to: ${config.baseURL}${config.url} - Authentication: ${config.requiresAuth}`);
+    
     const token = localStorage.getItem('token'); // Get token from local storage or other sources
-    // Check if the request should have the Authorization header
-    if (token && !config.url.includes('/auth')) {  // Exclude /auth endpoint
-      config.headers.Authorization = `Bearer ${token}`; // Add the token to the Authorization header
+    
+    // Verificar el flag `requiresAuth` en config
+    if (config.requiresAuth && token) {  
+      config.headers.Authorization = `Bearer ${token}`; // Añadir el token
     }
+
     return config;
   },
   (error) => {

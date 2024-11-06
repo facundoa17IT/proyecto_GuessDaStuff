@@ -1,28 +1,36 @@
 import React from "react"
 
 import { useRole } from '../../contextAPI/AuthContext'
-import axiosInstance from "../../AxiosConfig";
+import axiosInstance from "../../utils/AxiosConfig";
 
 import { ImExit } from "react-icons/im";
 
 const LogoutButton = () => {
     const { setRole } = useRole();  // Access the role from context
 
-    const logOut = () => {
+    const logOut = async () => {
         const username = localStorage.getItem("username");
-        axiosInstance.put(`/auth/logout/${username}`)
-            .then(response => {
-                // Remove user role from local storage & context API
-                localStorage.setItem("token", null);
+        if (username) {
+            try {
+                await axiosInstance.put(`/v1/logout/${username}`,{}, { requiresAuth: true });
+    
+                localStorage.removeItem("token");
                 localStorage.setItem("role", 'ROLE_GUESS');
                 localStorage.setItem("username", '');
                 setRole('ROLE_GUESS');
                 console.log("User logged out!");
-            })
-            .catch(error => {
+            } catch (error) {
+                // Handle any errors from the request
                 console.error('Logout Error:', error);
-            });
-    }
+                alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo de nuevo.');
+            }
+        } else {
+            console.warn('No username found in localStorage for logout.');
+        }
+    };
+    
+    
+    
 
     return (
         <button onClick={logOut}>

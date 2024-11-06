@@ -165,7 +165,6 @@ public class UserService {
     // Actualiza la contraseña del usuario
     public String updatePassword(String token, String newPassword)  {
         Optional<User> userOpt = userRepository.findByResetToken(token);
-        System.out.println(userOpt);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             user.setPassword(passwordEncoder.encode(newPassword));

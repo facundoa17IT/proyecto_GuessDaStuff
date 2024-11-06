@@ -96,8 +96,8 @@ public class GameService {
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.MC.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
-        MultipleChoice mC = new MultipleChoice(null, gameModeEnt, categoryEntidad, dtoMultipleChoice.getRandomCorrectWord(), dtoMultipleChoice.getRandomWord1(), 
-        dtoMultipleChoice.getRandomWord2(),dtoMultipleChoice.getRandomWord3(),dtoMultipleChoice.getQuestion(), dtoMultipleChoice.getHint1(), dtoMultipleChoice.getHint2(), dtoMultipleChoice.getHint3());
+        MultipleChoice mC = new MultipleChoice(null, gameModeEnt, categoryEntidad, dtoMultipleChoice.getRandomCorrectWord().toUpperCase(), dtoMultipleChoice.getRandomWord1().toUpperCase(), 
+        dtoMultipleChoice.getRandomWord2().toUpperCase(),dtoMultipleChoice.getRandomWord3().toUpperCase(),dtoMultipleChoice.getQuestion(), dtoMultipleChoice.getHint1(), dtoMultipleChoice.getHint2(), dtoMultipleChoice.getHint3());
 
         gameRepository.save(mC);
 
@@ -122,7 +122,7 @@ public class GameService {
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.OW.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
-        OrderWord ow = new OrderWord(null, gameModeEnt, categoryEntidad, dtoOrderWord.getWord(), dtoOrderWord.getHint1(), dtoOrderWord.getHint2(), dtoOrderWord.getHint3()); // {{ edit_1 }}
+        OrderWord ow = new OrderWord(null, gameModeEnt, categoryEntidad, dtoOrderWord.getWord().toUpperCase(), dtoOrderWord.getHint1(), dtoOrderWord.getHint2(), dtoOrderWord.getHint3()); // {{ edit_1 }}
 
         gameRepository.save(ow);
 
@@ -146,7 +146,7 @@ public class GameService {
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.GP.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
-        GuessPhrase gp = new GuessPhrase(null, gameModeEnt, categoryEntidad, dtoGuessPhrase.getPhrase(), dtoGuessPhrase.getCorrectWord(), dtoGuessPhrase.getHint1(), dtoGuessPhrase.getHint2(), dtoGuessPhrase.getHint3()); // {{ edit_2 }}
+        GuessPhrase gp = new GuessPhrase(null, gameModeEnt, categoryEntidad, dtoGuessPhrase.getPhrase(), dtoGuessPhrase.getCorrectWord().toUpperCase(), dtoGuessPhrase.getHint1(), dtoGuessPhrase.getHint2(), dtoGuessPhrase.getHint3()); // {{ edit_2 }}
 
         gameRepository.save(gp);
 

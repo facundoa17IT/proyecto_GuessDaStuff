@@ -3,8 +3,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 /** Components **/
-import Modal from '../../components/layouts/Modal';
-import { IconButton } from '../../components/layouts/ItemListButtons';
+import Modal from '../../../components/layouts/Modal';
+import { IconButton } from '../../../components/layouts/ItemListButtons';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
 
@@ -12,11 +12,12 @@ import validator from '@rjsf/validator-ajv8';
 import { FaEdit } from 'react-icons/fa';
 
 /** Utils **/
-import axiosInstance from '../../AxiosConfig';
-import { gameModesSchemas } from '../../utils/JsonSchemas';
+import axiosInstance from '../../../utils/AxiosConfig';
+import { gameModesSchemas } from '../../../utils/JsonSchemas';
+import { renderListItemDetails } from '../../../utils/ReactHelpers';
 
 /** Context API **/
-import { ListContext } from '../../contextAPI/ListContext';
+import { ListContext } from '../../../contextAPI/ListContext';
 
 export const CategoryDetails = () => {
     const navigate = useNavigate();
@@ -56,14 +57,18 @@ export const CategoryDetails = () => {
 
     // Initialize the modal content with List Item Details
     useEffect(() => {
-        setModalContent(() => renderListItemDetails())
+        setModalContent(
+            <>
+                {renderListItemDetails(selectedItem)}
+                <button onClick={() => handleListTitles()}>Titulos</button>
+            </>)
     }, []);
 
     // Update modal edit categories form
     useEffect(() => {
         if (schema) {
             setJsonSchemaForm();
-            setModalContent(()=>renderEditTitleForm());
+            setModalContent(() => renderEditTitleForm());
         }
     }, [schema]);
 
@@ -101,43 +106,47 @@ export const CategoryDetails = () => {
             </div>
         );
     };
-    
-    const handleEditClick = (gameModeKey, index, item) => {
+
+    const handleEditClick = async (gameModeKey, index, item) => {
         console.log(gameModeKey);
         console.log(index);
         console.log(item.title);
         console.log(item.id);
+
         setSelectedGameModeId(item.id);
         setSelectedGameMode(gameModeKey);
+
         if (item?.id) {
-            axiosInstance.get(`/api/admin/getDataOfGM/${item.id}`)
-                .then(response => {
-                    const data = response.data.body;
-                    setFormData(data);
-                    console.log(data);
-                    // Choose schema based on id_Category
-                    if (data.id_GameMode === "OW") {
-                        setSchema(gameModesSchemas.OW);
-                    } else if (data.id_GameMode === "OBD") {
-                        setSchema(gameModesSchemas.OBD);
-                    } else if (data.id_GameMode === "GP") {
-                        setSchema(gameModesSchemas.GP);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                });
+            try {
+                const response = await axiosInstance.get(`/game-modes/v1/${item.id}`, { requiresAuth: true });
+                const data = response.data.body;
+                setFormData(data);
+                console.log(data);
+
+                // Choose schema based on id_Category
+                if (data.idGameMode === "OW") {
+                    setSchema(gameModesSchemas.OW);
+                } else if (data.idGameMode === "MC") {
+                    setSchema(gameModesSchemas.MC);
+                } else if (data.idGameMode === "GP") {
+                    setSchema(gameModesSchemas.GP);
+                } else {
+                    console.log("Bad Id Game Mode");
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
     };
-    
+
     const setJsonSchemaForm = () => {
         if (selectedGameMode) {
             if (selectedGameMode === "Order Word") setSchema(gameModesSchemas.OW);
-            else if (selectedGameMode === "Order By Date") setSchema(gameModesSchemas.OBD);
+            else if (selectedGameMode === "Multiple Choice") setSchema(gameModesSchemas.MC);
             else if (selectedGameMode === "Guess Phrase") setSchema(gameModesSchemas.GP);
             else console.log("error");
         }
-        else{
+        else {
             console.log("Error bad game mode key");
         }
     }
@@ -163,72 +172,40 @@ export const CategoryDetails = () => {
         console.log(formData);
         let gameMode = "";
         if (selectedGameMode) {
-            if (selectedGameMode === "Order Word") gameMode = 'OrderWord';
-            else if (selectedGameMode === "Order By Date") gameMode = 'OrderByDate';
-            else if (selectedGameMode === "Guess Phrase") gameMode = 'GuessPhrase';
-            else console.log("error");
+            if (selectedGameMode === "Order Word") gameMode = 'OW';
+            else if (selectedGameMode === "Multiple Choice") gameMode = 'MC';
+            else if (selectedGameMode === "Guess Phrase") gameMode = 'GP';
+            else console.error("Error al seleccionar Game Mode");
+
+            try {
+                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, {}, { requiresAuth: true });
+                console.log('Data edited successfully!', response.data);
+                setFormData({});
+                navigate(-1);
+            } catch (error) {
+                console.error('Error al editar el titulo:', error);
+            }
         }
-        try {
-            const response = await axiosInstance.put(`/api/admin/edit${gameMode}/${selectedGameModeId}`, formData);
-            console.log('Data edited successfully!', response.data);
-            setFormData({});
-            navigate(-1);
-        } catch (error) {
-            console.error('Error during submission:', error);
-        }
+        else console.error("Error al seleccionar Game Mode");
     };
 
-
-    const renderListItemDetails = () => {
-        return (
-            <div>
-                {selectedItem && <ul style={{ textAlign: 'left' }}>
-                    {Object.entries(selectedItem).map(([key, value]) => (
-                        <li key={key}>
-                            {key === "icon" ? (
-                                <span>
-                                    <strong>{key}:</strong>
-                                    {typeof value === 'string' && value.endsWith('.png') ? (
-                                        <img
-                                            src={value}
-                                            alt={key}
-                                            style={{ width: '30px', height: '30px', marginLeft: '10px' }}
-                                        />
-                                    ) : (
-                                        React.createElement(value, { style: { marginLeft: '10px', fontSize: '30px' } })
-                                    )}
-                                </span>
-                            ) : (
-                                <span>
-                                    <strong>{key}:</strong> {String(value)}
-                                </span>
-                            )}
-                        </li>
-                    ))}
-                </ul>}
-                <button onClick={() => handleListTitles()}>Titulos</button>
-            </div>
-        );
-    }
-
     // Get titles of the selected category
-    const handleListTitles = () => {
+    const handleListTitles = async () => {
         if (selectedItem?.id) {
-            axiosInstance.get(`/api/admin/listTitles/${selectedItem.id}`)
-                .then(response => {
-                    setCategoryTitles(response.data);
-                })
-                .catch(error => {
-                    setModalContent(<>No hay titulos disponibles</>);
-                    console.error('Error fetching:', error);
-                });
+            try {
+                const response = await axiosInstance.get(`/game-modes/v1/titles/${selectedItem.id}`, { requiresAuth: true });
+                setCategoryTitles(response.data);
+            } catch (error) {
+                setModalContent(<>No hay titulos disponibles</>);
+                console.error('Error fetching:', error);
+            }
         } else {
             console.error('No id found in selectedItem');
         }
     };
 
     return (
-        <Modal onConfirm={null} showModal={true} closeModal={onClose} title="Detalles">
+        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles">
             <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
                 {modalContent}
             </div>

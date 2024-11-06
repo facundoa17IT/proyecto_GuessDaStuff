@@ -1,5 +1,5 @@
 /** React **/
-import React, { useState, useMemo, useEffect, useContext } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 
 /** Style **/
 import '../../styles/custom-list.css'
@@ -15,7 +15,9 @@ import { FaSearch, FaFilter, FaSort } from 'react-icons/fa';
 /** Sub Components **/
 import { IconButton, buttonMapping } from "../layouts/ItemListButtons"
 
+/** Context API **/
 import { ListContext } from '../../contextAPI/ListContext';
+
 const CustomList = ({
     listId,
     headerContent,
