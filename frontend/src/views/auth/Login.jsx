@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
 import axiosInstance from '../../utils/AxiosConfig';
-import {useRole} from '../../contextAPI/AuthContext'
+import { useRole } from '../../contextAPI/AuthContext'
 
 export const Login = () => {
     const [username, setUsername] = useState('');
@@ -16,7 +16,7 @@ export const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    const { setRole } = useRole();  // Access the setRole function from the context
+    const { setRole, setUserId } = useRole();  // Access the setRole function from the context
 
     const onClose = () => {
         navigate("/")
@@ -39,6 +39,12 @@ export const Login = () => {
             const decodedToken = jwtDecode(token);
             console.log('Decoded Token:', decodedToken);
 
+            // Store user Id
+            const jwtUserId = decodedToken.userId;
+            localStorage.setItem('userId', jwtUserId);
+            console.log('User logged -> ID: ', jwtUserId);
+            setUserId(jwtUserId);
+
             // Get user role
             const role = decodedToken.role[0].authority;
             console.log('Role:', role);
@@ -51,7 +57,7 @@ export const Login = () => {
             const jwtUsername = decodedToken.sub;
             console.log('jwt Username:', jwtUsername);
             localStorage.setItem('username', jwtUsername);
-            
+
             // Redirect to home page
             navigate('/');
         } catch (error) {

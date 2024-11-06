@@ -25,8 +25,6 @@ const SingleGameLobby = () => {
 
     const initializeGameModes = async () => {
         try {
-            logObject(initGameBody);
-
             const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
 
             setInitGameModes(response.data.gameModes);
@@ -38,21 +36,24 @@ const SingleGameLobby = () => {
     };
     useEffect(() => {
         if (initGameBody) {
+            logObject(initGameBody);
             initializeGameModes();
         }
     }, [initGameBody]);
 
     // Se da comienzo a la partida
     useEffect(() => {
-        if (initGameModes && idGameSingle) {
-            initPlayGame(idGameSingle);
+        if (!isGameReady){
+            if (initGameModes && idGameSingle) {
+                initPlayGame(idGameSingle);
+            }
         }
     }, [initGameModes, idGameSingle]);
 
     // Setea horario de inicio de partida y devuelve true
     const initPlayGame = async (idGameSingle) => {
         try {
-            const response = axiosInstance.post(`/game-single/v1/init-play-game/${idGameSingle}`)
+            const response = axiosInstance.post(`/game-single/v1/init-play-game/${idGameSingle}`);
             setIsGameReady(true);
         } catch (error) {
             console.error(error);

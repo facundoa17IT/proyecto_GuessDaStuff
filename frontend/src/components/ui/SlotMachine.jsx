@@ -1,13 +1,23 @@
+/** React **/
 import React, { useState, useContext, useEffect } from 'react';
-import '../../styles/slot-machine.css';
-import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useNavigate } from 'react-router-dom';
+
+/** Context API **/
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
+import { useRole } from '../../contextAPI/AuthContext'
+
+/** Style **/
+import '../../styles/slot-machine.css';
+
 const SlotMachine = () => {
     const { loadGameData } = useContext(LoadGameContext);
+    const { userId } = useRole();  // Access the setRole function from the context
+
     const navigate = useNavigate();
 
     useEffect(() => {
         //console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
+        console.log("user id slot machine -> " + userId);
         setTimeout(() => {
             spin();
         }, 1000);
@@ -73,7 +83,6 @@ const SlotMachine = () => {
             setResults(resultsArray);
 
             // Crear el objeto de salida en el formato requerido
-            const userId = "1234"; // Cambia esto por el ID real del usuario si es necesario
             const output = {
                 userId: userId,
                 parCatMod: resultsArray.map(result => ({

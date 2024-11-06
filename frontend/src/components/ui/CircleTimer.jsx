@@ -16,7 +16,7 @@ const renderTime = ({ remainingTime }) => {
   );
 };
 
-const CircleTimer = ({isLooping = false, loopDelay = 0 , isPlaying, duration = 10, onTimerComplete = () => {}}) => {
+const CircleTimer = ({isLooping = false, loopDelay = 0 , isPlaying, duration = 10, onTimerComplete = () => {}, onTimeUpdate = () => {}}) => {
   return (
     <div style={{display:'flex', justifyContent:'center', alignItems:'center', margin:'15px'}}>
       <div className="timer-wrapper">
@@ -25,6 +25,11 @@ const CircleTimer = ({isLooping = false, loopDelay = 0 , isPlaying, duration = 1
           duration={duration}
           colors={["#008000", "#F7B801", "#A30000", "#A30000"]}
           colorsTime={[duration, duration/2, duration-duration]}
+          onUpdate={(remainingTime) => {
+            // Calcula el tiempo transcurrido y envíalo al padre
+            const elapsedTime = duration - remainingTime;
+            onTimeUpdate(elapsedTime);
+          }}
           onComplete={() => {
             onTimerComplete();
             return { shouldRepeat: isLooping, delay: loopDelay } // repeat animation in 1.5 seconds

@@ -9,22 +9,28 @@ import OrderWord from './game-modes/OrderWord';
 import CircleTimer from '../components/ui/CircleTimer';
 import MultipleChoice from './game-modes/MultipleChoice';
 
+/** Assets */
 import { FaRegQuestionCircle } from "react-icons/fa";
+
+/** Utils **/
+import axiosInstance from '../utils/AxiosConfig';
 
 /** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
-import axiosInstance from '../utils/AxiosConfig';
+import { useRole } from '../contextAPI/AuthContext'
 
 const GameMatchView = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
     const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle, setIsCorrectAnswer, answer } = useContext(LoadGameContext);
+    const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
     const [gameContent, setGameContent] = useState(null);
     const [currentGameIndex, setCurrentGameIndex] = useState(null);
     const TIME = 30;
+    const [elapsedTime, setElapsedTime] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(TIME);
 
     const [isGameReady, setIsGameReady] = useState(false);
@@ -35,8 +41,7 @@ const GameMatchView = () => {
     const [hintButtonEnabled, setHintButtonEnabled] = useState(true);
 
     useEffect(() => {
-        setGameContent(null);  // Limpia el contenido del juego antes de iniciar
-        setIsCorrectAnswer(null);
+        resetGameState();
     }, []);
 
     useEffect(() => {
@@ -46,6 +51,12 @@ const GameMatchView = () => {
         }
     }, [answer]);
 
+    // useEffect(() => {
+    //     if(elapsedTime){
+    //         console.log("Tiempo transcurrido -> "+ elapsedTime);
+    //     }
+    // }, [elapsedTime]);
+
     useEffect(() => {
         if (currentGameIndex !== null) console.log("Current Game Index -> " + currentGameIndex);
     }, [currentGameIndex]);
@@ -54,7 +65,7 @@ const GameMatchView = () => {
     useEffect(() => {
         if (Object.keys(initGameModes).length > 0) {
             setGameContent(renderGame());
-        }
+        } 
     }, [currentGameIndex, initGameModes]);
 
     useEffect(() => {
@@ -107,45 +118,51 @@ const GameMatchView = () => {
             const currentGameKey = gameKeys[currentGameIndex];
             const gameInfo = initGameModes[currentGameKey].infoGame[0];
             const { id } = gameInfo;
-            await sendAnswer(idGameSingle, "123", answer, id, 20); // user id & time hardcoded
+            await sendAnswer(idGameSingle, userId, answer, id, elapsedTime); // time hardcoded
         } catch (error) {
             console.log("Error", error);
         }
     };
 
-    const handleCorrectAnswer = () => {
-        console.log("Respuesta correcta!!");
+    const resetGameState = () => {
         setHints([]);
         setIsCorrectAnswer(null);
-        setTimeRemaining(TIME);
-        setCurrentGameIndex(prevIndex => {
-            const nextIndex = prevIndex + 1;
-            if (nextIndex >= Object.keys(initGameModes).length) {
-                console.log("Fin del juego!");
-                // se podria enviar al jugador a la pantalla de inicio
-                return prevIndex; // No cambiar el índice si hemos terminado
-            }
-            return nextIndex; // Cambiar al siguiente juego
-        });
+        setElapsedTime(0);
+    };
+    
+    const updateGameIndex = (prevIndex) => {
+        const gameKeys = Object.keys(initGameModes);
+        const nextIndex = prevIndex + 1;
+    
+        if (nextIndex >= gameKeys.length) {
+            handleFishGame();
+            return prevIndex; // No cambiar el índice si hemos terminado
+        }
+        return nextIndex; // Cambiar al siguiente juego
     };
 
+    const handleTimeUpdate = (time) => {
+        setElapsedTime(time); // Actualiza el tiempo transcurrido
+      };
+
     const handleNextGameMode = () => {
-        setCurrentGameIndex(prevIndex => {
-            const gameKeys = Object.keys(initGameModes);
-            if (prevIndex + 1 >= gameKeys.length) {
-                setGameContent(null);
-                setCurrentGameIndex(null);
-                console.log("Fin del juego!");
-                setTimeout(() => {
-                    navigate('/start-game');
-                }, 200); // Breve retraso para asegurarse de que el contenido se haya limpiado
-                return prevIndex;
-            }
-            setIsCorrectAnswer(null);
-            setHints([]);
-            return prevIndex + 1;
-        });
-        setTimeRemaining(TIME);
+        resetGameState();
+        setCurrentGameIndex(prevIndex => updateGameIndex(prevIndex));
+    };    
+
+    const handleFishGame = async () => {
+        console.log("Fin del juego!");
+        try {
+            const response = axiosInstance.post(`/game-single/v1/finish-play-game/${idGameSingle}`);
+            console.log(response.data);
+            setGameContent(null);
+            setCurrentGameIndex(null);
+            setTimeout(() => {
+                navigate('/start-game');
+            }, 1000);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     const showNextHint = () => {
@@ -222,15 +239,15 @@ const GameMatchView = () => {
             switch (idModeGame) {
                 case 'OW':
                     setCurrentHeader("Ordena la Palabra");
-                    GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleCorrectAnswer}/>;
+                    GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleNextGameMode}/>;
                     break;
                 case 'GP':
                     setCurrentHeader("Adivina la Frase");
-                    GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleCorrectAnswer}/>;
+                    GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleNextGameMode}/>;
                     break;
                 case 'MC':
                     setCurrentHeader("Multiple Opcion");
-                    GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleCorrectAnswer}/>;
+                    GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleNextGameMode}/>;
                     break;
                 default:
                     GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -266,6 +283,7 @@ const GameMatchView = () => {
                     loopDelay={0.5}
                     isPlaying={isGameReady}
                     duration={timeRemaining}
+                    onTimeUpdate={handleTimeUpdate}
                     onTimerComplete={handleNextGameMode}
                 />
             }

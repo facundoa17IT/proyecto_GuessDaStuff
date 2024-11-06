@@ -6,7 +6,7 @@ import axiosInstance from "../../utils/AxiosConfig";
 import { ImExit } from "react-icons/im";
 
 const LogoutButton = () => {
-    const { setRole } = useRole();  // Access the role from context
+    const { setRole, setUserId } = useRole();  // Access the role from context
 
     const logOut = async () => {
         const username = localStorage.getItem("username");
@@ -17,7 +17,9 @@ const LogoutButton = () => {
                 localStorage.removeItem("token");
                 localStorage.setItem("role", 'ROLE_GUESS');
                 localStorage.setItem("username", '');
+                localStorage.setItem("userId", 0);
                 setRole('ROLE_GUESS');
+                setUserId(0);
                 console.log("User logged out!");
             } catch (error) {
                 // Handle any errors from the request
