@@ -34,6 +34,7 @@ const GameMatchView = () => {
     const [timeRemaining, setTimeRemaining] = useState(TIME);
 
     const [isGameReady, setIsGameReady] = useState(false);
+    const [isGameFinished, setisGameFinished] = useState(false);
 
     const [hints, setHints] = useState([]);
     const [currentHintIndex, setCurrentHintIndex] = useState(0);
@@ -129,17 +130,6 @@ const GameMatchView = () => {
         setIsCorrectAnswer(null);
         setElapsedTime(0);
     };
-    
-    const updateGameIndex = (prevIndex) => {
-        const gameKeys = Object.keys(initGameModes);
-        const nextIndex = prevIndex + 1;
-    
-        if (nextIndex >= gameKeys.length) {
-            handleFishGame();
-            return prevIndex; // No cambiar el índice si hemos terminado
-        }
-        return nextIndex; // Cambiar al siguiente juego
-    };
 
     const handleTimeUpdate = (time) => {
         setElapsedTime(time); // Actualiza el tiempo transcurrido
@@ -147,19 +137,27 @@ const GameMatchView = () => {
 
     const handleNextGameMode = () => {
         resetGameState();
-        setCurrentGameIndex(prevIndex => updateGameIndex(prevIndex));
+        const gameKeys = Object.keys(initGameModes);
+        const nextIndex = currentGameIndex + 1;
+    
+        if (nextIndex >= gameKeys.length) {
+            handleFishGame();
+            return;
+        }
+
+        setCurrentGameIndex(nextIndex);
     };    
 
     const handleFishGame = async () => {
-        console.log("Fin del juego!");
         try {
             const response = axiosInstance.post(`/game-single/v1/finish-play-game/${idGameSingle}`);
             console.log(response.data);
-            setGameContent(null);
-            setCurrentGameIndex(null);
-            setTimeout(() => {
-                navigate('/start-game');
-            }, 1000);
+            console.log("Fin del juego!");
+            setInitGameModes({});
+            setIsGameReady(false);
+            setisGameFinished(true);
+            setCurrentHeader("Partida Finalizada");
+            setGameContent(renderFinishGameStats());
         } catch (error) {
             console.error(error);
         }
@@ -221,7 +219,7 @@ const GameMatchView = () => {
             >
                 <FaRegQuestionCircle name="help-outline" size={50} color={hintButtonEnabled ? "var(--backround-color)" : "gray"} />
             </button>
-            <p>{hintButtonEnabled ? hintCounter : 0}</p>
+            <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
         </>
     );
 
@@ -263,9 +261,21 @@ const GameMatchView = () => {
         }
     };
 
+    const renderFinishGameStats = () => {
+        return (
+            <>
+                <h2>Resumen de la partida</h2>
+                <p>Sin contenido actual</p>
+                <button onClick={() => navigate("/")}>Menu Principal</button>
+            </>
+        );
+    }
+
     return (
         <MainGameLayout
             canGoBack={false}
+            hideLeftPanel={isGameFinished}
+            hideRightPanel={isGameFinished}
             leftHeader='Pistas'
             leftContent={
                 <>
@@ -277,7 +287,9 @@ const GameMatchView = () => {
             middleContent={gameContent}
             rightHeader='Stats'
             rightContent={
-                <CircleTimer
+                <>
+                <h3>Ronda {currentGameIndex+1}</h3>
+                {!isGameFinished && <CircleTimer
                     key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
                     isLooping={true}
                     loopDelay={0.5}
@@ -285,7 +297,8 @@ const GameMatchView = () => {
                     duration={timeRemaining}
                     onTimeUpdate={handleTimeUpdate}
                     onTimerComplete={handleNextGameMode}
-                />
+                />}
+                </>    
             }
         />
     );

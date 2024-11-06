@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 /** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
-import CircleTimer from '../components/ui/CircleTimer';
+import { BarLoader } from 'react-spinners';
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
@@ -20,8 +20,7 @@ const SingleGameLobby = () => {
 
     const { initGameBody } = location.state || {};
     const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle } = useContext(LoadGameContext);
-    const [isGameReady, setIsGameReady] = useState(false);
-    const [timeRemaining, setTimeRemaining] = useState(5);
+    const [isLoading, setIsLoading] = useState(true);
 
     const initializeGameModes = async () => {
         try {
@@ -29,52 +28,53 @@ const SingleGameLobby = () => {
 
             setInitGameModes(response.data.gameModes);
             setIdGameSingle(response.data.idGameSingle);
-
         } catch (error) {
             console.error('Error obteniendo datos del juego:', error);
         }
     };
     useEffect(() => {
-        if (initGameBody) {
-            logObject(initGameBody);
+        if (Object.keys(initGameBody).length > 0) {
             initializeGameModes();
         }
     }, [initGameBody]);
 
     // Se da comienzo a la partida
     useEffect(() => {
-        if (!isGameReady){
-            if (initGameModes && idGameSingle) {
-                initPlayGame(idGameSingle);
-            }
+        if (Object.keys(initGameModes).length > 0 && Object.keys(idGameSingle).length > 0) {
+            initPlayGame(idGameSingle);
         }
     }, [initGameModes, idGameSingle]);
 
     // Setea horario de inicio de partida y devuelve true
     const initPlayGame = async (idGameSingle) => {
         try {
-            const response = axiosInstance.post(`/game-single/v1/init-play-game/${idGameSingle}`);
-            setIsGameReady(true);
+            axiosInstance.post(`/game-single/v1/init-play-game/${idGameSingle}`);
+            setIsLoading(false);
         } catch (error) {
             console.error(error);
         }
     }
 
-    const handleTimerComplete = () => {
-        navigate(PUBLIC_ROUTES.INIT_GAME);
-    }
+    useEffect(() => {
+        if (!isLoading) {
+            setTimeout(() => {
+                navigate(PUBLIC_ROUTES.INIT_GAME);
+            }, 1500);
+        }
+    }, [isLoading]);
 
     return (
         <MainGameLayout
             canGoBack={false}
-            middleHeader={"Cargando la partida..."}
-            middleContent={<CircleTimer
-                isLooping={false}
-                loopDelay={0}
-                isPlaying={isGameReady}
-                duration={timeRemaining}
-                onTimerComplete={handleTimerComplete}
-            />}
+            hideLeftPanel={true}
+            hideRightPanel={true}
+            middleHeader={""}
+            middleContent={
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                    <h1>Cargando Partida</h1>
+                    <BarLoader color="var(--link-color)" height={20} width={250} loading={true} />
+                </div>
+            }
         />
     );
 };
