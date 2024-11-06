@@ -24,7 +24,7 @@ public class JwtService {
         return getToken(new HashMap<>(), user);
     }
 
-    public String getTokenv2(Map<String,Object> extraClaims, UserDetails user) {
+    public String generateTokenWithClaims(Map<String,Object> extraClaims, UserDetails user) {
         return getToken(extraClaims, user);
     }
 
@@ -34,7 +34,7 @@ public class JwtService {
             .setClaims(extraClaims)
             .setSubject(user.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24)) // 1 dia
+            .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24)) // 24 hr
             .signWith(getKey(), SignatureAlgorithm.HS256)
             .compact(); // crea el objeto y lo serializa
     }
