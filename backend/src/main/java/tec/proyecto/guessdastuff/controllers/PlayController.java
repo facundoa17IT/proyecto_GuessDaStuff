@@ -64,7 +64,7 @@ public class PlayController {
     }
 
     // Terminar partida
-    @PostMapping("/v1/finish-play-game")
+    @PostMapping("/v1/finish-play-game/{idGameSingle}")
     public ResponseEntity<Boolean> finishPlayGame(String idGameSingle) {
         try {
             Boolean response = playService.finishPlayGame(idGameSingle);

@@ -1,19 +1,22 @@
+/** React **/
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
-/** UI Elements **/
+/** Assets **/
 import AppLogoVertical from '../ui/AppLogoVertical';
-
-/** Icons **/
 import { FaUsers, FaUserCog, FaUserCircle } from "react-icons/fa";
 import { BsDatabaseFillGear } from "react-icons/bs";
 import { PiChartBarFill } from "react-icons/pi";
 import { BsCollectionPlayFill } from "react-icons/bs";
 
+/** Utils**/
+import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
+
 /** Style **/
 import '../../styles/navbar.css';
 
+/** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
 
 const Navbar = () => {
@@ -34,10 +37,10 @@ const Navbar = () => {
                     {role === 'ROLE_GUESS' ? (
                         <>
                             <li className="nav-item">
-                                <Link to="login" className="nav-links">Iniciar Sesion</Link>
+                                <Link to={PUBLIC_ROUTES.LOGIN} className="nav-links">Iniciar Sesion</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="register" className="nav-links">Registrarse</Link>
+                                <Link to={PUBLIC_ROUTES.REGISTER} className="nav-links">Registrarse</Link>
                             </li>
                         </>
                     ) : (
@@ -65,12 +68,12 @@ const Navbar = () => {
                             {role === 'ROLE_ADMIN' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="admin/game-content-management" className="nav-links">
+                                        <Link to={ADMIN_ROUTES.CONTENT_MANAGEMENT} className="nav-links">
                                             <BsDatabaseFillGear style={{ marginRight: '5px' }} />Contenido
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="admin/users-management" className="nav-links">
+                                        <Link to={ADMIN_ROUTES.USERS_MANAGEMENT} className="nav-links">
                                             <FaUserCog style={{ marginRight: '5px' }} />Usuarios
                                         </Link>
                                     </li>

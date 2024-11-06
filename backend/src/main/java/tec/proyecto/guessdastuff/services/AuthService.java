@@ -41,33 +41,37 @@ public class AuthService {
     public DtoAuthResponse login(DtoLoginRequest request) throws UserException {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails userDetail = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        
+    
+        // Buscar el usuario en la base de datos
+        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+        User userEnt = userOpt.orElseThrow(() -> new UserException("User not found"));
+    
+        // Verificar el estado del usuario
+        if (userEnt.getStatus().equals(EStatus.BLOCKED) || userEnt.getStatus().equals(EStatus.DELETED)) {
+            throw new UserException("El usuario " + userEnt.getUsername() + " se encuentra bloqueado o eliminado. Por favor contactese con el administrador.");
+        }
+    
+        // Añadir parametros al jwt
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", userDetail.getAuthorities());
         extraClaims.put("username", userDetail.getUsername());
-        
-        String token = jwtService.getTokenv2(extraClaims, userDetail);
-
-        //Busco al usuario logueado para actualizar su estado a ONLINE
-        Optional<User> user = userRepository.findByUsername(request.getUsername());
-        User userEnt = user.get();
-
-        if (userEnt.getStatus().equals(EStatus.BLOCKED) || userEnt.getStatus().equals(EStatus.DELETED)) {
-            throw new  UserException("El usuario " + userEnt.getUsername() + " se encuentra bloqueado o eliminado. Por favor contactese con el administrador.");
-        }
-
+        extraClaims.put("userId", userEnt.getId());
+    
+        // Generar el token con las reclamaciones adicionales
+        String token = jwtService.generateTokenWithClaims(extraClaims, userDetail);
+    
+        // Actualizar el estado del usuario a ONLINE
         userEnt.setStatus(EStatus.ONLINE);
         userRepository.save(userEnt);
-
+    
         return DtoAuthResponse.builder()
             .message("User successfully logged in")
             .token(token)
             .username(userDetail.getUsername())
             .role(userDetail.getAuthorities().toString())
             .build();
-
     }
-
+    
     public DtoAuthResponse register(DtoRegisterRequest request) {
         ERole[] rolValues = ERole.values(); // 0 = ROLE_USER | 1 = ROLE_ADMIN
         LocalDate birthdate = dateConverter.toLocalDate(request.getBirthday());
