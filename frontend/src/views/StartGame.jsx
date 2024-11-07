@@ -32,6 +32,7 @@ const StartGame = () => {
 
     const handleGameTypeChange = (event) => {
         setSelectedGameMode(event.target.value);
+        console.log(event.target.value);
     };
 
     const fetchActiveCategories = async () => {
@@ -60,17 +61,22 @@ const StartGame = () => {
         const categoryIds = selectedCategories.map(category => category.id);
         //console.log(categoryIds);
         
-        try {
-            const response = await axiosInstance.post('/game-single/v1/load-game', {
-                categories: categoryIds,
-                modeGame: selectedGameMode
-            }, { requiresAuth: true });
-    
-            //console.log('Response:', response.data.categories);
-            setLoadGameData(response.data.categories);
-            navigate('/selection-phase');
-        } catch (error) {
-            console.error('Error:', error);
+        if(selectedGameMode == "Single"){
+            try {
+                const response = await axiosInstance.post('/game-single/v1/load-game', {
+                    categories: categoryIds,
+                    modeGame: selectedGameMode
+                }, { requiresAuth: true });
+        
+                //console.log('Response:', response.data.categories);
+                setLoadGameData(response.data.categories);
+                navigate('/selection-phase');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        else {
+            navigate('/multiplayer-lobby');
         }
     };
     
