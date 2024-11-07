@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Juego de Adivinanzas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="question"></h2>
+        <div id="options"></div>
+        <div id="result" ></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script>
+        let stompClient;
+
+        function connect() {
+
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, (frame) => {
+                console.log('Connected: ' + frame); 
+                const sender = localStorage.getItem("sender");
+                const recipient = localStorage.getItem("recipient");
+                console.log(sender, recipient);
+
+                // Suscribirse a la notificación de inicio de partida
+                stompClient.subscribe('/game/start/' + sender, (message) => {
+                    const questionData = JSON.parse(message.body);
+                    displayQuestion(questionData);
+                });
+
+                stompClient.subscribe('/game/start/' + recipient, (message) => {
+                    const questionData = JSON.parse(message.body);
+                    console.log("Question Data:", questionData);
+                    displayQuestion(questionData);
+                });
+
+                // Suscribirse a resultados
+                stompClient.subscribe('/game/end', (message) => {
+                    document.getElementById("result").innerText = message.body;
+                    document.getElementById("result").style.display = "block";
+                    disableOptions();
+                });
+            });
+        }
+
+        function displayQuestion(questionData) {
+            document.getElementById("question").innerText = questionData.question;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = ""; // Limpiar opciones anteriores
+
+            questionData.options.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => sendResponse(option, questionData.correctAnswer); // Responder
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function sendResponse(selectedOption, correctAnswer) {
+            const response = {
+                answer: selectedOption,
+                correctAnswer: correctAnswer,
+                sender: localStorage.getItem("username") // Enviar el nombre del usuario que responde
+            };
+            stompClient.send("/app/response", {}, JSON.stringify(response));
+        }
+
+        function disableOptions() {
+            document.getElementById("options").style.display = "none"; // Ocultar opciones
+        }
+
+        connect();
+    </script>
+</body>
+</html>

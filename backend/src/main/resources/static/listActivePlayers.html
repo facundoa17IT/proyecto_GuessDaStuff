@@ -1,0 +1,160 @@
+
+LIST ACTIVE HTML ANDANDO OK - v2
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jugadores Conectados</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4">Jugadores Conectados </h2>
+        <div class="card mb-3">
+            <div class="card-header">Lista de Jugadores</div>
+            <ul class="list-group" id="playersList"></ul>
+        </div>
+
+        <div id="notificationArea" style="display:none;">
+            <p id="notificationMessage"></p>
+            <button onclick="respondToInvitation(true)">Aceptar</button>
+            <button onclick="respondToInvitation(false)">Rechazar</button>
+        </div>
+
+        <div id="responseArea" style="display:none;">
+            <p id="responseMessage"></p>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script>
+        let stompClient;
+        const username = localStorage.getItem("username"); // Obtener el nombre de usuario guardado
+    
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+    
+            stompClient.connect({}, () => {
+                // Enviar el nombre del usuario al conectarse
+                stompClient.send("/app/connect", {}, username);
+    
+                // Suscribirse a la lista de jugadores conectados en /game/activePlayers
+                stompClient.subscribe("/game/activePlayers", (message) => {
+                    const players = JSON.parse(message.body);
+                    updatePlayersList(players);
+                });
+
+                // Escuchar notificaciones de invitación
+                stompClient.subscribe("/game/invitations/" + username, (message) => {
+                    const invitation = JSON.parse(message.body);
+                    showInvitation(invitation);
+                });
+
+                // Escuchar respuestas a las invitaciones
+                stompClient.subscribe("/game/invitations/responses/" + username, (message) => {
+                    const response = JSON.parse(message.body);
+                    handleResponse(response);
+                });
+
+                // Escuchar las respuestas de aceptación de invitaciones
+                stompClient.subscribe("/game/start/" + username, (message) => {
+                    const response = JSON.parse(message.body);
+                    redirectToGame(response.sender, response.recipient);
+                });
+
+            });
+        }
+    
+        function updatePlayersList(players) {
+            const playersList = document.getElementById("playersList");
+            playersList.innerHTML = "";
+            players.forEach(player => {
+                const playerElement = document.createElement("li");
+                playerElement.className = "list-group-item";
+                playerElement.innerText = player;
+
+
+                // Crear un botón de invitar
+                const inviteButton = document.createElement("button");
+                inviteButton.innerText = "Invitar";
+                inviteButton.onclick = () => sendInvitation(player); // Función para invitar
+                playerElement.appendChild(inviteButton); // Agregar el botón al elemento del jugador
+
+                playersList.appendChild(playerElement); // Agregar el nuevo elemento a la lista
+            });
+        }
+
+        function sendInvitation(recipient) {
+            const invitation = { sender: username, recipient: recipient };
+            stompClient.send("/app/invite", {}, JSON.stringify(invitation));
+            alert(`Invitación enviada a ${recipient}`);
+        }
+
+        function showInvitation(invitation) {
+            document.getElementById("notificationArea").style.display = "block";
+            document.getElementById("notificationMessage").innerText = `${invitation.sender} te invita a jugar.`;
+            localStorage.setItem("invitationSender", invitation.sender);
+            // Oculta el área de respuesta cuando se muestra la invitación
+            document.getElementById("responseArea").style.display = "none";
+        }
+
+        function respondToInvitation(accepted) {
+            const sender = localStorage.getItem("invitationSender");
+            const response = { sender: sender, recipient: username, accepted: accepted };
+            stompClient.send("/app/respond", {}, JSON.stringify(response));
+
+            document.getElementById("notificationArea").style.display = "none";
+        }
+
+        function handleResponse(response) {
+            const responseArea = document.getElementById("responseArea");
+            const responseMessage = document.getElementById("responseMessage");
+
+            // Muestra el área de respuesta
+            responseArea.style.display = "block";
+
+            if (response.accepted) {
+                responseMessage.innerText = `${response.sender} ha aceptado tu invitación.`;
+            } else {
+                responseMessage.innerText = `${response.sender} ha rechazado tu invitación.`;
+            }
+        }
+
+        function redirectToGame(sender, recipient) {
+            // Redirigir a ambos jugadores a la página del juego
+            localStorage.setItem("sender", sender);
+            localStorage.setItem("recipient", recipient);
+            //stompClient.send("/app/start", {}, JSON.stringify({ sender: sender, recipient:recipient }));
+            window.location.href = "gameMCSinWS.html";
+        }
+
+        /*function acceptInvitation(invitation) {
+            const response = {
+                sender: localStorage.getItem("username"), // Quien acepta
+                recipient: invitation.sender, // Quien envió la invitación
+                accepted: true,
+            };
+            stompClient.send("/app/respond", {}, JSON.stringify(response)); // Enviar respuesta por WebSocket
+        }*/
+
+
+        window.addEventListener("beforeunload", () => {
+            // Envía el nombre de usuario al backend para indicar que se desconectó
+            if (stompClient && username) {
+                stompClient.send("/app/disconnect", {}, username);
+            }
+            // Elimina el nombre de usuario del localStorage
+            //localStorage.removeItem("username");
+        });
+
+    
+        connect();
+    </script>
+    
+</body>
+</html>

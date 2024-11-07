@@ -1,131 +1,98 @@
 package tec.proyecto.guessdastuff.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import tec.proyecto.guessdastuff.dtos.*;
-import tec.proyecto.guessdastuff.dtos.DtoInitGameRequest.ParCatMod;
-import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse.GameInfo;
-import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse.GameModeInfo;
-import tec.proyecto.guessdastuff.repositories.DataGameSingleRepository;
-import tec.proyecto.guessdastuff.repositories.PlayRepository;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
-import java.time.LocalDateTime;
 
-import tec.proyecto.guessdastuff.entities.DataGameSingle;
-import tec.proyecto.guessdastuff.entities.Game;
-import tec.proyecto.guessdastuff.entities.GuessPhrase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest.ParCatMod;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse.GameInfo;
+import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse.GameModeInfo;
+
+import tec.proyecto.guessdastuff.entities.DataGameMulti;
 import tec.proyecto.guessdastuff.entities.MultipleChoice;
+import tec.proyecto.guessdastuff.repositories.DataGameMultiRepository;
+import tec.proyecto.guessdastuff.repositories.InfoGameMultiRepository;
+import tec.proyecto.guessdastuff.repositories.PlayRepository;
+
+import java.util.Arrays;
+import java.util.ArrayList;
+import tec.proyecto.guessdastuff.entities.GuessPhrase;
+import tec.proyecto.guessdastuff.entities.InfoGameMulti;
 import tec.proyecto.guessdastuff.entities.OrderWord;
 
+
 @Service
-public class PlayService {
+public class PlayMultiService {
+
+    @Autowired
+    private DataGameMultiRepository dataGameMultiRepository;
+
+    @Autowired
+    private InfoGameMultiRepository  infoGameMultiRepository;
 
     @Autowired
     private PlayRepository playRepository;
 
-    @Autowired
-    private DataGameSingleRepository dataGameSingleRepository;
+     @Autowired
+    private SimpMessagingTemplate messagingTemplate; // Inyectar SimpMessagingTemplate
 
-    // SINGLEPLAYER
-    public boolean initPlayGame(String idGameSingle){
+    // MULTIPLAYER
+    // Crear una nueva partida
+    public String createGame(String idUser) {
 
-        dataGameSingleRepository.initPlayGame(idGameSingle);
-    return true;
+        DataGameMulti newDataGameMulti = new DataGameMulti();
+        newDataGameMulti.setId(UUID.randomUUID().toString());
+        newDataGameMulti.setIdUser1(idUser);
+
+        // Guardar en la base de datos
+        DataGameMulti savedGame = dataGameMultiRepository.save(newDataGameMulti);
+
+        // Crear el canal de socket para la nueva partida
+        String gameChannel = "/game/" + savedGame.getId();
+        messagingTemplate.convertAndSend(gameChannel, "Canal creado para la partida: " + savedGame.getId());
+
+        return newDataGameMulti.getId(); // Retornar el juego creado
     }
-    
-    public boolean finishPlayGame(String idGameSingle){
-        dataGameSingleRepository.finishPlayGame(idGameSingle);
-    return true;
-    }
-    
-    public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
-    //esto va a la tabla DataGame
-    Game result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
-    int points = 0;
-    float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
 
-    if (timePlaying != 0){
-        // Calcular puntos según el tiempo de respuesta
-        if (timePlaying < 8) {
-            points = 5;
-        } else if (timePlaying < 15) {
-            points = 4;
-        } else if (timePlaying < 20) {
-            points = 3;
-        } else if (timePlaying < 25) {
-            points = 2;
-        } else if (timePlaying <= 30) {
-            points = 1;
+    // Invitar a un amigo
+    public boolean inviteFriend(String idUser, String id, String email) {
+        Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(id);
+        
+        if (optionalGame.isPresent()) {
+            DataGameMulti dataGameMulti = optionalGame.get();
+            
+            // Verificar si ya hay un segundo usuario asignado
+            if (dataGameMulti.getIdUser2() != null) {
+                return false; // Ya hay un amigo invitado
+            }
+
+            // Asignar el segundo usuario
+            dataGameMulti.setIdUser2(idUser);
+            dataGameMultiRepository.save(dataGameMulti);
+
+            // Enviar un mensaje al canal de WebSocket para notificar la invitación
+            String gameChannel = "/game/7108d34b-de7b-4e51-b753-3b2387fc2c01";
+            messagingTemplate.convertAndSend(gameChannel, "El usuario " + idUser + " ha sido invitado a la partida. Email: " + email);
+
+            return true; // Retornar true si la invitación fue exitosa
         }
-         // Acceso unificado a los elementos del resultado
 
-        if ("GP".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            GuessPhrase guessPhrase = (GuessPhrase) result;  
-            if (guessPhrase.getCorrectWord().equals(dtoPlayGameRequest.getResponse())){
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
-        } else if ("OW".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            OrderWord orderWord = (OrderWord) result; 
-            if (orderWord.getWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
-        } else if ("MC".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            MultipleChoice multipleChoice = (MultipleChoice) result;
-            if (multipleChoice.getRandomCorrectWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
-        }
-    } else {
-        dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-        return true; //
-    }
-    //si es incorrecto;
-    return false; // Retornar false si es incorrecto
-   }
-
-    public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
-    List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
-    
-    // Lista para contener las categorías con sus modos de juego
-    List<DtoLoadGameResponse.CategoryData> categoriesList = new ArrayList<>();
-
-    for (Object[] row : result) {
-        Long categoryId = ((Number) row[0]).longValue(); // ID de la categoría
-        String categoryName = (String) row[1]; // Nombre de la categoría
-        String[] gameModesArray = (String[]) row[2]; // Modos de juego como array
-        
-        // Convertimos el array de modos de juego a una lista de strings
-        List<String> gameModes = Arrays.asList(gameModesArray);
-        
-        // Creamos un objeto CategoryData para la categoría actual
-        DtoLoadGameResponse.CategoryData categoryData = new DtoLoadGameResponse.CategoryData(categoryId, categoryName, gameModes);
-        
-        // Añadimos el objeto a la lista
-        categoriesList.add(categoryData);
+        return false; // Retornar false si no se encontró la partida
     }
 
-    // Retornamos la respuesta con la lista de categorías y sus modos de juego
-    return new DtoLoadGameResponse(categoriesList);
-}
+    // Iniciar la partida
+    public DtoInitGameMultiResponse startGame(String gameId, DtoInitGameMultiRequest dtoInitGameMultiRequest){
 
-    public DtoInitGameResponse initGame(DtoInitGameRequest dtoInitGameRequest) {
 
-        List<ParCatMod> parCatModeList = dtoInitGameRequest.getParCatMod();
+        List<ParCatMod> parCatModeList = dtoInitGameMultiRequest.getParCatMod();
     
         // Mapa que contendrá los modos de juego con su respectiva información
         Map<String, GameModeInfo> responseIntGame = new HashMap<>();
@@ -247,26 +214,91 @@ public class PlayService {
                 }
                 count++;
         }
-
-        // Crear y guardar la tupla en la tabla DataGameSingle dentro del bucle
-        DataGameSingle dataGameSingle = new DataGameSingle();
-        dataGameSingle.setId(UUID.randomUUID().toString()); // Generar un ID único
-        dataGameSingle.setIdUser(dtoInitGameRequest.getUserId()); // Asignar el ID del usuario
-        dataGameSingle.setIdDataGame1(idGame1);
-        dataGameSingle.setIdDataGame2(idGame2);
-        dataGameSingle.setIdDataGame3(idGame3);
-        dataGameSingle.setPoints(0); // Asignar puntos iniciales
-        dataGameSingle.setTimePlaying(0); // Asignar tiempo inicial
-        dataGameSingle.setTmstmpInit(LocalDateTime.now()); // Asignar timestamp actual
-        dataGameSingle.setFinish(false); // Inicialmente no está terminado
+        Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(gameId);
+        DataGameMulti dataGameMulti = optionalGame.get();
         
-        dataGameSingleRepository.save(dataGameSingle);     
+        for (String id : Arrays.asList(idGame1, idGame2, idGame3)) {
+            InfoGameMulti infoGameMulti = new InfoGameMulti();
+            infoGameMulti.setId(UUID.randomUUID().toString());
+            infoGameMulti.setIdDataGame(id);
+            infoGameMultiRepository.save(infoGameMulti);
+            if (dataGameMulti.getInfoGameMulti1() == null) {
+                dataGameMulti.setInfoGameMulti1(infoGameMulti); // Asignar al primer campo
+            } else if (dataGameMulti.getInfoGameMulti2() == null) {
+                dataGameMulti.setInfoGameMulti2(infoGameMulti); // Asignar al segundo campo
+            } else if (dataGameMulti.getInfoGameMulti3() == null) {
+                dataGameMulti.setInfoGameMulti3(infoGameMulti); // Asignar al tercer campo
+            }
+            dataGameMultiRepository.save(dataGameMulti);
+        }
+        // Enviar un mensaje al canal de WebSocket para notificar la invitación
+        String gameChannel = "/game/7108d34b-de7b-4e51-b753-3b2387fc2c01";
+        messagingTemplate.convertAndSend(gameChannel, "La partida ha sido configurada:");
+
 
         // Crear la respuesta y asignar el mapa de modos de juego
-        DtoInitGameResponse dtoInitGameResponse = new DtoInitGameResponse();
+        DtoInitGameMultiResponse dtoInitGameResponse = new DtoInitGameMultiResponse();
         dtoInitGameResponse.setGameModes(responseIntGame);
-        dtoInitGameResponse.setIdGameSingle(dataGameSingle.getId()); // Establecer el ID en la respuesta
+        dtoInitGameResponse.setIdGameMulti(gameId);
+        dtoInitGameResponse.setIdUserFriend(dataGameMulti.getIdUser2());
+        dtoInitGameResponse.setIdUserHost(dataGameMulti.getIdUser1());
     
         return dtoInitGameResponse;
+
     }
+    
+    public boolean finishPlayGame(String idGameMulti, String idUserWin){
+        dataGameMultiRepository.finishPlayGame(idUserWin, idGameMulti);
+        return true;
+
+      /*
+        int puntosUser1 = 0;
+        int puntosUser2 = 0;
+        Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(idGameMulti);
+        
+        // Manejo de excepciones si no se encuentra el juego
+        if (optionalGame.isEmpty()) {
+            return false; // Retornar false si no se encontró el juego
+        }
+        
+        DataGameMulti dataGameMulti = optionalGame.get();
+
+        if (dataGameMulti.getInfoGameMulti1().getIdUserWin().equals(dataGameMulti.getIdUser1())){
+            puntosUser1 += dataGameMulti.getInfoGameMulti1().getPoints();
+        } else {
+            puntosUser2 += dataGameMulti.getInfoGameMulti1().getPoints();
+        }
+        if (dataGameMulti.getInfoGameMulti2().getIdUserWin().equals(dataGameMulti.getIdUser1())){
+            puntosUser1 += dataGameMulti.getInfoGameMulti2().getPoints();
+        } else {
+            puntosUser2 += dataGameMulti.getInfoGameMulti2().getPoints();
+        }
+        if (dataGameMulti.getInfoGameMulti3().getIdUserWin().equals(dataGameMulti.getIdUser1())){
+            puntosUser1 += dataGameMulti.getInfoGameMulti3().getPoints();
+        } else {
+            puntosUser2 += dataGameMulti.getInfoGameMulti3().getPoints();
+        }
+        if (puntosUser1 < puntosUser2){
+            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser2(),idGameMulti);
+            return true; 
+        }else if (puntosUser1 > puntosUser2){
+            dataGameMultiRepository.finishPlayGame(dataGameMulti.getIdUser1(), idGameMulti);
+            return true; 
+        } else {
+
+            //CASO DE USO PARA EL TIRAR UNA MONEDA.
+            return false; //empate
+        }
+             */
+    }
+    
+    // Método para obtener la respuesta correcta de una partida
+    public String getCorrectAnswer(String gameId) {
+        // Simulación de recuperación de respuesta desde la base de datos o lógica de negocio
+        // Puedes sustituir este código para obtener la respuesta desde PostgreSQL o tu sistema actual
+        String correctAnswer = "respuesta_correcta";  // Ejemplo de respuesta
+        return correctAnswer;
+    }
+    
+    
 }

@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .cors(cors -> cors // Enable CORS with custom configuration
                         .configurationSource(request -> {
                             CorsConfiguration config = new CorsConfiguration();
-                            config.setAllowedOrigins(List.of("http://localhost:5173","https://proyectoguessdastuff-production.up.railway.app:8080")); // Set allowed origins
+                            config.setAllowedOriginPatterns(List.of("http://localhost:5173","http://localhost:8080", "https://proyectoguessdastuff-production.up.railway.app")); // Use patterns for allowed origins
                             config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Set allowed methods
                             config.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Set allowed headers
                             config.setAllowCredentials(true); // Allow cookies to be included in requests
