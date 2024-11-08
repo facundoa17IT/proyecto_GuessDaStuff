@@ -1,7 +1,10 @@
 package tec.proyecto.guessdastuff.services;
 
-import java.util.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -149,7 +152,7 @@ public class UserService {
     }
 
     // Envía el correo electrónico de restablecimiento de contraseña
-    private void sendResetPasswordEmail(String to, String resetUrl) {
+    private void sendResetPasswordEmail(String to, String resetUrl) {  // falta este 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Password Reset Request");
