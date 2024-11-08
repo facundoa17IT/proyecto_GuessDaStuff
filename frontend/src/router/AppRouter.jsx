@@ -34,6 +34,8 @@ import { UserDetails } from '../views/admin/users/userDetails';
 import { BlockUser } from '../views/admin/users/BlockUser';
 import { UnlockUser } from '../views/admin/users/UnblockUser';
 
+import MultiplayerLobby from '../views/MultiplayerLobby';
+
 /** Utils */
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../utils/constants';
 
@@ -70,6 +72,9 @@ function AppRouter() {
                 <Route path={ADMIN_ROUTES.DELETE_USER} element={<DeleteUser />} />
                 <Route path={ADMIN_ROUTES.BLOCK_USER} element={<BlockUser />} />
                 <Route path={ADMIN_ROUTES.UNBLOCK_USER} element={<UnlockUser />} />
+
+                <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby />} />
+
             </Route>
         </Routes>
     );

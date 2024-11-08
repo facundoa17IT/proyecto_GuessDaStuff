@@ -1,6 +1,8 @@
 package tec.proyecto.guessdastuff.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ import tec.proyecto.guessdastuff.dtos.DtoAuthResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoginRequest;
 import tec.proyecto.guessdastuff.dtos.DtoRegisterRequest;
 import tec.proyecto.guessdastuff.entities.User;
+import tec.proyecto.guessdastuff.entitiesSocket.UserOnline;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final DateConverter dateConverter;
+
+    private final List<UserOnline> connectedUsers = new ArrayList<>(); // Lista para almacenar usuarios conectados
+
+    public void addListConnect(UserOnline userOnline) {
+        connectedUsers.add(userOnline); // Agregar usuario a la lista de conectados
+        // Aquí podrías agregar lógica para notificar a otros usuarios si es necesario
+    }
 
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
@@ -109,5 +119,13 @@ public class AuthService {
         user.setStatus(EStatus.OFFLINE);
         userRepository.save(user);
         return ResponseEntity.ok("Finalizo la sesion");
+    }
+
+    public List<UserOnline> getConnectedUsers() {
+        return connectedUsers; // Retornar la lista de usuarios conectados
+    }
+
+    public void removeListConnect(String username) {
+        connectedUsers.removeIf(user -> user.getUsername().equals(username)); // Eliminar usuario de la lista de conectados
     }
 }

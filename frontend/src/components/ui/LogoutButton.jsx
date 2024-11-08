@@ -1,19 +1,21 @@
-import React from "react"
+import React,{useContext} from "react"
 
 import { useRole } from '../../contextAPI/AuthContext'
 import axiosInstance from "../../utils/AxiosConfig";
 
 import { ImExit } from "react-icons/im";
+import { SocketContext } from '../../contextAPI/SocketContext';
 
 const LogoutButton = () => {
     const { setRole, setUserId } = useRole();  // Access the role from context
+    const { disconnect } = useContext(SocketContext);
 
     const logOut = async () => {
         const username = localStorage.getItem("username");
         if (username) {
             try {
                 await axiosInstance.put(`/v1/logout/${username}`,{}, { requiresAuth: true });
-    
+                disconnect(username);
                 localStorage.removeItem("token");
                 localStorage.setItem("role", 'ROLE_GUESS');
                 localStorage.setItem("username", '');

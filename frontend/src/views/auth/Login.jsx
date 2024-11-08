@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../components/layouts/Modal';
 import axiosInstance from '../../utils/AxiosConfig';
 import { useRole } from '../../contextAPI/AuthContext'
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import { SocketContext } from '../../contextAPI/SocketContext';
+const socket = new SockJS('http://localhost:8080/ws');
+const stompClient = Stomp.over(socket);
 
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
+    const { connect } = useContext(SocketContext);
 
     const messageClass = isError ? 'text-error' : 'text-success';
     const [error, setError] = useState('');
@@ -58,6 +64,7 @@ export const Login = () => {
             console.log('jwt Username:', jwtUsername);
             localStorage.setItem('username', jwtUsername);
 
+            connect(jwtUsername);
             // Redirect to home page
             navigate('/');
         } catch (error) {

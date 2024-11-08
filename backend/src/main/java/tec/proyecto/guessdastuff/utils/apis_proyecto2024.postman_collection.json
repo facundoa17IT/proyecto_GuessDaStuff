@@ -2044,6 +2044,70 @@
 					]
 				},
 				{
+					"name": "List partidas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/game-modes/v1/loadplaygames/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-modes",
+								"v1",
+								"loadplaygames",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "List Titles of Category",
+							"originalRequest": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/game-modes/v1/loadplaygames/",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"game-modes",
+										"v1",
+										"loadplaygames",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": "",
+							"header": "",
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
 					"name": "GetDataOfGameMode",
 					"request": {
 						"auth": {
@@ -2490,7 +2554,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"mateo\",\r\n    \"email\" : \"mateo@gmail.com\",\r\n    \"password\" : \"1234\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
+							"raw": "{\r\n    \"username\" : \"pepe\",\r\n    \"email\" : \"pepe\",\r\n    \"password\" : \"pepe\",\r\n    \"country\": \"Uruguay\",\r\n    \"birthday\": {\r\n        \"anio\": 1999,\r\n        \"mes\": 12,\r\n        \"dia\": 14 \r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3194,20 +3258,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/game-single/v1/init-play-game?idGameSingle=0295afbd-540e-40ce-872c-60bc60ca55aa",
+							"raw": "{{BASE_URL}}/game-single/v1/init-play-game/0295afbd-540e-40ce-872c-60bc60ca55aa",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"game-single",
 								"v1",
-								"init-play-game"
-							],
-							"query": [
-								{
-									"key": "idGameSingle",
-									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa"
-								}
+								"init-play-game",
+								"0295afbd-540e-40ce-872c-60bc60ca55aa"
 							]
 						}
 					},
@@ -3472,23 +3531,18 @@
 						],
 						"body": {
 							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "idGameSingle",
-									"value": "0295afbd-540e-40ce-872c-60bc60ca55aa",
-									"type": "text"
-								}
-							]
+							"formdata": []
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/game-single/v1/finish-play-game",
+							"raw": "{{BASE_URL}}/game-single/v1/finish-play-game/abe9f03b-82f0-422f-9ba4-5ba0eb825afe",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"game-single",
 								"v1",
-								"finish-play-game"
+								"finish-play-game",
+								"abe9f03b-82f0-422f-9ba4-5ba0eb825afe"
 							]
 						}
 					},
@@ -3636,7 +3690,8 @@
 								{
 									"key": "idUser",
 									"value": "1001",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
@@ -3772,15 +3827,6 @@
 								"value": "application/json"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"idGameSingle\" : \"0295afbd-540e-40ce-872c-60bc60ca55aa\",\n    \"idUser\": \"1001\",\n    \"response\": \"BUFON\",\n    \"idGame\": 1032, // Multiplayer\n    \"time_playing\" : 16.6\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{BASE_URL}}/game-multi/v1/invite/{{ID_GAME_MULTI}}/?idUser=10054&friendEmail=mevoyadormir@gmail.com",
 							"host": [

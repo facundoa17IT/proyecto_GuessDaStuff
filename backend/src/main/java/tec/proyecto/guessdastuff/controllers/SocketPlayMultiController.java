@@ -1,32 +1,42 @@
 package tec.proyecto.guessdastuff.controllers;
 
+import java.net.Socket;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
 import tec.proyecto.guessdastuff.entities.GameMessage;
+import tec.proyecto.guessdastuff.entitiesSocket.GameAnswer;
+import tec.proyecto.guessdastuff.entitiesSocket.GameInvite;
+import tec.proyecto.guessdastuff.entitiesSocket.GameStatusUpdate;
+import tec.proyecto.guessdastuff.entitiesSocket.SocketMatch;
+import tec.proyecto.guessdastuff.entitiesSocket.SocketMatch.PlayerOnline;
+import tec.proyecto.guessdastuff.enums.EGameStatus;
 import tec.proyecto.guessdastuff.services.PlayMultiService;
+import tec.proyecto.guessdastuff.services.SocketPlayMultiService;
 
 @CrossOrigin(origins = "http://localhost:8080/")
 //@CrossOrigin(origins = "http://localhost:5173/")
 //@PreAuthorize("hasRole('USER')")
 @RestController
 @RequestMapping("/api/game-multi")
-public class SocketController {
+public class SocketPlayMultiController {
 
-    private final SimpMessagingTemplate messagingTemplate;
-    private final PlayMultiService playMultiService;
-
-    public SocketController(SimpMessagingTemplate messagingTemplate, PlayMultiService playMultiService) {
-        this.messagingTemplate = messagingTemplate;
-        this.playMultiService = playMultiService;
-    }
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private PlayMultiService playMultiService;
+    @Autowired
+    private SocketPlayMultiService socketPlayMultiService;
 
     // Endpoint para crear una nueva partida
     @PostMapping("/v1/create/{userId}")
@@ -34,14 +44,27 @@ public class SocketController {
         String newGame = playMultiService.createGame(userId);
         return newGame; // Retornar el ID del juego creado
     }
+    // SOCKET 
+    @MessageMapping("/game/create")
+    public void createGame(@Payload SocketMatch socketMatch) {
+        SocketMatch game = socketPlayMultiService.createGame(socketMatch.getIdGame(), socketMatch.getUserHost().getUserId(), socketMatch.getUserHost().getUsername());
+        messagingTemplate.convertAndSend("/topic/global", game);
+    }
 
     // Endpoint para invitar a un amigo
     @PostMapping("/v1/invite/{gameId}/")
     public String inviteFriend(@PathVariable String gameId, @RequestParam String idUser, @RequestParam String friendEmail) {
         // Lógica para enviar la invitación al amigo
-        playMultiService.inviteFriend(idUser, gameId, friendEmail);
-        return "Invitación enviada a " + friendEmail + " para el juego " + gameId;
+        PlayerOnline player = new PlayerOnline("PEPE", "1005");
+        SocketMatch response = socketPlayMultiService.addPlayerToGame(gameId, player);
+        return "Data SocketMatch : " + response;
     }
+    // SOCKET
+    @MessageMapping("/game/{gameId}/invite")
+    public void invitePlayer(@Payload GameInvite invite) {
+        messagingTemplate.convertAndSendToUser(invite.getToPlayerId(), "/queue/invites", invite);
+    }
+
 
     // Endpoint para iniciar la partida
     @PostMapping("/v1/start/{gameId}/")
@@ -54,8 +77,6 @@ public class SocketController {
         }
     }
 
-
-
     // Terminar partida
     @PostMapping("/v1/finish-play-game/{idGameMulti}/{idUserWin}")
     public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameMulti, @PathVariable String idUserWin) {
@@ -66,7 +87,37 @@ public class SocketController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+/*----------------------------------------------------------------------*/
 
+
+
+/* 
+    @MessageMapping("/game/{gameId}/join")
+    public void joinGame(@Payload InitGame player) {
+        SocketGame game = socketPlayMultiService.addPlayerToGame(gameId, player);
+        messagingTemplate.convertAndSend("/topic/game/" + gameId, game);
+    }
+*/
+    @MessageMapping("/game/{gameId}/start")
+    @SendTo("/topic/game/{gameId}")
+    public SocketMatch startGame(@Payload String gameId) {
+        return socketPlayMultiService.getGame(gameId).map(game -> {
+            game.setStatus(EGameStatus.STARTED);
+            return game;
+        }).orElse(null);
+    }
+
+    @MessageMapping("/game/{gameId}/answer")
+    public void handleAnswer(@Payload GameAnswer answer) {
+        boolean isCorrect = socketPlayMultiService.validateAnswer(answer);
+        messagingTemplate.convertAndSend("/topic/game/" + answer.getGameId() + "/status", 
+                new GameStatusUpdate(answer.getPlayerId(), isCorrect));
+    }
+
+
+
+
+/*----------------------------------------------------------------------*/
 
     // Endpoint para manejar mensajes de jugador 1 a jugador 2 y viceversa
    /*  @MessageMapping("/game/{gameId}/{playerId}")
