@@ -90,7 +90,7 @@ const SlotMachine = () => {
                     mod: result.mode // Modo de juego seleccionado
                 }))
             };
-
+            //console.log(`Slot: ${JSON.stringify(output, null, 2)}`);
             setIsSpinning(false); // Cambia el estado de giro a falso
 
             // Espera 3 segundos antes de redirigir

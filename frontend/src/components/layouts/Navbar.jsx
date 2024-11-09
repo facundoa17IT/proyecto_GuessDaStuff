@@ -53,7 +53,7 @@ const Navbar = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to="comunidad" className="nav-links">
                                             <FaUsers style={{ marginRight: '5px' }} />Comunidad
                                         </Link>
                                     </li>

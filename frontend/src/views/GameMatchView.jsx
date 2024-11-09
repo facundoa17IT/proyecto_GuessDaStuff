@@ -8,6 +8,7 @@ import GuessPhrase from './game-modes/GuessPhrase';
 import OrderWord from './game-modes/OrderWord';
 import CircleTimer from '../components/ui/CircleTimer';
 import MultipleChoice from './game-modes/MultipleChoice';
+import BrainCharacter from '../components/ui/BrainCharacter';
 
 /** Assets */
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -37,20 +38,26 @@ const GameMatchView = () => {
     const [isGameFinished, setisGameFinished] = useState(false);
 
     const [hints, setHints] = useState([]);
-    const [currentHintIndex, setCurrentHintIndex] = useState(0);
+    const [currentHintIndex, setCurrentHintIndex] = useState(null);
     const [hintCounter, setHintCounter] = useState(3);
     const [hintButtonEnabled, setHintButtonEnabled] = useState(true);
+
+    const [characterDialogue, setCharacterDialogue] = useState("");
 
     useEffect(() => {
         resetGameState();
     }, []);
 
     useEffect(() => {
-        if(answer){
-            console.log("Answer -> "+ answer);
+        if (answer) {
+            console.log("Answer -> " + answer);
             sendAnswerData(answer);
         }
     }, [answer]);
+
+    useEffect(() => {
+        setCharacterDialogue(hints[currentHintIndex]);
+    }, [currentHintIndex]);
 
     // useEffect(() => {
     //     if(elapsedTime){
@@ -58,16 +65,18 @@ const GameMatchView = () => {
     //     }
     // }, [elapsedTime]);
 
+    // initGameModes se obtiene de la pantala SingleGameLobby
     useEffect(() => {
-        if (currentGameIndex !== null) console.log("Current Game Index -> " + currentGameIndex);
-    }, [currentGameIndex]);
+        if (Object.keys(initGameModes).length > 0) {
+            setCurrentGameIndex(0);
+        }
+    }, [initGameModes]);
 
     // Actualizamos el contenido del juego cada vez que cambie el índice
     useEffect(() => {
-        if (Object.keys(initGameModes).length > 0) {
-            setGameContent(renderGame());
-        } 
-    }, [currentGameIndex, initGameModes]);
+        setGameContent(renderGame());
+        if (currentGameIndex === 0) setIsGameReady(true); // Se inicia el timer cuando el se asigna el index 0
+    }, [currentGameIndex]);
 
     useEffect(() => {
         // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
@@ -80,9 +89,14 @@ const GameMatchView = () => {
         // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
         if (isGameReady) {
             setCurrentGameIndex(0);
+            defaultCharacterDialogue();
             console.log("Inicia el juego!");
         }
     }, [isGameReady]);
+
+    const defaultCharacterDialogue = () => {
+        setCharacterDialogue("Puedo darte una pista!");
+    }
 
     const sendAnswer = async (idGameSingle, userId, answer, gameId, time) => {
         try {
@@ -92,7 +106,7 @@ const GameMatchView = () => {
             console.log("answer:", answer);
             console.log("gameId:", gameId);
             console.log("time:", time);
-    
+
             // Realiza la solicitud POST con axios
             const response = await axiosInstance.post("/game-single/v1/play-game", {
                 idGameSingle: idGameSingle,
@@ -101,7 +115,7 @@ const GameMatchView = () => {
                 idGame: gameId,
                 time_playing: time
             });
-    
+
             // Log de la respuesta de la solicitud
             console.log("response:", response.data);
 
@@ -111,7 +125,7 @@ const GameMatchView = () => {
         } catch (error) {
             console.error("Error:", error);
         }
-    };    
+    };
 
     const sendAnswerData = async (answer) => {
         try {
@@ -133,20 +147,20 @@ const GameMatchView = () => {
 
     const handleTimeUpdate = (time) => {
         setElapsedTime(time); // Actualiza el tiempo transcurrido
-      };
+    };
 
     const handleNextGameMode = () => {
         resetGameState();
         const gameKeys = Object.keys(initGameModes);
         const nextIndex = currentGameIndex + 1;
-    
+
         if (nextIndex >= gameKeys.length) {
             handleFishGame();
             return;
         }
-
+        defaultCharacterDialogue();
         setCurrentGameIndex(nextIndex);
-    };    
+    };
 
     const handleFishGame = async () => {
         try {
@@ -154,7 +168,6 @@ const GameMatchView = () => {
             console.log(response.data);
             console.log("Fin del juego!");
             setInitGameModes({});
-            setIsGameReady(false);
             setisGameFinished(true);
             setCurrentHeader("Partida Finalizada");
             setGameContent(renderFinishGameStats());
@@ -179,11 +192,17 @@ const GameMatchView = () => {
                     break;
                 default:
             }
-            // Actualiza el índice de la pista
+
             setCurrentHintIndex((prevIndex) => {
+                // Si es la primera interacción (está en null), lo pasamos a 0
+                if (prevIndex === null) {
+                    return 0;
+                }
+                // Incrementa el índice si no estamos en la última pista
                 if (prevIndex < hints.length - 1) {
                     return prevIndex + 1;
                 }
+                // Si estamos en la última pista, mantenemos el índice
                 return prevIndex;
             });
 
@@ -199,28 +218,19 @@ const GameMatchView = () => {
         }
     };
 
-    const renderHint = () => {
-        return (
-            <>
-                {hints.length > 0 ? (
-                    <h3>{hints[currentHintIndex]}</h3>
-                ) : (
-                    <h3>¡Apurate!</h3>
-                )}
-            </>
-        );
-    }
-
     const renderHintButton = () => (
-        <>
+        <div>
             <button
+            style={{width:'fit-content'}}
                 onClick={showNextHint}
                 disabled={!hintButtonEnabled}
             >
-                <FaRegQuestionCircle name="help-outline" size={50} color={hintButtonEnabled ? "var(--backround-color)" : "gray"} />
+                <span style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+
+                <FaRegQuestionCircle style={{marginRight:"5px"}} name="help-outline" size={30} color={hintButtonEnabled ? "" : "gray"} />Ayuda
+                </span>
             </button>
-            <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
-        </>
+        </div>
     );
 
     // Renderizar el juego basado en el índice actual
@@ -229,35 +239,37 @@ const GameMatchView = () => {
         const currentGameKey = gameKeys[currentGameIndex];
         const gameInfo = initGameModes[currentGameKey]?.infoGame[0]; // Asegúrate de que gameInfo exista
 
-        if (gameInfo) {
-            const { idModeGame } = gameInfo;
-            let GameComponent;
+        if (!isGameFinished) {
+            if (gameInfo) {
+                const { idModeGame } = gameInfo;
+                let GameComponent;
 
-            // Cambiamos el componente según el modo de juego
-            switch (idModeGame) {
-                case 'OW':
-                    setCurrentHeader("Ordena la Palabra");
-                    GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleNextGameMode}/>;
-                    break;
-                case 'GP':
-                    setCurrentHeader("Adivina la Frase");
-                    GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleNextGameMode}/>;
-                    break;
-                case 'MC':
-                    setCurrentHeader("Multiple Opcion");
-                    GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleNextGameMode}/>;
-                    break;
-                default:
-                    GameComponent = <p>Modo de juego no reconocido.</p>;
+                // Cambiamos el componente según el modo de juego
+                switch (idModeGame) {
+                    case 'OW':
+                        setCurrentHeader("Ordena la Palabra");
+                        GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        break;
+                    case 'GP':
+                        setCurrentHeader("Adivina la Frase");
+                        GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        break;
+                    case 'MC':
+                        setCurrentHeader("Multiple Opcion");
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        break;
+                    default:
+                        GameComponent = <p>Modo de juego no reconocido.</p>;
+                }
+
+                return (
+                    <div>
+                        {GameComponent}
+                    </div>
+                );
+            } else {
+                return <p>El juego aún no está disponible.</p>;
             }
-
-            return (
-                <div>
-                    {GameComponent}
-                </div>
-            );
-        } else {
-            return <p>El juego aún no está disponible.</p>;
         }
     };
 
@@ -278,27 +290,28 @@ const GameMatchView = () => {
             hideRightPanel={isGameFinished}
             leftHeader='Pistas'
             leftContent={
-                <>
-                    {renderHint()}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <BrainCharacter key={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
                     {renderHintButton()}
-                </>
+                </div>
             }
             middleHeader={currentHeader}
             middleContent={gameContent}
             rightHeader='Stats'
             rightContent={
                 <>
-                <h3>Ronda {currentGameIndex+1}</h3>
-                {!isGameFinished && <CircleTimer
-                    key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
-                    isLooping={true}
-                    loopDelay={0.5}
-                    isPlaying={isGameReady}
-                    duration={timeRemaining}
-                    onTimeUpdate={handleTimeUpdate}
-                    onTimerComplete={handleNextGameMode}
-                />}
-                </>    
+                    <h3>Ronda {currentGameIndex + 1}</h3>
+                    <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
+                    {!isGameFinished && <CircleTimer
+                        key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
+                        isLooping={true}
+                        loopDelay={0.5}
+                        isPlaying={isGameReady}
+                        duration={timeRemaining}
+                        onTimeUpdate={handleTimeUpdate}
+                        onTimerComplete={handleNextGameMode}
+                    />}
+                </>
             }
         />
     );

@@ -17,6 +17,9 @@ import SelectionPhase from '../views/SelectionPhase';
 import GameMatchView from '../views/GameMatchView';
 import SingleGameLobby from '../views/SingleGameLobby';
 
+/** Player **/
+import MultiplayerLobby from '../views/MultiplayerLobby';
+import MultiplayerLobby1 from '../views/MultiplayerLobby1';
 /** Admin Views **/
 import GameContentManagement from '../views/admin/GameContentManagement';
 import UsersManagment from '../views/admin/UsersManagement';
@@ -33,8 +36,6 @@ import { DeleteUser } from '../views/admin/users/DeleteUser'
 import { UserDetails } from '../views/admin/users/userDetails';
 import { BlockUser } from '../views/admin/users/BlockUser';
 import { UnlockUser } from '../views/admin/users/UnblockUser';
-
-import MultiplayerLobby from '../views/MultiplayerLobby';
 
 /** Utils */
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../utils/constants';
@@ -58,6 +59,11 @@ function AppRouter() {
                 <Route path={PUBLIC_ROUTES.INIT_GAME} element={<GameMatchView />} />
                 <Route path={PUBLIC_ROUTES.SINGLE_GAME_LOBBY} element={<SingleGameLobby />} />
 
+                {/* Player Routes */}
+                <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby />} />
+                <Route path="comunidad" element={<MultiplayerLobby1 />} />
+                
+
                 {/* Admin Routes */}
                 {/* Categories */}
                 <Route path={ADMIN_ROUTES.CONTENT_MANAGEMENT} element={<GameContentManagement />} />
@@ -72,9 +78,6 @@ function AppRouter() {
                 <Route path={ADMIN_ROUTES.DELETE_USER} element={<DeleteUser />} />
                 <Route path={ADMIN_ROUTES.BLOCK_USER} element={<BlockUser />} />
                 <Route path={ADMIN_ROUTES.UNBLOCK_USER} element={<UnlockUser />} />
-
-                <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby />} />
-
             </Route>
         </Routes>
     );

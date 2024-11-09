@@ -66,6 +66,7 @@ public class AuthService {
         extraClaims.put("role", userDetail.getAuthorities());
         extraClaims.put("username", userDetail.getUsername());
         extraClaims.put("userId", userEnt.getId());
+        extraClaims.put("email", userEnt.getEmail());
     
         // Generar el token con las reclamaciones adicionales
         String token = jwtService.generateTokenWithClaims(extraClaims, userDetail);

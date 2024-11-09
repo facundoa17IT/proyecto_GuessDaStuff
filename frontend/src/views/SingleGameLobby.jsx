@@ -25,7 +25,6 @@ const SingleGameLobby = () => {
     const initializeGameModes = async () => {
         try {
             const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
-
             setInitGameModes(response.data.gameModes);
             setIdGameSingle(response.data.idGameSingle);
         } catch (error) {
@@ -35,6 +34,7 @@ const SingleGameLobby = () => {
     useEffect(() => {
         if (Object.keys(initGameBody).length > 0) {
             initializeGameModes();
+            console.log(`Slot: ${JSON.stringify(initGameBody, null, 2)}`);
         }
     }, [initGameBody]);
 

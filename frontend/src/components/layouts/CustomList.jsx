@@ -52,7 +52,7 @@ const CustomList = ({
 
     const filteredSortedList = useMemo(() => {
         let filteredList = [...listContent];
-
+        
         // Filter the list based on search query
         if (searchQuery) {
             filteredList = filteredList.filter((item) =>
