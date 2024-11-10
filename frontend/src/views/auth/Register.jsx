@@ -1,9 +1,14 @@
+/** React **/
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+/** Components **/
 import Modal from '../../components/layouts/Modal';
-import axiosInstance from '../../utils/AxiosConfig';
 import ReactFlagsSelect from "react-flags-select";
 import CustomDatePicker from '../../components/ui/CustomDatePicker';
+
+/** Utils **/
+import axiosInstance from '../../utils/AxiosConfig';
 
 export const Register = () => {
     const [username, setUsername] = useState('');

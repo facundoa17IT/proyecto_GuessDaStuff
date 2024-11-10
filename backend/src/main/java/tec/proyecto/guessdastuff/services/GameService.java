@@ -93,7 +93,7 @@ public class GameService {
         for (DataGameSingle dataGameSingle : result) {
             boolean isFinish = dataGameSingle.isFinish();
             
-            String statusKey = isFinish ? "Finalizadas" : "En_Curso";
+            String statusKey = isFinish ? "Finalizadas" : "Activas";
 
             response.computeIfAbsent(statusKey, k -> new ArrayList<>()).add(dataGameSingle);
         }

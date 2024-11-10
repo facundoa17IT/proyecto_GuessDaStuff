@@ -226,7 +226,7 @@ const CustomList = ({
                         <IoMdAddCircleOutline style={{ marginRight: '5px', fontSize: '30px' }} /><small>Agregar</small>
                     </button>
                 )}
-                <small style={{ marginTop: '0' }}>Total: {listContent.length}</small>
+                <small style={{ marginTop: '0' }}>Total: {filteredSortedList.length}</small>
             </div>
         </div>
     );

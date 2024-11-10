@@ -5,10 +5,11 @@ import { useMediaQuery } from 'react-responsive';
 
 /** Assets **/
 import AppLogoVertical from '../ui/AppLogoVertical';
-import { FaUsers, FaUserCog, FaUserCircle } from "react-icons/fa";
+import { FaUserCog, FaUserCircle } from "react-icons/fa";
 import { BsDatabaseFillGear } from "react-icons/bs";
 import { PiChartBarFill } from "react-icons/pi";
 import { BsCollectionPlayFill } from "react-icons/bs";
+import { FaRankingStar } from "react-icons/fa6";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
@@ -49,14 +50,14 @@ const Navbar = () => {
                                 <>
                                     <li className="nav-item">
                                         <Link to="" className="nav-links">
-                                            <PiChartBarFill style={{ marginRight: '5px' }} />Estadisticas
+                                            <FaRankingStar style={{ marginRight: '5px' }} />Ranking
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <Link to="comunidad" className="nav-links">
                                             <FaUsers style={{ marginRight: '5px' }} />Comunidad
                                         </Link>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                         <Link to="" className="nav-links">
                                             <FaUserCircle style={{ marginRight: '5px' }} />Perfil
@@ -78,7 +79,7 @@ const Navbar = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to="admin/game-matches-management" className="nav-links">
                                             <BsCollectionPlayFill style={{ marginRight: '5px' }} />Partidas
                                         </Link>
                                     </li>

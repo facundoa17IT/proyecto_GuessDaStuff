@@ -46,8 +46,8 @@ public class GameController {
         }
     }
 
-    @GetMapping("/v1/loadplaygames/")
-    public ResponseEntity<?> listPlayGames() {
+    @GetMapping("/v1")
+    public ResponseEntity<?> listGames() {
         try {
             DtoLoadPlaygameResponse response = gameService.listPlayGames();
             return ResponseEntity.ok().body(response);

@@ -16,6 +16,7 @@ import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
 import tec.proyecto.guessdastuff.entities.GameMessage;
 import tec.proyecto.guessdastuff.entitiesSocket.GameAnswer;
+import tec.proyecto.guessdastuff.entitiesSocket.GameInvitationResponse;
 import tec.proyecto.guessdastuff.entitiesSocket.GameInvite;
 import tec.proyecto.guessdastuff.entitiesSocket.GameStatusUpdate;
 import tec.proyecto.guessdastuff.entitiesSocket.SocketMatch;
@@ -65,6 +66,31 @@ public class SocketPlayMultiController {
         messagingTemplate.convertAndSendToUser(invite.getToPlayerId(), "/queue/invites", invite);
     }
 
+    // @MessageMapping("/invite")
+    // public void sendInvitation(@Payload String userHost, @Payload String userReceiver) {
+    //     //String recipient = invitation.getRecipient();
+    //     messagingTemplate.convertAndSend("/game/invitations/" + userReceiver, "se realizado la invitacion!");
+    // }
+
+    // Nueva funcionalidad: Enviar respuesta de invitación
+    @MessageMapping("/respond")
+    public void respondToInvitation(GameInvitationResponse response) {
+        messagingTemplate.convertAndSend("/game/invitations/responses/" + response.getHost(), response);
+
+        // Si la respuesta es aceptada, también enviar un mensaje para redirigir a game.html
+        // if (response.isAccepted()) {
+        //    // GameInvitation invitation = new GameInvitation(response.getSender(), response.getRecipient());
+        //     messagingTemplate.convertAndSend("/game/start/" + response.getSender() , response);
+        //     messagingTemplate.convertAndSend("/game/start/" + response.getRecipient() , response);
+
+        // }
+    }
+
+    @MessageMapping("/invite/{recipientUsername}")
+    public void sendInvitation(@DestinationVariable String recipientUsername, GameInvite invitation) {
+        // Envía la invitación al canal específico del destinatario
+        messagingTemplate.convertAndSend("/game/invitations/" + recipientUsername, invitation);
+    }
 
     // Endpoint para iniciar la partida
     @PostMapping("/v1/start/{gameId}/")
