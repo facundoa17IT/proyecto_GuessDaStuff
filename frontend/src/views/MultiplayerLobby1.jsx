@@ -1,5 +1,6 @@
 /** React **/
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /** Socket **/
 import SockJS from 'sockjs-client';
@@ -12,6 +13,7 @@ import Modal from '../components/layouts/Modal';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
+import {PLAYER_ROUTES} from "../utils/constants";
 
 /** Context API **/
 import { useRole } from '../contextAPI/AuthContext'
@@ -35,6 +37,9 @@ const MultiplayerLobby = () => {
 
     const username = localStorage.getItem("username");
 
+    const navigate = useNavigate();
+
+    const [isHost, setIsHost] = useState(false);
     // Se inicializa la conexion al socket
     useEffect(() => {
         // Initialize WebSocket connection and STOMP client
@@ -71,14 +76,14 @@ const MultiplayerLobby = () => {
                     userId: userId
                 };
 
-                const player = {
+                const messageSocket = {
                     userHost: userHost,
                     idGame: idGame
                 };
 
-                console.log("Multiplayer Data -> " + JSON.stringify(player, null, 2));
+                console.log("Multiplayer Data -> " + JSON.stringify(messageSocket, null, 2));
 
-                stompClient.send("/app/game/create", {}, JSON.stringify(player));
+                stompClient.send("/app/game/create", {}, JSON.stringify(messageSocket));
             } catch (error) {
                 console.error('Error obteniendo datos del juego:', error);
             }
@@ -143,7 +148,7 @@ const MultiplayerLobby = () => {
         setIsModalOpen(true);
         setModalContent(
             <>
-                <h1 style={{ color: "var(--link-color)"}}>{invitation.fromPlayerId}</h1>
+                <h1 style={{ color: "var(--link-color)" }}>{invitation.fromPlayerId}</h1>
                 <h2>Te ha invitado a jugar!</h2>
             </>
         );
@@ -151,33 +156,52 @@ const MultiplayerLobby = () => {
     }
 
     function sendInvitation(recipient) {
-        const invitation = { 
-            gameId: gameId, 
-            fromPlayerId: username, 
-            toPlayerId: recipient 
+        const invitation = {
+            gameId: gameId,
+            fromPlayerId: username,
+            toPlayerId: recipient
         };
         // Enviar la invitación al canal del destinatario
         stompClient.send(`/app/invite/${recipient}`, {}, JSON.stringify(invitation));
         console.log(`Invitación enviada a ${recipient}`);
+        setIsHost(true);
     }
 
-    function respondToInvitation(accepted) {
+    // solo si soy invitado
+    function respondToInvitation(accepted){
         const host = localStorage.getItem("host");
-        if(host !== username){
-            const response = { host: host, guest: username, accepted: accepted };
-            stompClient.send("/app/respond", {}, JSON.stringify(response));
-        }
+        const response = { host: host, guest: username, accepted: accepted };
+        stompClient.send("/app/respond", {}, JSON.stringify(response));
         setIsModalOpen(false);
+        navigate(PLAYER_ROUTES.MULTIPLAYER_LOBBY);
     }
 
+    // solo si soy host
     function handleResponse(response) {
         setIsModalOpen(true);
         if (response.accepted) {
             setModalContent(<>El usuario ha aceptado la invitacion!</>);
         } else {
             setModalContent(<>El usuario ha rechazado la invitacion!</>);
+            setIsHost(false);
         }
     }
+
+    const handleConfirm = () => {
+        if (isHost) {
+            setIsModalOpen(false);
+        } else {
+            respondToInvitation(true);
+        }
+    };
+
+    const handleClose = () => {
+        if (isHost) {
+            setIsModalOpen(false);
+        } else {
+            respondToInvitation(false);
+        }
+    };
 
     return (
         <>
@@ -196,11 +220,11 @@ const MultiplayerLobby = () => {
                 }
                 rightHeader='Sala de Espera'
                 rightContent={
-                    <>Sin contenido</>
+                    <><h2>{username}</h2></>
                 }
             />
 
-            <Modal showModal={isModalOpen} onConfirm={() => respondToInvitation(true)} closeModal={() => respondToInvitation(false)} title="Invitacion">
+            <Modal showModal={isModalOpen} onConfirm={handleConfirm} closeModal={handleClose} title="Invitacion">
                 {modalContent}
             </Modal>
         </>
