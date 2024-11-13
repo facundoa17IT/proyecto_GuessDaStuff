@@ -25,7 +25,7 @@ export const PUBLIC_ROUTES = {
     REGISTER: "register",
     LOGIN: "login",
     START_GAME: "start-game",
-    SELECTION_PHASE: "selection-phase",
+    SELECTION_PHASE: "/selection-phase",
     INIT_GAME: "/init-game",
     SINGLE_GAME_LOBBY: "single-game-lobby"
   
@@ -48,5 +48,6 @@ export const ADMIN_ROUTES = {
 export const PLAYER_ROUTES = {
     PROFILE: "profile",
     GAME_LOBBY: "game-lobby",
-    MULTIPLAYER_LOBBY: '/multiplayer-lobby'
+    MULTIPLAYER_LOBBY: '/multiplayer-lobby',
+    INVITATIONS: '/invitations'
 }

@@ -1,5 +1,5 @@
 /** React **/
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
@@ -10,6 +10,7 @@ import { BsDatabaseFillGear } from "react-icons/bs";
 import { PiChartBarFill } from "react-icons/pi";
 import { BsCollectionPlayFill } from "react-icons/bs";
 import { FaRankingStar } from "react-icons/fa6";
+import { IoMdMail } from "react-icons/io";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
@@ -19,11 +20,14 @@ import '../../styles/navbar.css';
 
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
+import { SocketContext } from '../../contextAPI/SocketContext';
 
 const Navbar = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
     const { role } = useRole();  // Access the role from context
+
+    const { invitationCount } = useContext(SocketContext);
 
     if (isMobile) return null;
 
@@ -51,6 +55,11 @@ const Navbar = () => {
                                     <li className="nav-item">
                                         <Link to="" className="nav-links">
                                             <FaRankingStar style={{ marginRight: '5px' }} />Ranking
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link to={PLAYER_ROUTES.INVITATIONS} className="nav-links">
+                                            <IoMdMail style={{ marginRight: '5px' }} />Invitaciones<span style={{marginLeft:'5px'}}>&#40;{invitationCount}&#41;</span>
                                         </Link>
                                     </li>
                                     {/* <li className="nav-item">

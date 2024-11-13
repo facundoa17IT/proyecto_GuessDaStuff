@@ -267,6 +267,17 @@ fieldset{
 }
 /****/
 
+.border-container {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--border-color);
+  margin-top: 15px;
+  border-radius: 8px;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
   /**/
