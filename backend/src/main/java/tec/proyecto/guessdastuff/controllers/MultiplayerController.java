@@ -42,7 +42,7 @@ public class MultiplayerController {
     public void sendAnswer(@Payload DtoSendAnswer dtoSendAnswer, @DestinationVariable String idSocket) {
         try {
             DtoSendAnswerResponse msgUsersAll = new DtoSendAnswerResponse();
-            msgUsersAll = multiplayerService.sendAnswer(dtoSendAnswer);
+            msgUsersAll = multiplayerService.sendAnswer(dtoSendAnswer, idSocket);
             //avisarle a los otros jugadores
             messagingTemplate.convertAndSend("/game/" + idSocket + "/", msgUsersAll);
         } catch (Exception e) {

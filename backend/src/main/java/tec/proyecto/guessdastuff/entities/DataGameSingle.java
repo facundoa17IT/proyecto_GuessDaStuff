@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,6 +42,20 @@ public class DataGameSingle {
 
     @Column(name = "tmstmp_init")
     private LocalDateTime tmstmpInit;
+
+    @Column(name = "tmstmp_update")
+    private LocalDateTime tmstmpUpdate;
+
+    @PrePersist
+    protected void onCreate() {
+        tmstmpInit = LocalDateTime.now();
+        tmstmpUpdate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        tmstmpUpdate = LocalDateTime.now();
+    }
 
     @Column
     private boolean isFinish;  

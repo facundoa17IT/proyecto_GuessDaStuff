@@ -18,5 +18,6 @@ public class DtoUserToUser {
     private boolean accepted; // INVITE_RESPONSE, RESPONSE_IDGAME
 
     private String message;
+    private String implementGame; // al momento de ejecutar /game-multi/v1/start/{{ID_GAME_MULTI}}/ guardamos la respuesta aca para que el otro user tenga la misma data
 }
 

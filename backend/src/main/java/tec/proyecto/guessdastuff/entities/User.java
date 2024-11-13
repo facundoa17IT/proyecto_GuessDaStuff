@@ -1,6 +1,7 @@
 package tec.proyecto.guessdastuff.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,16 +56,26 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private EStatus status;
 
-    @Column(name = "atCreate")
-    private LocalDate atCreate;
+    @Column(name = "atCreate", updatable = false)
+    private LocalDateTime atCreate;
 
     @Column(name = "atUpdate")
-    private LocalDate atUpdate;
+    private LocalDateTime atUpdate;
     
     @Column(name = "resetToken")
     private String resetToken;
 
-    
+    @PrePersist
+    protected void onCreate() {
+        atCreate = LocalDateTime.now();
+        atUpdate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        atUpdate = LocalDateTime.now();
+    }
+
     // UserDetails overrides
 
     @Override
