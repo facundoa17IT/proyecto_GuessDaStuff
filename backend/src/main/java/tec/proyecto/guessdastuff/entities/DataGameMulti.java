@@ -3,11 +3,11 @@ package tec.proyecto.guessdastuff.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,14 +28,8 @@ public class DataGameMulti {
     @Column
     private String idUserWin;
 
-    @ManyToOne
-    private InfoGameMulti infoGameMulti1;
-
-    @ManyToOne
-    private InfoGameMulti infoGameMulti2;
-
-    @ManyToOne
-    private InfoGameMulti infoGameMulti3;
+    @Column
+    private String idInfoGameMulti;
 
     @Column
     private boolean isFinish;

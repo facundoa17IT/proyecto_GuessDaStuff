@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
 import tec.proyecto.guessdastuff.entities.InfoGameMulti;
+import tec.proyecto.guessdastuff.entities.InfoGameMultiId;
 import tec.proyecto.guessdastuff.entities.OrderWord;
 
 
@@ -215,26 +216,23 @@ public class PlayMultiService {
                 count++;
         }
         Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(gameId);
+
+        String idInfoGame = UUID.randomUUID().toString();
+
         DataGameMulti dataGameMulti = optionalGame.get();
-        
+
         for (String id : Arrays.asList(idGame1, idGame2, idGame3)) {
+            InfoGameMultiId infoGameMultiId = new InfoGameMultiId();
             InfoGameMulti infoGameMulti = new InfoGameMulti();
-            infoGameMulti.setId(UUID.randomUUID().toString());
-            infoGameMulti.setIdDataGame(id);
+            infoGameMultiId.setId(idInfoGame);
+            infoGameMultiId.setIdDataGame(id);
+            infoGameMulti.setInfoGameMultiId(infoGameMultiId);
             infoGameMultiRepository.save(infoGameMulti);
-            if (dataGameMulti.getInfoGameMulti1() == null) {
-                dataGameMulti.setInfoGameMulti1(infoGameMulti); // Asignar al primer campo
-            } else if (dataGameMulti.getInfoGameMulti2() == null) {
-                dataGameMulti.setInfoGameMulti2(infoGameMulti); // Asignar al segundo campo
-            } else if (dataGameMulti.getInfoGameMulti3() == null) {
-                dataGameMulti.setInfoGameMulti3(infoGameMulti); // Asignar al tercer campo
-            }
-            dataGameMultiRepository.save(dataGameMulti);
+            infoGameMultiId = null;
         }
         // Enviar un mensaje al canal de WebSocket para notificar la invitación
         String gameChannel = "/game/7108d34b-de7b-4e51-b753-3b2387fc2c01";
         messagingTemplate.convertAndSend(gameChannel, "La partida ha sido configurada:");
-
 
         // Crear la respuesta y asignar el mapa de modos de juego
         DtoInitGameMultiResponse dtoInitGameResponse = new DtoInitGameMultiResponse();
@@ -242,7 +240,8 @@ public class PlayMultiService {
         dtoInitGameResponse.setIdGameMulti(gameId);
         dtoInitGameResponse.setIdUserFriend(dataGameMulti.getIdUser2());
         dtoInitGameResponse.setIdUserHost(dataGameMulti.getIdUser1());
-    
+        dataGameMulti.setIdInfoGameMulti(idInfoGame); 
+        dataGameMultiRepository.save(dataGameMulti);
         return dtoInitGameResponse;
 
     }
