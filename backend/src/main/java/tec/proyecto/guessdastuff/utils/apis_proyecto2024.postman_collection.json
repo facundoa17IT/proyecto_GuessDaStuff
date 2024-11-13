@@ -2075,35 +2075,84 @@
 						{
 							"name": "List Titles of Category",
 							"originalRequest": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{ACCESS_TOKEN}}",
-											"type": "string"
-										}
-									]
-								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{BASE_URL}}/game-modes/v1/loadplaygames/",
+									"raw": "{{BASE_URL}}/game-modes/v1/titles/3",
 									"host": [
 										"{{BASE_URL}}"
 									],
 									"path": [
 										"game-modes",
 										"v1",
-										"loadplaygames",
-										""
+										"titles",
+										"3"
 									]
 								}
 							},
-							"_postman_previewlanguage": "",
-							"header": "",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 02 Nov 2024 00:36:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
 							"cookie": [],
-							"body": ""
+							"body": "{\n    \"titlesOfCategory\": {\n        \"Guess Phrase\": [\n            {\n                \"title\": \"¿Cuál es el nombre de la banda que canta Bohemian Rhapsody?\",\n                \"id\": 1044\n            },\n            {\n                \"title\": \"¿Quién canta Thriller?\",\n                \"id\": 1045\n            }\n        ],\n        \"Order Word\": [\n            {\n                \"title\": \"penicilina\",\n                \"id\": 1030\n            },\n            {\n                \"title\": \"candombe\",\n                \"id\": 1033\n            }\n        ],\n        \"Multiple Choice\": [\n            {\n                \"title\": \"¿Cuál fue el descubrimiento de Alexander Fleming?\",\n                \"id\": 1025\n            },\n            {\n                \"title\": \"¿Qué teoría famosa es obra de Einstein?\",\n                \"id\": 1026\n            }\n        ]\n    }\n}"
 						}
 					]
 				},
@@ -3651,7 +3700,7 @@
 			"name": "Multiplayer Game",
 			"item": [
 				{
-					"name": "1- CreateGameMulti",
+					"name": "1- Crear partida multijugador",
 					"event": [
 						{
 							"listen": "test",
@@ -3685,18 +3734,11 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "idUser",
-									"value": "1001",
-									"type": "text",
-									"disabled": true
-								}
-							]
+							"mode": "raw",
+							"raw": "{\r\n    \"userHost\":{\r\n        \"username\":\"pepe\",\r\n        \"userId\": \"1001\"\r\n    },\r\n    \"userGuest\":{\r\n        \"username\":\"jose\",\r\n        \"userId\": \"5555\"\r\n    }\r\n}    \r\n    "
 						},
 						"url": {
-							"raw": "{{BASE_URL}}/game-multi/v1/create/1001",
+							"raw": "{{BASE_URL}}/game-multi/v1/create/",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -3704,150 +3746,7 @@
 								"game-multi",
 								"v1",
 								"create",
-								"1001"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "loadGame",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"categories\": [\"1\",\"2\", \"3\"],\n    \"modeGame\": \"Single\" // Multiplayer\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{BASE_URL}}/api/user/game/loadGame",
-									"host": [
-										"{{BASE_URL}}"
-									],
-									"path": [
-										"api",
-										"user",
-										"game",
-										"loadGame"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Method"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Headers"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "0"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 25 Oct 2024 00:32:46 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"categories\": [\n        {\n            \"id\": 1,\n            \"name\": \"Deportes\",\n            \"gameModes\": [\n                \"OW\"\n            ]\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Historia\",\n            \"gameModes\": [\n                \"OBD\"\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Musica\",\n            \"gameModes\": [\n                \"GP\"\n            ]\n        }\n    ]\n}"
-						}
-					]
-				},
-				{
-					"name": "2- InviteFriend",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{ACCESS_TOKEN}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{BASE_URL}}/game-multi/v1/invite/{{ID_GAME_MULTI}}/?idUser=10054&friendEmail=mevoyadormir@gmail.com",
-							"host": [
-								"{{BASE_URL}}"
-							],
-							"path": [
-								"game-multi",
-								"v1",
-								"invite",
-								"{{ID_GAME_MULTI}}",
 								""
-							],
-							"query": [
-								{
-									"key": "idUser",
-									"value": "10054"
-								},
-								{
-									"key": "friendEmail",
-									"value": "mevoyadormir@gmail.com"
-								}
 							]
 						}
 					},
@@ -3951,7 +3850,7 @@
 					]
 				},
 				{
-					"name": "3- loadGame",
+					"name": "2- loadGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -4091,7 +3990,7 @@
 					]
 				},
 				{
-					"name": "4- StartGame",
+					"name": "3- StartGame",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -4373,7 +4272,7 @@
 					]
 				},
 				{
-					"name": "7- finishPlayGame",
+					"name": "7- FINAL TOTAL DEL JUEGO",
 					"request": {
 						"auth": {
 							"type": "bearer",

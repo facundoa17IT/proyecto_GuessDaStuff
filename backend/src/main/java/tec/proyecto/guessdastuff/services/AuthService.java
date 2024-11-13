@@ -22,7 +22,7 @@ import tec.proyecto.guessdastuff.dtos.DtoAuthResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoginRequest;
 import tec.proyecto.guessdastuff.dtos.DtoRegisterRequest;
 import tec.proyecto.guessdastuff.entities.User;
-import tec.proyecto.guessdastuff.entitiesSocket.UserOnline;
+import tec.proyecto.guessdastuff.entitiesSocket.DtoUserOnline;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,9 +37,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final DateConverter dateConverter;
 
-    private final List<UserOnline> connectedUsers = new ArrayList<>(); // Lista para almacenar usuarios conectados
+    private final List<DtoUserOnline> connectedUsers = new ArrayList<>(); // Lista para almacenar usuarios conectados
 
-    public void addListConnect(UserOnline userOnline) {
+    public void addListConnect(DtoUserOnline userOnline) {
         connectedUsers.add(userOnline); // Agregar usuario a la lista de conectados
         // Aquí podrías agregar lógica para notificar a otros usuarios si es necesario
     }
@@ -122,7 +122,7 @@ public class AuthService {
         return ResponseEntity.ok("Finalizo la sesion");
     }
 
-    public List<UserOnline> getConnectedUsers() {
+    public List<DtoUserOnline> getConnectedUsers() {
         return connectedUsers; // Retornar la lista de usuarios conectados
     }
 

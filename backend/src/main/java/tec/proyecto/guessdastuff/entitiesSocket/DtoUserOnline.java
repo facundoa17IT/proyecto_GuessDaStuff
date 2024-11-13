@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class GameStatusUpdate {
-    private String playerId;
+public class DtoUserOnline {
 
-    private boolean result;
+    private Long userId;
+    private String username;
+    private String email;
+   
 }
