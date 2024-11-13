@@ -1,31 +1,45 @@
 package tec.proyecto.guessdastuff;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-import java.util.List;
-import java.util.ArrayList;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.GameConverter;
-import tec.proyecto.guessdastuff.dtos.*;
-import tec.proyecto.guessdastuff.entities.*;
-import tec.proyecto.guessdastuff.enums.*;
+import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
+import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
+import tec.proyecto.guessdastuff.dtos.DtoMultipleChoice;
+import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
+import tec.proyecto.guessdastuff.entities.Category;
+import tec.proyecto.guessdastuff.entities.GameMode;
+import tec.proyecto.guessdastuff.entities.GuessPhrase;
+import tec.proyecto.guessdastuff.entities.MultipleChoice;
+import tec.proyecto.guessdastuff.entities.OrderWord;
+import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.exceptions.GameModeException;
-import tec.proyecto.guessdastuff.repositories.*;
+import tec.proyecto.guessdastuff.repositories.CategoryRepository;
+import tec.proyecto.guessdastuff.repositories.GameModeRepository;
+import tec.proyecto.guessdastuff.repositories.GameRepository;
 import tec.proyecto.guessdastuff.services.GameService;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class GameServiceTest {
 
@@ -67,6 +81,15 @@ public class GameServiceTest {
         Field statusField = Category.class.getDeclaredField("status");
         statusField.setAccessible(true);
         statusField.set(testCategory, ECategoryStatus.EMPTY);
+
+
+        // Inicializar testGameMode
+        testGameMode = new GameMode();
+        Field gameModeNameField = GameMode.class.getDeclaredField("name");
+        gameModeNameField.setAccessible(true);
+        gameModeNameField.set(testGameMode, "MC");
+
+        // Establece otros campos necesarios de testGameMode si es necesario
     }
 
     @Test
@@ -96,20 +119,25 @@ public class GameServiceTest {
 
         assertEquals("El titulo: What is 2+2?, se creo correctamente para la categoria Test Category y modo de juego MC", response.getBody());
         verify(gameRepository, times(1)).save(any(MultipleChoice.class));
-    }
+    }           
 
     @Test
     public void testCreateOWIndividual_Success() throws GameModeException {
         DtoOrderWord dto = new DtoOrderWord("OW", 1L, "WORD", "Hint1", "Hint2", "Hint3");
 
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
-        when(gameModeRepository.findByName("OW")).thenReturn(Optional.of(testGameMode));
+         // Cambiar el nombre del modo de juego a "OW" para este test
+         Field gameModeNameField = GameMode.class.getDeclaredField("name");
+         gameModeNameField.setAccessible(true);
+         gameModeNameField.set(testGameMode, "OW");
 
-        ResponseEntity<?> response = gameService.createOWIndividual(dto);
+    when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
+    when(gameModeRepository.findByName("OW")).thenReturn(Optional.of(testGameMode));
 
-        assertEquals("La palabra WORD se creó correctamente para la categoría Test Category y modo de juego OW", response.getBody());
-        verify(gameRepository, times(1)).save(any(OrderWord.class));
-    }
+    ResponseEntity<?> response = gameService.createOWIndividual(dto);
+
+    assertEquals("La palabra WORD se creó correctamente para la categoría Test Category y modo de juego OW", response.getBody());
+    verify(gameRepository, times(1)).save(any(OrderWord.class));
+    }            
 
 
     @Test
@@ -123,7 +151,7 @@ public class GameServiceTest {
 
         assertEquals("La frase Guess this phrase se creó correctamente para la categoría Test Category y modo de juego GP", response.getBody());
         verify(gameRepository, times(1)).save(any(GuessPhrase.class));
-    }
+    }        
 
     @Test
     public void testGetDataOfGameMode_Success_GuessPhrase() throws GameModeException {
