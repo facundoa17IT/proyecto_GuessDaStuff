@@ -1,5 +1,5 @@
 /** React **/
-import React, {useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
@@ -14,6 +14,7 @@ import { IoMdMail } from "react-icons/io";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
+import { invitationData } from '../../utils/Helpers';
 
 /** Style **/
 import '../../styles/navbar.css';
@@ -27,9 +28,37 @@ const Navbar = () => {
 
     const { role } = useRole();  // Access the role from context
 
-    const { invitationCount } = useContext(SocketContext);
+    const { invitation, setInvitation, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection } = useContext(SocketContext);
+    
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
 
     if (isMobile) return null;
+
+    useEffect(() => {
+        if (invitation) {
+            handleInvitationInteraction(invitation);
+            console.log(invitation);
+        }
+    }, [invitation]);
+
+    const handleInvitationInteraction = (invitation) => {
+        if (invitation) {
+            console.log(invitation.action);
+            switch (invitation.action) {
+                case 'INVITE':
+                    console.log("Se ha realizado una invitacion!");
+                    setInvitationCount(invitationCount + 1);
+                    setInvitationCollection([...invitationCollection, invitation]);
+                    setInvitation(null);
+                    break;
+
+                default:
+                    break;
+            }
+        } else {
+            console.error("Invalid Invitation");
+        }
+    };
 
     return (
         <nav className="navbar">
@@ -59,7 +88,7 @@ const Navbar = () => {
                                     </li>
                                     <li className="nav-item">
                                         <Link to={PLAYER_ROUTES.INVITATIONS} className="nav-links">
-                                            <IoMdMail style={{ marginRight: '5px' }} />Invitaciones<span style={{marginLeft:'5px'}}>&#40;{invitationCount}&#41;</span>
+                                            <IoMdMail style={{ marginRight: '5px' }} />Invitaciones<span style={{ marginLeft: '5px' }}>&#40;{invitationCount}&#41;</span>
                                         </Link>
                                     </li>
                                     {/* <li className="nav-item">
@@ -69,7 +98,7 @@ const Navbar = () => {
                                     </li> */}
                                     <li className="nav-item">
                                         <Link to="" className="nav-links">
-                                            <FaUserCircle style={{ marginRight: '5px' }} />Perfil
+                                            <FaUserCircle style={{ marginRight: '5px' }} />Perfil - <span style={{ marginLeft: '5px' }}>{userObj.username}</span>
                                         </Link>
                                     </li>
                                 </>

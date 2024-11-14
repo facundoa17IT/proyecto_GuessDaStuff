@@ -11,6 +11,7 @@ import WaitingLobby from '../components/layouts/WaitingLobby';
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
 import { PUBLIC_ROUTES } from '../utils/constants';
+import { invitationData, setInviteAction, setResponseIdGame } from '../utils/Helpers';
 
 /** Context API **/
 import { useRole } from '../contextAPI/AuthContext'
@@ -20,7 +21,8 @@ import { ListContext } from '../contextAPI/ListContext';
 const MultiplayerLobby = () => {
     const navigate = useNavigate();
 
-    const { users, client, invitation, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection } = useContext(SocketContext);
+    const { users, client, invitation, setInvitation, invitationCollection } = useContext(SocketContext);
+
     const { selectedItem } = useContext(ListContext);
 
     const getPlayerName = (player) => player.username;
@@ -35,75 +37,34 @@ const MultiplayerLobby = () => {
     const username = localStorage.getItem("username");
 
     const [isHost, setIsHost] = useState(false);
-    
+
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    const [playerTag, setPlayerTag] =useState(null);
+    const [playerTag, setPlayerTag] = useState(null);
 
-    // Leer `connectedUsers` de `localStorage` solo una vez al cargar el componente
     const [connectedUsers, setConnectedUsers] = useState(() => {
         const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
         return storedUsers || [];
     });
 
-    // Se actualiza la lista cada vez que hay un cambio de usuario
-    // useEffect(() => {
-    //     if (users.length > 0) {
-    //         setConnectedUsers(users);
-    //         console.log(users);
-    //     }
-    // }, [users]);
+    //Se actualiza la lista cada vez que hay un cambio de usuario
+    useEffect(() => {
+        setConnectedUsers(users);
+        filterSelfUsername();
+        console.log(users);
+    }, [users]);
 
     // Limpiamos el local storage de host y guest
     useEffect(() => {
         localStorage.removeItem("guest");
         localStorage.removeItem("host");
+        filterSelfUsername();
     }, []);
 
-    useEffect(() => {
-        if(invitationCollection.length > 0){
-            console.log("Nueva invitacion recibida!");
-            console.log(invitationCollection);
-        }
-    }, [invitationCollection]);
-
-    const invitationData = {
-        action:"",          // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        userIdHost:"",      // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        usernameHost:"",    // INVITE
-        userIdGuest:"",     // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        usernameGuest:"",   // INVITE, INVITE_RESPONSE
-        gameId: "",         // RESPONSE_IDGAME
-        accepted: null,     // INVITE_RESPONSE, RESPONSE_IDGAME
-        message:"",         // INVITE, INVITE_RESPONSE
-    }
-
-    // Función para actualizar la invitación
-    function setInviteAction(usernameHost, userIdHost, userIdGuest, message) {
-        invitationData.action = "INVITE";
-        invitationData.userIdHost = userIdHost;
-        invitationData.usernameHost = usernameHost;
-        invitationData.userIdGuest = userIdGuest;
-        invitationData.message = message;
-        console.log('Datos de la invitación actualizados:', invitationData);
-    }
-
-    // Función para actualizar la respuesta de la invitación
-    function setInviteResponse(accepted, usernameGuest, userIdGuest, message) {
-        invitationData.action = "INVITE_RESPONSE";
-        invitationData.userIdGuest = userIdGuest;
-        invitationData.usernameGuest = usernameGuest;
-        invitationData.accepted = accepted;
-        invitationData.message = message;
-        console.log('Respuesta actualizada:', invitationData);
-    }
-
-    // Función para actualizar la respuesta de la invitación
-    function setResponseIdGame(idGame, message) {
-        invitationData.action = "RESPONSE_IDGAME";
-        invitationData.gameId = idGame;
-        invitationData.message = message;
-        console.log('Respuesta actualizada:', invitationData);
+    // Remueve el propio host de la lista de usuarios conectados
+    const filterSelfUsername = () => {
+        const updatedList = connectedUsers.filter(item => item.username !== userObj.username);
+        setConnectedUsers(updatedList);
     }
 
     // se ejecuta cuando el guest acepta la partida
@@ -111,7 +72,7 @@ const MultiplayerLobby = () => {
     const handleCreateGame = async () => {
         let idGame = '';
         const username = localStorage.getItem("username");
-       
+
         if (userId && username) {
             try {
                 const userHost = {
@@ -149,20 +110,34 @@ const MultiplayerLobby = () => {
     // 1)
     const handleLobbyListInteraction = (listId, buttonKey, item) => {
         if (listId === "lobbyList") {
-            if (selectedItem && buttonKey === 'inviteBtn') {
-                sendInvitation(selectedItem.userId);
-                localStorage.setItem("guest", selectedItem.username);
+            if (Object.values(item).length > 0 && buttonKey === 'inviteBtn') {
+                sendInvitation(item.userId);
+                localStorage.setItem("guest", item.username);
+            }
+            else{
+                console.log(listId);
+                console.log(buttonKey);
+                console.log(item);
             }
         } else {
             console.log("Error list ID");
         }
     };
 
+    // 1.1)
+    // Enviar la invitación al canal del destinatario del guest
+    function sendInvitation(userIdGuest) {
+        setInviteAction(userObj.username, userId, userIdGuest, `${userObj.username} - Te ha invitado a jugar`);
+        client.current.send(`/topic/lobby/${userIdGuest}`, {}, JSON.stringify(invitationData));
+        setIsHost(true);
+    }
+
     // 2)
     // Se gestiona que accion realizar dependiendo de la respuesta de la invitacion del socket
     useEffect(() => {
         if (invitation) {
             handleInvitationInteraction(invitation);
+            console.log(invitation);
         }
     }, [invitation]);
 
@@ -171,68 +146,21 @@ const MultiplayerLobby = () => {
         if (invitation) {
             console.log(invitation.action);
             switch (invitation.action) {
-                case 'INVITE':
-                    console.log("Se ha realizado una invitacion!");
-                    setInvitationCount(invitationCount+1);
-                    setInvitationCollection([...invitationCollection, invitation]);
-                    console.log(invitation);
-                    showInvitation(invitation);
-                    break;
 
                 case 'INVITE_RESPONSE':
                     console.log("Se ha respondido a la invitacion!");
                     handleResponse(invitation);
                     break;
 
-                case 'RESPONSE_IDGAME':
-                    console.log("Se iniciara la partida!");
-                    client.current.subscribe(`/topic/game/${invitation.idGame}`);
-                    setTimeout(() => {
-                        navigate(PUBLIC_ROUTES.SELECTION_PHASE);
-                    }, 3000); // 3000 ms para esperar 3 segundos adicionales
-                    break;
-
                 default:
-                    console.warn("Action type not recognized:", buttonKey);
+                    break;
             }
         } else {
             console.error("Invalid Invitation");
         }
     };
 
-   // 3)
-    function showInvitation(invitation) {
-        setIsModalOpen(true);
-        setModalContent(
-            <>
-                <h1 style={{ color: "var(--link-color)" }}>"{invitation.usernameHost}"</h1>
-                <h2>Te ha invitado a jugar!</h2>
-            </>
-        );
-        localStorage.setItem("host", invitation.usernameHost);
-    }
-
-    // Enviar la invitación al canal del destinatario del guest
-    function sendInvitation(userIdGuest) {
-        setInviteAction(userObj.username, userId, userIdGuest, `${userObj.username} - Te ha invitado a jugar`);
-        client.current.send(`/topic/lobby/${userIdGuest}`, {}, JSON.stringify(invitationData));
-        setIsHost(true);
-    }
-
-    // 4)
-    // Solo si soy guest
-    // Enviar la respuesta al canal destinatario del host
-    function respondToInvitation(response){
-        setInviteResponse(response, invitation.usernameGuest, invitation.userIdGuest, response ? "Ha aceptado la invitacion" : "Ha rechazado la invitacion");
-        client.current.send(`/topic/lobby/${invitation.userIdHost}`, {}, JSON.stringify(invitationData));
-        setIsModalOpen(false);
-        setInvitationCount(invitationCount-1);
-        if(response){
-            setPlayerTag(localStorage.getItem("host"));
-        }
-    }
-
-    // 5) solo si acepta
+    // 3) solo guest si acepta (esto se gestiona en la vista de invitations)
     // solo si soy host
     // Enviar la respuesta al canal destinatario del guest
     function handleResponse(invitation) {
@@ -246,15 +174,13 @@ const MultiplayerLobby = () => {
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
         } else {
             setIsModalOpen(true);
-            setModalContent(<p style={{color:'red'}}>El usuario ha rechazado la invitacion!</p>); 
+            setModalContent(<p style={{ color: 'red' }}>El usuario ha rechazado la invitacion!</p>);
         }
     }
 
     const handleConfirm = () => {
         if (isHost) {
             setIsModalOpen(false);
-        } else {
-            respondToInvitation(true);
         }
     };
 
@@ -263,8 +189,6 @@ const MultiplayerLobby = () => {
             setIsModalOpen(false);
             setIsHost(false);
             localStorage.removeItem("host");
-        } else {
-            respondToInvitation(false);
         }
     };
 
@@ -277,7 +201,7 @@ const MultiplayerLobby = () => {
                 middleContent={
                     <CustomList
                         listId={"lobbyList"}
-                        listContent={users}
+                        listContent={connectedUsers}
                         getItemLabel={getPlayerName}
                         buttons={['inviteBtn', 'infoBtn']}
                         onButtonInteraction={handleLobbyListInteraction}

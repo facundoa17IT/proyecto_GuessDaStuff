@@ -1,18 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
     const [invitation, setInvitation] = useState(null);
     const [users, setUsers] = useState([]);
-    
     const [invitationCount, setInvitationCount] = useState(0);
     const [invitationCollection, setInvitationCollection] = useState([]);
 
-    const [isInvitationAccepted, setIsInvitationAccepted] = useState(null);
-
-    // Stomp client socket
     const client = useRef(null);
 
     useEffect(() => {
@@ -20,8 +17,8 @@ export const SocketProvider = ({ children }) => {
     }, [users]);
 
     useEffect(() => {
-        if(invitationCollection.length > 0){
-            console.log("Nueva invitacion recibida!");
+        if (invitationCollection.length > 0) {
+            console.log("Nueva invitación recibida!");
             console.log(invitationCollection);
         }
     }, [invitationCollection]);
@@ -29,7 +26,7 @@ export const SocketProvider = ({ children }) => {
     const connect = (dtoUserOnline) => {
         client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
 
-        if(dtoUserOnline === null){
+        if (dtoUserOnline === null) {
             console.error("DtoUserOnline NULL");
             return;
         }
@@ -37,21 +34,17 @@ export const SocketProvider = ({ children }) => {
         client.current.connect({}, () => {
             console.log("Usuario conectado!");
 
-            // Suscripción a usuarios en el lobby
             client.current.subscribe('/topic/lobby', (message) => {
                 console.log(message.body);
-                setUsers(JSON.parse(message.body)); 
+                setUsers(JSON.parse(message.body));
             });
 
-            // Suscripcion a cualquier tipo de invitaciones
             client.current.subscribe(`/topic/lobby/${dtoUserOnline.userId}`, (message) => {
                 const invitationBody = JSON.parse(message.body);
                 console.log(invitationBody);
                 setInvitation(invitationBody);
-                //setInvitationCollection(invitationBody);
             });
 
-            // Unirse al lobby con el usuario
             client.current.send('/app/join', {}, JSON.stringify(dtoUserOnline));
         });
     };
@@ -65,7 +58,20 @@ export const SocketProvider = ({ children }) => {
     };
 
     return (
-        <SocketContext.Provider value={{ connect, disconnect, users, invitation, client, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection, isInvitationAccepted, setIsInvitationAccepted }}>
+        <SocketContext.Provider
+            value={{
+                connect,
+                disconnect,
+                users,
+                invitation,
+                setInvitation,
+                client,
+                invitationCount,
+                setInvitationCount,
+                invitationCollection,
+                setInvitationCollection,
+            }}
+        >
             {children}
         </SocketContext.Provider>
     );
