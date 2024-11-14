@@ -1,13 +1,23 @@
+/** React **/
 import React, { useState, useContext, useEffect } from 'react';
-import '../../styles/slot-machine.css';
-import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useNavigate } from 'react-router-dom';
+
+/** Context API **/
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
+import { useRole } from '../../contextAPI/AuthContext'
+
+/** Style **/
+import '../../styles/slot-machine.css';
+
 const SlotMachine = () => {
     const { loadGameData } = useContext(LoadGameContext);
+    const { userId } = useRole();  // Access the setRole function from the context
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
+        //console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
+        console.log("user id slot machine -> " + userId);
         setTimeout(() => {
             spin();
         }, 1000);
@@ -19,7 +29,7 @@ const SlotMachine = () => {
     const [slot3, setSlot3] = useState(loadGameData[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
-    const spinDuration = 3000;
+    const spinDuration = 1500;
 
     // Función para obtener un elemento aleatorio de un array
     const getRandomItem = (array) => {
@@ -73,7 +83,6 @@ const SlotMachine = () => {
             setResults(resultsArray);
 
             // Crear el objeto de salida en el formato requerido
-            const userId = "1234"; // Cambia esto por el ID real del usuario si es necesario
             const output = {
                 userId: userId,
                 parCatMod: resultsArray.map(result => ({
@@ -81,12 +90,12 @@ const SlotMachine = () => {
                     mod: result.mode // Modo de juego seleccionado
                 }))
             };
-
+            //console.log(`Slot: ${JSON.stringify(output, null, 2)}`);
             setIsSpinning(false); // Cambia el estado de giro a falso
 
             // Espera 3 segundos antes de redirigir
             setTimeout(() => {
-                navigate('/init-game', {
+                navigate('/single-game-lobby', {
                     state: {
                         initGameBody: output
                     }

@@ -10,34 +10,19 @@ export const gameModesSchemas = {
             hint3: { type: "string", title: "Hint 3" }
         }
     },
-    // OBD - Order by Date
-    OBD: {
+    // MC - Multiple Choice
+    MC: {
         type: "object",
         properties: {
             id_Category: { type: "integer", title: "Category ID" },
-            event: { type: "string", title: "Event" },
-            infoEvent: { type: "string", title: "Info Event" },
-            startDate: {
-                type: "object",
-                title: "Start Date",
-                properties: {
-                    anio: { type: "string", title: "Year" },
-                    mes: { type: "string", title: "Month" },
-                    dia: { type: "string", title: "Day" }
-                }
-            },
-            endDate: {
-                type: "object",
-                title: "End Date",
-                properties: {
-                    anio: { type: "string", title: "Year" },
-                    mes: { type: "string", title: "Month" },
-                    dia: { type: "string", title: "Day" }
-                }
-            },
             hint1: { type: "string", title: "Hint 1" },
             hint2: { type: "string", title: "Hint 2" },
-            hint3: { type: "string", title: "Hint 3" }
+            hint3: { type: "string", title: "Hint 3" },
+            randomWord1: { type: "string", title: "Random Word 1" },
+            randomWord2: { type: "string", title: "Random Word 2" },
+            randomWord3: { type: "string", title: "Random Word 3" },
+            randomCorrectWord: { type: "string", title: "Random Correct Word" },
+            question: { type: "string", title: "Question" }
         }
     },
     // GP - Guess Phrase

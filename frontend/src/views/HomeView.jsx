@@ -31,7 +31,7 @@ const HomePage = () => {
 	const handleStartGame = () => {
 		navigate('/start-game')
 	}
-
+	
 	const minimalistButtonStyle = {
 		padding: '0',
 		background: 'none',

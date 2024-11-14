@@ -1,96 +1,80 @@
-import React, { useState, useEffect } from 'react';
+/** React **/
+import React, { useState, useEffect, useContext } from 'react';
 
-const GuessPhrase = ({ GPinfo }) => {
-    const { phrase, correct_word } = GPinfo;
-    const [userInput, setUserInput] = useState('');
-    const [resultMessage, setResultMessage] = useState('');
+/** Context API **/
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
-    const handleCheckAnswer = () => {
-        if (correct_word === null) {
-            setResultMessage("Este juego aún no fue implementado.");
-        } else {
-            const isCorrect = userInput.trim().toLowerCase() === correct_word.toLowerCase();
-            setResultMessage(isCorrect ? "¡Correcto!" : "Incorrecto. Intenta de nuevo.");
+/** Style **/
+import '../../styles/guess-phrase.css';
+import '../../styles/game-mode.css';
 
-        }
-    };
+const GuessPhrase = ({ GPinfo, onCorrect, veryfyAnswer }) => {
+	const { answer, setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
+	const { phrase, correct_word } = GPinfo;
+	const [userInput, setUserInput] = useState('');
+	const [resultMessage, setResultMessage] = useState('');
 
-    useEffect(() => {
-      setUserInput('');
-    }, [phrase]);
+	useEffect(() => {
+		setUserInput('');
+		setResultMessage('');
+	}, [GPinfo]);
 
-    return (
-        <div style={styles.container}>
-            <div style={styles.containerPhrase}>
-              {phrase ? (
-                  <p style={styles.phrase}>{phrase}</p>
-              ) : (
-                  <p>Este juego aún no fue implementado.</p>
-              )}
-            </div>
-            <input 
-                style={styles.input}
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Escribe tu respuesta"
-            />
-            {resultMessage && <p style={styles.resultMessage}>{resultMessage}</p>}
-            <button style={styles.verifyButton} onClick={handleCheckAnswer}>
-              Verificar
-            </button>
-        </div>
-    );
-};
+	useEffect(() => {
+		if (isCorrectAnswer !== null) {
+			console.log("IS CORRECT ANSWER -> " + isCorrectAnswer);
+			handleCheckAnswer();
+		};
+	}, [isCorrectAnswer]);
 
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'start',
-    },
-    title: {
-        fontSize: '20px',
-        marginBottom: '10px',
-    },
-    phrase: {
-        fontSize: '24px',
-        fontWeight: 'bold',
-    },
-    input: {
-      backgroundColor: '#FFF',
-      borderWidth: '3px',
-      borderColor: '#653532',
-      width: '300px',
-      padding: '10px',
-      marginBottom: '10px',
-      fontSize: '20px',
-    },
-    verifyButton: {
-      backgroundColor: '#B36F6F',
-      padding: '15px',
-      borderRadius: '8px',
-      borderStyle: 'solid',
-      borderWidth: '2px',
-      borderColor: '#653532',
-      color: '#fff',
-      fontSize: '18px',
-      cursor: 'pointer',
-      textAlign: 'center',
-    },
-    resultMessage: {
-      marginBottom: '50px',
-      fontSize: '15px',
-    },
-    containerPhrase: {
-      backgroundColor: '#FFF',
-      padding: '10px',
-      borderRadius: '8px',
-      borderWidth: '3px',
-      borderColor: '#653532',
-      width: '300px',
-      marginBottom: '50px',
-    },
+	const handleAnswer = () => {
+		if (!correct_word) {
+			setResultMessage("Este juego aún no fue implementado.");
+			return;
+		}
+		setAnswer(userInput.trim().toUpperCase());
+	}
+
+	const handleCheckAnswer = async () => {
+		try {
+			if (isCorrectAnswer) {
+				setResultMessage("¡Correcto!");
+				await new Promise((resolve) => setTimeout(resolve, 1500));
+				onCorrect();
+			} else {
+				setResultMessage("Incorrecto. Intenta de nuevo.");
+			}
+		} catch (error) {
+			console.error("Error al enviar la respuesta:", error);
+			setResultMessage("Hubo un error al verificar la respuesta.");
+		}
+	};
+
+	return (
+		<div className="game-mode-container gp-container">
+			<div className="containerPhrase">
+				{phrase ? (
+					<p>{phrase}</p>
+				) : (
+					<p>Este juego aún no fue implementado.</p>
+				)}
+			</div>
+			{resultMessage && (
+				<div className={`resultMessage ${isCorrectAnswer ? 'correct' : ''}`}>
+					{resultMessage}
+					hola
+				</div>
+			)}
+			<input
+				className="input"
+				value={userInput}
+				onChange={(e) => setUserInput(e.target.value)}
+				placeholder="Escribe tu respuesta"
+			/>
+			<button className="verifyButton" onClick={handleAnswer}>
+				Verificar
+			</button>
+		</div>
+	);
 };
 
 export default GuessPhrase;

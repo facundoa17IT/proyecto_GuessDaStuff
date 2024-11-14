@@ -20,10 +20,12 @@ import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.GameConverter;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
 import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
+import tec.proyecto.guessdastuff.dtos.DtoLoadPlaygameResponse;
 import tec.proyecto.guessdastuff.dtos.DtoMultipleChoice;
 import tec.proyecto.guessdastuff.dtos.DtoOrderWord;
 import tec.proyecto.guessdastuff.dtos.DtoTitleWithId;
 import tec.proyecto.guessdastuff.entities.Category;
+import tec.proyecto.guessdastuff.entities.DataGameSingle;
 import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
@@ -33,6 +35,7 @@ import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.enums.EGameMode;
 import tec.proyecto.guessdastuff.exceptions.GameModeException;
 import tec.proyecto.guessdastuff.repositories.CategoryRepository;
+import tec.proyecto.guessdastuff.repositories.DataGameSingleRepository;
 import tec.proyecto.guessdastuff.repositories.GameModeRepository;
 import tec.proyecto.guessdastuff.repositories.GameRepository;
 
@@ -49,6 +52,9 @@ public class GameService {
     GameModeRepository gameModeRepository;
 
     @Autowired
+    DataGameSingleRepository dataGameSingleRepository;
+
+    @Autowired
     DateConverter dateConverter;
 
     @Autowired
@@ -61,7 +67,6 @@ public class GameService {
             throw new GameModeException("Para la categoria ingresada no existen titulos");
         }
 
-        // Se utiliza Map<String, List<String>> para almacenar varios títulos por cada modo de juego
         Map<String, List<DtoTitleWithId>> titlesMap = new HashMap<>();
 
         for (Object[] row : result) {
@@ -77,6 +82,25 @@ public class GameService {
 
         return new DtoListTitlesResponse(titlesMap);
 }
+    public DtoLoadPlaygameResponse listPlayGames() throws GameModeException {
+        List<DataGameSingle> result = dataGameSingleRepository.findAll();
+        if (result.isEmpty()) {
+            throw new GameModeException("No hay partidas");
+        }
+
+        Map<String, List<DataGameSingle>> response = new HashMap<>();
+
+        for (DataGameSingle dataGameSingle : result) {
+            boolean isFinish = dataGameSingle.isFinish();
+            
+            String statusKey = isFinish ? "Finalizadas" : "Activas";
+
+            response.computeIfAbsent(statusKey, k -> new ArrayList<>()).add(dataGameSingle);
+        }
+        
+        return new DtoLoadPlaygameResponse(response);
+    }
+
 
     /***** INDIVIDUAL *****/
     public ResponseEntity<?> createMCIndividual (DtoMultipleChoice dtoMultipleChoice) throws GameModeException{

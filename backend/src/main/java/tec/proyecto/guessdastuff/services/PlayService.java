@@ -32,16 +32,19 @@ public class PlayService {
     @Autowired
     private DataGameSingleRepository dataGameSingleRepository;
 
+    // SINGLEPLAYER
     public boolean initPlayGame(String idGameSingle){
+
         dataGameSingleRepository.initPlayGame(idGameSingle);
     return true;
     }
+    
     public boolean finishPlayGame(String idGameSingle){
         dataGameSingleRepository.finishPlayGame(idGameSingle);
     return true;
     }
     
-   public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
+    public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
     //esto va a la tabla DataGame
     Game result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
     int points = 0;
@@ -95,8 +98,7 @@ public class PlayService {
     return false; // Retornar false si es incorrecto
    }
 
-
-   public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
+    public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
     List<Object[]> result = playRepository.loadGameByCategories(dtoLoadGameRequest.getCategories());
     
     // Lista para contener las categorías con sus modos de juego

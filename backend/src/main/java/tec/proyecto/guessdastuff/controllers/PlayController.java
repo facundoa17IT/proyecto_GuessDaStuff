@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +55,7 @@ public class PlayController {
 
     // Setear tiempo de inicio de partida
     @PostMapping("/v1/init-play-game/{idGameSingle}")
-    public ResponseEntity<Boolean> initPlayGame(String idGameSingle) {
+    public ResponseEntity<Boolean> initPlayGame(@PathVariable String idGameSingle) {
         try {
             Boolean response = playService.initPlayGame(idGameSingle);
             return ResponseEntity.ok(response);
@@ -64,8 +65,8 @@ public class PlayController {
     }
 
     // Terminar partida
-    @PostMapping("/v1/finish-play-game")
-    public ResponseEntity<Boolean> finishPlayGame(String idGameSingle) {
+    @PostMapping("/v1/finish-play-game/{idGameSingle}")
+    public ResponseEntity<Boolean> finishPlayGame(@PathVariable String idGameSingle) {
         try {
             Boolean response = playService.finishPlayGame(idGameSingle);
             return ResponseEntity.ok(response);

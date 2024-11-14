@@ -1,165 +1,122 @@
 /** React **/
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 /** Utils **/
 import { shuffleArray } from '../../utils/Helpers';
 
-const OrderWord = ({ OWinfo }) => {
-  const { word } = OWinfo;
-  const [selectedOrder, setSelectedOrder] = useState([]); // Inicialmente vacío
-  const [shuffledLetters, setShuffledLetters] = useState([]);
+/** Context API **/
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
-  useEffect(() => {
-    // Separar la palabra en letras, agregar un id único a cada letra
-    const letters = word.split('').map((letter, index) => ({
-      id: `${letter}-${index}`, // Un id único basado en la letra y su índice
-      letter,
-    }));
+/** Style **/
+import '../../styles/order-word.css'; // Importa el archivo CSS
+import '../../styles/game-mode.css';
 
-    // Desordenar las letras
-    const shuffled = shuffleArray(letters);
-    setShuffledLetters(shuffled);
-    setSelectedOrder([]);
-  }, [word]);
+const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
+	const { answer, setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
+	const { word } = OWinfo;
+	const [selectedOrder, setSelectedOrder] = useState([[]]);
+	const [shuffledLetters, setShuffledLetters] = useState([]);
+	const [resultMessage, setResultMessage] = useState('');
 
-  const handleLetterPress = (letterObj) => {
-    setShuffledLetters((prev) => prev.filter(l => l.id !== letterObj.id)); // Quitar letra del arreglo de letras disponibles
-    setSelectedOrder((prev) => [...prev, letterObj]); // Añadir letra al arreglo de seleccionadas
-  };
+	useEffect(() => {
+		setSelectedOrder([[]]);
+		setAnswer('');
+		setResultMessage('');
+		const letters = word.split('').map((letter, index) => ({
+			id: `${letter}-${index}`,
+			letter,
+		}));
+		const shuffled = shuffleArray(letters);
+		setShuffledLetters(shuffled);
+		setSelectedOrder([]);
+	}, [word]);
 
-  const handleSelectedPress = (letterObj) => {
-    setSelectedOrder((prev) => prev.filter(l => l.id !== letterObj.id)); // Quitar letra del arreglo de seleccionadas
-    setShuffledLetters((prev) => [...prev, letterObj]); // Regresar letra al arreglo de letras disponibles
-  };
+	useEffect(() => {
+		if (isCorrectAnswer !== null) {
+			handleVerify();
+		}
+	}, [isCorrectAnswer]);
 
-  const handleVerify = () => {
-    const selectedString = selectedOrder.map(l => l.letter).join('');
-    const isCorrect = selectedString === word;
-    console.log(isCorrect ? "Correcto!" : "Incorrecto!");
-  };
+	const handleLetterPress = (letterObj) => {
+		setShuffledLetters((prev) => prev.filter((l) => l.id !== letterObj.id));
+		setSelectedOrder((prev) => [...prev, letterObj]);
+	};
 
-  const handleReset = () => {
-    setSelectedOrder([]);
-    const letters = word.split('').map((letter, index) => ({
-      id: `${letter}-${index}`,
-      letter,
-    }));
-    const shuffled = shuffleArray(letters);
-    setShuffledLetters(shuffled);
-  };
+	const handleSelectedPress = (letterObj) => {
+		setSelectedOrder((prev) => prev.filter((l) => l.id !== letterObj.id));
+		setShuffledLetters((prev) => [...prev, letterObj]);
+	};
 
-  return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Ordena la palabra...</h2>
+	const handleAnswer = () => {
+		const selectedStrings = selectedOrder.map((selected) => selected.letter);
+		const resultString = selectedStrings.join('');
+		setAnswer(resultString);
+	};
 
-      {/* Contenedor de letras seleccionadas */}
-      <div style={styles.selectedOrderContainer}>
-        {selectedOrder.map((letterObj, index) => (
-          <button
-            key={letterObj.id}
-            style={styles.selectedButton}
-            onClick={() => handleSelectedPress(letterObj)}
-          >
-            {letterObj.letter}
-          </button>
-        ))}
-      </div>
+	const handleVerify = async () => {
+		try {
+			if (isCorrectAnswer) {
+				setResultMessage('¡Correcto!');
+				await new Promise((resolve) => setTimeout(resolve, 1500));
+				onCorrect();
+			} else {
+				setResultMessage('Incorrecto. Intenta de nuevo');
+			}
+		} catch (error) {
+			console.error('Error al verificar la respuesta:', error);
+			setResultMessage('Error en la verificación. Intenta de nuevo.');
+		}
+	};
 
-      {/* Contenedor de letras desordenadas */}
-      <div style={styles.buttonContainer}>
-        {shuffledLetters.map((letterObj) => (
-          <button
-            key={letterObj.id}
-            style={styles.button}
-            onClick={() => handleLetterPress(letterObj)}
-          >
-            {letterObj.letter}
-          </button>
-        ))}
-      </div>
+	const handleReset = () => {
+		setSelectedOrder([]);
+		const letters = word.split('').map((letter, index) => ({
+			id: `${letter}-${index}`,
+			letter,
+		}));
+		const shuffled = shuffleArray(letters);
+		setShuffledLetters(shuffled);
+	};
 
-      <div style={styles.buttonRow}>
-        <button style={styles.verifyButton} onClick={handleVerify}>
-          Verificar
-        </button>
-        <button style={styles.resetButton} onClick={handleReset}>
-          Reiniciar
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'start',
-  },
-  title: {
-    fontSize: '24px',
-    marginBottom: '20px',
-  },
-  selectedOrderContainer: {
-    marginTop: '20px',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginTop: '20px',
-  },
-  button: {
-    backgroundColor: '#FFFDD0',
-    padding: '10px',
-    margin: '5px',
-    borderRadius: '5px',
-    width: '50px',
-    border: '2px solid #000',
-    color: '#000',
-  },
-  selectedButton: {
-    backgroundColor: '#1F354A',
-    padding: '10px',
-    margin: '5px',
-    borderRadius: '5px',
-    width: '50px',
-    border: '2px solid #000',
-    color: '#000000',
-    fontSize: '20px',
-  },
-  buttonRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    width: '80%',
-    marginTop: '20px',
-  },
-  verifyButton: {
-    backgroundColor: "#B36F6F",
-    padding: '15px',
-    borderRadius: '8px',
-    border: '2px solid #653532',
-    width: '50%',
-    marginRight: '10px',
-    color: '#fff',
-    fontSize: '18px',
-    cursor: 'pointer',
-  },
-  resetButton: {
-    backgroundColor: "#B36F6F",
-    padding: '15px',
-    borderRadius: '8px',
-    border: '2px solid #653532',
-    width: '50%',
-    color: '#fff',
-    fontSize: '18px',
-    cursor: 'pointer',
-  },
+	return (
+		<div className="game-mode-container ow-container">
+			<div className="selectedOrderContainer">
+				{selectedOrder.map((letterObj, index) => (
+					<button
+						key={`${letterObj.id}-${index}`}
+						className="selectedButton"
+						onClick={() => handleSelectedPress(letterObj)}
+					>
+						{letterObj.letter}
+					</button>
+				))}
+			</div>
+			<div className="buttonContainer">
+				{shuffledLetters.map((letterObj, index) => (
+					<button
+						key={`${letterObj.id}-${index}`}
+						className="button"
+						onClick={() => handleLetterPress(letterObj)}
+					>
+						{letterObj.letter}
+					</button>
+				))}
+			</div>
+			{resultMessage && (
+				<div className={`resultMessage ${resultMessage.includes('¡Correcto!') ? 'correct' : 'incorrect'}`}>
+					{resultMessage}
+				</div>
+			)}
+			<div className="buttonRow">
+				<button className="verifyButton" onClick={handleAnswer}>
+					Verificar
+				</button>
+				<button className="resetButton" onClick={handleReset}>
+					Reiniciar
+				</button>
+			</div>
+		</div>
+	);
 };
 
 export default OrderWord;

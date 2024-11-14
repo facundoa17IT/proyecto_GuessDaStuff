@@ -1,6 +1,8 @@
 // Debug objects
 export const logObject = ({ object }) => {
+  if (object){
     console.log(JSON.stringify(object, null, 2));
+  }
 }
 
 // Return random array

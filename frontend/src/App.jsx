@@ -7,6 +7,7 @@ import { LoadGameProvider } from './contextAPI/LoadGameContext';
 import { ListProvider } from './contextAPI/ListContext';
 /** Animations **/
 import { AnimatePresence } from "framer-motion";
+import { SocketProvider } from './contextAPI/SocketContext';
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
       <AuthProvider>
         <LoadGameProvider>
           <ListProvider>
-            <AppRouter />
+            <SocketProvider>
+              <AppRouter />
+            </SocketProvider>
           </ListProvider>
         </LoadGameProvider>
       </AuthProvider>

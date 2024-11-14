@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-4">Conectarse al Juego</h2>
+        <div class="input-group mb-3">
+            <input type="text" id="usernameInput" class="form-control" placeholder="Ingresa tu nombre de usuario">
+            <div class="input-group-append">
+                <button class="btn btn-primary" onclick="connect()">Conectar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function connect() {
+            const username = document.getElementById("usernameInput").value;
+            if (username) {
+                // Guardar el nombre de usuario en el almacenamiento local para utilizarlo en la siguiente pantalla
+                localStorage.setItem("username", username);
+                // Redirigir a la pantalla de jugadores conectados
+                window.location.href = "/listActivePlayers.html";
+            }
+        }
+    </script>
+</body>
+</html>
