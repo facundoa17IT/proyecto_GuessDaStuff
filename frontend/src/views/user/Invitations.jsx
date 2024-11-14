@@ -1,5 +1,5 @@
 /** React **/
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 
 /** Components **/
 import CustomList from '../../components/layouts/CustomList';
@@ -11,25 +11,23 @@ import { SocketContext } from '../../contextAPI/SocketContext';
 const Invitations = () => {
     /** Invitations List**/
     const { invitationCollection } = useContext(SocketContext);
+    const getPlayerName = (player) => player.message;
 
     return (
-        <div>
-            <h2>Invitaciones</h2>
-            {invitationCollection.length > 0 ? (
-                <ul>
-                    {invitationCollection.map((invitation) => (
-                        <li key={invitation.gameId || invitation.userIdHost}> {/* Use unique key if available */}
-                            <p><strong>Mensaje:</strong> {invitation.message}</p>
-                            <p><strong>Host:</strong> {invitation.userIdHost}</p>
-                            <p><strong>Invitado:</strong> {invitation.userIdGuest}</p>
-                            <p><strong>Estado de aceptación:</strong> {invitation.accepted === null ? "Pendiente" : invitation.accepted ? "Aceptado" : "Rechazado"}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No hay invitaciones en este momento.</p>
-            )}
-        </div>
+        <MainGameLayout
+            hideLeftPanel={true}
+            hideRightPanel={true}
+            middleHeader='Invitaciones'
+            middleContent={
+                <CustomList
+                    listId={"invitationsList"}
+                    listContent={invitationCollection}
+                    getItemLabel={getPlayerName}
+                    buttons={['acceptBtn', 'cancelBtn']}
+                //onButtonInteraction={handleLobbyListInteraction}
+                />
+            }
+        />
     );
 };
 

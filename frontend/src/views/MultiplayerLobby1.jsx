@@ -36,6 +36,8 @@ const MultiplayerLobby = () => {
 
     const [isHost, setIsHost] = useState(false);
     
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
     // Leer `connectedUsers` de `localStorage` solo una vez al cargar el componente
     const [connectedUsers, setConnectedUsers] = useState(() => {
         const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
@@ -64,35 +66,31 @@ const MultiplayerLobby = () => {
     }, [invitationCollection]);
 
     const invitationData = {
-        action:"", //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        userIdHost:"", //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        userIdGuest:"",//INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-        gameId: "", //RESPONSE_IDGAME
-        accepted: null, // INVITE_RESPONSE, RESPONSE_IDGAME
-        message:"",
+        action:"",          // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
+        userIdHost:"",      // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
+        usernameHost:"",    // INVITE
+        userIdGuest:"",     // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
+        usernameGuest:"",   // INVITE, INVITE_RESPONSE
+        gameId: "",         // RESPONSE_IDGAME
+        accepted: null,     // INVITE_RESPONSE, RESPONSE_IDGAME
+        message:"",         // INVITE, INVITE_RESPONSE
     }
-    // const [invitationData, setInvitationData] = useState({
-    //     action: "", // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-    //     userIdHost: "", // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-    //     userIdGuest: "", // INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
-    //     gameId: "", // RESPONSE_IDGAME
-    //     accepted: "", // INVITE_RESPONSE, RESPONSE_IDGAME
-    //     message: "",
-    //   });
 
     // Función para actualizar la invitación
-    function setInviteAction(userIdHost, userIdGuest, message) {
+    function setInviteAction(usernameHost, userIdHost, userIdGuest, message) {
         invitationData.action = "INVITE";
         invitationData.userIdHost = userIdHost;
+        invitationData.usernameHost = usernameHost;
         invitationData.userIdGuest = userIdGuest;
         invitationData.message = message;
         console.log('Datos de la invitación actualizados:', invitationData);
     }
 
     // Función para actualizar la respuesta de la invitación
-    function setInviteResponse(accepted, userIdGuest, message) {
+    function setInviteResponse(accepted, usernameGuest, userIdGuest, message) {
         invitationData.action = "INVITE_RESPONSE";
         invitationData.userIdGuest = userIdGuest;
+        invitationData.usernameGuest = usernameGuest;
         invitationData.accepted = accepted;
         invitationData.message = message;
         console.log('Respuesta actualizada:', invitationData);
@@ -173,9 +171,9 @@ const MultiplayerLobby = () => {
             switch (invitation.action) {
                 case 'INVITE':
                     console.log("Se ha realizado una invitacion!");
-                    //setInvitationCount(invitationCount+1);
-                    //setInvitationCollection(invitation);
-                    //console.log(invitation);
+                    setInvitationCount(invitationCount+1);
+                    setInvitationCollection([...invitationCollection, invitation]);
+                    console.log(invitation);
                     showInvitation(invitation);
                     break;
 
@@ -203,16 +201,16 @@ const MultiplayerLobby = () => {
         setIsModalOpen(true);
         setModalContent(
             <>
-                <h1 style={{ color: "var(--link-color)" }}>"ID: {invitation.userIdGuest}"</h1>
+                <h1 style={{ color: "var(--link-color)" }}>"ID: {invitation.usernameHost}"</h1>
                 <h2>Te ha invitado a jugar!</h2>
             </>
         );
-        localStorage.setItem("host", invitation.userIdHost);
+        localStorage.setItem("host", invitation.usernameHost);
     }
 
     // Enviar la invitación al canal del destinatario del guest
     function sendInvitation(userIdGuest) {
-        setInviteAction(userId, userIdGuest, "Te ha invitado a jugar");
+        setInviteAction(userObj.username, userId, userIdGuest, `${userObj.username} - Te ha invitado a jugar`);
         client.current.send(`/topic/lobby/${userIdGuest}`, {}, JSON.stringify(invitationData));
         setIsHost(true);
     }
@@ -221,10 +219,10 @@ const MultiplayerLobby = () => {
     // Solo si soy guest
     // Enviar la respuesta al canal destinatario del host
     function respondToInvitation(response){
-        setInviteResponse(response, invitation.userIdGuest, response ? "Ha aceptado la invitacion" : "Ha rechazado la invitacion");
+        setInviteResponse(response, invitation.usernameGuest, invitation.userIdGuest, response ? "Ha aceptado la invitacion" : "Ha rechazado la invitacion");
         client.current.send(`/topic/lobby/${invitation.userIdHost}`, {}, JSON.stringify(invitationData));
         setIsModalOpen(false);
-        //setInvitationCount(invitationCount-1);
+        setInvitationCount(invitationCount-1);
     }
 
     // 5) solo si acepta

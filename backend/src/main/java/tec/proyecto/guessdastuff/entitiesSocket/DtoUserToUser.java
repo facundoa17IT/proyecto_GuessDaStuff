@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 public class DtoUserToUser {
     private String action; //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
     private String userIdHost; //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
+    private String usernameHost; //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
     private String userIdGuest; //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
+    private String usernameGuest; //INVITE, INVITE_RESPONSE, RESPONSE_IDGAME
 
     private String gameId; //RESPONSE_IDGAME
 
