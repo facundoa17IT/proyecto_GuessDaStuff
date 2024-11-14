@@ -39,7 +39,7 @@ const WaitingLobby = ({ isHost = false, user1 = 'Undefined', user2 = 'Undefined'
                         /> */}
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
                 {/* <ReadyButton onReady={handleReady} /> */}
-                {isHost && <button onClick={onClick}>Iniciar</button>}
+                {/* {isHost && <button onClick={onClick}>Iniciar</button>} */}
             </div>
         </div>
     );

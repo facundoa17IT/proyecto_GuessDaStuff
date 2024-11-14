@@ -38,6 +38,8 @@ const MultiplayerLobby = () => {
     
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
+    const [playerTag, setPlayerTag] =useState(null);
+
     // Leer `connectedUsers` de `localStorage` solo una vez al cargar el componente
     const [connectedUsers, setConnectedUsers] = useState(() => {
         const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
@@ -185,7 +187,9 @@ const MultiplayerLobby = () => {
                 case 'RESPONSE_IDGAME':
                     console.log("Se iniciara la partida!");
                     client.current.subscribe(`/topic/game/${invitation.idGame}`);
-                    navigate(PUBLIC_ROUTES.SELECTION_PHASE);
+                    setTimeout(() => {
+                        navigate(PUBLIC_ROUTES.SELECTION_PHASE);
+                    }, 3000); // 3000 ms para esperar 3 segundos adicionales
                     break;
 
                 default:
@@ -201,7 +205,7 @@ const MultiplayerLobby = () => {
         setIsModalOpen(true);
         setModalContent(
             <>
-                <h1 style={{ color: "var(--link-color)" }}>"ID: {invitation.usernameHost}"</h1>
+                <h1 style={{ color: "var(--link-color)" }}>"{invitation.usernameHost}"</h1>
                 <h2>Te ha invitado a jugar!</h2>
             </>
         );
@@ -223,6 +227,9 @@ const MultiplayerLobby = () => {
         client.current.send(`/topic/lobby/${invitation.userIdHost}`, {}, JSON.stringify(invitationData));
         setIsModalOpen(false);
         setInvitationCount(invitationCount-1);
+        if(response){
+            setPlayerTag(localStorage.getItem("host"));
+        }
     }
 
     // 5) solo si acepta
@@ -230,10 +237,13 @@ const MultiplayerLobby = () => {
     // Enviar la respuesta al canal destinatario del guest
     function handleResponse(invitation) {
         if (invitation.accepted) {
+            setPlayerTag(localStorage.getItem("guest"));
             setResponseIdGame(invitation.idGame, "Se ha enviado el id de la partida")
             client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
             client.current.subscribe(`/topic/game/${invitation.idGame}`);
-            navigate(PUBLIC_ROUTES.SELECTION_PHASE);
+            setTimeout(() => {
+                navigate(PUBLIC_ROUTES.SELECTION_PHASE);
+            }, 3000); // 3000 ms para esperar 3 segundos adicionales
         } else {
             setIsModalOpen(true);
             setModalContent(<p style={{color:'red'}}>El usuario ha rechazado la invitacion!</p>); 
@@ -275,7 +285,7 @@ const MultiplayerLobby = () => {
                 }
                 rightHeader='Sala de Espera'
                 rightContent={
-                    <WaitingLobby onClick={null} isHost={isHost} user1={username} user2={!isHost ? localStorage.getItem("host") : localStorage.getItem("guest")} />
+                    <WaitingLobby onClick={null} isHost={isHost} user1={username} user2={playerTag} />
                 }
             />
 

@@ -10,6 +10,8 @@ export const SocketProvider = ({ children }) => {
     const [invitationCount, setInvitationCount] = useState(0);
     const [invitationCollection, setInvitationCollection] = useState([]);
 
+    const [isInvitationAccepted, setIsInvitationAccepted] = useState(null);
+
     // Stomp client socket
     const client = useRef(null);
 
@@ -63,7 +65,7 @@ export const SocketProvider = ({ children }) => {
     };
 
     return (
-        <SocketContext.Provider value={{ connect, disconnect, users, invitation, client, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection }}>
+        <SocketContext.Provider value={{ connect, disconnect, users, invitation, client, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection, isInvitationAccepted, setIsInvitationAccepted }}>
             {children}
         </SocketContext.Provider>
     );
