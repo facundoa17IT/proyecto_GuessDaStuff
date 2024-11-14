@@ -77,11 +77,11 @@ public class MultiplayerController {
     }
 
     // Endpoint para iniciar la partida
-    @MessageMapping("/game/{idSocket}/start/{gameId}/")
-    public void startGame(@DestinationVariable String idSocket, @DestinationVariable String gameId, @Payload DtoInitGameMultiRequest dtoInitGameMultiRequest) {
+    @MessageMapping("/game/{idSocket}/start/")
+    public void startGame(@DestinationVariable String idSocket, @Payload DtoInitGameMultiRequest dtoInitGameMultiRequest) {
         try {
 
-            DtoInitGameMultiResponse implementation = multiplayerService.startGame(gameId, dtoInitGameMultiRequest);
+            DtoInitGameMultiResponse implementation = multiplayerService.startGame(idSocket, dtoInitGameMultiRequest);
 
             DtoImplementationGame response = new DtoImplementationGame();
             response.setStatus("INVITE_IMPLEMENTATION");
