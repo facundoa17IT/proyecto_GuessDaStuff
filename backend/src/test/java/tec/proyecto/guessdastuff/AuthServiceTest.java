@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,8 +64,8 @@ public class AuthServiceTest {
             .password("password123")
             .status(EStatus.REGISTERED) // Set necessary non-null fields
             .role(ERole.ROLE_USER)
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())  // Use LocalDateTime instead of LocalDate
+            .atUpdate(LocalDateTime.now())  // Use LocalDateTime instead of LocalDate
             .build();
     }
 

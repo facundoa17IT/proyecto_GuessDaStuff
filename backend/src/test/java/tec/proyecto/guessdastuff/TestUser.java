@@ -1,6 +1,7 @@
 package tec.proyecto.guessdastuff;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,8 +64,8 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build();
 
         when(userRepo.findByUsername("User 1")).thenReturn(Optional.of(user));
@@ -86,8 +87,8 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build(),
 
             User.builder()
@@ -98,8 +99,8 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build()
         );
 
@@ -127,8 +128,8 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build(),
 
             User.builder()
@@ -139,10 +140,11 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build()
         );
+    
 
         when(userRepo.findAll()).thenReturn(users);
 
@@ -162,10 +164,9 @@ public class TestUser {
             .status(EStatus.ONLINE)
             .birthday(LocalDate.now()) 
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
+            .atCreate(LocalDateTime.now())
+            .atUpdate(LocalDateTime.now())
             .build();
-        
 
         // Datos para la edición del usuario
         var dtoEditUser = new DtoUserRequest();
