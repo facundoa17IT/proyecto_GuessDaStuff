@@ -20,6 +20,7 @@ import SingleGameLobby from '../views/SingleGameLobby';
 /** Player **/
 import MultiplayerLobby from '../views/MultiplayerLobby';
 import MultiplayerLobby1 from '../views/MultiplayerLobby1';
+import Invitations from '../views/user/Invitations';
 
 /** Admin Views **/
 import GameContentManagement from '../views/admin/GameContentManagement';
@@ -66,8 +67,8 @@ function AppRouter() {
                 {/* Player Routes */}
                 <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby1 />} />
                 <Route path="comunidad" element={<MultiplayerLobby1 />} />
+                <Route path={PLAYER_ROUTES.INVITATIONS} element={<Invitations />} />
                 
-
                 {/* Admin Routes */}
                 {/* Categories */}
                 <Route path={ADMIN_ROUTES.CONTENT_MANAGEMENT} element={<GameContentManagement />} />

@@ -96,8 +96,6 @@ public class AuthService {
             .country(request.getCountry())
             .birthday(birthdate)
             .status(EStatus.REGISTERED)
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
             .build();
     
             User savedUser = userRepository.save(user);

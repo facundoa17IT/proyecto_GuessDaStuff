@@ -221,13 +221,13 @@ const GameMatchView = () => {
     const renderHintButton = () => (
         <div>
             <button
-            style={{width:'fit-content'}}
+                style={{ width: 'fit-content' }}
                 onClick={showNextHint}
                 disabled={!hintButtonEnabled}
             >
-                <span style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+                <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
 
-                <FaRegQuestionCircle style={{marginRight:"5px"}} name="help-outline" size={30} color={hintButtonEnabled ? "" : "gray"} />Ayuda
+                    <FaRegQuestionCircle style={{ marginRight: "5px" }} name="help-outline" size={30} color={hintButtonEnabled ? "" : "gray"} />Ayuda
                 </span>
             </button>
         </div>
@@ -277,7 +277,44 @@ const GameMatchView = () => {
         return (
             <>
                 <h2>Resumen de la partida</h2>
-                <p>Sin contenido actual</p>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Modos de Juego</th>
+                            <th>Categorías</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Modo 1</td>
+                            <td>Categoría 1</td>
+                        </tr>
+                        <tr>
+                            <td>Modo 2</td>
+                            <td>Categoría 2</td>
+                        </tr>
+                        <tr>
+                            <td>Modo 3</td>
+                            <td>Categoría 3</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Puntaje Total</th>
+                            <th>Duración Total</th>
+                            <th>Posición Ranking</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <button onClick={() => navigate("/")}>Menu Principal</button>
             </>
         );
@@ -311,6 +348,7 @@ const GameMatchView = () => {
                         onTimeUpdate={handleTimeUpdate}
                         onTimerComplete={handleNextGameMode}
                     />}
+                    <button onClick={handleNextGameMode}>Next Round</button>
                 </>
             }
         />

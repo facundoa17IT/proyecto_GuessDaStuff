@@ -24,7 +24,8 @@ import axiosInstance from '../utils/AxiosConfig';
 const HomePage = () => {
 	const { role } = useRole();
 
-	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+	//const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+	const isMobile = false;
 
 	const navigate = useNavigate();
 

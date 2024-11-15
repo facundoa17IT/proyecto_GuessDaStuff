@@ -2,18 +2,16 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-/** Socket **/
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
-
 /** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
 import CustomList from '../components/layouts/CustomList';
 import Modal from '../components/layouts/Modal';
+import WaitingLobby from '../components/layouts/WaitingLobby';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
-import {PLAYER_ROUTES} from "../utils/constants";
+import { PUBLIC_ROUTES } from '../utils/constants';
+import { invitationData, setInviteAction, setResponseIdGame } from '../utils/Helpers';
 
 /** Context API **/
 import { useRole } from '../contextAPI/AuthContext'
@@ -21,69 +19,85 @@ import { SocketContext } from '../contextAPI/SocketContext';
 import { ListContext } from '../contextAPI/ListContext';
 
 const MultiplayerLobby = () => {
-    const { users, isInvitationSended } = useContext(SocketContext);
+    const navigate = useNavigate();
+
+    const { users, client, invitation, setInvitation, invitationCollection } = useContext(SocketContext);
+
     const { selectedItem } = useContext(ListContext);
 
-    const getPlayerName = (player) => player;
+    const getPlayerName = (player) => player.username;
 
-    const [stompClient, setStompClient] = useState(null);
     const [gameId, setGameId] = useState('');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const [modalContent, setModalContent] = useState(null);
 
-    const { userId } = useRole();  // Access the setRole function from the context
-
+    // se puede usar el userObj de local storage
+    const { userId } = useRole();
     const username = localStorage.getItem("username");
 
-    const navigate = useNavigate();
-
     const [isHost, setIsHost] = useState(false);
-    // Se inicializa la conexion al socket
+
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
+    const [playerTag, setPlayerTag] = useState(null);
+
+    const [connectedUsers, setConnectedUsers] = useState(() => {
+        const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
+        return storedUsers || [];
+    });
+
+    //Se actualiza la lista cada vez que hay un cambio de usuario
     useEffect(() => {
-        // Initialize WebSocket connection and STOMP client
-        const client = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
+        setConnectedUsers(users);
+        filterSelfUsername();
+        console.log(users);
+    }, [users]);
 
-        client.connect({}, () => {
-            setStompClient(client);
-
-            // Subscribe to global notifications
-            client.subscribe('/topic/global', (message) => {
-                console.log("Global Update: " + message.body);
-            });
-        });
-
-        // Disconnect the client when the component is unmounted
-        return () => {
-            if (client) client.disconnect();
-        };
+    // Limpiamos el local storage de host y guest
+    useEffect(() => {
+        localStorage.removeItem("guest");
+        localStorage.removeItem("host");
+        filterSelfUsername();
     }, []);
 
+    // Remueve el propio host de la lista de usuarios conectados
+    const filterSelfUsername = () => {
+        const updatedList = connectedUsers.filter(item => item.username !== userObj.username);
+        setConnectedUsers(updatedList);
+    }
+
+    // se ejecuta cuando el guest acepta la partida
     // Se crea el game mediante socket
     const handleCreateGame = async () => {
         let idGame = '';
         const username = localStorage.getItem("username");
+
         if (userId && username) {
             try {
-                const response = await axiosInstance.post(`/game-multi/v1/create/${userId}`, { requiresAuth: true });
-                idGame = response.data;
-                setGameId(idGame);
-                console.log("Partida creada! -> " + `idGame: ${JSON.stringify(idGame, null, 2)}`);
-
                 const userHost = {
                     username: username,
                     userId: userId
                 };
 
-                const messageSocket = {
-                    userHost: userHost,
-                    idGame: idGame
+                const userGuest = {
+                    username: selectedItem.username,
+                    userId: selectedItem.id
                 };
+
+                const createGameBody = {
+                    userHost: userHost,
+                    userGuest: userGuest
+                };
+
+                const response = await axiosInstance.post('/game-multi/v1/create', createGameBody, { requiresAuth: true });
+                idGame = response.data;
+                setGameId(idGame);
+                console.log("Partida creada! -> " + `idGame: ${JSON.stringify(idGame, null, 2)}`);
 
                 console.log("Multiplayer Data -> " + JSON.stringify(messageSocket, null, 2));
 
-                stompClient.send("/app/game/create", {}, JSON.stringify(messageSocket));
+                client.current.send("/app/game/create", {}, JSON.stringify(messageSocket));
             } catch (error) {
                 console.error('Error obteniendo datos del juego:', error);
             }
@@ -93,113 +107,88 @@ const MultiplayerLobby = () => {
         }
     };
 
-    // Se llama la funcion una vez que se establecio la conexion con el socket
-    useEffect(() => {
-        if (stompClient) {
-            // Execute handleCreateGame after connection is established
-            handleCreateGame();
-        }
-    }, [stompClient]);
-
-    // Nos suscribimos al canal restante
-    useEffect(() => {
-        if (stompClient && gameId) {
-            // Subscribe to the dynamic game channel based on gameId
-            stompClient.subscribe(`/topic/game/${gameId}`, (message) => {
-                console.log("Game Update: " + message.body);
-            });
-
-            // Escuchar notificaciones de invitación
-            stompClient.subscribe("/game/invitations/" + username, (message) => {
-                console.log("invitacion enviada context");
-                const invitation = JSON.parse(message.body);
-                showInvitation(invitation);
-                console.log(invitation);
-            });
-
-            // Escuchar respuestas a las invitaciones
-            stompClient.subscribe("/game/invitations/responses/" + username, (message) => {
-                const response = JSON.parse(message.body);
-                console.log(response);
-                handleResponse(response);
-            });
-        }
-    }, [stompClient, gameId]);
-
-
-    useEffect(() => {
-        if (isInvitationSended) {
-            console.log("se mando la inivitacion");
-            isModalOpen(isInvitationSended);
-        }
-    }, [isInvitationSended]);
-
+    // 1)
     const handleLobbyListInteraction = (listId, buttonKey, item) => {
         if (listId === "lobbyList") {
-            if (item !== null && buttonKey === 'inviteBtn') {
-                sendInvitation(selectedItem);
+            if (Object.values(item).length > 0 && buttonKey === 'inviteBtn') {
+                sendInvitation(item.userId);
+                localStorage.setItem("guest", item.username);
+            }
+            else{
+                console.log(listId);
+                console.log(buttonKey);
+                console.log(item);
             }
         } else {
             console.log("Error list ID");
         }
     };
 
-    function showInvitation(invitation) {
-        setIsModalOpen(true);
-        setModalContent(
-            <>
-                <h1 style={{ color: "var(--link-color)" }}>{invitation.fromPlayerId}</h1>
-                <h2>Te ha invitado a jugar!</h2>
-            </>
-        );
-        localStorage.setItem("host", invitation.fromPlayerId);
-    }
-
-    function sendInvitation(recipient) {
-        const invitation = {
-            gameId: gameId,
-            fromPlayerId: username,
-            toPlayerId: recipient
-        };
-        // Enviar la invitación al canal del destinatario
-        stompClient.send(`/app/invite/${recipient}`, {}, JSON.stringify(invitation));
-        console.log(`Invitación enviada a ${recipient}`);
+    // 1.1)
+    // Enviar la invitación al canal del destinatario del guest
+    function sendInvitation(userIdGuest) {
+        setInviteAction(userObj.username, userId, userIdGuest, `${userObj.username} - Te ha invitado a jugar`);
+        client.current.send(`/topic/lobby/${userIdGuest}`, {}, JSON.stringify(invitationData));
         setIsHost(true);
     }
 
-    // solo si soy invitado
-    function respondToInvitation(accepted){
-        const host = localStorage.getItem("host");
-        const response = { host: host, guest: username, accepted: accepted };
-        stompClient.send("/app/respond", {}, JSON.stringify(response));
-        setIsModalOpen(false);
-        navigate(PLAYER_ROUTES.MULTIPLAYER_LOBBY);
-    }
+    // 2)
+    // Se gestiona que accion realizar dependiendo de la respuesta de la invitacion del socket
+    useEffect(() => {
+        if (invitation) {
+            handleInvitationInteraction(invitation);
+            console.log(invitation);
+        }
+    }, [invitation]);
 
-    // solo si soy host
-    function handleResponse(response) {
-        setIsModalOpen(true);
-        if (response.accepted) {
-            setModalContent(<>El usuario ha aceptado la invitacion!</>);
+    // 2.1)
+    const handleInvitationInteraction = (invitation) => {
+        if (invitation) {
+            console.log(invitation.action);
+            switch (invitation.action) {
+
+                case 'INVITE_RESPONSE':
+                    console.log("Se ha respondido a la invitacion!");
+                    handleResponse(invitation);
+                    break;
+
+                default:
+                    break;
+            }
         } else {
-            setModalContent(<>El usuario ha rechazado la invitacion!</>);
-            setIsHost(false);
+            console.error("Invalid Invitation");
+        }
+    };
+
+    // 3) solo guest si acepta (esto se gestiona en la vista de invitations)
+    // solo si soy host
+    // Enviar la respuesta al canal destinatario del guest
+    function handleResponse(invitation) {
+        if (invitation.accepted) {
+            setPlayerTag(localStorage.getItem("guest"));
+            setResponseIdGame(invitation.idGame, "Se ha enviado el id de la partida")
+            client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
+            client.current.subscribe(`/topic/game/${invitation.idGame}`);
+            setTimeout(() => {
+                navigate(PUBLIC_ROUTES.SELECTION_PHASE);
+            }, 3000); // 3000 ms para esperar 3 segundos adicionales
+        } else {
+            setIsModalOpen(true);
+            setModalContent(<p style={{ color: 'red' }}>El usuario ha rechazado la invitacion!</p>);
         }
     }
 
     const handleConfirm = () => {
         if (isHost) {
             setIsModalOpen(false);
-        } else {
-            respondToInvitation(true);
         }
     };
 
     const handleClose = () => {
         if (isHost) {
             setIsModalOpen(false);
-        } else {
-            respondToInvitation(false);
+            setIsHost(false);
+            localStorage.removeItem("host");
         }
     };
 
@@ -212,7 +201,7 @@ const MultiplayerLobby = () => {
                 middleContent={
                     <CustomList
                         listId={"lobbyList"}
-                        listContent={users}
+                        listContent={connectedUsers}
                         getItemLabel={getPlayerName}
                         buttons={['inviteBtn', 'infoBtn']}
                         onButtonInteraction={handleLobbyListInteraction}
@@ -220,7 +209,7 @@ const MultiplayerLobby = () => {
                 }
                 rightHeader='Sala de Espera'
                 rightContent={
-                    <><h2>{username}</h2></>
+                    <WaitingLobby onClick={null} isHost={isHost} user1={username} user2={playerTag} />
                 }
             />
 

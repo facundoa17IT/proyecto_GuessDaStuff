@@ -89,7 +89,6 @@ public class UserService {
 
         userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
         userEnt.setUrlPerfil(dtoEditUser.getUrlPerfil());
-        userEnt.setAtUpdate(LocalDate.now());
 
         userRepository.save(userEnt);
 
@@ -126,8 +125,6 @@ public class UserService {
             .status(EStatus.REGISTERED)
             .birthday(LocalDate.now()) // hardcoded
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
             .build();
 
         userRepository.save(userBuild);
@@ -172,7 +169,6 @@ public class UserService {
             User user = userOpt.get();
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setResetToken(null); // Limpia el token después de usarlo
-            user.setAtUpdate(LocalDate.now());
             userRepository.save(user);
             return "Token válido";
         } else {

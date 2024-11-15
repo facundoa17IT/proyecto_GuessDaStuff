@@ -49,24 +49,33 @@ export const Login = () => {
             // Store user Id
             const jwtUserId = decodedToken.userId;
             localStorage.setItem('userId', jwtUserId);
-            console.log('User logged -> ID: ', jwtUserId);
             setUserId(jwtUserId);
 
             // Get user role
             const role = decodedToken.role[0].authority;
             console.log('Role:', role);
-
             // Store user Role in Local Storage & AuthContext
             localStorage.setItem('role', role);
             setRole(role);
 
             // Get username
             const jwtUsername = decodedToken.sub;
-            console.log('jwt Username:', jwtUsername);
             localStorage.setItem('username', jwtUsername);
 
+            // Get email
+            const jwtUserEmail = decodedToken.email;
+            localStorage.setItem('email', jwtUserEmail);
+
             // Agrega el usuario a la lista de usuarios conectados usando socket 
-            connect(jwtUsername);
+            // creo el Dto en lugar del username y id
+            const dtoUserOnline = {
+                username: jwtUsername,
+                userId: jwtUserId,
+                email: jwtUserEmail
+            }
+            console.log(dtoUserOnline);
+            localStorage.setItem("userObj", JSON.stringify(dtoUserOnline));
+            connect(dtoUserOnline);
 
             // Redirect to home page
             navigate('/');

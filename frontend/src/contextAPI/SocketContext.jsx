@@ -1,64 +1,78 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import { Stomp } from '@stomp/stompjs';
 
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-    //const [username, setUsername] = useState('');
+    const [invitation, setInvitation] = useState(null);
     const [users, setUsers] = useState([]);
-    const [isInvitationSended, setIsInvitationSended] = useState(false);
+    const [invitationCount, setInvitationCount] = useState(0);
+    const [invitationCollection, setInvitationCollection] = useState([]);
 
-    const client = React.useRef(null);
+    const client = useRef(null);
 
-    const connect = (username) => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        
-        client.current = new Client({
-            webSocketFactory: () => socket,
-            onConnect: () => {
-                client.current.subscribe('/topic/lobby', message => {
-                    setUsers(JSON.parse(message.body)); // Actualizar usuarios conectados
-                });
-                client.current.publish({
-                    destination: '/app/join',
-                    body: username
-                });
-                // // Escuchar notificaciones de invitación
-                // client.current.subscribe("/game/invitations/" + username, (message) => {
-                //     console.log("invitacion enviada context");
-                //     const invitation = JSON.parse(message.body);
-                //     console.log(invitation);
-                //     setIsInvitationSended(true);
-                //     //showInvitation(invitation);
-                // });
+    useEffect(() => {
+        localStorage.setItem("connectedUsers", JSON.stringify(users));
+    }, [users]);
 
-                // // Escuchar respuestas a las invitaciones
-                // client.current.subscribe("/game/invitations/responses/" + username, (message) => {
-                //     const response = JSON.parse(message.body);
-                //     console.log(response);
-                //     //handleResponse(response);
-                // });
-            }
-        });
-        client.current.activate();
-    };
-    
-    const disconnect = (username) => {
-        if (client.current) {
-            client.current.publish({
-                destination: '/app/leave',
-                body: username
+    useEffect(() => {
+        if (invitationCollection.length > 0) {
+            console.log("Nueva invitación recibida!");
+            console.log(invitationCollection);
+        }
+    }, [invitationCollection]);
+
+    const connect = (dtoUserOnline) => {
+        client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
+
+        if (dtoUserOnline === null) {
+            console.error("DtoUserOnline NULL");
+            return;
+        }
+
+        client.current.connect({}, () => {
+            console.log("Usuario conectado!");
+
+            client.current.subscribe('/topic/lobby', (message) => {
+                console.log(message.body);
+                setUsers(JSON.parse(message.body));
             });
-            client.current.deactivate();
+
+            client.current.subscribe(`/topic/lobby/${dtoUserOnline.userId}`, (message) => {
+                const invitationBody = JSON.parse(message.body);
+                console.log(invitationBody);
+                setInvitation(invitationBody);
+            });
+
+            client.current.send('/app/join', {}, JSON.stringify(dtoUserOnline));
+        });
+    };
+
+    const disconnect = (dtoUserOnline) => {
+        if (client.current) {
+            console.log("Usuario desconectado!");
+            client.current.send('/app/leave', {}, JSON.stringify(dtoUserOnline));
+            client.current.disconnect();
         }
     };
 
     return (
-        <SocketContext.Provider value={{connect, disconnect, users, isInvitationSended}}>
+        <SocketContext.Provider
+            value={{
+                connect,
+                disconnect,
+                users,
+                invitation,
+                setInvitation,
+                client,
+                invitationCount,
+                setInvitationCount,
+                invitationCollection,
+                setInvitationCollection,
+            }}
+        >
             {children}
         </SocketContext.Provider>
     );
 };
-
-

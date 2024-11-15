@@ -7,12 +7,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import tec.proyecto.guessdastuff.entities.InfoGameMulti;
+import tec.proyecto.guessdastuff.entities.InfoGameMultiId;
 
 @Repository
-public interface InfoGameMultiRepository extends JpaRepository<InfoGameMulti, String> {
+public interface InfoGameMultiRepository extends JpaRepository<InfoGameMulti, InfoGameMultiId> {
     @Modifying
     @Transactional
-    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = ?2, d.points = ?3, d.timePlaying = ?4 WHERE d.id = ?1")
-    void updateDataGame(String idGameMulti, String idUserWin, int points, float timePlaying);
+    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = ?2, d.points = ?3, d.timePlaying = ?4 WHERE d.infoGameMultiId.id = ?1")
+    void updateDataGame(InfoGameMultiId infoGameMultiId, String idUserWin, int points, float timePlaying);
 
 }

@@ -1,5 +1,5 @@
 /** React **/
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 
 /** Style **/
 import '../../styles/custom-list.css'
@@ -93,6 +93,12 @@ const CustomList = ({
         onButtonInteraction?.(listId, buttonKey, item);
         console.log(`List ID: ${listId}, Button: ${buttonKey}, Item: ${JSON.stringify(item, null, 2)}`);
     };
+
+    // useEffect(() => {
+    //     if (setSelectedItem, setSelectedBtn, setSelectedListId) {
+    //         onButtonInteraction(setSelectedListId, setSelectedBtn, setSelectedItem);
+    //     }
+    // }, [setSelectedItem, setSelectedBtn, setSelectedListId]);
 
     return (
         <div className='list-wrapper' style={{ width: `${width}` }}>
