@@ -21,6 +21,10 @@ import SingleGameLobby from '../views/SingleGameLobby';
 import MultiplayerLobby from '../views/MultiplayerLobby';
 import MultiplayerLobby1 from '../views/MultiplayerLobby1';
 import Invitations from '../views/user/Invitations';
+import SlotMachineMulti from '../components/ui/SlotMachineMulti';
+import Ranking from '../views/user/Ranking';
+import Profile from '../views/user/Profile';
+
 
 /** Admin Views **/
 import GameContentManagement from '../views/admin/GameContentManagement';
@@ -68,6 +72,9 @@ function AppRouter() {
                 <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby1 />} />
                 <Route path="comunidad" element={<MultiplayerLobby1 />} />
                 <Route path={PLAYER_ROUTES.INVITATIONS} element={<Invitations />} />
+                <Route path={PLAYER_ROUTES.SLOT_MACHINE} element={<SlotMachineMulti />} />
+                <Route path={PLAYER_ROUTES.RANKING} element={<Ranking />} />
+                <Route path={PLAYER_ROUTES.PROFILE} element={<Profile />} />
                 
                 {/* Admin Routes */}
                 {/* Categories */}

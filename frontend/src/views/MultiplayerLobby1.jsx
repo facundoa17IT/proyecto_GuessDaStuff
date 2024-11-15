@@ -10,24 +10,24 @@ import WaitingLobby from '../components/layouts/WaitingLobby';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
-import { PUBLIC_ROUTES } from '../utils/constants';
+import { PLAYER_ROUTES } from '../utils/constants';
 import { invitationData, setInviteAction, setResponseIdGame } from '../utils/Helpers';
 
 /** Context API **/
 import { useRole } from '../contextAPI/AuthContext'
 import { SocketContext } from '../contextAPI/SocketContext';
 import { ListContext } from '../contextAPI/ListContext';
+import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
 const MultiplayerLobby = () => {
     const navigate = useNavigate();
 
-    const { users, client, invitation, setInvitation, invitationCollection } = useContext(SocketContext);
+    const { users, client, invitation, implementationGameBody, setImplementationGameBody, setUsernameHost, gameId, setGameId } = useContext(SocketContext);
 
     const { selectedItem } = useContext(ListContext);
+    const { loadGameData } = useContext(LoadGameContext);
 
     const getPlayerName = (player) => player.username;
-
-    const [gameId, setGameId] = useState('');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(null);
@@ -70,7 +70,6 @@ const MultiplayerLobby = () => {
     // se ejecuta cuando el guest acepta la partida
     // Se crea el game mediante socket
     const handleCreateGame = async () => {
-        let idGame = '';
         const username = localStorage.getItem("username");
 
         if (userId && username) {
@@ -90,14 +89,13 @@ const MultiplayerLobby = () => {
                     userGuest: userGuest
                 };
 
-                const response = await axiosInstance.post('/game-multi/v1/create', createGameBody, { requiresAuth: true });
-                idGame = response.data;
-                setGameId(idGame);
-                console.log("Partida creada! -> " + `idGame: ${JSON.stringify(idGame, null, 2)}`);
+                const response = await axiosInstance.post('/game-multi/v1/create/', createGameBody, { requiresAuth: true });
+                console.log(response.data);
+                console.log("Partida creada! -> " + `idGame: ${JSON.stringify(response.data, null, 2)}`);
 
-                console.log("Multiplayer Data -> " + JSON.stringify(messageSocket, null, 2));
+                setGameId(response.data);
 
-                client.current.send("/app/game/create", {}, JSON.stringify(messageSocket));
+                return response.data; // retorna gameId
             } catch (error) {
                 console.error('Error obteniendo datos del juego:', error);
             }
@@ -114,7 +112,7 @@ const MultiplayerLobby = () => {
                 sendInvitation(item.userId);
                 localStorage.setItem("guest", item.username);
             }
-            else{
+            else {
                 console.log(listId);
                 console.log(buttonKey);
                 console.log(item);
@@ -130,6 +128,7 @@ const MultiplayerLobby = () => {
         setInviteAction(userObj.username, userId, userIdGuest, `${userObj.username} - Te ha invitado a jugar`);
         client.current.send(`/topic/lobby/${userIdGuest}`, {}, JSON.stringify(invitationData));
         setIsHost(true);
+        setUsernameHost(userObj.username);
     }
 
     // 2)
@@ -163,20 +162,48 @@ const MultiplayerLobby = () => {
     // 3) solo guest si acepta (esto se gestiona en la vista de invitations)
     // solo si soy host
     // Enviar la respuesta al canal destinatario del guest
-    function handleResponse(invitation) {
+    const handleResponse = async (invitation) => {
         if (invitation.accepted) {
             setPlayerTag(localStorage.getItem("guest"));
-            setResponseIdGame(invitation.idGame, "Se ha enviado el id de la partida")
-            client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
-            client.current.subscribe(`/topic/game/${invitation.idGame}`);
-            setTimeout(() => {
-                navigate(PUBLIC_ROUTES.SELECTION_PHASE);
-            }, 3000); // 3000 ms para esperar 3 segundos adicionales
+            handleCreateGame(); // retorna y seta el gameId
         } else {
             setIsModalOpen(true);
             setModalContent(<p style={{ color: 'red' }}>El usuario ha rechazado la invitacion!</p>);
         }
     }
+
+    // Se ejecuta cuando obtengo el valor de gameId
+    useEffect(() => {
+        if(gameId !== null){
+            setResponseIdGame(gameId, "Se ha enviado el id de la partida");
+            client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
+            client.current.subscribe(`/game/${gameId}/`, (message) => {
+                const implementGame = JSON.parse(message.body);
+                console.log(implementGame);
+                setImplementationGameBody(implementGame);
+            });
+        }
+    }, [gameId]);
+
+    //Se actualiza la lista cada vez que hay un cambio de usuario
+    useEffect(() => {
+        if (implementationGameBody) {
+            if (implementationGameBody.status === "INVITE_RULETA") {
+                setTimeout(() => {
+                    navigate(PLAYER_ROUTES.SLOT_MACHINE, {
+                        state: {
+                            ruletaGame: implementationGameBody.ruletaGame,
+                            finalSlot1: implementationGameBody.finalSlot1,
+                            finalSlot2: implementationGameBody.finalSlot2,
+                            finalSlot3: implementationGameBody.finalSlot3,
+                            idGame: gameId
+                        }
+                    });
+                }, 3000); // 3000 ms para esperar 3 segundos adicionales
+            }
+        }
+    }, [implementationGameBody]);
+
 
     const handleConfirm = () => {
         if (isHost) {
@@ -191,6 +218,23 @@ const MultiplayerLobby = () => {
             localStorage.removeItem("host");
         }
     };
+
+    // Función para obtener un elemento aleatorio de un array
+    const getRandomItem = (array) => {
+        return array[Math.floor(Math.random() * array.length)];
+    };
+
+    const initGameHost = async () => {
+        try {
+            loadGameData.finalSlot1 = getRandomItem(loadGameData.categories[0].gameModes);
+            loadGameData.finalSlot2 = getRandomItem(loadGameData.categories[1].gameModes);
+            loadGameData.finalSlot3 = getRandomItem(loadGameData.categories[2].gameModes);
+            console.log(loadGameData);
+            axiosInstance.post(`/game-multi/game/${gameId}/load-game/`, loadGameData, { requiresAuth: false })
+        } catch (error) {
+            console.error('Error con load game:', error);
+        }
+    }
 
     return (
         <>
@@ -209,7 +253,7 @@ const MultiplayerLobby = () => {
                 }
                 rightHeader='Sala de Espera'
                 rightContent={
-                    <WaitingLobby onClick={null} isHost={isHost} user1={username} user2={playerTag} />
+                    <WaitingLobby onClick={initGameHost} isHost={isHost} user1={username} user2={playerTag} />
                 }
             />
 

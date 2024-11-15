@@ -9,8 +9,8 @@ import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
-    const { answer, setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
+const MultipleChoice = ({ MCinfo, onCorrect }) => {
+    const { setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
@@ -25,23 +25,15 @@ const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
         setAnswer('');
     }, [MCinfo]);
 
-    // IsCorrectAnswer recibe el valor de true o false desde el padre
-    useEffect(() => {
-        if (isCorrectAnswer !== null) {
-            console.log("IS CORRECT ANSWER -> " + isCorrectAnswer);
-            handleCheckAnswer(selectedAnswer);
-        }
-    }, [isCorrectAnswer]);
-
     const allOptions = [randomCorrectWord, randomWord1, randomWord2, randomWord3];
 
     const handleCheckAnswer = async (selectedAnswer) => {
-        if (!MCinfo.randomCorrectWord) {
+        if (!randomCorrectWord) {
             setResultMessage("Este juego aún no fue implementado.");
             return;
         }
         try {
-            if (isCorrectAnswer) {
+            if (confirmedAnswer === randomCorrectWord) {
                 setResultMessage("¡Correcto!");
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 onCorrect(); // Llama a la función que maneja la respuesta correcta
@@ -57,8 +49,8 @@ const MultipleChoice = ({ MCinfo, veryfyAnswer, onCorrect }) => {
 
     const confirmAnswer = () => {
         if (selectedAnswer) {
-            setAnswer(selectedAnswer);
             setConfirmedAnswer(selectedAnswer); // Confirma la respuesta seleccionada
+            handleCheckAnswer(selectedAnswer);
         }
     };
 

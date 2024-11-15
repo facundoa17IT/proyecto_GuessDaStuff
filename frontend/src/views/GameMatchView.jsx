@@ -19,12 +19,15 @@ import axiosInstance from '../utils/AxiosConfig';
 /** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 import { useRole } from '../contextAPI/AuthContext'
+import { SocketContext } from '../contextAPI/SocketContext';
 
 const GameMatchView = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle, setIsCorrectAnswer, answer } = useContext(LoadGameContext);
+    const { implementationGameBody,gameId } = useContext(SocketContext);
+
+    const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -49,11 +52,11 @@ const GameMatchView = () => {
     }, []);
 
     useEffect(() => {
-        if (answer) {
+        if (isCorrectAnswer) {
             console.log("Answer -> " + answer);
             sendAnswerData(answer);
         }
-    }, [answer]);
+    }, [isCorrectAnswer]);
 
     useEffect(() => {
         setCharacterDialogue(hints[currentHintIndex]);
@@ -72,23 +75,45 @@ const GameMatchView = () => {
         }
     }, [initGameModes]);
 
+    //Obtengo todos los datos necesario para inicar la partida multiplayer
+    useEffect(() => {
+        if (implementationGameBody) {
+            if (implementationGameBody.status === "INVITE_IMPLEMENTATION") {
+                setInitGameModes(implementationGameBody.implementGame.gameModes);
+                setIdGameSingle(implementationGameBody.implementGame.idGameSingle);
+            }
+            else if (implementationGameBody.status === "FINISH_ROUND"){
+                // si es is_win = true hay un ganador y viene en la var idUserWin
+                // si soy el ganador o perdedor muestro el resultado y paso a la sigiente ronda
+                //handleNextGameMode();
+                console.log("FINISH ROUND!");
+            }
+        }
+    }, [implementationGameBody]);
+
     // Actualizamos el contenido del juego cada vez que cambie el índice
     useEffect(() => {
-        setGameContent(renderGame());
-        if (currentGameIndex === 0) setIsGameReady(true); // Se inicia el timer cuando el se asigna el index 0
+       console.log(isMultiplayer);
+    }, []);
+
+    // Actualizamos el contenido del juego cada vez que cambie el índice
+    useEffect(() => {
+        if (currentGameIndex >= 0) {
+            setGameContent(renderGame());
+        }
     }, [currentGameIndex]);
 
     useEffect(() => {
         // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
         if (gameContent) {
-            setIsGameReady(true);
+            if (currentGameIndex === 0) setIsGameReady(true); // Se inicia el timer cuando el se asigna el index 0
         }
     }, [gameContent]);
 
     useEffect(() => {
         // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
         if (isGameReady) {
-            setCurrentGameIndex(0);
+            //setCurrentGameIndex(0);
             defaultCharacterDialogue();
             console.log("Inicia el juego!");
         }
@@ -98,7 +123,9 @@ const GameMatchView = () => {
         setCharacterDialogue("Puedo darte una pista!");
     }
 
-    const sendAnswer = async (idGameSingle, userId, answer, gameId, time) => {
+    // Guarda en la BD el ganador
+    // le avisa a los demas usuarios que el juego termino
+    const sendAnswer = async (idGameSingle, userId, answer, gameModeId, time) => {
         try {
             // Log de cada parámetro para depuración
             console.log("idGameSingle:", idGameSingle);
@@ -108,20 +135,33 @@ const GameMatchView = () => {
             console.log("time:", time);
 
             // Realiza la solicitud POST con axios
-            const response = await axiosInstance.post("/game-single/v1/play-game", {
-                idGameSingle: idGameSingle,
-                idUser: userId,
-                response: answer,
-                idGame: gameId,
+            await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
+                idUserWin: userId,
+                idGameMulti: gameId, // socket
+                idGame: gameModeId, // game mode
                 time_playing: time
             });
 
-            // Log de la respuesta de la solicitud
-            console.log("response:", response.data);
-
-            // Se define si la respuesta es correcta o no (true o false)
-            setIsCorrectAnswer(response.data);
-            return response.data;
+            // if (isMultiplayer) {
+            //     axiosInstance.post(`/game-multi/game/${idGame}/start/`, dtoinitGameMultiRequest, { requiresAuth: true })
+            //     // Realiza la solicitud POST con axios
+            //     await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
+            //         idUserWin: userId,
+            //         idGameMulti: gameId, // socket
+            //         idGame: gameModeId, // game mode
+            //         time_playing: time
+            //     });
+            // } 
+            // else {
+            //     // Realiza la solicitud POST con axios
+            //     await axiosInstance.post("/game-single/v1/play-game", {
+            //         idGameSingle: idGameSingle,
+            //         idUser: userId,
+            //         response: answer,
+            //         idGame: gameModeId,
+            //         time_playing: time
+            //     });
+            // }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -133,7 +173,7 @@ const GameMatchView = () => {
             const currentGameKey = gameKeys[currentGameIndex];
             const gameInfo = initGameModes[currentGameKey].infoGame[0];
             const { id } = gameInfo;
-            await sendAnswer(idGameSingle, userId, answer, id, elapsedTime); // time hardcoded
+            await sendAnswer(idGameSingle, userId, answer, id, elapsedTime);
         } catch (error) {
             console.log("Error", error);
         }

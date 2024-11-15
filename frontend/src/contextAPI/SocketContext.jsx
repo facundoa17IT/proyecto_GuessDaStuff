@@ -9,6 +9,9 @@ export const SocketProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [invitationCount, setInvitationCount] = useState(0);
     const [invitationCollection, setInvitationCollection] = useState([]);
+    const [implementationGameBody, setImplementationGameBody] = useState(null);
+    const [usernameHost, setUsernameHost] = useState(null);
+    const [gameId, setGameId] = useState(null);
 
     const client = useRef(null);
 
@@ -22,6 +25,8 @@ export const SocketProvider = ({ children }) => {
             console.log(invitationCollection);
         }
     }, [invitationCollection]);
+
+    
 
     const connect = (dtoUserOnline) => {
         client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
@@ -63,13 +68,13 @@ export const SocketProvider = ({ children }) => {
                 connect,
                 disconnect,
                 users,
-                invitation,
-                setInvitation,
+                invitation, setInvitation,
                 client,
-                invitationCount,
-                setInvitationCount,
-                invitationCollection,
-                setInvitationCollection,
+                invitationCount, setInvitationCount,
+                invitationCollection, setInvitationCollection,
+                implementationGameBody, setImplementationGameBody,
+                usernameHost, setUsernameHost,
+                gameId, setGameId
             }}
         >
             {children}

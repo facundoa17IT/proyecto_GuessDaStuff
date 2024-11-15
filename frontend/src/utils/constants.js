@@ -49,5 +49,8 @@ export const PLAYER_ROUTES = {
     PROFILE: "profile",
     GAME_LOBBY: "game-lobby",
     MULTIPLAYER_LOBBY: '/multiplayer-lobby',
-    INVITATIONS: '/invitations'
+    INVITATIONS: '/invitations',
+    SLOT_MACHINE: '/slot-machine-multi',
+    RANKING: '/ranking',
+    PROFILE: '/profile'
 }

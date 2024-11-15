@@ -8,7 +8,7 @@ import MainGameLayout from '../../components/layouts/MainGamelayout'
 
 /** Utils **/
 import { invitationData, setInviteResponse } from '../../utils/Helpers';
-import { PUBLIC_ROUTES } from '../../utils/constants';
+import { PLAYER_ROUTES } from '../../utils/constants';
 
 /** Context API **/
 import { SocketContext } from '../../contextAPI/SocketContext';
@@ -21,12 +21,12 @@ const Invitations = () => {
 
 
     /** Invitations List**/
-    const { client, invitation, setInvitation, invitationCollection, setInvitationCollection, invitationCount, setInvitationCount } = useContext(SocketContext);
+    const { client, invitation, setInvitation, invitationCollection, setInvitationCollection, invitationCount, setInvitationCount, implementationGameBody, setImplementationGameBody } = useContext(SocketContext);
 
     const getPlayerName = (player) => player.message;
 
     const handleInvitationListInteraction = (listId, buttonKey, item) => {
-        if (listId === "invitationsList" && Object.values(item).length > 0 ) {
+        if (listId === "invitationsList" && Object.values(item).length > 0) {
             console.log("Invitations List Interaction");
             switch (buttonKey) {
                 case 'acceptBtn':
@@ -60,36 +60,51 @@ const Invitations = () => {
         // Filtra el array para excluir el elemento en el índice dado
         const updatedList = invitationCollection.filter(item => item.userIdHost !== userIdHost);
         setInvitationCollection(updatedList);
-      };
+    };
 
     // 2.1)
     const handleInvitationInteraction = (invitation) => {
         if (invitation) {
             console.log(invitation.action);
-            switch (invitation.action) {
-
-                case 'RESPONSE_IDGAME':
-                    console.log("Se iniciara la partida!");
-                    client.current.subscribe(`/topic/game/${invitation.idGame}`);        
-                    setTimeout(() => {
-                        navigate(PUBLIC_ROUTES.SELECTION_PHASE);
-                    }, 3000); // 3000 ms para esperar 3 segundos adicionales
-                    break;
-
-                default:
-                    console.warn("Invitation Action type not recognized:", invitation.action);
+            if (invitation.action === 'RESPONSE_IDGAME') {
+                client.current.subscribe(`/game/${invitation.gameId}/`, (message) => {
+                    const implementGame = JSON.parse(message.body);
+                    console.log(implementGame);
+                    setImplementationGameBody(implementGame);
+                });
+            } else {
+                console.warn("Invitation Action type not recognized:", invitation.action);
             }
         } else {
             console.error("Invalid Invitation");
         }
     };
 
+    // 2.2)
+    useEffect(() => {
+        if (implementationGameBody) {
+            if (implementationGameBody.status === "INVITE_RULETA") {
+                setTimeout(() => {
+                    navigate(PLAYER_ROUTES.SLOT_MACHINE, {
+                        state: {
+                            ruletaGame: implementationGameBody.ruletaGame,
+                            finalSlot1: implementationGameBody.finalSlot1,
+                            finalSlot2: implementationGameBody.finalSlot2,
+                            finalSlot3: implementationGameBody.finalSlot3,
+                            idGame: invitation.gameId // Agrega el `idGame` también
+                        }
+                    });
+                }, 3000); // Espera 3 segundos adicionales para navegar
+            }
+        }
+    }, [implementationGameBody]);
+
     function respondToInvitation(response, invitation) {
         // selectedItem = invitation
         setInviteResponse(response, invitation.usernameGuest, invitation.userIdGuest, response ? "Ha aceptado la invitacion" : "Ha rechazado la invitacion");
-        client.current.send(`/topic/lobby/${selectedItem.userIdHost}`, {}, JSON.stringify(invitationData));
+        client.current.send(`/topic/lobby/${invitation.userIdHost}`, {}, JSON.stringify(invitationData));
         setInvitationCount(invitationCount - 1);
-        removeInvitation(selectedItem.userIdHost);
+        removeInvitation(invitation.userIdHost);
         setInvitation(null);
         // if(response){
         //     setPlayerTag(localStorage.getItem("host"));
@@ -106,7 +121,7 @@ const Invitations = () => {
                     listId={"invitationsList"}
                     listContent={invitationCollection}
                     getItemLabel={getPlayerName}
-                    buttons={['infoBtn', 'acceptBtn', 'cancelBtn']}
+                    buttons={['acceptBtn', 'cancelBtn']}
                     onButtonInteraction={handleInvitationListInteraction}
                 />
             }

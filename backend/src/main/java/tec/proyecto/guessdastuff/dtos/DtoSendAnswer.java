@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DtoSendAnswer {
-
     private String idUserWin;
     // ID de la tabla InfoGameMulti
     private String idGameMulti;

@@ -2,10 +2,12 @@ import { React, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/AxiosConfig';
 import Modal from '../components/layouts/Modal';
+
+/** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
 const StartGame = () => {
-    const { setLoadGameData, selectedCategories, setSelectedCategories } = useContext(LoadGameContext);
+    const { setLoadGameData, selectedCategories, setSelectedCategories, setIsMultiplayer, isMultiplayer} = useContext(LoadGameContext);
     // Load Stored Cateogries From DB
     const [categories, setCategories] = useState([]);
 
@@ -32,7 +34,6 @@ const StartGame = () => {
 
     const handleGameTypeChange = (event) => {
         setSelectedGameMode(event.target.value);
-        console.log(event.target.value);
     };
 
     const fetchActiveCategories = async () => {
@@ -51,7 +52,21 @@ const StartGame = () => {
     useEffect(() => {
         fetchActiveCategories();
     }, []);
-    
+
+    useEffect(() => {
+        console.log(selectedGameMode);
+        if(selectedGameMode == "Single"){
+            setIsMultiplayer(false);
+        }
+        else if (selectedGameMode == "Multi"){
+            setIsMultiplayer(true);
+        }
+    }, [selectedGameMode]);
+
+
+    useEffect(() => {
+        console.log(isMultiplayer);
+    }, [isMultiplayer]);
 
     const handleConfirm = async () => {
         if (selectedCategories.length < 3) {
@@ -67,8 +82,10 @@ const StartGame = () => {
                 modeGame: selectedGameMode
             }, { requiresAuth: true });
     
-            setLoadGameData(response.data.categories);
-            console.log('Response:', response.data.categories);
+            //setLoadGameData(response.data.categories);
+            setLoadGameData(response.data);
+            console.log('Response:', response.data);
+
             if(selectedGameMode == "Single"){
                 navigate('/selection-phase');
             }

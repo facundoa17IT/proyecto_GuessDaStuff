@@ -50,6 +50,7 @@ const Navbar = () => {
                     setInvitationCount(invitationCount + 1);
                     setInvitationCollection([...invitationCollection, invitation]);
                     setInvitation(null);
+                    alert("Has recibido una nueva invitacion!");
                     break;
 
                 default:
@@ -82,7 +83,7 @@ const Navbar = () => {
                             {role === 'ROLE_USER' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to={PLAYER_ROUTES.RANKING} className="nav-links">
                                             <FaRankingStar style={{ marginRight: '5px' }} />Ranking
                                         </Link>
                                     </li>
@@ -97,7 +98,7 @@ const Navbar = () => {
                                         </Link>
                                     </li> */}
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to={PLAYER_ROUTES.PROFILE} className="nav-links">
                                             <FaUserCircle style={{ marginRight: '5px' }} />Perfil - <span style={{ marginLeft: '5px' }}>{userObj.username}</span>
                                         </Link>
                                     </li>

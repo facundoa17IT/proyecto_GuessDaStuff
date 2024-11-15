@@ -7,6 +7,7 @@ export const LoadGameProvider = ({ children }) => {
     const [loadGameData, setLoadGameData] = useState({}); // Load Game Response Data
     const [initGameModes, setInitGameModes] = useState({}); // Init Game Response Data
     const [idGameSingle, setIdGameSingle] = useState({}); // Id Game Single
+    const [isMultiplayer, setIsMultiplayer] = useState(null);
 
     const [answer, setAnswer] = useState('');
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(null);
@@ -18,7 +19,8 @@ export const LoadGameProvider = ({ children }) => {
             initGameModes,setInitGameModes,
             idGameSingle,setIdGameSingle,
             isCorrectAnswer, setIsCorrectAnswer,
-            answer, setAnswer
+            answer, setAnswer,
+            isMultiplayer, setIsMultiplayer
         }}>
             {children}
         </LoadGameContext.Provider>
