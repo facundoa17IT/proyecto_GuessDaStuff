@@ -128,7 +128,7 @@ public class AuthServiceTest {
                 .thenReturn(null); // Mock authenticate call
         when(userRepository.findByUsername("testuser"))
                 .thenReturn(Optional.of(testUser));
-        when(jwtService.getTokenv2(anyMap(), any(UserDetails.class)))
+        when(jwtService.generateTokenWithClaims(anyMap(), any(UserDetails.class)))
                 .thenReturn("sampleToken");
 
         DtoAuthResponse response = authService.login(loginRequest);

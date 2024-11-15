@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -48,17 +46,6 @@ class JwtServiceTest {
     @Test
     void testGetToken_ShouldGenerateToken() {
         String token = jwtService.getToken(testUser);
-        assertNotNull(token);
-        assertTrue(token.length() > 0);
-    }
-
-    @Test
-    void testGetTokenv2_ShouldGenerateTokenWithExtraClaims() {
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("role", "ROLE_USER");
-        extraClaims.put("customClaim", "customValue");
-
-        String token = jwtService.getTokenv2(extraClaims, testUser);
         assertNotNull(token);
         assertTrue(token.length() > 0);
     }

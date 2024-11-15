@@ -6,25 +6,22 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import tec.proyecto.guessdastuff.dtos.DtoCategory;
 import tec.proyecto.guessdastuff.dtos.DtoCategoryRequest;
 import tec.proyecto.guessdastuff.enums.ECategoryStatus;
-import tec.proyecto.guessdastuff.exceptions.CategoryException;
 import tec.proyecto.guessdastuff.services.CategoryService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import tec.proyecto.guessdastuff.controllers.CategoryController;
+import tec.proyecto.guessdastuff.entities.Category;
+
+import java.util.List;
 
 @WebMvcTest(CategoryController.class)
 class CategoryControllerTest {
@@ -42,9 +39,12 @@ class CategoryControllerTest {
     void addCategory_Success() throws Exception {
         DtoCategory dtoCategory = new DtoCategory("New Category", "Description", "URL", ECategoryStatus.EMPTY);
 
-        // Mock the service call to return a ResponseEntity containing the success message
-        when(categoryService.addCategory(dtoCategory))
-                .thenReturn(ResponseEntity.ok("Categoria con id 1 creada correctamente"));
+        // Use doAnswer to simulate method behavior without needing thenReturn
+        doAnswer(invocation -> {
+            DtoCategory argument = invocation.getArgument(0);
+            // Simulate success response from service method
+            return ResponseEntity.ok("Categoria con id 1 creada correctamente");
+        }).when(categoryService).addCategory(any(DtoCategory.class));
 
         // Perform the mock HTTP POST request
         mockMvc.perform(post("/api/v1/categories")
@@ -52,34 +52,57 @@ class CategoryControllerTest {
                 .content(objectMapper.writeValueAsString(dtoCategory)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Categoria con id 1 creada correctamente"));
+
+        // Verify that the service was called once
+        verify(categoryService, times(1)).addCategory(any(DtoCategory.class));
     }
-
-
-
-
 
     @Test
     void getCategoryByName_Success() throws Exception {
-        DtoCategory dtoCategory = new DtoCategory("Test Category", "Description", "URL", ECategoryStatus.INITIALIZED);
-
-        when(categoryService.getCategoryByName("Test Category")).thenReturn(dtoCategory);
-
+        // Create a Category object (not DtoCategory)
+        Category category = new Category();
+        category.setName("Test Category");
+        category.setDescription("Description");
+        category.setUrlIcon("URL");
+        category.setStatus(ECategoryStatus.INITIALIZED);
+    
+        // Mock the service to return a Category object
+        when(categoryService.getCategoryByName("Test Category"))
+                .thenReturn(category);
+    
         mockMvc.perform(get("/api/v1/categories/Test Category"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test Category"));
+    
+        verify(categoryService, times(1)).getCategoryByName("Test Category");
     }
-
+    
     @Test
     void getAllCategories_Success() throws Exception {
-        DtoCategory category1 = new DtoCategory("Category1", "Description1", "URL1", ECategoryStatus.INITIALIZED);
-        DtoCategory category2 = new DtoCategory("Category2", "Description2", "URL2", ECategoryStatus.INITIALIZED);
-
-        when(categoryService.getAllCategories()).thenReturn(List.of(category1, category2));
-
+        // Create Category objects for the response
+        Category category1 = new Category();
+        category1.setName("Category1");
+        category1.setDescription("Description1");
+        category1.setUrlIcon("URL1");
+        category1.setStatus(ECategoryStatus.INITIALIZED);
+    
+        Category category2 = new Category();
+        category2.setName("Category2");
+        category2.setDescription("Description2");
+        category2.setUrlIcon("URL2");
+        category2.setStatus(ECategoryStatus.INITIALIZED);
+    
+        // Mock the service to return a list of Category objects
+        when(categoryService.getAllCategories())
+                .thenReturn(List.of(category1, category2));
+    
         mockMvc.perform(get("/api/v1/categories"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2));
+    
+        verify(categoryService, times(1)).getAllCategories();
     }
+    
 
     @Test
     void editCategory_Success() throws Exception {
@@ -87,23 +110,31 @@ class CategoryControllerTest {
         dtoCategoryRequest.setDescription("Updated description");
         dtoCategoryRequest.setUrlIcon("Updated URL");
 
-        when(categoryService.editCategory(eq("Existing Category"), any(DtoCategoryRequest.class)))
-                .thenReturn("La categoria Existing Category ha sido editada correctamente!");
+        doAnswer(invocation -> {
+            // Simulate success response
+            return ResponseEntity.ok("La categoria Existing Category ha sido editada correctamente!");
+        }).when(categoryService).editCategory(eq("Existing Category"), any(DtoCategoryRequest.class));
 
         mockMvc.perform(put("/api/v1/categories/edit/Existing Category")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dtoCategoryRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("La categoria Existing Category ha sido editada correctamente!"));
+
+        verify(categoryService, times(1)).editCategory(eq("Existing Category"), any(DtoCategoryRequest.class));
     }
 
     @Test
     void deleteCategory_Success() throws Exception {
-        when(categoryService.deleteCategory("Delete Category"))
-                .thenReturn("La categoria Delete Category ha sido eliminada de forma exitosa!");
+        doAnswer(invocation -> {
+            // Simulate success response
+            return ResponseEntity.ok("La categoria Delete Category ha sido eliminada de forma exitosa!");
+        }).when(categoryService).deleteCategory("Delete Category");
 
         mockMvc.perform(put("/api/v1/categories/delete/Delete Category"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("La categoria Delete Category ha sido eliminada de forma exitosa!"));
+
+        verify(categoryService, times(1)).deleteCategory("Delete Category");
     }
 }

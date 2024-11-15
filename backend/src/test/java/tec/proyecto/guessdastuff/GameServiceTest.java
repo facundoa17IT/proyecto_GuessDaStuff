@@ -126,9 +126,9 @@ public class GameServiceTest {
         DtoOrderWord dto = new DtoOrderWord("OW", 1L, "WORD", "Hint1", "Hint2", "Hint3");
 
          // Cambiar el nombre del modo de juego a "OW" para este test
-         Field gameModeNameField = GameMode.class.getDeclaredField("name");
-         gameModeNameField.setAccessible(true);
-         gameModeNameField.set(testGameMode, "OW");
+         GameMode testGameMode = new GameMode();
+        testGameMode.setName("OW"); // Assuming a setter exists
+
 
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
     when(gameModeRepository.findByName("OW")).thenReturn(Optional.of(testGameMode));
