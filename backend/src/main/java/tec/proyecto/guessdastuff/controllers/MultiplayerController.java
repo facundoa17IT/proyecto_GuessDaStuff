@@ -1,11 +1,6 @@
 package tec.proyecto.guessdastuff.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
 import tec.proyecto.guessdastuff.dtos.DtoCreateMultiGameRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
-import tec.proyecto.guessdastuff.dtos.DtoLoadGameRequest;
 import tec.proyecto.guessdastuff.dtos.DtoLoadGameResponse;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswer;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswerResponse;

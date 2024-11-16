@@ -20,7 +20,6 @@ import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse.GameModeInfo;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswer;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswerResponse;
 import tec.proyecto.guessdastuff.entities.DataGameMulti;
-import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
 import tec.proyecto.guessdastuff.entities.InfoGameMulti;
 import tec.proyecto.guessdastuff.entities.InfoGameMultiId;

@@ -1,6 +1,7 @@
 package tec.proyecto.guessdastuff.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.GameConverter;
+import tec.proyecto.guessdastuff.dtos.DtoAllGames;
+import tec.proyecto.guessdastuff.dtos.DtoGamesOfPlayer;
+import tec.proyecto.guessdastuff.dtos.DtoGamesOfPlayerResponse;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
 import tec.proyecto.guessdastuff.dtos.DtoListTitlesResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoadPlaygameResponse;
@@ -35,6 +39,7 @@ import tec.proyecto.guessdastuff.enums.ECategoryStatus;
 import tec.proyecto.guessdastuff.enums.EGameMode;
 import tec.proyecto.guessdastuff.exceptions.GameModeException;
 import tec.proyecto.guessdastuff.repositories.CategoryRepository;
+import tec.proyecto.guessdastuff.repositories.DataGameMultiRepository;
 import tec.proyecto.guessdastuff.repositories.DataGameSingleRepository;
 import tec.proyecto.guessdastuff.repositories.GameModeRepository;
 import tec.proyecto.guessdastuff.repositories.GameRepository;
@@ -53,6 +58,9 @@ public class GameService {
 
     @Autowired
     DataGameSingleRepository dataGameSingleRepository;
+
+    @Autowired
+    DataGameMultiRepository dataGameMultiRepository;
 
     @Autowired
     DateConverter dateConverter;
@@ -82,6 +90,7 @@ public class GameService {
 
         return new DtoListTitlesResponse(titlesMap);
 }
+   
     public DtoLoadPlaygameResponse listPlayGames() throws GameModeException {
         List<DataGameSingle> result = dataGameSingleRepository.findAll();
         if (result.isEmpty()) {
@@ -101,6 +110,68 @@ public class GameService {
         return new DtoLoadPlaygameResponse(response);
     }
 
+    public Map<String, List<DtoAllGames>> listAllGames(){
+        // Ejecutar las consultas
+        List<Object[]> singleGames = dataGameSingleRepository.findAllSingleGames();
+        List<Object[]> multiplayerGames = dataGameMultiRepository.findAllMultiplayerGames();
+
+        // Combinar y transformar los resultados
+        List<DtoAllGames> allGames = new ArrayList<>();
+        allGames.addAll(mapResults(singleGames));
+        allGames.addAll(mapResults(multiplayerGames));
+
+        // Agrupar por isFinish
+        return allGames.stream()
+                .collect(Collectors.groupingBy(game -> game.isFinish() ? "Finalizadas" : "Activas"));
+    }
+
+    public DtoGamesOfPlayerResponse listGamesOfPlayer(String idUser){
+        
+        List<DtoGamesOfPlayer> individualGames = mapToDto(dataGameSingleRepository.findIndividualGamesOfPlayer(idUser));
+        List<DtoGamesOfPlayer> multiplayerGames = mapToDto(dataGameMultiRepository.findMultiplayerGamesOfPlayer(idUser));
+
+        Map<String, List<DtoGamesOfPlayer>> partidas = new HashMap<>();
+        partidas.put("INDIVIDUAL", individualGames);
+        partidas.put("MULTIPLAYER", multiplayerGames);
+
+        DtoGamesOfPlayerResponse partidasResponse = new DtoGamesOfPlayerResponse(partidas);
+        return partidasResponse;
+
+
+    }
+
+    private List<DtoGamesOfPlayer> mapToDto(List<Object[]> rows) {
+        List<DtoGamesOfPlayer> dtos = new ArrayList<>();
+        for (Object[] row : rows) {
+            dtos.add(new DtoGamesOfPlayer(
+                (String) row[0],              // id_game
+                (String) row[1],              // game1
+                (String) row[2],              // game2
+                (String) row[3],              // game3
+                (Integer) row[4],             // points
+                ((Number) row[5]).floatValue(), // time_playing
+                (String) row[6]               // user_win
+            ));
+        }
+        return dtos;
+    }
+
+    private List<DtoAllGames> mapResults(List<Object[]> results) {
+        return results.stream().map(row -> {
+            DtoAllGames dto = new DtoAllGames();
+            dto.setId_game((String) row[0]);
+            dto.setUser((String) row[1]);
+            dto.setUser2((String) row[2]);
+            dto.setUserWin((String) row[3]);
+            dto.setGame1((String) row[4]);
+            dto.setGame2((String) row[5]);
+            dto.setGame3((String) row[6]);
+            dto.setFinish(row[7] != null && Boolean.parseBoolean(row[7].toString()));
+            dto.setPoints(row[8] != null ? Integer.parseInt(row[8].toString()) : null);
+            dto.setTime_playing(row[9] != null ? Float.parseFloat(row[9].toString()) : 0);
+            return dto;
+        }).toList();
+    }
 
     /***** INDIVIDUAL *****/
     public ResponseEntity<?> createMCIndividual (DtoMultipleChoice dtoMultipleChoice) throws GameModeException{
@@ -202,7 +273,7 @@ public class GameService {
                 rows.next(); // Esto avanza a la segunda fila, saltando la primera
             }
             
-            int rowIndex = 2; // Para contar las filas (empieza en 2 porque se saltó la primera)
+            //int rowIndex = 2; // Para contar las filas (empieza en 2 porque se saltó la primera)
             
             while(rows.hasNext()){
                 Row currentRow = rows.next();
@@ -252,7 +323,7 @@ public class GameService {
                 }
                 
                 gameRepository.save(multipleChoice);
-                rowIndex++;
+                //rowIndex++;
             }
         }
         return ResponseEntity.ok("Se cargaron correctamente los eventos para la categoria " + categoryEntidad.getName() + " y modo de juego " + gameModeEnt.getName());

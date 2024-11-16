@@ -1,5 +1,7 @@
 package tec.proyecto.guessdastuff.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUserRequest;
+import tec.proyecto.guessdastuff.services.GameService;
 import tec.proyecto.guessdastuff.services.UserService;
 
 @RestController
@@ -18,6 +21,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    GameService gameService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/v1")
@@ -36,6 +42,16 @@ public class UserController {
             return ResponseEntity.ok(userService.listActiveUsers());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/v1/gamesOfPlayer/{idUser}")
+    public ResponseEntity<?> listGamesOfPlayer(@PathVariable String idUser){
+        try {
+            return ResponseEntity.ok(gameService.listGamesOfPlayer(idUser));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
         }
     }
 
