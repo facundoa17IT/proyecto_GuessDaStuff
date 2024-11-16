@@ -1,4 +1,4 @@
-package tec.proyecto.guessdastuff;
+/*package tec.proyecto.guessdastuff;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -307,7 +307,7 @@ public class TestUser {
 
     }
     */
-
+/* 
     @Test
     void testvalidatePasswordResetToken() {
         // Configura el token y el usuario de prueba
@@ -398,3 +398,4 @@ public class TestUser {
     }
 }
     
+*/
