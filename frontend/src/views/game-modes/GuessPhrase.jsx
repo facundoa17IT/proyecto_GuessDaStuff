@@ -48,7 +48,7 @@ const GuessPhrase = ({ GPinfo, onCorrect }) => {
         } else {
 			try {
 				const isCorrect = userInput.trim().toLowerCase() === correct_word.toLowerCase();
-            	setResultMessage(isCorrect ? "¡Correcto!" : "Incorrecto. Intenta de nuevo.");
+				console.log(isCorrect ? "Correcto!" : "Incorrecto!");
 
 				if (isCorrect) {
 					setIsCorrectAnswer(true);

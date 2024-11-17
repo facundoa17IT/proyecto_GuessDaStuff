@@ -1,6 +1,6 @@
 /** React **/
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 /** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
@@ -9,6 +9,8 @@ import OrderWord from './game-modes/OrderWord';
 import CircleTimer from '../components/ui/CircleTimer';
 import MultipleChoice from './game-modes/MultipleChoice';
 import BrainCharacter from '../components/ui/BrainCharacter';
+import { ScaleLoader } from 'react-spinners';
+import MultiplayerHUD from '../components/layouts/MultiplayerHUD';
 
 /** Assets */
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -22,12 +24,10 @@ import { useRole } from '../contextAPI/AuthContext'
 import { SocketContext } from '../contextAPI/SocketContext';
 
 const GameMatchView = () => {
-    const location = useLocation();
     const navigate = useNavigate();
 
-    const { implementationGameBody,gameId } = useContext(SocketContext);
-
-    const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer } = useContext(LoadGameContext);
+    const { implementationGameBody, setImplementationGameBody, setInvitationCount } = useContext(SocketContext);
+    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -38,7 +38,7 @@ const GameMatchView = () => {
     const [timeRemaining, setTimeRemaining] = useState(TIME);
 
     const [isGameReady, setIsGameReady] = useState(false);
-    const [isGameFinished, setisGameFinished] = useState(false);
+    const [isGameFinished, setIsGameFinished] = useState(false);
 
     const [hints, setHints] = useState([]);
     const [currentHintIndex, setCurrentHintIndex] = useState(null);
@@ -46,6 +46,11 @@ const GameMatchView = () => {
     const [hintButtonEnabled, setHintButtonEnabled] = useState(true);
 
     const [characterDialogue, setCharacterDialogue] = useState("");
+
+    // Almacena username, userId, email
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
+    const [player2, setPlayer2] = useState(localStorage.getItem("host") || localStorage.getItem("guest") || "Undefined");
 
     useEffect(() => {
         resetGameState();
@@ -62,58 +67,52 @@ const GameMatchView = () => {
         setCharacterDialogue(hints[currentHintIndex]);
     }, [currentHintIndex]);
 
-    // useEffect(() => {
-    //     if(elapsedTime){
-    //         console.log("Tiempo transcurrido -> "+ elapsedTime);
-    //     }
-    // }, [elapsedTime]);
+    /*useEffect(() => {
+        if(elapsedTime){
+            console.log("Tiempo transcurrido -> "+ elapsedTime);
+        }
+    }, [elapsedTime]);*/
 
     // initGameModes se obtiene de la pantala SingleGameLobby
     useEffect(() => {
         if (Object.keys(initGameModes).length > 0) {
             setCurrentGameIndex(0);
         }
+        console.log(initGameModes);
     }, [initGameModes]);
 
-    //Obtengo todos los datos necesario para inicar la partida multiplayer
+    // solo para multiplayer
     useEffect(() => {
         if (implementationGameBody) {
-            if (implementationGameBody.status === "INVITE_IMPLEMENTATION") {
-                setInitGameModes(implementationGameBody.implementGame.gameModes);
-                setIdGameSingle(implementationGameBody.implementGame.idGameSingle);
-            }
-            else if (implementationGameBody.status === "FINISH_ROUND"){
+            console.log("SE ACTUALIZO -> " + implementationGameBody.status);
+            console.log(implementationGameBody);
+            if (implementationGameBody.status === "FINISH_ROUND") {
                 // si es is_win = true hay un ganador y viene en la var idUserWin
                 // si soy el ganador o perdedor muestro el resultado y paso a la sigiente ronda
-                //handleNextGameMode();
+                handleNextGameMode();
                 console.log("FINISH ROUND!");
             }
         }
     }, [implementationGameBody]);
 
-    // Actualizamos el contenido del juego cada vez que cambie el índice
-    useEffect(() => {
-       console.log(isMultiplayer);
-    }, []);
-
-    // Actualizamos el contenido del juego cada vez que cambie el índice
+    // Se actualiza el contenido del juego cada vez que cambie el índice
     useEffect(() => {
         if (currentGameIndex >= 0) {
             setGameContent(renderGame());
         }
     }, [currentGameIndex]);
 
+    // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
+    // Se inicia el timer cuando el se asigna el index 0
     useEffect(() => {
-        // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
-        if (gameContent) {
-            if (currentGameIndex === 0) setIsGameReady(true); // Se inicia el timer cuando el se asigna el index 0
+        if (gameContent && currentGameIndex === 0) {
+            setIsGameReady(true);
         }
     }, [gameContent]);
 
+    // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
     useEffect(() => {
-        // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
         if (isGameReady) {
-            //setCurrentGameIndex(0);
             defaultCharacterDialogue();
             console.log("Inicia el juego!");
         }
@@ -123,59 +122,48 @@ const GameMatchView = () => {
         setCharacterDialogue("Puedo darte una pista!");
     }
 
-    // Guarda en la BD el ganador
-    // le avisa a los demas usuarios que el juego termino
-    const sendAnswer = async (idGameSingle, userId, answer, gameModeId, time) => {
-        try {
-            // Log de cada parámetro para depuración
-            console.log("idGameSingle:", idGameSingle);
-            console.log("userId:", userId);
-            console.log("answer:", answer);
-            console.log("gameId:", gameId);
-            console.log("time:", time);
-
-            // Realiza la solicitud POST con axios
-            await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
-                idUserWin: userId,
-                idGameMulti: gameId, // socket
-                idGame: gameModeId, // game mode
-                time_playing: time
-            });
-
-            // if (isMultiplayer) {
-            //     axiosInstance.post(`/game-multi/game/${idGame}/start/`, dtoinitGameMultiRequest, { requiresAuth: true })
-            //     // Realiza la solicitud POST con axios
-            //     await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
-            //         idUserWin: userId,
-            //         idGameMulti: gameId, // socket
-            //         idGame: gameModeId, // game mode
-            //         time_playing: time
-            //     });
-            // } 
-            // else {
-            //     // Realiza la solicitud POST con axios
-            //     await axiosInstance.post("/game-single/v1/play-game", {
-            //         idGameSingle: idGameSingle,
-            //         idUser: userId,
-            //         response: answer,
-            //         idGame: gameModeId,
-            //         time_playing: time
-            //     });
-            // }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
     const sendAnswerData = async (answer) => {
         try {
             const gameKeys = Object.keys(initGameModes);
             const currentGameKey = gameKeys[currentGameIndex];
             const gameInfo = initGameModes[currentGameKey].infoGame[0];
             const { id } = gameInfo;
-            await sendAnswer(idGameSingle, userId, answer, id, elapsedTime);
+            await sendAnswer(userId, answer, gameId, id, elapsedTime);
         } catch (error) {
             console.log("Error", error);
+        }
+    };
+
+    // Guarda en la BD el ganador
+    // le avisa a los demas usuarios que el juego termino
+    const sendAnswer = async (userId, answer, gameId, gameModeId, time) => {
+        try {
+            // Log de cada parámetro para depuración
+            console.log("userId:", userId);
+            console.log("answer:", answer);
+            console.log("gameId:", gameId);
+            console.log("gameModeId:", gameModeId);
+            console.log("time:", time);
+
+            if(isMultiplayer) {
+                await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
+                    idUserWin: userId,
+                    idGameMulti: gameId,
+                    idGame: gameModeId,
+                    time_playing: time
+                });
+            }
+            else {
+                await axiosInstance.post("/game-single/v1/play-game", {
+                    idGameSingle: gameId,
+                    idUser: userId,
+                    response: answer,
+                    idGame: gameModeId,
+                    time_playing: time
+                });
+            }
+        } catch (error) {
+            console.error("Error:", error);
         }
     };
 
@@ -204,13 +192,19 @@ const GameMatchView = () => {
 
     const handleFishGame = async () => {
         try {
-            const response = axiosInstance.post(`/game-single/v1/finish-play-game/${idGameSingle}`);
+            const response = axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
             console.log(response.data);
             console.log("Fin del juego!");
             setInitGameModes({});
-            setisGameFinished(true);
+            setIsGameFinished(true);
             setCurrentHeader("Partida Finalizada");
             setGameContent(renderFinishGameStats());
+
+            if (isMultiplayer) {
+                setImplementationGameBody(null);
+                setInvitationCount(null);
+                setPlayer2(null);
+            }
         } catch (error) {
             console.error(error);
         }
@@ -308,7 +302,12 @@ const GameMatchView = () => {
                     </div>
                 );
             } else {
-                return <p>El juego aún no está disponible.</p>;
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                        <h1>Cargando Partida</h1>
+                        <ScaleLoader color="var(--link-color)" height={30} width={15} loading={true} />
+                    </div>
+                );
             }
         }
     };
@@ -368,7 +367,7 @@ const GameMatchView = () => {
             leftHeader='Pistas'
             leftContent={
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <BrainCharacter key={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
+                    <BrainCharacter rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
                     {renderHintButton()}
                 </div>
             }
@@ -377,7 +376,8 @@ const GameMatchView = () => {
             rightHeader='Stats'
             rightContent={
                 <>
-                    <h3>Ronda {currentGameIndex + 1}</h3>
+                    {isMultiplayer && <MultiplayerHUD player1={userObj.username} player2={player2}/>}
+                    <h3 style={{marginBottom:'0'}}>Ronda {currentGameIndex + 1}</h3>
                     <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
                     {!isGameFinished && <CircleTimer
                         key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index

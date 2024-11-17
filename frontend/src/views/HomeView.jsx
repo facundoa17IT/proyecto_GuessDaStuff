@@ -18,9 +18,6 @@ import { useRole } from '../contextAPI/AuthContext';
 /** Styles **/
 import '../styles/home.css'
 
-/** Utils **/
-import axiosInstance from '../utils/AxiosConfig';
-
 const HomePage = () => {
 	const { role } = useRole();
 

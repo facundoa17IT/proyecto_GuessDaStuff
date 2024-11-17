@@ -46,11 +46,11 @@ export const ADMIN_ROUTES = {
 }
 
 export const PLAYER_ROUTES = {
-    PROFILE: "profile",
+    PROFILE: "/profile",
     GAME_LOBBY: "game-lobby",
     MULTIPLAYER_LOBBY: '/multiplayer-lobby',
     INVITATIONS: '/invitations',
     SLOT_MACHINE: '/slot-machine-multi',
     RANKING: '/ranking',
-    PROFILE: '/profile'
+    LOAD_GAME: '/load-game'
 }

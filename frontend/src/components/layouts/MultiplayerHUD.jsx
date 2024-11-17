@@ -3,20 +3,20 @@ import React from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import '../../styles/multiplayer-hud.css'
 
-const MultiplayerHUD = ({ host='Undefined', guest='Undefined' ,currentScore = 0, currentRound = 1, maxNumberOfRounds = 0 }) => {
+const MultiplayerHUD = ({ player1='Undefined', player2='Undefined' ,currentScore = 0, currentRound = 1, maxNumberOfRounds = 0 }) => {
     return (
         <div className='player-hud' style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ display: 'flex' }}>
                 <FaUserCircle style={{ marginRight: '10px', fontSize: '35px' }} />
             </div>
             <div style={{ color:'var(--player1-color)', display: 'flex', flexDirection: 'column' }}>
-                <b>{host}</b>
+                <b>{player1}</b>
                 <small>Estado</small>
                 <small>🧠 x 0</small>
             </div>
             <div style={{ margin: '15px' }}>vs</div>
             <div style={{ color:'var(--player2-color)', display: 'flex', flexDirection: 'column' }}>
-                <b>{guest}</b>
+                <b>{player2}</b>
                 <small>Estado</small>
                 <small>🧠 x 0</small>
             </div>

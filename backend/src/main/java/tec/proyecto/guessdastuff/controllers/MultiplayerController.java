@@ -63,8 +63,7 @@ public class MultiplayerController {
     @PostMapping("/game/{idSocket}/play/")
     public void sendAnswer(@RequestBody DtoSendAnswer dtoSendAnswer, @PathVariable String idSocket) {
         try {
-            DtoSendAnswerResponse msgUsersAll = new DtoSendAnswerResponse();
-            msgUsersAll = multiplayerService.sendAnswer(dtoSendAnswer, idSocket);
+            DtoSendAnswerResponse msgUsersAll = multiplayerService.sendAnswer(dtoSendAnswer, idSocket);
             msgUsersAll.setStatus("FINISH_ROUND");
             //avisarle a los otros jugadores
             messagingTemplate.convertAndSend("/game/" + idSocket + "/", msgUsersAll);
@@ -77,7 +76,6 @@ public class MultiplayerController {
     @PostMapping("/game/{idSocket}/start/")
     public void startGame(@PathVariable String idSocket, @RequestBody DtoInitGameMultiRequest dtoInitGameMultiRequest) {
         try {
-
             DtoInitGameMultiResponse implementation = playMultiService.startGame(idSocket, dtoInitGameMultiRequest);
 
             DtoImplementationGame response = new DtoImplementationGame();
@@ -89,5 +87,4 @@ public class MultiplayerController {
             messagingTemplate.convertAndSend("/game/" + idSocket + "/error", e.getMessage());
         }
     }
-
 }

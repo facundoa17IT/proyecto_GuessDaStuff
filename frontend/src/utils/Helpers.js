@@ -5,6 +5,11 @@ export const logObject = ({ object }) => {
 	}
 }
 
+// Función para obtener un elemento aleatorio de un array
+export const getRandomItem = (array) => {
+	return array[Math.floor(Math.random() * array.length)];
+};
+
 // Return random array
 export const shuffleArray = (array) => {
 	for (let i = array.length - 1; i > 0; i--) {

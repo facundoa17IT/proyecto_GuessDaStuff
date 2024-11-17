@@ -8,7 +8,7 @@ import axiosInstance from '../../utils/AxiosConfig';
 import { SocketContext } from '../../contextAPI/SocketContext';
 
 /** Utils **/
-import { PUBLIC_ROUTES } from '../../utils/constants';
+import { PLAYER_ROUTES } from '../../utils/constants';
 
 /** Style **/
 import '../../styles/slot-machine.css';
@@ -110,7 +110,7 @@ const SlotMachineMulti = () => {
 
             // Espera 3 segundos antes de redirigir
             setTimeout(() => {
-                navigate(PUBLIC_ROUTES.INIT_GAME);
+                navigate(PLAYER_ROUTES.LOAD_GAME);
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
         }, spinDuration); // Duración del giro (2 segundos)
     };

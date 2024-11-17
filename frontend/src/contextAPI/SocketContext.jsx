@@ -25,9 +25,7 @@ export const SocketProvider = ({ children }) => {
             console.log(invitationCollection);
         }
     }, [invitationCollection]);
-
     
-
     const connect = (dtoUserOnline) => {
         client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
 
@@ -60,7 +58,24 @@ export const SocketProvider = ({ children }) => {
             client.current.send('/app/leave', {}, JSON.stringify(dtoUserOnline));
             client.current.disconnect();
         }
+        else{
+            console.error("Error con el cliente STOMP");
+        }
     };
+
+    const suscribeToGameSocket = (gameId) => {
+        if (client.current) {
+            client.current.subscribe(`/game/${gameId}/`, (message) => {
+                const implementGame = JSON.parse(message.body);
+                console.log(implementGame);
+                setImplementationGameBody(implementGame);
+                console.warn("SOCKET -> /game/gameId/");
+            });
+        }
+        else{
+            console.error("Error con el cliente STOMP");
+        }
+    } 
 
     return (
         <SocketContext.Provider
@@ -74,7 +89,8 @@ export const SocketProvider = ({ children }) => {
                 invitationCollection, setInvitationCollection,
                 implementationGameBody, setImplementationGameBody,
                 usernameHost, setUsernameHost,
-                gameId, setGameId
+                gameId, setGameId,
+                suscribeToGameSocket
             }}
         >
             {children}

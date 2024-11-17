@@ -32,8 +32,19 @@ const Navbar = () => {
     
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    if (isMobile) return null;
-
+    const handleInvitationInteraction = (invitation) => {
+        if (invitation) {
+            if (invitation.action === 'INVITE') {
+                setInvitationCount(invitationCount + 1);
+                setInvitationCollection([...invitationCollection, invitation]);
+                setInvitation(null);
+                alert("Has recibido una nueva invitación!");
+            }
+        } else {
+            console.error("Invalid Invitation");
+        }
+    };
+    
     useEffect(() => {
         if (invitation) {
             handleInvitationInteraction(invitation);
@@ -41,25 +52,7 @@ const Navbar = () => {
         }
     }, [invitation]);
 
-    const handleInvitationInteraction = (invitation) => {
-        if (invitation) {
-            console.log(invitation.action);
-            switch (invitation.action) {
-                case 'INVITE':
-                    console.log("Se ha realizado una invitacion!");
-                    setInvitationCount(invitationCount + 1);
-                    setInvitationCollection([...invitationCollection, invitation]);
-                    setInvitation(null);
-                    alert("Has recibido una nueva invitacion!");
-                    break;
-
-                default:
-                    break;
-            }
-        } else {
-            console.error("Invalid Invitation");
-        }
-    };
+    if (isMobile) return null;
 
     return (
         <nav className="navbar">

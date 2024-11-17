@@ -10,7 +10,7 @@ import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
 const MultipleChoice = ({ MCinfo, onCorrect }) => {
-    const { setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
+    const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
@@ -33,7 +33,9 @@ const MultipleChoice = ({ MCinfo, onCorrect }) => {
             return;
         }
         try {
-            if (confirmedAnswer === randomCorrectWord) {
+            const isCorrect = confirmedAnswer === randomCorrectWord;
+            if (isCorrect) {
+                setIsCorrectAnswer(isCorrect);
                 setResultMessage("¡Correcto!");
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 onCorrect(); // Llama a la función que maneja la respuesta correcta

@@ -63,9 +63,8 @@ const StartGame = () => {
         }
     }, [selectedGameMode]);
 
-
     useEffect(() => {
-        console.log(isMultiplayer);
+        if(isMultiplayer || !isMultiplayer) console.log("Is multiplayer: " + isMultiplayer);
     }, [isMultiplayer]);
 
     const handleConfirm = async () => {
@@ -74,7 +73,6 @@ const StartGame = () => {
             return;
         }
         const categoryIds = selectedCategories.map(category => category.id);
-        //console.log(categoryIds);
         
         try {
             const response = await axiosInstance.post('/game-single/v1/load-game', {
