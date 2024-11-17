@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.RequiredArgsConstructor;
 import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUserRequest;
@@ -69,11 +71,22 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/v1/edit/{username}")
-    public ResponseEntity<?> editUser(@PathVariable String username, @RequestBody DtoUserRequest dtoUser){
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/v1/getImageProfile/{username}")
+    public ResponseEntity<?> getImageProfile(@PathVariable String username){
         try {
-            return ResponseEntity.ok(userService.editUser(username, dtoUser));
+            return ResponseEntity.ok(userService.getImageProfile(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PutMapping("/v1/edit/{username}")
+    public ResponseEntity<?> editUser(@PathVariable String username, @ModelAttribute DtoUserRequest dtoUser, 
+                                      @RequestParam(value = "file", required = false) MultipartFile file){
+        try {
+            return ResponseEntity.ok(userService.editUser(username, dtoUser, file));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
