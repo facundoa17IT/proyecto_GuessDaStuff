@@ -14,6 +14,28 @@ import { FaUserCircle } from 'react-icons/fa';
 
 const Profile = () => {
     const userObj = JSON.parse(localStorage.getItem("userObj"));
+    const [profileImage, setProfileImage] = useState(null); // Estado para la imagen de perfil
+
+    // Obtener la URL de la imagen de perfil desde el backend
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            try {
+                const response = await axiosInstance.get(`/users/v1/getImageProfile/${userObj.username}`, { requiresAuth: true });
+                console.log(response.data);
+                const data = await response.data;
+                if(data === 'urlDoMacaco'){
+                    setProfileImage(null)
+                }else{
+                    setProfileImage(data);
+                }
+                
+            } catch (error) {
+                console.error("Error de red al obtener la imagen de perfil:", error);
+            }
+        };
+
+        fetchProfileImage();
+    }, [userObj.username]);
 
     return (
         <MainGameLayout
@@ -21,8 +43,22 @@ const Profile = () => {
         leftContent={
             <div>
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '15px' }}>
-                    <FaUserCircle style={{ fontSize: '100px' }} />
-                </div>
+                        {/* Mostrar imagen de perfil si existe, de lo contrario el ícono */}
+                        {profileImage ? (
+                            <img
+                                src={profileImage}
+                                alt="Foto de perfil"
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover'
+                                }}
+                            />
+                        ) : (
+                            <FaUserCircle style={{ fontSize: '100px' }} />
+                        )}
+                    </div>
 
                 <h1 style={{ marginBottom: '0px' }}>{userObj.username}</h1>
                 <p>{userObj.email}</p>
