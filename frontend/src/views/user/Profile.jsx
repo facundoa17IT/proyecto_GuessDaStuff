@@ -1,9 +1,10 @@
 /** React **/
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /** Components **/
 import MainGameLayout from '../../components/layouts/MainGamelayout'
 import CustomList from '../../components/layouts/CustomList';
+import axiosInstance from '../../utils/AxiosConfig';
 
 /** Icons **/
 import { BiSolidMoviePlay } from "react-icons/bi";
