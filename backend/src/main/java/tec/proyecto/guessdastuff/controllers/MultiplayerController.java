@@ -87,4 +87,14 @@ public class MultiplayerController {
             messagingTemplate.convertAndSend("/game/" + idSocket + "/error", e.getMessage());
         }
     }
+
+    // Endpoint para iniciar la partida
+    @PostMapping("/game/{idSocket}/finish/{idGame}")
+    public void finishGameMulti(@PathVariable String idSocket, @PathVariable String idGame) {
+        try {
+            multiplayerService.finishGameMulti(idSocket, idGame);
+        } catch (Exception e) {
+            messagingTemplate.convertAndSend("/game/" + idSocket + "/error", e.getMessage());
+        }
+    }
 }

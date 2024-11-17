@@ -237,4 +237,12 @@ public class MultiplayerService {
 
     }
     
+    public void finishGameMulti(String idSocket, String idGame) {
+
+        InfoGameMultiId infoGameMultiId = new InfoGameMultiId();
+        infoGameMultiId.setId(idSocket);
+        infoGameMultiId.setIdDataGame(idGame);
+        infoGameMultiRepository.finishGameMulti(infoGameMultiId);
+    }
+    
 }
