@@ -4668,6 +4668,262 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Ranking",
+			"item": [
+				{
+					"name": "PartidasGanadas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingPartidasWin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingPartidasWin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "PartidasGanadas",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/users/v1/rankingPartidasWin",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users",
+										"v1",
+										"rankingPartidasWin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 16 Nov 2024 23:34:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"username\": \"pepe\",\n        \"partidas_win\": 3\n    },\n    {\n        \"username\": \"kiko\",\n        \"partidas_win\": 3\n    },\n    {\n        \"username\": \"facu\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"zaza\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"user\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"carlitos\",\n        \"partidas_win\": 1\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "MayorPuntaje",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingPuntaje",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingPuntaje"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "MayorPuntaje",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/users/v1/rankingPuntaje",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users",
+										"v1",
+										"rankingPuntaje"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 17 Nov 2024 00:03:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"MULTIPLAYER\": [\n        {\n            \"username\": \"carlitos\",\n            \"criterio\": 5\n        },\n        {\n            \"username\": \"kiko\",\n            \"criterio\": 2\n        },\n        {\n            \"username\": \"pepe\",\n            \"criterio\": 3\n        },\n        {\n            \"username\": \"santi\",\n            \"criterio\": 4\n        },\n        {\n            \"username\": \"user\",\n            \"criterio\": 4\n        },\n        {\n            \"username\": \"zaza\",\n            \"criterio\": 2\n        }\n    ],\n    \"INDIVIDUAL\": [\n        {\n            \"username\": \"kiko\",\n            \"criterio\": 5\n        },\n        {\n            \"username\": \"zaza\",\n            \"criterio\": 19\n        },\n        {\n            \"username\": \"pepe\",\n            \"criterio\": 13\n        },\n        {\n            \"username\": \"carlitos\",\n            \"criterio\": 8\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "MenorTiempo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingTiempo",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingTiempo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

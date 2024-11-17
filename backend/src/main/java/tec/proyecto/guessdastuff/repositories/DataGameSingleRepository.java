@@ -52,4 +52,23 @@ public interface DataGameSingleRepository extends JpaRepository<DataGameSingle, 
         WHERE u.status NOT IN ('BLOCKED', 'DELETED')
         """, nativeQuery = true)
     List<Object[]> findAllSingleGames();
+
+    @Query(value = """
+            SELECT u.username, SUM(s.points)
+            FROM data_game_single s
+            INNER JOIN users u ON s.id_user = CAST(u.id AS TEXT) 
+            WHERE s.is_finish = true
+            GROUP BY u.username
+            """, nativeQuery = true)
+    List<Object[]> getRankingPuntajeSingle();
+
+    @Query(value = """
+            SELECT u.username, SUM(time_playing) time_playing
+            FROM data_game_single s
+            INNER JOIN users u ON s.id_user = CAST(u.id AS TEXT)
+            WHERE is_finish = true 
+            GROUP BY u.username
+            ORDER BY SUM(time_playing)
+            """, nativeQuery = true)
+    List<Object[]> getRankingMenorTiempoSingle();
 }
