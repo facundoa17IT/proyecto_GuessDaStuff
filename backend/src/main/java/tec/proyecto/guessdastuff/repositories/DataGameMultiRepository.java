@@ -19,6 +19,7 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
     @Query("UPDATE DataGameMulti d SET d.isFinish = true, d.idUserWin = ?2 WHERE d.id = ?1")
     void finishPlayGame(String idUserWin, String idGameMulti);
     
+
     @Query(value = """
         WITH GameRows AS (
             SELECT 
@@ -48,6 +49,7 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
         """, nativeQuery = true)
     List<Object[]> findMultiplayerGamesOfPlayer(@Param("userId") String userId);
 
+
     @Query(value = """
         WITH GameRows AS (
             SELECT i.id AS id_info_game_multi, g.dtype AS game_type, 
@@ -74,4 +76,38 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
         SELECT * FROM MultiplayerData
         """, nativeQuery = true)
     List<Object[]> findAllMultiplayerGames();
+
+
+    @Query(value = """
+            SELECT u.username, COUNT(*) AS partidas_win 
+            FROM data_game_multi m
+            INNER JOIN users u ON m.id_user_win = CAST(u.id AS TEXT)
+            GROUP BY u.id, u.username
+            ORDER BY partidas_win DESC
+            """, nativeQuery = true)
+    List<Object[]> getRankingPartidasGanadas();
+
+
+    @Query(value = """
+            SELECT u.username, SUM(i.points) AS points 
+            FROM info_game_multi i
+            INNER JOIN users u ON i.id_user_win = CAST(u.id AS TEXT) 
+            WHERE i.is_finish = true
+            GROUP BY u.username
+            """,nativeQuery = true)
+    List<Object[]> getRankingPuntaje();
+
+    @Query(value = """
+            SELECT u.username, SUM(time_playing) AS time_playing 
+            FROM info_game_multi i
+            INNER JOIN users u ON i.id_user_win = CAST(u.id AS TEXT)
+            WHERE i.is_finish = true
+            GROUP BY  u.username
+            ORDER BY SUM(time_playing)
+            """, nativeQuery = true)
+    List<Object[]> getRankingMenorTiempoMulti();
+
+
+
+    
 }

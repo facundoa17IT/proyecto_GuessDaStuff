@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUserRequest;
 import tec.proyecto.guessdastuff.services.GameService;
+import tec.proyecto.guessdastuff.services.RankingService;
 import tec.proyecto.guessdastuff.services.UserService;
 
 @RestController
@@ -24,6 +25,9 @@ public class UserController {
 
     @Autowired
     GameService gameService;
+
+    @Autowired
+    RankingService rankingService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/v1")
@@ -110,6 +114,36 @@ public class UserController {
     public ResponseEntity<?> unblockUser(@PathVariable String username){
         try {
             return ResponseEntity.ok(userService.unblockUser(username));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/v1/rankingPartidasWin")
+    public ResponseEntity<?> getRankingPartidasWin(){
+        try {
+            return ResponseEntity.ok(rankingService.rankingPartidasWin());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/v1/rankingPuntaje")
+    public ResponseEntity<?> getRankingPuntaje(){
+        try {
+            return ResponseEntity.ok(rankingService.rankingPuntaje());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/v1/rankingTiempo")
+    public ResponseEntity<?> getRankingTiempo(){
+        try {
+            return ResponseEntity.ok(rankingService.rankingTiempo());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
