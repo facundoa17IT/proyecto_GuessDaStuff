@@ -17,7 +17,6 @@ import tec.proyecto.guessdastuff.dtos.DtoSendAnswer;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswerResponse;
 import tec.proyecto.guessdastuff.entitiesSocket.DtoImplementationGame;
 import tec.proyecto.guessdastuff.services.MultiplayerService;
-import tec.proyecto.guessdastuff.services.PlayMultiService;
 
 @CrossOrigin(origins = "http://localhost:8080/")
 @RestController
@@ -30,9 +29,6 @@ public class MultiplayerController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
     
-    @Autowired
-    private PlayMultiService playMultiService;
-
     // Endpoint para crear una nueva partida
     @PostMapping("/v1/create/")
     public String createGame(@RequestBody DtoCreateMultiGameRequest dtoCreateMultiGameRequest) {
@@ -76,7 +72,7 @@ public class MultiplayerController {
     @PostMapping("/game/{idSocket}/start/")
     public void startGame(@PathVariable String idSocket, @RequestBody DtoInitGameMultiRequest dtoInitGameMultiRequest) {
         try {
-            DtoInitGameMultiResponse implementation = playMultiService.startGame(idSocket, dtoInitGameMultiRequest);
+            DtoInitGameMultiResponse implementation = multiplayerService.startGame(idSocket, dtoInitGameMultiRequest);
 
             DtoImplementationGame response = new DtoImplementationGame();
             response.setStatus("INVITE_IMPLEMENTATION");
@@ -92,7 +88,11 @@ public class MultiplayerController {
     @PostMapping("/game/{idSocket}/finish/{idGame}")
     public void finishGameMulti(@PathVariable String idSocket, @PathVariable String idGame) {
         try {
-            multiplayerService.finishGameMulti(idSocket, idGame);
+            if (idGame != "0") {
+                multiplayerService.finishGameMulti(idSocket, idGame);
+            } else {
+                multiplayerService.finishGame(idSocket);
+            }
         } catch (Exception e) {
             messagingTemplate.convertAndSend("/game/" + idSocket + "/error", e.getMessage());
         }
