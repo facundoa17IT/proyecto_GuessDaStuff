@@ -8,7 +8,7 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import '../../styles/guess-phrase.css';
 import '../../styles/game-mode.css';
 
-const GuessPhrase = ({ GPinfo, onCorrect }) => {
+const GuessPhrase = ({ GPinfo }) => {
 	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 	const { phrase, correct_word } = GPinfo;
 	const [userInput, setUserInput] = useState('');
@@ -53,8 +53,6 @@ const GuessPhrase = ({ GPinfo, onCorrect }) => {
 				if (isCorrect) {
 					setIsCorrectAnswer(true);
 					setResultMessage("¡Correcto!");
-					await new Promise((resolve) => setTimeout(resolve, 1500));
-					onCorrect();
 				} else {
 					setResultMessage("Incorrecto. Intenta de nuevo.");
 				}

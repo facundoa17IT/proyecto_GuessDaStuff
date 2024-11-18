@@ -36,8 +36,6 @@ const MultiplayerLobby = () => {
     // Almacena username, userId, email
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    const [guestTag, setGuestTag] = useState(null);
-
     const [connectedUsers, setConnectedUsers] = useState(() => {
         const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
         return storedUsers || [];
@@ -52,8 +50,9 @@ const MultiplayerLobby = () => {
 
     // Limpiamos el local storage de host y guest
     useEffect(() => {
-        localStorage.removeItem("guest");
         localStorage.removeItem("host");
+		localStorage.removeItem("guest");
+        localStorage.setItem("host", JSON.stringify(userObj));
         filterSelfUsername();
     }, []);
 
@@ -85,8 +84,7 @@ const MultiplayerLobby = () => {
         client.current.send(`/topic/lobby/${userGuest.userId}`, {}, JSON.stringify(invitationData));
         setIsHost(true);
         setUsernameHost(userObj.username);
-        localStorage.setItem("guest", userGuest.username);
-        setGuestTag(userGuest.username);
+        localStorage.setItem("guest", JSON.stringify(userGuest));
     }
 
     // 2)
@@ -147,7 +145,6 @@ const MultiplayerLobby = () => {
     const handleResponse = async (invitation) => {
         setIsMatchAccepted(invitation.accepted);
         if (invitation.accepted) {
-            setGuestTag(localStorage.getItem("guest"));
             handleCreateGame(); // retorna y seta el gameId
         } else {
             setIsModalOpen(true);
@@ -200,7 +197,6 @@ const MultiplayerLobby = () => {
         if (isHost) {
             setIsModalOpen(false);
             setIsHost(false);
-            setGuestTag(null);
             localStorage.removeItem("host");
             localStorage.removeItem("guest");
         }
@@ -227,8 +223,6 @@ const MultiplayerLobby = () => {
                         onClick={initGameHost}
                         isHost={isHost}
                         isMatchAccepted={isMatchAccepted}
-                        user1={userObj.username}
-                        user2={guestTag}
                     />
                 }
             />

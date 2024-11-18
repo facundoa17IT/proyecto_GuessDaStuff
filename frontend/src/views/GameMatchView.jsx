@@ -11,6 +11,7 @@ import MultipleChoice from './game-modes/MultipleChoice';
 import BrainCharacter from '../components/ui/BrainCharacter';
 import { ScaleLoader } from 'react-spinners';
 import MultiplayerHUD from '../components/layouts/MultiplayerHUD';
+import Modal from '../components/layouts/Modal';
 
 /** Assets */
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -26,8 +27,8 @@ import { SocketContext } from '../contextAPI/SocketContext';
 const GameMatchView = () => {
     const navigate = useNavigate();
 
-    const { implementationGameBody, setImplementationGameBody, setInvitationCount } = useContext(SocketContext);
-    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer } = useContext(LoadGameContext);
+    const { implementationGameBody, setImplementationGameBody, setInvitation, setInvitationCount, unsubscribeFromGameSocket } = useContext(SocketContext);
+    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -36,6 +37,7 @@ const GameMatchView = () => {
     const TIME = 30;
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(TIME);
+    const [isTimePlaying, setIsTimePlaying] = useState(false);
 
     const [isGameReady, setIsGameReady] = useState(false);
     const [isGameFinished, setIsGameFinished] = useState(false);
@@ -50,7 +52,14 @@ const GameMatchView = () => {
     // Almacena username, userId, email
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    const [player2, setPlayer2] = useState(localStorage.getItem("host") || localStorage.getItem("guest") || "Undefined");
+    const [currentGameModeId, setCurrentGameModeId] = useState(null);
+
+    const [winner, setWinner] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const host = JSON.parse(localStorage.getItem("host")) || "Undefined";
+    const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
 
     useEffect(() => {
         resetGameState();
@@ -84,11 +93,23 @@ const GameMatchView = () => {
     // solo para multiplayer
     useEffect(() => {
         if (implementationGameBody) {
-            console.log("SE ACTUALIZO -> " + implementationGameBody.status);
-            console.log(implementationGameBody);
             if (implementationGameBody.status === "FINISH_ROUND") {
-                // si es is_win = true hay un ganador y viene en la var idUserWin
-                // si soy el ganador o perdedor muestro el resultado y paso a la sigiente ronda
+                if (implementationGameBody.is_win) {
+                    setIsTimePlaying(false);
+                    setIsModalOpen(true);
+                    if (implementationGameBody.idUserWin == host.userId) {
+                        setWinner(host.username);
+                        console.log("Ganador: " + host.username);
+                    }
+                    else {
+                        setWinner(guest.username);
+                        console.log("Ganador: " + guest.username);
+                    }
+                    console.log("Ganador Id: " + implementationGameBody.idUserWin);
+                }
+                else {
+                    console.log("EMPATE!");
+                }
                 handleNextGameMode();
                 console.log("FINISH ROUND!");
             }
@@ -115,6 +136,7 @@ const GameMatchView = () => {
         if (isGameReady) {
             defaultCharacterDialogue();
             console.log("Inicia el juego!");
+            setIsTimePlaying(true);
         }
     }, [isGameReady]);
 
@@ -145,7 +167,7 @@ const GameMatchView = () => {
             console.log("gameModeId:", gameModeId);
             console.log("time:", time);
 
-            if(isMultiplayer) {
+            if (isMultiplayer) {
                 await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
                     idUserWin: userId,
                     idGameMulti: gameId,
@@ -178,6 +200,7 @@ const GameMatchView = () => {
     };
 
     const handleNextGameMode = () => {
+        setGameContent(renderGame());
         resetGameState();
         const gameKeys = Object.keys(initGameModes);
         const nextIndex = currentGameIndex + 1;
@@ -186,14 +209,31 @@ const GameMatchView = () => {
             handleFishGame();
             return;
         }
-        defaultCharacterDialogue();
-        setCurrentGameIndex(nextIndex);
+
+        setTimeout(() => {
+            setIsModalOpen(false);
+            defaultCharacterDialogue();
+            setCurrentGameIndex(nextIndex);
+            setIsTimePlaying(true);
+        }, 3000); // 3000 ms para esperar 3 segundos adicionales
     };
+
+    const handleTimerComplete = async () => {
+        try {
+            axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeId}`);
+            handleNextGameMode();
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleFishGame = async () => {
         try {
-            const response = axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
-            console.log(response.data);
+            setTimeout(() => {
+                setIsModalOpen(false);
+            }, 3000); // 3000 ms para esperar 3 segundos adicionales
+
             console.log("Fin del juego!");
             setInitGameModes({});
             setIsGameFinished(true);
@@ -202,9 +242,17 @@ const GameMatchView = () => {
 
             if (isMultiplayer) {
                 setImplementationGameBody(null);
-                setInvitationCount(null);
-                setPlayer2(null);
+                setInvitationCount(0);
+                setInvitation(null);
+                unsubscribeFromGameSocket();
+                setIsMultiplayer(false);
+                axiosInstance.post(`/game-multi/game/${gameId}/finish/0`);
             }
+            else {
+                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
+            }
+            localStorage.removeItem("host");
+            localStorage.removeItem("guest");
         } catch (error) {
             console.error(error);
         }
@@ -276,21 +324,24 @@ const GameMatchView = () => {
         if (!isGameFinished) {
             if (gameInfo) {
                 const { idModeGame } = gameInfo;
+
                 let GameComponent;
+
+                setCurrentGameModeId(idModeGame);
 
                 // Cambiamos el componente según el modo de juego
                 switch (idModeGame) {
                     case 'OW':
                         setCurrentHeader("Ordena la Palabra");
-                        GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <OrderWord OWinfo={gameInfo} />;
                         break;
                     case 'GP':
                         setCurrentHeader("Adivina la Frase");
-                        GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <GuessPhrase GPinfo={gameInfo} />;
                         break;
                     case 'MC':
                         setCurrentHeader("Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} />;
                         break;
                     default:
                         GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -360,38 +411,45 @@ const GameMatchView = () => {
     }
 
     return (
-        <MainGameLayout
-            canGoBack={false}
-            hideLeftPanel={isGameFinished}
-            hideRightPanel={isGameFinished}
-            leftHeader='Pistas'
-            leftContent={
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <BrainCharacter rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
-                    {renderHintButton()}
-                </div>
-            }
-            middleHeader={currentHeader}
-            middleContent={gameContent}
-            rightHeader='Stats'
-            rightContent={
-                <>
-                    {isMultiplayer && <MultiplayerHUD player1={userObj.username} player2={player2}/>}
-                    <h3 style={{marginBottom:'0'}}>Ronda {currentGameIndex + 1}</h3>
-                    <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
-                    {!isGameFinished && <CircleTimer
-                        key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
-                        isLooping={true}
-                        loopDelay={0.5}
-                        isPlaying={isGameReady}
-                        duration={timeRemaining}
-                        onTimeUpdate={handleTimeUpdate}
-                        onTimerComplete={handleNextGameMode}
-                    />}
-                    <button onClick={handleNextGameMode}>Next Round</button>
-                </>
-            }
-        />
+        <>
+            <MainGameLayout
+                canGoBack={false}
+                hideLeftPanel={isGameFinished}
+                hideRightPanel={isGameFinished}
+                leftHeader='Pistas'
+                leftContent={
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <BrainCharacter rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
+                        {renderHintButton()}
+                    </div>
+                }
+                middleHeader={currentHeader}
+                middleContent={gameContent}
+                rightHeader='Stats'
+                rightContent={
+                    <>
+                        {isMultiplayer && <MultiplayerHUD />}
+                        <h3 style={{ marginBottom: '0' }}>Ronda {currentGameIndex + 1}</h3>
+                        <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
+                        {!isGameFinished && <CircleTimer
+                            key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
+                            isLooping={true}
+                            loopDelay={0.5}
+                            isPlaying={isTimePlaying}
+                            duration={timeRemaining}
+                            onTimeUpdate={handleTimeUpdate}
+                            onTimerComplete={handleTimerComplete}
+                        />}
+                        <button onClick={handleNextGameMode}>Next Round</button>
+                    </>
+                }
+            />
+
+            <Modal showModal={isModalOpen} hideConfirmBtn={true} hideCloseBtn={true} title="Ronda Finalizada">
+                {winner && <h2>"{winner}" es el ganador de la ronda!</h2>}
+                <h3>Preparate para la siguiente ronda!</h3>
+            </Modal>
+        </>
     );
 };
 

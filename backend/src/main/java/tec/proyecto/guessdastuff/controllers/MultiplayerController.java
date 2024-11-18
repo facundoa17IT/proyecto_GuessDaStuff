@@ -88,7 +88,7 @@ public class MultiplayerController {
     @PostMapping("/game/{idSocket}/finish/{idGame}")
     public void finishGameMulti(@PathVariable String idSocket, @PathVariable String idGame) {
         try {
-            if (idGame != "0") {
+            if (!idGame.equals("0")) {
                 multiplayerService.finishGameMulti(idSocket, idGame);
             } else {
                 multiplayerService.finishGame(idSocket);

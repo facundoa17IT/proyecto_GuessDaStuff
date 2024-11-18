@@ -15,6 +15,8 @@ export const SocketProvider = ({ children }) => {
 
     const client = useRef(null);
 
+    let gameSubscription = null;
+
     useEffect(() => {
         localStorage.setItem("connectedUsers", JSON.stringify(users));
     }, [users]);
@@ -75,7 +77,18 @@ export const SocketProvider = ({ children }) => {
         else{
             console.error("Error con el cliente STOMP");
         }
-    } 
+    }
+
+    const unsubscribeFromGameSocket = () => {
+        if (gameSubscription) {
+            // Llama al método unsubscribe para cancelar la suscripción
+            gameSubscription.unsubscribe();
+            console.info("Desuscripción exitosa del canal de juego");
+            gameSubscription = null;
+        } else {
+            console.warn("No hay ninguna suscripción activa para desuscribirse");
+        }
+    };
 
     return (
         <SocketContext.Provider
@@ -90,7 +103,8 @@ export const SocketProvider = ({ children }) => {
                 implementationGameBody, setImplementationGameBody,
                 usernameHost, setUsernameHost,
                 gameId, setGameId,
-                suscribeToGameSocket
+                suscribeToGameSocket,
+                unsubscribeFromGameSocket
             }}
         >
             {children}

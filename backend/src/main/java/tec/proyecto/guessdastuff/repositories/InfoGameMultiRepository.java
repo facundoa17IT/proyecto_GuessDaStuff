@@ -13,7 +13,7 @@ import tec.proyecto.guessdastuff.entities.InfoGameMultiId;
 public interface InfoGameMultiRepository extends JpaRepository<InfoGameMulti, InfoGameMultiId> {
     @Modifying
     @Transactional
-    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = ?2, d.points = ?3, d.timePlaying = ?4 WHERE d.infoGameMultiId.id = ?1")
+    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = ?2, d.points = ?3, d.timePlaying = ?4 WHERE d.infoGameMultiId = ?1")
     void updateDataGame(InfoGameMultiId infoGameMultiId, String idUserWin, int points, float timePlaying);
 
     @Modifying

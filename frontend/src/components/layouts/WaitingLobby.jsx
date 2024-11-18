@@ -9,10 +9,13 @@ import { ClipLoader } from 'react-spinners';
 /** Style **/
 import '../../styles/multiplayer-hud.css'
 
-const WaitingLobby = ({ isHost = false, isMatchAccepted = false, user1 = 'Undefined', user2 = 'Undefined', onClick }) => {
+const WaitingLobby = ({ isHost = false, isMatchAccepted = false, onClick }) => {
+    const host = JSON.parse(localStorage.getItem("host")) || "Undefined";
+    const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
+
     return (
         <div className='border-container' style={{ width: '100%' }}>
-            {!isMatchAccepted ? <p>Esperando Jugadores...</p> : <p>{user2} se ha unido!</p>}
+            {!isMatchAccepted ? <p>Esperando Jugadores...</p> : <p>{guest.username} se ha unido!</p>}
 
             <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
 
@@ -20,15 +23,15 @@ const WaitingLobby = ({ isHost = false, isMatchAccepted = false, user1 = 'Undefi
                     <FaUserCircle style={{ marginRight: '10px', fontSize: '35px' }} />
                 </div>
                 <div style={{ color: 'var(--player1-color)', display: 'flex', flexDirection: 'column' }}>
-                    <b>{user1}</b>
-                    <small>Listo ✅</small>
+                    <b>{host.username}</b>
+                    <small>Host Id: {host.userId}</small>
                 </div>
                 <div style={{ margin: '15px' }}>vs</div>
                 {isMatchAccepted ? (
                     <>
                         <div style={{ color: 'var(--player2-color)', display: 'flex', flexDirection: 'column' }}>
-                            <b>{user2}</b>
-                            <small>Listo ✅</small>
+                            <b>{guest.username}</b>
+                            <small>Guest Id: {guest.userId}</small>
                         </div>
                         <div style={{ display: 'flex' }}>
                             <FaUserCircle style={{ marginLeft: '10px', fontSize: '35px' }} />
@@ -49,7 +52,7 @@ const WaitingLobby = ({ isHost = false, isMatchAccepted = false, user1 = 'Undefi
                         <button onClick={onClick}>Iniciar</button>
                     </div>
                 ) : (
-                    isHost && <p>Has invitado a {user2}</p>
+                    isHost && <p>Has invitado a {guest.username}</p>
                 )}
             </div>
         </div>

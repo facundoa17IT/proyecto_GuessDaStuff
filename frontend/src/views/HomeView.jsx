@@ -29,7 +29,7 @@ const HomePage = () => {
 	const handleStartGame = () => {
 		navigate('/start-game')
 	}
-	
+
 	const minimalistButtonStyle = {
 		padding: '0',
 		background: 'none',
@@ -39,6 +39,12 @@ const HomePage = () => {
 		width: '180px',
 		fontSize: 'medium'
 	}
+
+	useEffect(() => {
+		localStorage.removeItem("host");
+		localStorage.removeItem("guest");
+	}, []);
+
 
 	return (
 		<div className='home-page-wrapper'>

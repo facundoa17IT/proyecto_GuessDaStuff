@@ -11,7 +11,7 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import '../../styles/order-word.css'; // Importa el archivo CSS
 import '../../styles/game-mode.css';
 
-const OrderWord = ({ OWinfo, onCorrect }) => {
+const OrderWord = ({ OWinfo }) => {
 	const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 	const { word } = OWinfo;
 	const [selectedOrder, setSelectedOrder] = useState([[]]);
@@ -72,8 +72,6 @@ const OrderWord = ({ OWinfo, onCorrect }) => {
 			if (isCorrect) {
 				setIsCorrectAnswer(isCorrect);
 				setResultMessage('¡Correcto!');
-				await new Promise((resolve) => setTimeout(resolve, 1500));
-				onCorrect();
 			}
 			else {
 				setResultMessage('Incorrecto. Intenta de nuevo');

@@ -9,7 +9,7 @@ import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo, onCorrect }) => {
+const MultipleChoice = ({ MCinfo }) => {
     const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -33,16 +33,12 @@ const MultipleChoice = ({ MCinfo, onCorrect }) => {
             return;
         }
         try {
-            const isCorrect = confirmedAnswer === randomCorrectWord;
+            const isCorrect = selectedAnswer === randomCorrectWord;
             if (isCorrect) {
                 setIsCorrectAnswer(isCorrect);
                 setResultMessage("¡Correcto!");
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                onCorrect(); // Llama a la función que maneja la respuesta correcta
             } else {
                 setResultMessage("Incorrecto. Intenta de nuevo.");
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                onCorrect();
             }
         } catch (error) {
             console.error("Error al enviar la respuesta:", error);

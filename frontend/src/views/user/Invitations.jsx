@@ -26,6 +26,9 @@ const Invitations = () => {
 
     const getPlayerName = (player) => player.message;
 
+    // Almacena username, userId, email
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
     const handleInvitationListInteraction = (listId, buttonKey, item) => {
         if (listId === "invitationsList" && Object.values(item).length > 0) {
             console.log("Invitations List Interaction");
@@ -35,7 +38,12 @@ const Invitations = () => {
                     respondToInvitation(true, item);
                     setAcceptMatch(true);
                     setIsMultiplayer(true);
-                    localStorage.setItem("host", item.usernameHost);
+                    const hostObj = {
+                        username: item.usernameHost,
+                        userId: item.userIdHost,
+                    }
+                    localStorage.setItem("host", JSON.stringify(hostObj));
+                    localStorage.setItem("guest", JSON.stringify(userObj));
                     break;
 
                 case 'cancelBtn':
@@ -51,10 +59,6 @@ const Invitations = () => {
             console.log("Error list ID");
         }
     };
-
-    useEffect(() => {
-        if (isMultiplayer || !isMultiplayer) console.log("Is multiplayer: " + isMultiplayer);
-    }, [isMultiplayer]);
 
     // 2)
     // Se gestiona que accion realizar dependiendo de la respuesta de la invitacion del socket
