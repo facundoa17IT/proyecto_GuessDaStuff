@@ -1,12 +1,12 @@
 import { m } from "framer-motion";
 
 export const STATUS = {
-    ONLINE: "Online",
-    OFFLINE: "Offline",
-    BLOCKED: "Blocked",
-    PLAYING: "Playing",
-    REGISTERED: "Registered",
-    DELETED: "Deleted"
+    ONLINE: "ONLINE",
+    OFFLINE: "OFFLINE",
+    BLOCKED: "BLOCKED",
+    PLAYING: "PLAYING",
+    REGISTERED: "REGISTERED",
+    DELETED: "DELETED"
 };
 
 export const ROLE = {
@@ -27,7 +27,8 @@ export const PUBLIC_ROUTES = {
     START_GAME: "start-game",
     SELECTION_PHASE: "/selection-phase",
     INIT_GAME: "/init-game",
-    SINGLE_GAME_LOBBY: "single-game-lobby"
+    SINGLE_GAME_LOBBY: "single-game-lobby",
+    FORGOT_PASSWORD: '/forgot-password'
   
 }
 

@@ -36,14 +36,14 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
                 MAX(CASE WHEN gr.row_number = 2 THEN gr.game_type END) AS game2,
                 MAX(CASE WHEN gr.row_number = 3 THEN gr.game_type END) AS game3,
                 i.points,
-                i.time_playing,
+                SUM(i.time_playing) time_playing,
                 (SELECT u.username FROM users u WHERE u.id::TEXT = m.id_user_win) AS user_win
             FROM data_game_multi m
             INNER JOIN info_game_multi i ON m.id_info_game_multi = i.id
             INNER JOIN GameRows gr ON gr.id_info_game_multi = i.id
             WHERE m.id_user1 = :userId OR m.id_user2 = :userId
             GROUP BY 
-                m.id, i.id, i.points, i.time_playing, m.id_user_win
+                m.id, i.id, i.points, m.id_user_win
         )
         SELECT * FROM MultiplayerData
         """, nativeQuery = true)
@@ -94,6 +94,7 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
             INNER JOIN users u ON i.id_user_win = CAST(u.id AS TEXT) 
             WHERE i.is_finish = true
             GROUP BY u.username
+            ORDER BY SUM(points) DESC
             """,nativeQuery = true)
     List<Object[]> getRankingPuntaje();
 

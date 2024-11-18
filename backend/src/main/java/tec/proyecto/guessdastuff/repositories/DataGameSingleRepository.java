@@ -54,11 +54,12 @@ public interface DataGameSingleRepository extends JpaRepository<DataGameSingle, 
     List<Object[]> findAllSingleGames();
 
     @Query(value = """
-            SELECT u.username, SUM(s.points)
+            SELECT u.username, SUM(s.points) AS points
             FROM data_game_single s
             INNER JOIN users u ON s.id_user = CAST(u.id AS TEXT) 
             WHERE s.is_finish = true
             GROUP BY u.username
+            ORDER BY SUM(points) DESC 
             """, nativeQuery = true)
     List<Object[]> getRankingPuntajeSingle();
 

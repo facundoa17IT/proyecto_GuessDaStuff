@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/v1/{username}")
     public ResponseEntity<?> findUserByUsername(@PathVariable String username){
         try {

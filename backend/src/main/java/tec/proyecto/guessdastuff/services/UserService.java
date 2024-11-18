@@ -151,7 +151,7 @@ public class UserService {
             user.setResetToken(token);
             userRepository.save(user);
 
-            String resetUrl = "http://localhost:8080/auth/reset-password?token=" + token; // Luego modificar x la url correcta
+            String resetUrl = "http://localhost:5173/reset-password?token=" + token; // Luego modificar x la url correcta
             sendResetPasswordEmail(user.getEmail(), resetUrl);
         } else {
             throw new UserException("El usuario con el correo electrónico " + email + " no existe");

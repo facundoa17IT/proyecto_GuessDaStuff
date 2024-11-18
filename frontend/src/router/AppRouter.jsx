@@ -47,6 +47,9 @@ import GameMatchesManagement from '../views/admin/GameMatchesManagement';
 /** Utils */
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../utils/constants';
 
+import ForgotPassword from '../views/auth/ForgotPassword';
+import ResetPassword from '../views/auth/ResetPassword';
+
 function AppRouter() {
     const location = useLocation();
 
@@ -59,6 +62,8 @@ function AppRouter() {
                 {/* Guess Routes */}
                 <Route path={PUBLIC_ROUTES.REGISTER} element={<Register />} />
                 <Route path={PUBLIC_ROUTES.LOGIN} element={<Login />} />
+                <Route path={PUBLIC_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Player & Guess Routes */}
                 <Route path={PUBLIC_ROUTES.START_GAME} element={<StartGame />} />

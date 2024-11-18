@@ -21,12 +21,12 @@ public class CloudinaryService {
         @Value("${cloudinary.cloud_name}") String cloudName,
         @Value("${cloudinary.api_key}") String apiKey,
         @Value("${cloudinary.api_secret}") String apiSecret) {
-    this.cloudinary = new Cloudinary(ObjectUtils.asMap(
+        this.cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", cloudName,
             "api_key", apiKey,
             "api_secret", apiSecret
-    ));
-}
+        ));
+    }   
 
     public String uploadImage(MultipartFile file) throws IOException {
         Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
