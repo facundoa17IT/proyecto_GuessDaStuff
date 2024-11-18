@@ -1,12 +1,12 @@
 import { m } from "framer-motion";
 
 export const STATUS = {
-    ONLINE: "Online",
-    OFFLINE: "Offline",
-    BLOCKED: "Blocked",
-    PLAYING: "Playing",
-    REGISTERED: "Registered",
-    DELETED: "Deleted"
+    ONLINE: "ONLINE",
+    OFFLINE: "OFFLINE",
+    BLOCKED: "BLOCKED",
+    PLAYING: "PLAYING",
+    REGISTERED: "REGISTERED",
+    DELETED: "DELETED"
 };
 
 export const ROLE = {
@@ -25,9 +25,11 @@ export const PUBLIC_ROUTES = {
     REGISTER: "register",
     LOGIN: "login",
     START_GAME: "start-game",
-    SELECTION_PHASE: "selection-phase",
+    SELECTION_PHASE: "/selection-phase",
     INIT_GAME: "/init-game",
-    SINGLE_GAME_LOBBY: "single-game-lobby"
+    SINGLE_GAME_LOBBY: "single-game-lobby",
+    FORGOT_PASSWORD: '/forgot-password'
+  
 }
 
 export const ADMIN_ROUTES = {
@@ -45,6 +47,11 @@ export const ADMIN_ROUTES = {
 }
 
 export const PLAYER_ROUTES = {
-    PROFILE: "profile",
-    GAME_LOBBY: "game-lobby"
+    PROFILE: "/profile",
+    GAME_LOBBY: "game-lobby",
+    MULTIPLAYER_LOBBY: '/multiplayer-lobby',
+    INVITATIONS: '/invitations',
+    SLOT_MACHINE: '/slot-machine-multi',
+    RANKING: '/ranking',
+    LOAD_GAME: '/load-game'
 }

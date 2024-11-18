@@ -12,14 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/game", "/topic"); // Prefijo para canales de publicación
+        config.enableSimpleBroker("/topic", "/game");
         config.setApplicationDestinationPrefixes("/app"); // Prefijo para el envío de mensajes
     }
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:5173", "http://localhost:8080", "https://proyectoguessdastuff-production.up.railway.app") // Lista explícita de orígenes permitidos
+   @Override
+   public void registerStompEndpoints(StompEndpointRegistry registry) {
+       registry.addEndpoint("/ws")
+               .setAllowedOrigins("http://localhost:5173", "http://localhost:8080", "https://proyectoguessdastuff-production.up.railway.app") 
                 .withSockJS();
     }
 }

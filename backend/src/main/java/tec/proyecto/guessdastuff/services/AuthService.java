@@ -1,9 +1,12 @@
 package tec.proyecto.guessdastuff.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDate;
+
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +23,7 @@ import tec.proyecto.guessdastuff.dtos.DtoAuthResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoginRequest;
 import tec.proyecto.guessdastuff.dtos.DtoRegisterRequest;
 import tec.proyecto.guessdastuff.entities.User;
+import tec.proyecto.guessdastuff.entitiesSocket.DtoUserOnline;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final DateConverter dateConverter;
+
+    private final List<DtoUserOnline> connectedUsers = new ArrayList<>(); // Lista para almacenar usuarios conectados
+
+    public void addListConnect(DtoUserOnline userOnline) {
+        connectedUsers.add(userOnline); // Agregar usuario a la lista de conectados
+        // Aquí podrías agregar lógica para notificar a otros usuarios si es necesario
+    }
 
     public boolean checkPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
@@ -56,6 +67,7 @@ public class AuthService {
         extraClaims.put("role", userDetail.getAuthorities());
         extraClaims.put("username", userDetail.getUsername());
         extraClaims.put("userId", userEnt.getId());
+        extraClaims.put("email", userEnt.getEmail());
     
         // Generar el token con las reclamaciones adicionales
         String token = jwtService.generateTokenWithClaims(extraClaims, userDetail);
@@ -72,7 +84,16 @@ public class AuthService {
             .build();
     }
     
-    public DtoAuthResponse register(DtoRegisterRequest request) {
+    public DtoAuthResponse register(DtoRegisterRequest request) throws UserException {
+
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UserException("El nombre de usuario ya existe!");  
+        }
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserException("El email ingresado ya existe o no se puede ocupar.");  
+        }
+
         ERole[] rolValues = ERole.values(); // 0 = ROLE_USER | 1 = ROLE_ADMIN
         LocalDate birthdate = dateConverter.toLocalDate(request.getBirthday());
 
@@ -85,8 +106,6 @@ public class AuthService {
             .country(request.getCountry())
             .birthday(birthdate)
             .status(EStatus.REGISTERED)
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
             .build();
     
             User savedUser = userRepository.save(user);
@@ -109,5 +128,13 @@ public class AuthService {
         user.setStatus(EStatus.OFFLINE);
         userRepository.save(user);
         return ResponseEntity.ok("Finalizo la sesion");
+    }
+
+    public List<DtoUserOnline> getConnectedUsers() {
+        return connectedUsers; // Retornar la lista de usuarios conectados
+    }
+
+    public void removeListConnect(String username) {
+        connectedUsers.removeIf(user -> user.getUsername().equals(username)); // Eliminar usuario de la lista de conectados
     }
 }

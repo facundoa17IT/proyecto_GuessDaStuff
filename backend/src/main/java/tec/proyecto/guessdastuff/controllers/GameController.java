@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import tec.proyecto.guessdastuff.services.*;
 import tec.proyecto.guessdastuff.dtos.*;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "http://localhost:5173/")
@@ -40,6 +41,25 @@ public class GameController {
     public ResponseEntity<?> listTitlesOfCategory(@PathVariable Long idCategory){
         try {
             return ResponseEntity.ok(gameService.listTitlesOfCategory(idCategory));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/v1")
+    public ResponseEntity<?> listGames() {
+        try {
+            DtoLoadPlaygameResponse response = gameService.listPlayGames();
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/v1/allGames")
+    public ResponseEntity<?> listAllGames(){
+        try {
+            return ResponseEntity.ok(gameService.listAllGames());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

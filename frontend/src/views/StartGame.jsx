@@ -2,10 +2,12 @@ import { React, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../utils/AxiosConfig';
 import Modal from '../components/layouts/Modal';
+
+/** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
 const StartGame = () => {
-    const { setLoadGameData, selectedCategories, setSelectedCategories } = useContext(LoadGameContext);
+    const { setLoadGameData, selectedCategories, setSelectedCategories, setIsMultiplayer, isMultiplayer} = useContext(LoadGameContext);
     // Load Stored Cateogries From DB
     const [categories, setCategories] = useState([]);
 
@@ -50,7 +52,20 @@ const StartGame = () => {
     useEffect(() => {
         fetchActiveCategories();
     }, []);
-    
+
+    useEffect(() => {
+        console.log(selectedGameMode);
+        if(selectedGameMode == "Single"){
+            setIsMultiplayer(false);
+        }
+        else if (selectedGameMode == "Multi"){
+            setIsMultiplayer(true);
+        }
+    }, [selectedGameMode]);
+
+    useEffect(() => {
+        if(isMultiplayer || !isMultiplayer) console.log("Is multiplayer: " + isMultiplayer);
+    }, [isMultiplayer]);
 
     const handleConfirm = async () => {
         if (selectedCategories.length < 3) {
@@ -58,7 +73,6 @@ const StartGame = () => {
             return;
         }
         const categoryIds = selectedCategories.map(category => category.id);
-        //console.log(categoryIds);
         
         try {
             const response = await axiosInstance.post('/game-single/v1/load-game', {
@@ -66,9 +80,16 @@ const StartGame = () => {
                 modeGame: selectedGameMode
             }, { requiresAuth: true });
     
-            //console.log('Response:', response.data.categories);
-            setLoadGameData(response.data.categories);
-            navigate('/selection-phase');
+            //setLoadGameData(response.data.categories);
+            setLoadGameData(response.data);
+            console.log('Response:', response.data);
+
+            if(selectedGameMode == "Single"){
+                navigate('/selection-phase');
+            }
+            else {
+                navigate('/multiplayer-lobby');
+            }
         } catch (error) {
             console.error('Error:', error);
         }

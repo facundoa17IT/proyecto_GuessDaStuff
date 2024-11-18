@@ -25,5 +25,4 @@ public interface GameRepository extends JpaRepository<Game, Long>{
     """, nativeQuery = true)
     List<Object[]> listTitlesOfCategory(Long idCategory);
 
-    
 } 

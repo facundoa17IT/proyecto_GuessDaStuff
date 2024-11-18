@@ -22,8 +22,8 @@ const UsersManagment = () => {
     const customFilter = [
         { label: 'Admin', criteria: item => item.role === ROLE.ADMIN },
         { label: 'User', criteria: item => item.role === ROLE.USER },
-        { label: 'Blocked', criteria: item => item.role === STATUS.BLOCKED },
-        { label: 'Deleted', criteria: item => item.role === STATUS.DELETED },
+        { label: 'Blocked', criteria: item => item.status === STATUS.BLOCKED },
+        { label: 'Deleted', criteria: item => item.status === STATUS.DELETED },
     ];
 
     /** Register Admin */

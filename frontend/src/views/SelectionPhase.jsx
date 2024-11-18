@@ -9,6 +9,8 @@ const SelectionPhase = () => {
 
 	return (
 		<MainGameLayout
+			hideLeftPanel={true}
+			hideRightPanel={true}
 			middleHeader='Fase de Seleccion'
 			middleContent={
 				<SlotMachine />

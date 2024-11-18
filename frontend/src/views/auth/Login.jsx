@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+/** React **/
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+/** Components **/
 import Modal from '../../components/layouts/Modal';
+
+/** Utils **/
 import axiosInstance from '../../utils/AxiosConfig';
-import {useRole} from '../../contextAPI/AuthContext'
+import { jwtDecode } from 'jwt-decode';
+
+/** Context API **/
+import { useRole } from '../../contextAPI/AuthContext'
+import { SocketContext } from '../../contextAPI/SocketContext';
 
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isError, setIsError] = useState(false);
-    const [message, setMessage] = useState('');
-
-    const messageClass = isError ? 'text-error' : 'text-success';
     const [error, setError] = useState('');
-    const navigate = useNavigate();
+    
+    const { connect } = useContext(SocketContext);
+    const { setRole, setUserId } = useRole();  // Access the setRole function from the context
 
-    const { setRole } = useRole();  // Access the setRole function from the context
+    const navigate = useNavigate();
 
     const onClose = () => {
         navigate("/")
@@ -29,6 +34,7 @@ export const Login = () => {
                 username,
                 password,
             });
+            
             const { token } = response.data;
 
             // Save token to local storage
@@ -39,28 +45,50 @@ export const Login = () => {
             const decodedToken = jwtDecode(token);
             console.log('Decoded Token:', decodedToken);
 
+            // Store user Id
+            const jwtUserId = decodedToken.userId;
+            localStorage.setItem('userId', jwtUserId);
+            setUserId(jwtUserId);
+
             // Get user role
             const role = decodedToken.role[0].authority;
             console.log('Role:', role);
-
             // Store user Role in Local Storage & AuthContext
             localStorage.setItem('role', role);
             setRole(role);
 
             // Get username
             const jwtUsername = decodedToken.sub;
-            console.log('jwt Username:', jwtUsername);
             localStorage.setItem('username', jwtUsername);
-            
+
+            // Get email
+            const jwtUserEmail = decodedToken.email;
+            localStorage.setItem('email', jwtUserEmail);
+
+            // Agrega el usuario a la lista de usuarios conectados usando socket 
+            // creo el Dto en lugar del username y id
+            const dtoUserOnline = {
+                username: jwtUsername,
+                userId: jwtUserId,
+                email: jwtUserEmail
+            }
+            console.log(dtoUserOnline);
+            localStorage.setItem("userObj", JSON.stringify(dtoUserOnline));
+            connect(dtoUserOnline);
+
             // Redirect to home page
             navigate('/');
         } catch (error) {
             console.error('Login failed:', error);
-            if (error.response && error.response.data) {
-                setMessage(error.response.data.message);
+            if (error.response?.data) {
+                if(error.response.data?.message){
+                    setError(error.response.data.message);
                 console.log('Login failed: ', error.response.data.message);
+                }else {
+                    setError(error.response.data);
+                    console.log('Login failed: ', error.response.data);
+                }
             }
-            setIsError(true);
         }
     };
 
@@ -79,7 +107,7 @@ export const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <a style={{ marginBottom: '15px' }} href="">Restaurar Contraseña</a>
+             <a style={{ marginBottom: '15px' }} href="/forgot-password">Restaurar Contraseña</a>
         </Modal>
     );
 };

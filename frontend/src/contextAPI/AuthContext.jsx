@@ -4,6 +4,12 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(() => localStorage.getItem('role') || 'ROLE_GUESS');
+  const [userId, setUserId] = useState(() => localStorage.getItem('userId') || 0);
+
+  // Sync role with localStorage whenever it changes
+  useEffect(() => {
+    console.log("el user id es: " + userId);
+  }, [userId]);
 
   // Sync role with localStorage whenever it changes
   useEffect(() => {
@@ -23,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ role, setRole }}>
+    <AuthContext.Provider value={{ role, setRole, userId, setUserId }}>
       {children}
     </AuthContext.Provider>
   );

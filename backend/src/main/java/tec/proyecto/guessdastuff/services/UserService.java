@@ -1,6 +1,7 @@
 package tec.proyecto.guessdastuff.services;
 
 import java.util.*;
+import java.io.IOException;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
@@ -38,6 +40,9 @@ public class UserService {
 
     @Autowired
     JavaMailSender mailSender;
+
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     public DtoUserResponse findUserByUsername(String username) throws UserException{
 
@@ -75,7 +80,7 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> editUser(String username, DtoUserRequest dtoEditUser) throws UserException{
+    public ResponseEntity<?> editUser(String username, DtoUserRequest dtoEditUser, MultipartFile file) throws UserException, IOException{
 
         Optional<User> userOpt = userRepository.findByUsername(username);
         if(!userOpt.isPresent()){
@@ -84,9 +89,16 @@ public class UserService {
 
         User userEnt = userOpt.get();
 
-        userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
-        userEnt.setUrlPerfil(dtoEditUser.getUrlPerfil());
-        userEnt.setAtUpdate(LocalDate.now());
+        // Actualizar contraseña si se proporciona
+        if (dtoEditUser.getPassword() != null && !dtoEditUser.getPassword().isBlank()) {
+            userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
+        }
+
+        // Si hay un archivo (imagen) que se recibe
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadImage(file);
+            userEnt.setUrlPerfil(imageUrl);
+        }
 
         userRepository.save(userEnt);
 
@@ -123,8 +135,6 @@ public class UserService {
             .status(EStatus.REGISTERED)
             .birthday(LocalDate.now()) // hardcoded
             .country("Uruguay")
-            .atCreate(LocalDate.now())
-            .atUpdate(LocalDate.now())
             .build();
 
         userRepository.save(userBuild);
@@ -141,7 +151,7 @@ public class UserService {
             user.setResetToken(token);
             userRepository.save(user);
 
-            String resetUrl = "http://localhost:8080/auth/reset-password?token=" + token; // Luego modificar x la url correcta
+            String resetUrl = "http://localhost:5173/reset-password?token=" + token; // Luego modificar x la url correcta
             sendResetPasswordEmail(user.getEmail(), resetUrl);
         } else {
             throw new UserException("El usuario con el correo electrónico " + email + " no existe");
@@ -169,7 +179,6 @@ public class UserService {
             User user = userOpt.get();
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setResetToken(null); // Limpia el token después de usarlo
-            user.setAtUpdate(LocalDate.now());
             userRepository.save(user);
             return "Token válido";
         } else {
@@ -206,4 +215,8 @@ public class UserService {
         return ResponseEntity.ok("El usuario " + username + " ha sido desbloqueado de forma exitosa!");
     }
 
+    public String getImageProfile(String username) throws UserException{
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt.get().getUrlPerfil();
+    }
 }

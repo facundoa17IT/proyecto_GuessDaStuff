@@ -18,13 +18,11 @@ import { useRole } from '../contextAPI/AuthContext';
 /** Styles **/
 import '../styles/home.css'
 
-/** Utils **/
-import axiosInstance from '../utils/AxiosConfig';
-
 const HomePage = () => {
 	const { role } = useRole();
 
-	const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+	//const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+	const isMobile = false;
 
 	const navigate = useNavigate();
 
@@ -41,6 +39,12 @@ const HomePage = () => {
 		width: '180px',
 		fontSize: 'medium'
 	}
+
+	useEffect(() => {
+		localStorage.removeItem("host");
+		localStorage.removeItem("guest");
+	}, []);
+
 
 	return (
 		<div className='home-page-wrapper'>

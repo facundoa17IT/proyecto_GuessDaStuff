@@ -1,28 +1,56 @@
 /** React **/
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
 /** Assets **/
 import AppLogoVertical from '../ui/AppLogoVertical';
-import { FaUsers, FaUserCog, FaUserCircle } from "react-icons/fa";
+import { FaUserCog, FaUserCircle } from "react-icons/fa";
 import { BsDatabaseFillGear } from "react-icons/bs";
 import { PiChartBarFill } from "react-icons/pi";
 import { BsCollectionPlayFill } from "react-icons/bs";
+import { FaRankingStar } from "react-icons/fa6";
+import { IoMdMail } from "react-icons/io";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
+import { invitationData } from '../../utils/Helpers';
 
 /** Style **/
 import '../../styles/navbar.css';
 
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
+import { SocketContext } from '../../contextAPI/SocketContext';
 
 const Navbar = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
     const { role } = useRole();  // Access the role from context
+
+    const { invitation, setInvitation, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection } = useContext(SocketContext);
+    
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
+    const handleInvitationInteraction = (invitation) => {
+        if (invitation) {
+            if (invitation.action === 'INVITE') {
+                setInvitationCount(invitationCount + 1);
+                setInvitationCollection([...invitationCollection, invitation]);
+                setInvitation(null);
+                alert("Has recibido una nueva invitación!");
+            }
+        } else {
+            console.error("Invalid Invitation");
+        }
+    };
+    
+    useEffect(() => {
+        if (invitation) {
+            handleInvitationInteraction(invitation);
+            console.log(invitation);
+        }
+    }, [invitation]);
 
     if (isMobile) return null;
 
@@ -48,18 +76,23 @@ const Navbar = () => {
                             {role === 'ROLE_USER' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
-                                            <PiChartBarFill style={{ marginRight: '5px' }} />Estadisticas
+                                        <Link to={PLAYER_ROUTES.RANKING} className="nav-links">
+                                            <FaRankingStar style={{ marginRight: '5px' }} />Ranking
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to={PLAYER_ROUTES.INVITATIONS} className="nav-links">
+                                            <IoMdMail style={{ marginRight: '5px' }} />Invitaciones<span style={{ marginLeft: '5px' }}>&#40;{invitationCount}&#41;</span>
+                                        </Link>
+                                    </li>
+                                    {/* <li className="nav-item">
+                                        <Link to="comunidad" className="nav-links">
                                             <FaUsers style={{ marginRight: '5px' }} />Comunidad
                                         </Link>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
-                                            <FaUserCircle style={{ marginRight: '5px' }} />Perfil
+                                        <Link to={PLAYER_ROUTES.PROFILE} className="nav-links">
+                                            <FaUserCircle style={{ marginRight: '5px' }} />Perfil - <span style={{ marginLeft: '5px' }}>{userObj.username}</span>
                                         </Link>
                                     </li>
                                 </>
@@ -78,7 +111,7 @@ const Navbar = () => {
                                         </Link>
                                     </li>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to="admin/game-matches-management" className="nav-links">
                                             <BsCollectionPlayFill style={{ marginRight: '5px' }} />Partidas
                                         </Link>
                                     </li>

@@ -1,22 +1,36 @@
+/** React **/
 import React, { useState, useContext, useEffect } from 'react';
-import '../../styles/slot-machine.css';
-import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useNavigate } from 'react-router-dom';
+
+/** Context API **/
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
+import { useRole } from '../../contextAPI/AuthContext'
+
+/** Utils **/
+import { PLAYER_ROUTES } from '../../utils/constants';
+
+/** Style **/
+import '../../styles/slot-machine.css';
+
+
 const SlotMachine = () => {
     const { loadGameData } = useContext(LoadGameContext);
+    const { userId } = useRole();  // Access the setRole function from the context
+
     const navigate = useNavigate();
 
     useEffect(() => {
         //console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
+        console.log("user id slot machine -> " + userId);
         setTimeout(() => {
             spin();
         }, 1000);
     }, []);
 
     // Estado para almacenar el valor de cada slot
-    const [slot1, setSlot1] = useState(loadGameData[0].gameModes[0]); // Inicializa con el primer modo de la primera categoría
-    const [slot2, setSlot2] = useState(loadGameData[1].gameModes[0]); // Inicializa con el primer modo de la segunda categoría
-    const [slot3, setSlot3] = useState(loadGameData[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
+    const [slot1, setSlot1] = useState(loadGameData.categories[0].gameModes[0]); // Inicializa con el primer modo de la primera categoría
+    const [slot2, setSlot2] = useState(loadGameData.categories[1].gameModes[0]); // Inicializa con el primer modo de la segunda categoría
+    const [slot3, setSlot3] = useState(loadGameData.categories[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;
@@ -33,9 +47,9 @@ const SlotMachine = () => {
 
         // Simulación del giro de los slots
         let spinInterval = setInterval(() => {
-            setSlot1(getRandomItem(loadGameData[0].gameModes)); // Cambia el slot 1 a un modo aleatorio
-            setSlot2(getRandomItem(loadGameData[1].gameModes)); // Cambia el slot 2 a un modo aleatorio
-            setSlot3(getRandomItem(loadGameData[2].gameModes)); // Cambia el slot 3 a un modo aleatorio
+            setSlot1(getRandomItem(loadGameData.categories[0].gameModes)); // Cambia el slot 1 a un modo aleatorio
+            setSlot2(getRandomItem(loadGameData.categories[1].gameModes)); // Cambia el slot 2 a un modo aleatorio
+            setSlot3(getRandomItem(loadGameData.categories[2].gameModes)); // Cambia el slot 3 a un modo aleatorio
         }, spinDuration * 0.05); // Intervalo entre cambios
 
         // Detener el giro después de spinDuration
@@ -43,9 +57,9 @@ const SlotMachine = () => {
             clearInterval(spinInterval); // Detiene el intervalo de giro
 
             // Selecciona el modo final para cada slot
-            const finalSlot1 = getRandomItem(loadGameData[0].gameModes);
-            const finalSlot2 = getRandomItem(loadGameData[1].gameModes);
-            const finalSlot3 = getRandomItem(loadGameData[2].gameModes);
+            const finalSlot1 = getRandomItem(loadGameData.categories[0].gameModes);
+            const finalSlot2 = getRandomItem(loadGameData.categories[1].gameModes);
+            const finalSlot3 = getRandomItem(loadGameData.categories[2].gameModes);
 
             setSlot1(finalSlot1); // Establece el valor final del slot 1
             setSlot2(finalSlot2); // Establece el valor final del slot 2
@@ -53,19 +67,19 @@ const SlotMachine = () => {
 
             // Crear objetos de resultado para cada slot
             const result1 = {
-                category: loadGameData[0].name,
+                category: loadGameData.categories[0].name,
                 mode: finalSlot1,
-                id: loadGameData[0].id
+                id: loadGameData.categories[0].id
             };
             const result2 = {
-                category: loadGameData[1].name,
+                category: loadGameData.categories[1].name,
                 mode: finalSlot2,
-                id: loadGameData[1].id
+                id: loadGameData.categories[1].id
             };
             const result3 = {
-                category: loadGameData[2].name,
+                category: loadGameData.categories[2].name,
                 mode: finalSlot3,
-                id: loadGameData[2].id
+                id: loadGameData.categories[2].id
             };
 
             // Establecer los resultados en el estado
@@ -73,22 +87,21 @@ const SlotMachine = () => {
             setResults(resultsArray);
 
             // Crear el objeto de salida en el formato requerido
-            const userId = "1234"; // Cambia esto por el ID real del usuario si es necesario
-            const output = {
+            const initGameData = {
                 userId: userId,
                 parCatMod: resultsArray.map(result => ({
                     cat: result.id, // ID de la categoría
                     mod: result.mode // Modo de juego seleccionado
                 }))
             };
-
+            //console.log(`Slot: ${JSON.stringify(output, null, 2)}`);
             setIsSpinning(false); // Cambia el estado de giro a falso
 
             // Espera 3 segundos antes de redirigir
             setTimeout(() => {
-                navigate('/single-game-lobby', {
+                navigate(PLAYER_ROUTES.LOAD_GAME, {
                     state: {
-                        initGameBody: output
+                        initGameBody: initGameData
                     }
                 });
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
