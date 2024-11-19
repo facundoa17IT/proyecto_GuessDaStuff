@@ -20,7 +20,7 @@ const Invitations = () => {
     const navigate = useNavigate();
 
     const { client, invitation, setInvitation, invitationCollection, setInvitationCollection, invitationCount, setInvitationCount, implementationGameBody, suscribeToGameSocket } = useContext(SocketContext);
-    const { isMultiplayer, setIsMultiplayer } = useContext(LoadGameContext);
+    const { setIsMultiplayer } = useContext(LoadGameContext);
 
     const [acceptMatch, setAcceptMatch] = useState(false);
 
@@ -32,28 +32,21 @@ const Invitations = () => {
     const handleInvitationListInteraction = (listId, buttonKey, item) => {
         if (listId === "invitationsList" && Object.values(item).length > 0) {
             console.log("Invitations List Interaction");
-            switch (buttonKey) {
-                case 'acceptBtn':
-                    console.log('Accept invitation');
-                    respondToInvitation(true, item);
-                    setAcceptMatch(true);
-                    setIsMultiplayer(true);
-                    const hostObj = {
-                        username: item.usernameHost,
-                        userId: item.userIdHost,
-                    }
-                    localStorage.setItem("host", JSON.stringify(hostObj));
-                    localStorage.setItem("guest", JSON.stringify(userObj));
-                    break;
-
-                case 'cancelBtn':
-                    console.log('Cancel invitation');
-                    respondToInvitation(false, item);
-                    setAcceptMatch(false);
-                    break;
-
-                default:
-                    break;
+            if (buttonKey === 'acceptBtn') {
+                console.log('Accept invitation');
+                respondToInvitation(true, item);
+                setAcceptMatch(true);
+                setIsMultiplayer(true);
+                const hostObj = {
+                    username: item.usernameHost,
+                    userId: item.userIdHost,
+                };
+                localStorage.setItem("host", JSON.stringify(hostObj));
+                localStorage.setItem("guest", JSON.stringify(userObj));
+            } else if (buttonKey === 'cancelBtn') {
+                console.log('Cancel invitation');
+                respondToInvitation(false, item);
+                setAcceptMatch(false);
             }
         } else {
             console.log("Error list ID");
@@ -102,7 +95,7 @@ const Invitations = () => {
                             idGame: invitation.gameId // Agrega el `idGame` también
                         }
                     });
-                }, 3000); // Espera 3 segundos adicionales para navegar
+                }, 1500);
             }
         }
     }, [implementationGameBody]);

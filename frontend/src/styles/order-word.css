@@ -9,6 +9,10 @@
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px;
+    border: 3px double var(--link-color);
+    width: 100%;
+    min-height: 60px;
+    border-radius: 8px;
   }
   
   .buttonContainer {
@@ -32,18 +36,18 @@
   .selectedButton {
     color: var(--link-color);
     background-color: transparent;
-    border: 3px double var(--link-color) !important;
     padding: 5px;
-    margin: 2px;
-    width: 40px;
+    margin: 5px;
+    width: fit-content;
     font-size: 25px;
+    border: none;
   }
   
   .buttonRow {
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin-top: 20px;
+    padding: 5px;
   }
   
   .verifyButton, .resetButton {
@@ -60,18 +64,3 @@
   .verifyButton {
     margin-right: 10px;
   }
-  
-  .resultMessage {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px 0;
-  }
-  
-  .resultMessage.correct {
-    color: #006400; /* Verde oscuro para correcto */
-  }
-  
-  .resultMessage.incorrect {
-    color: #8B0000; /* Rojo oscuro para incorrecto */
-  }
-  

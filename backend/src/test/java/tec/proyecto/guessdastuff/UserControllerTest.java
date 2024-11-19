@@ -1,4 +1,5 @@
 // package tec.proyecto.guessdastuff;
+// package tec.proyecto.guessdastuff;
 
 // import static org.mockito.ArgumentMatchers.any;
 // import static org.mockito.ArgumentMatchers.eq;
@@ -92,29 +93,32 @@
 //         // Verify interaction
 //         verify(userService, times(1)).findUserByUsername(username);
 //     }
+//         // Verify interaction
+//         verify(userService, times(1)).findUserByUsername(username);
+//     }
 
-//     // @Test
-//     // @WithMockUser(roles = "ADMIN")
-//     // void testEditUser() throws Exception {
-//     //     String username = "testUser";
-//     //     DtoUserRequest dtoUser = new DtoUserRequest();
-//     //     dtoUser.setPassword("UpdatedPassword");  // Set password instead of name
+//     @Test
+//     @WithMockUser(roles = "ADMIN")
+//     void testEditUser() throws Exception {
+//         String username = "testUser";
+//         DtoUserRequest dtoUser = new DtoUserRequest();
+//         dtoUser.setPassword("UpdatedPassword");  // Set password instead of name
         
-//     //     // Using doAnswer to mock the response
-//     //     doAnswer(invocation -> {
-//     //         return "User updated"; // Returning mocked response
-//     //     }).when(userService).editUser(eq(username), any(DtoUserRequest.class));
+//         // Using doAnswer to mock the response
+//         doAnswer(invocation -> {
+//             return "User updated"; // Returning mocked response
+//         }).when(userService).editUser(eq(username), any(DtoUserRequest.class));
 
-//     //     mockMvc.perform(put("/api/users/v1/edit/{username}", username)
-//     //                         .contentType("application/json")
-//     //                         .content(objectMapper.writeValueAsString(dtoUser)))
-//     //                 .andExpect(status().isOk())
-//     //                 .andExpect(content().string("User updated"))
-//     //                 .andDo(MockMvcResultHandlers.print());
+//         mockMvc.perform(put("/api/users/v1/edit/{username}", username)
+//                             .contentType("application/json")
+//                             .content(objectMapper.writeValueAsString(dtoUser)))
+//                     .andExpect(status().isOk())
+//                     .andExpect(content().string("User updated"))
+//                     .andDo(MockMvcResultHandlers.print());
 
-//     //     // Verify interaction
-//     //     verify(userService, times(1)).editUser(eq(username), any(DtoUserRequest.class));
-//     // }
+//         // Verify interaction
+//         verify(userService, times(1)).editUser(eq(username), any(DtoUserRequest.class));
+//     }
 
 //     @Test
 //     @WithMockUser(roles = "ADMIN")

@@ -70,7 +70,7 @@ const HomePage = () => {
 					)
 				)}
 			</div>
-			{!isMobile && <div className='home-page-footer'>
+			{/* {!isMobile && <div className='home-page-footer'>
 				<div className='home-page-footer-container'>
 					<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 						<small style={{ marginBottom: '0' }}>Descarga la App</small>
@@ -78,7 +78,7 @@ const HomePage = () => {
 						<button style={minimalistButtonStyle}><span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FaAppStoreIos fontSize={30} style={{ marginRight: '10px' }} />App Store</span></button>
 					</div>
 				</div>
-			</div>}
+			</div>} */}
 		</div>
 	);
 };

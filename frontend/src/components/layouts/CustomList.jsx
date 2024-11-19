@@ -28,15 +28,17 @@ const CustomList = ({
     buttons = [],
     extraColumns = () => [],
     width = '100%',
+    defaultFilter = 'none', // Nueva propiedad para el filtro predeterminado
     customFilter = [],  // Accept custom filter function
+    defaultSort = 'label-asc',
     customSort = [],     // Accept custom sort function
     onButtonInteraction, // New prop
 }) => {
     const { setSelectedItem, setSelectedBtn, setSelectedListId} = useContext(ListContext);
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedFilter, setSelectedFilter] = useState('none');
-    const [sortOption, setSortOption] = useState('none'); // Default sort by item label (ascending)
+    const [selectedFilter, setSelectedFilter] = useState(defaultFilter);
+    const [sortOption, setSortOption] = useState(defaultSort); // Default sort by item label (ascending)
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -93,12 +95,6 @@ const CustomList = ({
         onButtonInteraction?.(listId, buttonKey, item);
         console.log(`List ID: ${listId}, Button: ${buttonKey}, Item: ${JSON.stringify(item, null, 2)}`);
     };
-
-    // useEffect(() => {
-    //     if (setSelectedItem, setSelectedBtn, setSelectedListId) {
-    //         onButtonInteraction(setSelectedListId, setSelectedBtn, setSelectedItem);
-    //     }
-    // }, [setSelectedItem, setSelectedBtn, setSelectedListId]);
 
     return (
         <div className='list-wrapper' style={{ width: `${width}` }}>
