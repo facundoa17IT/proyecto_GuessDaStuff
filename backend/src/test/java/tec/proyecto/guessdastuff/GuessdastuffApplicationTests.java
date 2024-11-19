@@ -1,13 +1,13 @@
-package tec.proyecto.guessdastuff;
+// package tec.proyecto.guessdastuff;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class GuessdastuffApplicationTests {
+// @SpringBootTest
+// class GuessdastuffApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }

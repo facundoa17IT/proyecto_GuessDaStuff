@@ -112,7 +112,7 @@ const SlotMachineMulti = () => {
             setTimeout(() => {
                 navigate(PLAYER_ROUTES.LOAD_GAME);
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
-        }, spinDuration); // Duración del giro (2 segundos)
+        }, spinDuration);
     };
 
     return (

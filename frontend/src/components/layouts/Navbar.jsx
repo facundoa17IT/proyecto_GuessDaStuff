@@ -14,7 +14,7 @@ import { IoMdMail } from "react-icons/io";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
-import { invitationData } from '../../utils/Helpers';
+import toast from 'react-hot-toast';
 
 /** Style **/
 import '../../styles/navbar.css';
@@ -38,7 +38,7 @@ const Navbar = () => {
                 setInvitationCount(invitationCount + 1);
                 setInvitationCollection([...invitationCollection, invitation]);
                 setInvitation(null);
-                alert("Has recibido una nueva invitación!");
+                toast('Has recibido una nueva invitacion!', {icon:'📩'});
             }
         } else {
             console.error("Invalid Invitation");

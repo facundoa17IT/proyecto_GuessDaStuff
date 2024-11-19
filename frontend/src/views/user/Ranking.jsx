@@ -91,8 +91,8 @@ const Ranking = () => {
                     getItemLabel={username}
                     extraColumns={extraColumns}
                     customFilter={customFilter}
-                    // buttons={['infoBtn']}
-                    // onButtonInteraction={}
+                    defaultFilter='Partidas ganadas'
+                    defaultSort='none'
                 />
             }
         />

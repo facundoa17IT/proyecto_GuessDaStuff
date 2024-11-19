@@ -1,43 +1,64 @@
-import { React, useState, useContext, useEffect } from 'react';
+/** React **/
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../utils/AxiosConfig';
-import Modal from '../components/layouts/Modal';
 
-/** Context API **/
+/** Components **/
+import Modal from '../components/layouts/Modal';
+import toast from 'react-hot-toast';
+import { ClipLoader } from 'react-spinners';
+
+/** Utils **/
+import axiosInstance from '../utils/AxiosConfig';
+
+/** Context API**/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
+/** Style **/
+import '../styles/start-game.css';
+
 const StartGame = () => {
-    const { setLoadGameData, selectedCategories, setSelectedCategories, setIsMultiplayer, isMultiplayer} = useContext(LoadGameContext);
-    // Load Stored Cateogries From DB
+    const { setLoadGameData, selectedCategories, setSelectedCategories, setIsMultiplayer } = useContext(LoadGameContext);
     const [categories, setCategories] = useState([]);
-
     const [selectedGameMode, setSelectedGameMode] = useState('');
-    const [loading, setLoading] = useState(true); // Estado para indicar que está cargando
-
-    const handleCategoryToggle = (category) => {
-        if (selectedCategories.length == 3) {
-            return;
-        }
-
-        if (selectedCategories.some((selectedCategory) => selectedCategory.id === category.id)) {
-            // Elimina el objeto de la categoría si ya está en la lista
-            setSelectedCategories(selectedCategories.filter((selectedCategory) => selectedCategory.id !== category.id));
-        } else {
-            // Agrega el objeto de la categoría si no está en la lista
-            setSelectedCategories([...selectedCategories, category]);
-        }
-    };
+    const [loading, setLoading] = useState(true);
 
     const gameType = ['Single', 'Multi'];
 
     const navigate = useNavigate();
 
-    const handleGameTypeChange = (event) => {
-        setSelectedGameMode(event.target.value);
+    const handleCategoryToggle = (category) => {
+        if (selectedCategories.some((selectedCategory) => selectedCategory.id === category.id)) {
+            setSelectedCategories(selectedCategories.filter((selectedCategory) => selectedCategory.id !== category.id));
+        } else if (selectedCategories.length < 3) {
+            setSelectedCategories([...selectedCategories, category]);
+        } else {
+            toast('Has alcanzado el limite de categorias!');
+        }
+    };
+
+    const selectRandomCategories = () => {
+        if (categories.length < 3) {
+            toast('No hay suficientes categorías para seleccionar.');
+            return;
+        }
+
+        const randomCategories = [];
+        const selectedIndices = new Set();
+
+        while (randomCategories.length < 3) {
+            const randomIndex = Math.floor(Math.random() * categories.length);
+
+            if (!selectedIndices.has(randomIndex)) {
+                selectedIndices.add(randomIndex);
+                randomCategories.push(categories[randomIndex]);
+            }
+        }
+
+        setSelectedCategories(randomCategories);
     };
 
     const fetchActiveCategories = async () => {
-        setLoading(true); // Start loading
+        setLoading(true);
         setSelectedCategories([]);
 
         try {
@@ -46,117 +67,88 @@ const StartGame = () => {
         } catch (error) {
             console.error('Error fetching categories:', error);
         } finally {
-            setLoading(false); // End loading in either case
+            setLoading(false);
         }
     };
+
     useEffect(() => {
         fetchActiveCategories();
     }, []);
 
     useEffect(() => {
-        console.log(selectedGameMode);
-        if(selectedGameMode == "Single"){
+        if (selectedGameMode === 'Single') {
             setIsMultiplayer(false);
-        }
-        else if (selectedGameMode == "Multi"){
+        } else if (selectedGameMode === 'Multi') {
             setIsMultiplayer(true);
         }
     }, [selectedGameMode]);
 
-    useEffect(() => {
-        if(isMultiplayer || !isMultiplayer) console.log("Is multiplayer: " + isMultiplayer);
-    }, [isMultiplayer]);
-
     const handleConfirm = async () => {
         if (selectedCategories.length < 3) {
-            alert('Por favor selecciona 3 categorias para continuar!');
+            toast('Por favor selecciona 3 categorias para continuar!');
             return;
         }
+
         const categoryIds = selectedCategories.map(category => category.id);
-        
+
         try {
             const response = await axiosInstance.post('/game-single/v1/load-game', {
                 categories: categoryIds,
                 modeGame: selectedGameMode
             }, { requiresAuth: true });
-    
-            //setLoadGameData(response.data.categories);
-            setLoadGameData(response.data);
-            console.log('Response:', response.data);
 
-            if(selectedGameMode == "Single"){
+            setLoadGameData(response.data);
+
+            if (selectedGameMode === 'Single') {
                 navigate('/selection-phase');
-            }
-            else {
+            } else {
                 navigate('/multiplayer-lobby');
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
-    
+
     const handleCloseModal = () => {
         setSelectedCategories([]);
         navigate('/');
-    }
+    };
 
     return (
         <div>
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
-                <div style={{ height: '100%' }}>
+                <div className="start-game-modal">
                     <h2>Categorias</h2>
-                    {loading ? (
-                        <p>Cargando categorías...</p> // Mostrar mientras carga
-                    ) : (
-                        <div>
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    gap: '10px',
-                                    justifyContent: 'flex-start',
-                                    alignItems: 'center',
-                                    overflowY: 'auto',
-                                    padding: '15px 5px',
-                                    height: '120px',
-                                    border:'1px solid var(--border-color)',
-                                    borderRadius:'8px'
-                                }}>
-                                {categories.map((category) => (
+                    <div>
+                        <div className="categories-container">
+                            {!loading ? (
+                                categories.map((category) => (
                                     <div
-                                        className='chip'
+                                        className={`chip ${selectedCategories.includes(category) ? 'selected' : ''}`}
                                         key={category.id}
                                         onClick={() => handleCategoryToggle(category)}
-                                        style={{
-                                            backgroundColor: selectedCategories.includes(category) ? 'var(--secondary-bg-color)' : 'transparent',
-                                            color: selectedCategories.includes(category) ? 'var(--secondary-text-color)' : 'var(--link-color)',
-                                            width: 'fit-content',
-                                            padding: '5px 10px',
-                                            cursor: 'pointer',
-                                            border: '1px solid var(--border-color)',
-                                            borderRadius: '20px',
-                                            display: 'inline-block',
-                                            transition: 'background-color 0.3s, color 0.3s, transform 0.25s, border-color 0.25s, letter-spacing 0.25s',
-                                            fontSize: 'small'
-                                        }}
                                     >
                                         {category.name}
                                     </div>
-                                ))}
-                            </div>
-                            <small style={{ margin: '5px' }}>Total Seleccionadas: {selectedCategories.length}</small>
+                                ))
+                            ) : <ClipLoader />}
                         </div>
-                    )}
+                        <div className="category-selection-info">
+                            <small>Total Seleccionadas: {selectedCategories.length}</small>
+                            <button className="random-selection-btn" onClick={selectRandomCategories}>Seleccion Aleatoria</button>
+                        </div>
+                    </div>
+                    <div style={{ margin: '20px' }}></div>
                     <h2>Estilo de Juego</h2>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>
+                    <div className="game-type-container">
                         {gameType.map((gt) => (
-                            <div key={gt}>
-                                <label style={{ cursor: 'pointer' }}>
+                            <div className="game-type-option" key={gt}>
+                                <label>
                                     <input
                                         type="radio"
                                         name="gt-options"
                                         value={gt}
-                                        onChange={handleGameTypeChange}
+                                        onChange={(e) => setSelectedGameMode(e.target.value)}
                                         required
                                     />
                                     {gt}player

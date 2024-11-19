@@ -14,14 +14,12 @@ const MultipleChoice = ({ MCinfo }) => {
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
-    const [resultMessage, setResultMessage] = useState('');
 
     const { question, randomCorrectWord, randomWord1, randomWord2, randomWord3 } = MCinfo;
 
     useEffect(() => {
         setSelectedAnswer(null);
         setConfirmedAnswer(null);
-        setResultMessage('');
         setAnswer('');
     }, [MCinfo]);
 
@@ -29,19 +27,17 @@ const MultipleChoice = ({ MCinfo }) => {
 
     const handleCheckAnswer = async (selectedAnswer) => {
         if (!randomCorrectWord) {
-            setResultMessage("Este juego aún no fue implementado.");
+            console.warn("Este juego aún no fue implementado.");
             return;
         }
+
         try {
+            setAnswer(selectedAnswer);
             const isCorrect = selectedAnswer === randomCorrectWord;
-            if (isCorrect) {
-                setIsCorrectAnswer(isCorrect);
-                setResultMessage("¡Correcto!");
-            } else {
-                setResultMessage("Incorrecto. Intenta de nuevo.");
-            }
+            console.log(isCorrect ? "Correcto!" : "Incorrecto!");
+            setIsCorrectAnswer(isCorrect);
         } catch (error) {
-            console.error("Error al enviar la respuesta:", error);
+            console.error("Error al verificar la respuesta:", error);
         }
     };
 
@@ -63,11 +59,21 @@ const MultipleChoice = ({ MCinfo }) => {
                     {allOptions.map((option, index) => (
                         <button
                             key={index}
-                            className={`optionButton ${selectedAnswer === option ? 'selectedOption' : ''} ${confirmedAnswer && option === randomCorrectWord ? 'correctOption' : ''} ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOption' : ''}`}
+                            className={
+                                `optionButton ${selectedAnswer === option ? 'selectedOption' : ''} 
+                                ${confirmedAnswer && option === randomCorrectWord ? 'correctOption' : ''} 
+                                ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOption' : ''}`
+                            }
                             onClick={() => setSelectedAnswer(option)}
                             disabled={confirmedAnswer !== null}
                         >
-                            <span className={`optionText ${selectedAnswer === option ? 'selectedOptionText' : ''} ${confirmedAnswer && option === randomCorrectWord ? 'correctOptionText' : ''} ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOptionText' : ''}`}>
+                            <span
+                                className={
+                                    `optionText ${selectedAnswer === option ? 'selectedOptionText' : ''} 
+                                    ${confirmedAnswer && option === randomCorrectWord ? 'correctOptionText' : ''} 
+                                    ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOptionText' : ''}`
+                                }
+                            >
                                 {option}
                             </span>
                         </button>
@@ -75,16 +81,9 @@ const MultipleChoice = ({ MCinfo }) => {
                 </div>
             </div>
 
-
             <button className="confirmButton" onClick={confirmAnswer} disabled={confirmedAnswer !== null}>
                 Confirmar Opción
             </button>
-
-            {confirmedAnswer && (
-                <p className="answerText">
-                    {confirmedAnswer === randomCorrectWord ? '¡Respuesta correcta!' : 'Respuesta incorrecta.'}
-                </p>
-            )}
         </div>
     );
 };

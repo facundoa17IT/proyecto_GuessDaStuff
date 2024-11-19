@@ -188,7 +188,7 @@ const MultiplayerLobby = () => {
                             idGame: gameId
                         }
                     });
-                }, 3000); // 3000 ms para esperar 3 segundos adicionales
+                }, 1500);
             }
         }
     }, [implementationGameBody]);

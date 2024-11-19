@@ -12,56 +12,31 @@ const GuessPhrase = ({ GPinfo }) => {
 	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 	const { phrase, correct_word } = GPinfo;
 	const [userInput, setUserInput] = useState('');
-	const [resultMessage, setResultMessage] = useState('');
 
 	useEffect(() => {
 		setUserInput('');
-		setResultMessage('');
 	}, [GPinfo]);
 
-	// const handleAnswer = () => {
-	// 	if (!correct_word) {
-	// 		setResultMessage("Este juego aún no fue implementado.");
-	// 		return;
-	// 	}
-	// 	setAnswer(userInput.trim().toUpperCase());
-	// }
-
-	// const handleCheckAnswer = async () => {
-	// 	try {
-	// 		if (isCorrectAnswer) {
-	// 			setResultMessage("¡Correcto!");
-	// 			await new Promise((resolve) => setTimeout(resolve, 1500));
-	// 			onCorrect();
-	// 		} else {
-	// 			setResultMessage("Incorrecto. Intenta de nuevo.");
-	// 		}
-	// 	} catch (error) {
-	// 		console.error("Error al enviar la respuesta:", error);
-	// 		setResultMessage("Hubo un error al verificar la respuesta.");
-	// 	}
-	// };
-
 	const handleCheckAnswer = async () => {
-        if (correct_word === null) {
-            setResultMessage("Este juego aún no fue implementado.");
-        } else {
-			try {
-				const isCorrect = userInput.trim().toLowerCase() === correct_word.toLowerCase();
-				console.log(isCorrect ? "Correcto!" : "Incorrecto!");
+		if (!correct_word) {
+			console.warn("Este juego aún no fue implementado.");
+			return;
+		}
 
-				if (isCorrect) {
-					setIsCorrectAnswer(true);
-					setResultMessage("¡Correcto!");
-				} else {
-					setResultMessage("Incorrecto. Intenta de nuevo.");
-				}
-			} catch (error) {
-				console.error("Error al enviar la respuesta:", error);
-				setResultMessage("Hubo un error al verificar la respuesta.");
-			}
-        }
-    };
+		try {
+			setAnswer(userInput);
+			const isCorrect = userInput.trim().toLowerCase() === correct_word.toLowerCase();
+			setIsCorrectAnswer(isCorrect);
+			console.log(isCorrect ? "Correcto!" : "Incorrecto!");
+		} catch (error) {
+			console.error("Error al verificar la respuesta:", error);
+		}
+	};
+
+	const handleReset = () => {
+		setUserInput("");
+		setIsCorrectAnswer(null);
+	};
 
 	return (
 		<div className="game-mode-container gp-container">
@@ -72,20 +47,18 @@ const GuessPhrase = ({ GPinfo }) => {
 					<p>Este juego aún no fue implementado.</p>
 				)}
 			</div>
-			{resultMessage && (
-				<div className={`resultMessage ${isCorrectAnswer ? 'correct' : ''}`}>
-					{resultMessage}
-				</div>
-			)}
+
 			<input
-				className="input"
+				className={`input ${isCorrectAnswer === null ? '' : isCorrectAnswer ? 'respuesta-correcta' : 'respuesta-incorrecta'}`}
 				value={userInput}
 				onChange={(e) => setUserInput(e.target.value)}
 				placeholder="Escribe tu respuesta"
 			/>
-			<button className="verifyButton" onClick={handleCheckAnswer}>
-				Verificar
-			</button>
+
+			<div className="buttonRow">
+				<button className="resetButton" onClick={handleReset}>Borrar</button>
+				<button className="verifyButton" onClick={handleCheckAnswer}>Verificar</button>
+			</div>
 		</div>
 	);
 };
