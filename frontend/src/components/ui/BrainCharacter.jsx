@@ -4,7 +4,7 @@ import HintGlobe from '../../assets/hint-globe.png'
 import Typewriter from 'typewriter-effect';
 import '../../styles/brain-character.css'
 
-const BrainCharacter = ({ wordsDelay = 3000, key, words = "", autoStart = false, hideDialogue = false, sprite = idle }) => {
+const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, sprite = idle }) => {
     return (
         <div className='character-container'>
             {!hideDialogue && <div className="globe-hint-container">
@@ -21,17 +21,8 @@ const BrainCharacter = ({ wordsDelay = 3000, key, words = "", autoStart = false,
                                 .typeString(words)
                                 .start();
                         }}
-                        key={key} // Importante para que re-renderice el componente con cada nueva palabra
+                        key={rerenderKey} // Importante para que re-renderice el componente con cada nueva palabra
                     />
-                    {/* <Typewriter
-                        options={{
-                            delay: 80,
-                            strings: words,  // String sequence array
-                            autoStart: autoStart,
-                            pauseFor: wordsDelay,
-                            loop: true,
-                        }}
-                    /> */}
                 </div>
             </div>}
             <img className="brain-character" src={sprite} alt="" />

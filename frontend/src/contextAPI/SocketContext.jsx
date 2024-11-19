@@ -9,8 +9,13 @@ export const SocketProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const [invitationCount, setInvitationCount] = useState(0);
     const [invitationCollection, setInvitationCollection] = useState([]);
+    const [implementationGameBody, setImplementationGameBody] = useState(null);
+    const [usernameHost, setUsernameHost] = useState(null);
+    const [gameId, setGameId] = useState(null);
 
     const client = useRef(null);
+
+    let gameSubscription = null;
 
     useEffect(() => {
         localStorage.setItem("connectedUsers", JSON.stringify(users));
@@ -22,7 +27,7 @@ export const SocketProvider = ({ children }) => {
             console.log(invitationCollection);
         }
     }, [invitationCollection]);
-
+    
     const connect = (dtoUserOnline) => {
         client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
 
@@ -55,6 +60,34 @@ export const SocketProvider = ({ children }) => {
             client.current.send('/app/leave', {}, JSON.stringify(dtoUserOnline));
             client.current.disconnect();
         }
+        else{
+            console.error("Error con el cliente STOMP");
+        }
+    };
+
+    const suscribeToGameSocket = (gameId) => {
+        if (client.current) {
+            client.current.subscribe(`/game/${gameId}/`, (message) => {
+                const implementGame = JSON.parse(message.body);
+                console.log(implementGame);
+                setImplementationGameBody(implementGame);
+                console.warn("SOCKET -> /game/gameId/");
+            });
+        }
+        else{
+            console.error("Error con el cliente STOMP");
+        }
+    }
+
+    const unsubscribeFromGameSocket = () => {
+        if (gameSubscription) {
+            // Llama al método unsubscribe para cancelar la suscripción
+            gameSubscription.unsubscribe();
+            console.info("Desuscripción exitosa del canal de juego");
+            gameSubscription = null;
+        } else {
+            console.warn("No hay ninguna suscripción activa para desuscribirse");
+        }
     };
 
     return (
@@ -63,13 +96,15 @@ export const SocketProvider = ({ children }) => {
                 connect,
                 disconnect,
                 users,
-                invitation,
-                setInvitation,
+                invitation, setInvitation,
                 client,
-                invitationCount,
-                setInvitationCount,
-                invitationCollection,
-                setInvitationCollection,
+                invitationCount, setInvitationCount,
+                invitationCollection, setInvitationCollection,
+                implementationGameBody, setImplementationGameBody,
+                usernameHost, setUsernameHost,
+                gameId, setGameId,
+                suscribeToGameSocket,
+                unsubscribeFromGameSocket
             }}
         >
             {children}

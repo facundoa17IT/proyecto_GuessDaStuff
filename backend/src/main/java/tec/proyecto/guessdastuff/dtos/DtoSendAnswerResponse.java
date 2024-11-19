@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DtoSendAnswerResponse {
-
+    private String status; // FINISH_GAME FINISH_ROUND
     private String idUserWin;
     //GUID DE CADA JUEGO MULTIJUGADOR. SON 3. es un  que apunta guid() -> 1021 1022 1023
     private String idGameMulti;

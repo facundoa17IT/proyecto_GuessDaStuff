@@ -14,7 +14,7 @@ import { IoMdMail } from "react-icons/io";
 
 /** Utils**/
 import { PUBLIC_ROUTES, ADMIN_ROUTES, PLAYER_ROUTES } from '../../utils/constants';
-import { invitationData } from '../../utils/Helpers';
+import toast from 'react-hot-toast';
 
 /** Style **/
 import '../../styles/navbar.css';
@@ -32,8 +32,19 @@ const Navbar = () => {
     
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    if (isMobile) return null;
-
+    const handleInvitationInteraction = (invitation) => {
+        if (invitation) {
+            if (invitation.action === 'INVITE') {
+                setInvitationCount(invitationCount + 1);
+                setInvitationCollection([...invitationCollection, invitation]);
+                setInvitation(null);
+                toast('Has recibido una nueva invitacion!', {icon:'📩'});
+            }
+        } else {
+            console.error("Invalid Invitation");
+        }
+    };
+    
     useEffect(() => {
         if (invitation) {
             handleInvitationInteraction(invitation);
@@ -41,24 +52,7 @@ const Navbar = () => {
         }
     }, [invitation]);
 
-    const handleInvitationInteraction = (invitation) => {
-        if (invitation) {
-            console.log(invitation.action);
-            switch (invitation.action) {
-                case 'INVITE':
-                    console.log("Se ha realizado una invitacion!");
-                    setInvitationCount(invitationCount + 1);
-                    setInvitationCollection([...invitationCollection, invitation]);
-                    setInvitation(null);
-                    break;
-
-                default:
-                    break;
-            }
-        } else {
-            console.error("Invalid Invitation");
-        }
-    };
+    if (isMobile) return null;
 
     return (
         <nav className="navbar">
@@ -82,7 +76,7 @@ const Navbar = () => {
                             {role === 'ROLE_USER' && (
                                 <>
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to={PLAYER_ROUTES.RANKING} className="nav-links">
                                             <FaRankingStar style={{ marginRight: '5px' }} />Ranking
                                         </Link>
                                     </li>
@@ -97,7 +91,7 @@ const Navbar = () => {
                                         </Link>
                                     </li> */}
                                     <li className="nav-item">
-                                        <Link to="" className="nav-links">
+                                        <Link to={PLAYER_ROUTES.PROFILE} className="nav-links">
                                             <FaUserCircle style={{ marginRight: '5px' }} />Perfil - <span style={{ marginLeft: '5px' }}>{userObj.username}</span>
                                         </Link>
                                     </li>

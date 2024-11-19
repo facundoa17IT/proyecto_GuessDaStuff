@@ -56,6 +56,15 @@ public class GameController {
         }
     }
 
+    @GetMapping("/v1/allGames")
+    public ResponseEntity<?> listAllGames(){
+        try {
+            return ResponseEntity.ok(gameService.listAllGames());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
     @PostMapping("/v1/individual/MC")
     public ResponseEntity<?> createMCIndividual(@RequestBody DtoMultipleChoice dtoMultipleChoice){
         try {

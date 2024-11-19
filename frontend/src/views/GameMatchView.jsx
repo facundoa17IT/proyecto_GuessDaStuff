@@ -1,6 +1,6 @@
 /** React **/
 import React, { useEffect, useState, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 /** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
@@ -9,6 +9,11 @@ import OrderWord from './game-modes/OrderWord';
 import CircleTimer from '../components/ui/CircleTimer';
 import MultipleChoice from './game-modes/MultipleChoice';
 import BrainCharacter from '../components/ui/BrainCharacter';
+import { ScaleLoader } from 'react-spinners';
+import MultiplayerHUD from '../components/layouts/MultiplayerHUD';
+import Modal from '../components/layouts/Modal';
+import toast from 'react-hot-toast';
+import { ClockLoader } from 'react-spinners';
 
 /** Assets */
 import { FaRegQuestionCircle } from "react-icons/fa";
@@ -19,12 +24,13 @@ import axiosInstance from '../utils/AxiosConfig';
 /** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 import { useRole } from '../contextAPI/AuthContext'
+import { SocketContext } from '../contextAPI/SocketContext';
 
 const GameMatchView = () => {
-    const location = useLocation();
     const navigate = useNavigate();
 
-    const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle, setIsCorrectAnswer, answer } = useContext(LoadGameContext);
+    const { implementationGameBody, setImplementationGameBody, setInvitation, setInvitationCount, unsubscribeFromGameSocket } = useContext(SocketContext);
+    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -33,9 +39,10 @@ const GameMatchView = () => {
     const TIME = 30;
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(TIME);
+    const [isTimePlaying, setIsTimePlaying] = useState(false);
 
     const [isGameReady, setIsGameReady] = useState(false);
-    const [isGameFinished, setisGameFinished] = useState(false);
+    const [isGameFinished, setIsGameFinished] = useState(false);
 
     const [hints, setHints] = useState([]);
     const [currentHintIndex, setCurrentHintIndex] = useState(null);
@@ -44,53 +51,55 @@ const GameMatchView = () => {
 
     const [characterDialogue, setCharacterDialogue] = useState("");
 
+    // Almacena username, userId, email
+    const userObj = JSON.parse(localStorage.getItem("userObj"));
+
+    const [currentGameModeId, setCurrentGameModeId] = useState(null);
+
+    const [winner, setWinner] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const host = JSON.parse(localStorage.getItem("host")) || "Undefined";
+    const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
+
     useEffect(() => {
         resetGameState();
     }, []);
 
     useEffect(() => {
-        if (answer) {
-            console.log("Answer -> " + answer);
-            sendAnswerData(answer);
-        }
-    }, [answer]);
-
-    useEffect(() => {
         setCharacterDialogue(hints[currentHintIndex]);
     }, [currentHintIndex]);
 
-    // useEffect(() => {
-    //     if(elapsedTime){
-    //         console.log("Tiempo transcurrido -> "+ elapsedTime);
-    //     }
-    // }, [elapsedTime]);
-
-    // initGameModes se obtiene de la pantala SingleGameLobby
+    // initGameModes se obtiene de LoadGame
     useEffect(() => {
         if (Object.keys(initGameModes).length > 0) {
             setCurrentGameIndex(0);
         }
+        console.log(initGameModes);
     }, [initGameModes]);
 
-    // Actualizamos el contenido del juego cada vez que cambie el índice
+    // Se actualiza el contenido del juego cada vez que cambie el índice
     useEffect(() => {
-        setGameContent(renderGame());
-        if (currentGameIndex === 0) setIsGameReady(true); // Se inicia el timer cuando el se asigna el index 0
+        if (currentGameIndex >= 0) {
+            setGameContent(renderGame());
+        }
     }, [currentGameIndex]);
 
+    // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
+    // Se inicia el timer cuando el se asigna el index 0
     useEffect(() => {
-        // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
-        if (gameContent) {
+        if (gameContent && currentGameIndex === 0) {
             setIsGameReady(true);
         }
     }, [gameContent]);
 
+    // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
     useEffect(() => {
-        // Se inicia el timer cuando el contenido del juego ya esta cargado en pantalla
         if (isGameReady) {
-            setCurrentGameIndex(0);
             defaultCharacterDialogue();
             console.log("Inicia el juego!");
+            setIsTimePlaying(true);
         }
     }, [isGameReady]);
 
@@ -98,51 +107,99 @@ const GameMatchView = () => {
         setCharacterDialogue("Puedo darte una pista!");
     }
 
-    const sendAnswer = async (idGameSingle, userId, answer, gameId, time) => {
+    // Guarda en la BD los datos de la ronda
+    // Le avisa a los demas usuarios que el juego termino
+    const sendAnswer = async () => {
         try {
+            const gameKeys = Object.keys(initGameModes);
+            const currentGameKey = gameKeys[currentGameIndex];
+            const gameInfo = initGameModes[currentGameKey].infoGame[0];
+            const { id } = gameInfo; // game mode id
+
             // Log de cada parámetro para depuración
-            console.log("idGameSingle:", idGameSingle);
             console.log("userId:", userId);
             console.log("answer:", answer);
             console.log("gameId:", gameId);
-            console.log("time:", time);
+            console.log("gameModeId:", id); // game mode id
+            console.log("time:", elapsedTime);
 
-            // Realiza la solicitud POST con axios
-            const response = await axiosInstance.post("/game-single/v1/play-game", {
-                idGameSingle: idGameSingle,
-                idUser: userId,
-                response: answer,
-                idGame: gameId,
-                time_playing: time
-            });
-
-            // Log de la respuesta de la solicitud
-            console.log("response:", response.data);
-
-            // Se define si la respuesta es correcta o no (true o false)
-            setIsCorrectAnswer(response.data);
-            return response.data;
+            if (isMultiplayer) {
+                await axiosInstance.post(`/game-multi/game/${gameId}/play/`, {
+                    idUserWin: userId,
+                    idGameMulti: gameId,
+                    idGame: id, // game mode id
+                    time_playing: elapsedTime
+                });
+            }
+            else {
+                setIsTimePlaying(false);
+                await axiosInstance.post("/game-single/v1/play-game", {
+                    idGameSingle: gameId,
+                    idUser: userId,
+                    response: answer,
+                    idGame: id, // game mode id
+                    time_playing: elapsedTime
+                });
+                handleNextGameMode();
+            }
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
-    const sendAnswerData = async (answer) => {
-        try {
-            const gameKeys = Object.keys(initGameModes);
-            const currentGameKey = gameKeys[currentGameIndex];
-            const gameInfo = initGameModes[currentGameKey].infoGame[0];
-            const { id } = gameInfo;
-            await sendAnswer(idGameSingle, userId, answer, id, elapsedTime); // time hardcoded
-        } catch (error) {
-            console.log("Error", error);
+    // Verificar la respuesta
+    // En caso de ser correcta se llama al endpoint
+    const handleVerifyAnswer = () => {
+        if (isCorrectAnswer !== null) {
+            console.log("Is correct answer -> " + isCorrectAnswer);
+            if (isCorrectAnswer) {
+                sendAnswer();
+                setCharacterDialogue("Muy bien!");
+                toast.success('Respuesta Correcta!');
+            }
+            else {
+                toast.error('Respuesta Incorrecta!');
+                setCharacterDialogue("Intenta de nuevo!");
+            }
         }
-    };
+    }
+    useEffect(() => {
+        handleVerifyAnswer();
+    }, [isCorrectAnswer]);
+
+    // Se recibe el mensaje del endpoint si la respuesta es correcta
+    // Verificar si hay un ganador y avanza de ronda
+    useEffect(() => {
+        if (implementationGameBody) {
+            if (implementationGameBody.status === "FINISH_ROUND") {
+                if (implementationGameBody.is_win) {
+                    setIsTimePlaying(false);
+                    setIsModalOpen(true);
+                    if (implementationGameBody.idUserWin == host.userId) {
+                        setWinner(host.username);
+                        console.log("Ganador: " + host.username);
+                    }
+                    else {
+                        setWinner(guest.username);
+                        console.log("Ganador: " + guest.username);
+                    }
+                    console.log("Ganador Id: " + implementationGameBody.idUserWin);
+                }
+                else {
+                    console.log("EMPATE!");
+                }
+                handleNextGameMode();
+                console.log("FINISH ROUND!");
+            }
+        }
+    }, [implementationGameBody]);
+
 
     const resetGameState = () => {
         setHints([]);
         setIsCorrectAnswer(null);
         setElapsedTime(0);
+        setIsTimePlaying(false);
     };
 
     const handleTimeUpdate = (time) => {
@@ -151,6 +208,7 @@ const GameMatchView = () => {
 
     const handleNextGameMode = () => {
         resetGameState();
+
         const gameKeys = Object.keys(initGameModes);
         const nextIndex = currentGameIndex + 1;
 
@@ -158,19 +216,53 @@ const GameMatchView = () => {
             handleFishGame();
             return;
         }
-        defaultCharacterDialogue();
-        setCurrentGameIndex(nextIndex);
+
+        setTimeout(() => {
+            setIsModalOpen(false);
+            defaultCharacterDialogue();
+            setCurrentGameIndex(nextIndex);
+            setIsTimePlaying(true);
+        }, 3000); // 3000 ms para esperar 3 segundos adicionales
     };
+
+    const handleTimerComplete = async () => {
+        if(isMultiplayer) {
+            try {
+                await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeId}`);
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+        handleNextGameMode();
+    }
 
     const handleFishGame = async () => {
         try {
-            const response = axiosInstance.post(`/game-single/v1/finish-play-game/${idGameSingle}`);
-            console.log(response.data);
+            setTimeout(() => {
+                setIsModalOpen(false);
+            }, 3000); // 3000 ms para esperar 3 segundos adicionales
+
             console.log("Fin del juego!");
-            setInitGameModes({});
-            setisGameFinished(true);
+            setIsGameFinished(true);
             setCurrentHeader("Partida Finalizada");
+            setInitGameModes({});
             setGameContent(renderFinishGameStats());
+            
+            if (isMultiplayer) {
+                setImplementationGameBody(null);
+                setInvitationCount(0);
+                setInvitation(null);
+                unsubscribeFromGameSocket();
+                setIsMultiplayer(false);
+                axiosInstance.post(`/game-multi/game/${gameId}/finish/0`);
+            }
+            else {
+                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
+            }
+            setGameId(null);
+            localStorage.removeItem("host");
+            localStorage.removeItem("guest");
         } catch (error) {
             console.error(error);
         }
@@ -242,21 +334,24 @@ const GameMatchView = () => {
         if (!isGameFinished) {
             if (gameInfo) {
                 const { idModeGame } = gameInfo;
+
                 let GameComponent;
+
+                setCurrentGameModeId(idModeGame);
 
                 // Cambiamos el componente según el modo de juego
                 switch (idModeGame) {
                     case 'OW':
                         setCurrentHeader("Ordena la Palabra");
-                        GameComponent = <OrderWord OWinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <OrderWord OWinfo={gameInfo} />;
                         break;
                     case 'GP':
                         setCurrentHeader("Adivina la Frase");
-                        GameComponent = <GuessPhrase GPinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <GuessPhrase GPinfo={gameInfo} />;
                         break;
                     case 'MC':
                         setCurrentHeader("Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} onCorrect={handleNextGameMode} />;
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} />;
                         break;
                     default:
                         GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -268,90 +363,115 @@ const GameMatchView = () => {
                     </div>
                 );
             } else {
-                return <p>El juego aún no está disponible.</p>;
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                        <h1>No hay contenido disponible</h1>
+                        <ScaleLoader color="var(--link-color)" height={30} width={15} loading={true} />
+                    </div>
+                );
             }
         }
     };
 
     const renderFinishGameStats = () => {
         return (
-            <>
-                <h2>Resumen de la partida</h2>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Modos de Juego</th>
-                            <th>Categorías</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Modo 1</td>
-                            <td>Categoría 1</td>
-                        </tr>
-                        <tr>
-                            <td>Modo 2</td>
-                            <td>Categoría 2</td>
-                        </tr>
-                        <tr>
-                            <td>Modo 3</td>
-                            <td>Categoría 3</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Puntaje Total</th>
-                            <th>Duración Total</th>
-                            <th>Posición Ranking</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div className='stats-container'>
+                <h2 style={{ marginBottom: '15px' }}>Resumen de la partida</h2>
+                <div className='stats-container'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Modos de Juego</th>
+                                <th>Categoria</th>
+                                <th>Puntaje</th>
+                                <th>Tiempo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Modo 1</td>
+                                <td>Categoría 1</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Modo 2</td>
+                                <td>Categoría 2</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Modo 3</td>
+                                <td>Categoría 3</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div className='stats-container'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Puntaje Total</th>
+                                <th>Duración Total</th>
+                                <th>Posición Ranking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0/3</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <button onClick={() => navigate("/")}>Menu Principal</button>
-            </>
+            </div>
         );
     }
 
     return (
-        <MainGameLayout
-            canGoBack={false}
-            hideLeftPanel={isGameFinished}
-            hideRightPanel={isGameFinished}
-            leftHeader='Pistas'
-            leftContent={
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <BrainCharacter key={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
-                    {renderHintButton()}
-                </div>
-            }
-            middleHeader={currentHeader}
-            middleContent={gameContent}
-            rightHeader='Stats'
-            rightContent={
-                <>
-                    <h3>Ronda {currentGameIndex + 1}</h3>
-                    <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
-                    {!isGameFinished && <CircleTimer
-                        key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
-                        isLooping={true}
-                        loopDelay={0.5}
-                        isPlaying={isGameReady}
-                        duration={timeRemaining}
-                        onTimeUpdate={handleTimeUpdate}
-                        onTimerComplete={handleNextGameMode}
-                    />}
-                    <button onClick={handleNextGameMode}>Next Round</button>
-                </>
-            }
-        />
+        <>
+            <MainGameLayout
+                canGoBack={false}
+                hideLeftPanel={isGameFinished}
+                hideRightPanel={isGameFinished}
+                leftHeader='Pistas'
+                leftContent={
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <BrainCharacter rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
+                        {renderHintButton()}
+                    </div>
+                }
+                middleHeader={currentHeader}
+                middleContent={gameContent}
+                rightHeader='Stats'
+                rightContent={
+                    <>
+                        {isMultiplayer && <MultiplayerHUD />}
+                        <h3 style={{ marginBottom: '0' }}>Ronda {currentGameIndex + 1}</h3>
+                        <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
+                        {!isGameFinished && <CircleTimer
+                            key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
+                            isLooping={true}
+                            loopDelay={0.5}
+                            isPlaying={isTimePlaying}
+                            duration={timeRemaining}
+                            onTimeUpdate={handleTimeUpdate}
+                            onTimerComplete={handleTimerComplete}
+                        />}
+                    </>
+                }
+            />
+
+            <Modal showModal={isModalOpen} hideConfirmBtn={true} hideCloseBtn={true} title="Ronda Finalizada">
+                {winner && <h2>"{winner}" es el ganador de la ronda!</h2>}
+                {currentGameIndex < 2 && <h3>Preparate para la siguiente ronda!</h3>}
+                <ClockLoader size={80} />
+            </Modal>
+        </>
     );
 };
 

@@ -28,15 +28,17 @@ const CustomList = ({
     buttons = [],
     extraColumns = () => [],
     width = '100%',
+    defaultFilter = 'none', // Nueva propiedad para el filtro predeterminado
     customFilter = [],  // Accept custom filter function
+    defaultSort = 'label-asc',
     customSort = [],     // Accept custom sort function
     onButtonInteraction, // New prop
 }) => {
     const { setSelectedItem, setSelectedBtn, setSelectedListId} = useContext(ListContext);
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedFilter, setSelectedFilter] = useState('none');
-    const [sortOption, setSortOption] = useState('label-asc'); // Default sort by item label (ascending)
+    const [selectedFilter, setSelectedFilter] = useState(defaultFilter);
+    const [sortOption, setSortOption] = useState(defaultSort); // Default sort by item label (ascending)
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -94,12 +96,6 @@ const CustomList = ({
         console.log(`List ID: ${listId}, Button: ${buttonKey}, Item: ${JSON.stringify(item, null, 2)}`);
     };
 
-    // useEffect(() => {
-    //     if (setSelectedItem, setSelectedBtn, setSelectedListId) {
-    //         onButtonInteraction(setSelectedListId, setSelectedBtn, setSelectedItem);
-    //     }
-    // }, [setSelectedItem, setSelectedBtn, setSelectedListId]);
-
     return (
         <div className='list-wrapper' style={{ width: `${width}` }}>
             <div className='list-container'>
@@ -140,9 +136,11 @@ const CustomList = ({
                             style={{ width: '50%', height: '100%', border: '2px solid var(--border-color)', borderRadius: '8px', padding: '3px' }}
                         >
                             {/* Render sorting options dynamically */}
-                            {[
+                            {[  
+                                { label: 'Ninguno', value: 'none' },
                                 { label: '(A-Z)', value: 'label-asc' },
                                 { label: '(Z-A)', value: 'label-desc' },
+
                                 ...customSort
                             ].map((option, index) => (
                                 <option key={index} value={option.value}>

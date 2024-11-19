@@ -11,17 +11,15 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import '../../styles/order-word.css'; // Importa el archivo CSS
 import '../../styles/game-mode.css';
 
-const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
-	const { answer, setAnswer, isCorrectAnswer } = useContext(LoadGameContext);
+const OrderWord = ({ OWinfo }) => {
+	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 	const { word } = OWinfo;
 	const [selectedOrder, setSelectedOrder] = useState([[]]);
 	const [shuffledLetters, setShuffledLetters] = useState([]);
-	const [resultMessage, setResultMessage] = useState('');
 
 	useEffect(() => {
 		setSelectedOrder([[]]);
 		setAnswer('');
-		setResultMessage('');
 		const letters = word.split('').map((letter, index) => ({
 			id: `${letter}-${index}`,
 			letter,
@@ -30,12 +28,6 @@ const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
 		setShuffledLetters(shuffled);
 		setSelectedOrder([]);
 	}, [word]);
-
-	useEffect(() => {
-		if (isCorrectAnswer !== null) {
-			handleVerify();
-		}
-	}, [isCorrectAnswer]);
 
 	const handleLetterPress = (letterObj) => {
 		setShuffledLetters((prev) => prev.filter((l) => l.id !== letterObj.id));
@@ -47,24 +39,20 @@ const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
 		setShuffledLetters((prev) => [...prev, letterObj]);
 	};
 
-	const handleAnswer = () => {
-		const selectedStrings = selectedOrder.map((selected) => selected.letter);
-		const resultString = selectedStrings.join('');
-		setAnswer(resultString);
-	};
-
 	const handleVerify = async () => {
+		if (!word) {
+            console.warn("Este juego aún no fue implementado.");
+            return;
+        }
+
 		try {
-			if (isCorrectAnswer) {
-				setResultMessage('¡Correcto!');
-				await new Promise((resolve) => setTimeout(resolve, 1500));
-				onCorrect();
-			} else {
-				setResultMessage('Incorrecto. Intenta de nuevo');
-			}
+			const selectedString = selectedOrder.map(l => l.letter).join('');
+			setAnswer(selectedString);
+			const isCorrect = selectedString === word;
+			console.log(isCorrect ? "Correcto!" : "Incorrecto!");
+			setIsCorrectAnswer(isCorrect);	
 		} catch (error) {
 			console.error('Error al verificar la respuesta:', error);
-			setResultMessage('Error en la verificación. Intenta de nuevo.');
 		}
 	};
 
@@ -76,11 +64,12 @@ const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
 		}));
 		const shuffled = shuffleArray(letters);
 		setShuffledLetters(shuffled);
+		setIsCorrectAnswer(null);
 	};
 
 	return (
 		<div className="game-mode-container ow-container">
-			<div className="selectedOrderContainer">
+			<div className={`selectedOrderContainer ${isCorrectAnswer === null ? '' : isCorrectAnswer ? 'respuesta-correcta' : 'respuesta-incorrecta'}`}>
 				{selectedOrder.map((letterObj, index) => (
 					<button
 						key={`${letterObj.id}-${index}`}
@@ -91,6 +80,7 @@ const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
 					</button>
 				))}
 			</div>
+
 			<div className="buttonContainer">
 				{shuffledLetters.map((letterObj, index) => (
 					<button
@@ -102,18 +92,10 @@ const OrderWord = ({ OWinfo, onCorrect, veryfyAnswer }) => {
 					</button>
 				))}
 			</div>
-			{resultMessage && (
-				<div className={`resultMessage ${resultMessage.includes('¡Correcto!') ? 'correct' : 'incorrect'}`}>
-					{resultMessage}
-				</div>
-			)}
+
 			<div className="buttonRow">
-				<button className="verifyButton" onClick={handleAnswer}>
-					Verificar
-				</button>
-				<button className="resetButton" onClick={handleReset}>
-					Reiniciar
-				</button>
+				<button className="resetButton" onClick={handleReset}>Borrar</button>
+				<button className="verifyButton" onClick={handleVerify}>Verificar</button>
 			</div>
 		</div>
 	);

@@ -8,47 +8,72 @@ import { BarLoader } from 'react-spinners';
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
-import { logObject } from '../utils/Helpers';
 import { PUBLIC_ROUTES } from '../utils/constants';
 
 /** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
+import { SocketContext } from '../contextAPI/SocketContext';
 
-const SingleGameLobby = () => {
+const LoadGame = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
     const { initGameBody } = location.state || {};
-    const { initGameModes, setInitGameModes, idGameSingle, setIdGameSingle } = useContext(LoadGameContext);
+
+    const { initGameModes, setInitGameModes, gameId, setGameId, isMultiplayer } = useContext(LoadGameContext);
+    const { implementationGameBody } = useContext(SocketContext);
+
     const [isLoading, setIsLoading] = useState(true);
 
-    const initializeGameModes = async () => {
+    // Multiplayer
+    const initializeMultiplayerGame = () => {
+        if (implementationGameBody.status === "INVITE_IMPLEMENTATION") {
+            console.log("INVITE_IMPLEMENTATION");
+
+            setGameId(implementationGameBody.implementGame.idGameMulti);
+            setInitGameModes(implementationGameBody.implementGame.gameModes);
+        }
+    }
+    useEffect(() => {
+        if (isMultiplayer) {
+            if (Object.keys(implementationGameBody).length > 0) {
+                initializeMultiplayerGame();
+            }
+        }
+    }, [implementationGameBody]); // Este valor se actualiza luego de ejecutar SlotMachineMulti (multiplayer)
+
+    // Singleplayer
+    const initializeSingleplayerGame = async () => {
         try {
             const response = await axiosInstance.post("/game-single/v1/init-game", initGameBody, { requiresAuth: true });
             setInitGameModes(response.data.gameModes);
-            setIdGameSingle(response.data.idGameSingle);
+            setGameId(response.data.idGameSingle);
         } catch (error) {
             console.error('Error obteniendo datos del juego:', error);
         }
     };
     useEffect(() => {
-        if (Object.keys(initGameBody).length > 0) {
-            initializeGameModes();
-            console.log(`Slot: ${JSON.stringify(initGameBody, null, 2)}`);
+        if (!isMultiplayer) {
+            if (Object.keys(initGameBody).length > 0) {
+                initializeSingleplayerGame();
+                console.log(`Slot: ${JSON.stringify(initGameBody, null, 2)}`);
+            }
         }
-    }, [initGameBody]);
+    }, [initGameBody]); // Este valor se actualiza luego de ejecutar SlotMachine (singleplayer)
 
     // Se da comienzo a la partida
     useEffect(() => {
-        if (Object.keys(initGameModes).length > 0 && Object.keys(idGameSingle).length > 0) {
-            initPlayGame(idGameSingle);
+        if (Object.keys(initGameModes).length > 0 && gameId !== null) {
+            initPlayGame(gameId);
         }
-    }, [initGameModes, idGameSingle]);
+    }, [initGameModes, gameId]);
 
-    // Setea horario de inicio de partida y devuelve true
-    const initPlayGame = async (idGameSingle) => {
+    const initPlayGame = async (gameId) => {
         try {
-            axiosInstance.post(`/game-single/v1/init-play-game/${idGameSingle}`);
+            // Setea horario de inicio de partida y devuelve true
+            if (!isMultiplayer) {
+                axiosInstance.post(`/game-single/v1/init-play-game/${gameId}`);
+            }
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -79,4 +104,4 @@ const SingleGameLobby = () => {
     );
 };
 
-export default SingleGameLobby;
+export default LoadGame;

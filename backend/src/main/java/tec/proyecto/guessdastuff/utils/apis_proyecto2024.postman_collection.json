@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f51f7166-0b5e-497c-8052-dcf902487400",
+		"_postman_id": "54bf1b5c-7645-4ef5-afec-b146aeb64f1b",
 		"name": "apis_proyecto2024",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "34327432"
+		"_exporter_id": "26511696"
 	},
 	"item": [
 		{
@@ -2383,6 +2383,230 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ListPartidasDePlayer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/gamesOfPlayer/1",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"gamesOfPlayer",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "ListGamesOfPlayer",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/game-modes/v1/gamesOfPlayer/3",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"game-modes",
+										"v1",
+										"gamesOfPlayer",
+										"3"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 16 Nov 2024 03:37:35 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"partidas\": {\n        \"MULTIPLAYER\": [\n            {\n                \"modo\": \"MULTIPLAYER\",\n                \"id_game\": \"4731d8fb-a1d8-40e7-bae6-f26d83a628e8\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"MULTIPLAYER\",\n                \"id_game\": \"a24dc97f-f0c7-4f05-8af0-7ff3695ce129\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"MULTIPLAYER\",\n                \"id_game\": \"c2475890-8730-43e3-8347-7c2fc5ca65b2\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            }\n        ],\n        \"INDIVIDUAL\": [\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"dfaa84a6-3f38-4868-afcd-9f77f9899cc6\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"7ed6b66c-e758-410d-a277-a765f9d775ec\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"b8ffb534-0caf-4f24-ad66-0d99ac098196\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"73361f07-1899-450e-b872-05fc6139badb\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"de4cb75e-ae4a-4e5c-8ff0-7cebbbb7f4f6\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"40d570ae-21d9-4064-9ac2-ba85b9f9cdaa\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"e942c1e3-5ca1-432f-96d3-5bc43c4b5b72\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"6fc21061-02c8-4186-b644-eb6008293300\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"e2ae85f8-c7a3-45d7-be47-8c08351b7f16\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"e2419c75-cab3-46a5-8584-3b8da232b88b\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"d8cb479a-057a-422d-a35c-ad2d1b1204ab\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"fdb70791-b5f0-4048-9162-2543c1c34048\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"c0661746-f531-40ea-8a88-e55bc342f8d6\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"0cbc3842-b2b1-413d-999f-f56cc1164f3d\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"649ce075-22ee-4e85-85b1-2aac99e4d56f\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"80c9d6d1-6aad-4826-b55e-f47e0e305d78\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"dcc57b48-78b6-4ab2-93a2-bb1ecc5a78b6\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"f2bc9602-8356-4083-a86b-ade2c564bcf9\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"b05e0c43-6642-4cce-8429-b4d700c230e4\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"GuessPhrase\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"2391883b-8677-4bbc-b807-f06665f2327f\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 10,\n                \"time_playing\": 9,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"e49f432a-5aa8-4b69-bb83-807c62ca429b\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"63f92a18-6d36-48b3-8e0c-72da1d3dc87a\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"23777cfb-854b-40b4-8ddf-1809774a09d3\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"c0fcad3b-d7a6-4e94-bf73-59d6574f2942\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"27bd60cb-93e9-4096-a529-8e12b8f5e9b6\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"159f2264-5da0-4315-9704-6974bbd9850e\",\n                \"game1\": \"MultipleChoice\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"d875989f-d681-44e6-b3bc-9c8bb54e10f1\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"a2b3ae7b-1fb3-4ce2-870f-93eea54595c2\",\n                \"game1\": \"OrderWord\",\n                \"game2\": \"OrderWord\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"78304156-ccc9-4937-98c6-f58804777161\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"ddd75cdb-48df-4323-ae26-bee0eb7cf41e\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"fe10cf5c-51c0-4562-bf1f-efecbf1d2671\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"ff351215-e2e6-4bb5-ba58-980cb352ecb6\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"1d2375ac-a724-4b07-9fdc-017f745676ec\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            },\n            {\n                \"modo\": \"INDIVIDUAL\",\n                \"id_game\": \"2e80088b-35bc-4867-8f1d-98a33d524065\",\n                \"game1\": \"GuessPhrase\",\n                \"game2\": \"MultipleChoice\",\n                \"game3\": \"GuessPhrase\",\n                \"points\": 0,\n                \"time_playing\": 0,\n                \"user_win\": null\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Listar-Partidas-V2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/game-modes/v1/allGames",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"game-modes",
+								"v1",
+								"allGames"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Listar-Partidas-V2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/game-modes/v1/allGames",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"game-modes",
+										"v1",
+										"allGames"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 16 Nov 2024 05:12:54 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"Finalizadas\": [\n        {\n            \"id_game\": \"27a673f5-72b1-47bf-a38e-454ba2bbee8b\",\n            \"user\": \"kiko\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 5,\n            \"time_playing\": 42,\n            \"finish\": true\n        },\n        {\n            \"id_game\": \"2826e3a8-ab33-4f49-b486-42ccafefb20a\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 3,\n            \"time_playing\": 17,\n            \"finish\": true\n        },\n        {\n            \"id_game\": \"a858ce37-1ef0-45a2-87c6-73f2ecc41d16\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"MultipleChoice\",\n            \"points\": 5,\n            \"time_playing\": 35,\n            \"finish\": true\n        },\n        {\n            \"id_game\": \"2391883b-8677-4bbc-b807-f06665f2327f\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 10,\n            \"time_playing\": 9,\n            \"finish\": true\n        },\n        {\n            \"id_game\": \"63f92a18-6d36-48b3-8e0c-72da1d3dc87a\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": true\n        },\n        {\n            \"id_game\": \"2e80088b-35bc-4867-8f1d-98a33d524065\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": true\n        }\n    ],\n    \"Activas\": [\n        {\n            \"id_game\": \"80d05d09-63e6-4c8e-a352-4da30129cf84\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"16003be3-4ca8-4284-8a10-6be772ed6864\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"a3d0f9cc-263f-4f6e-93b8-79445d91ecb5\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"01cf9483-65a9-4181-88f4-a0622cacab48\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"e2c44918-8ffc-4fdb-8fca-57bd0e2d6b2a\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"b3895be8-998c-415a-8ad0-d52e0e4c60c2\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"dfaa84a6-3f38-4868-afcd-9f77f9899cc6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"7ed6b66c-e758-410d-a277-a765f9d775ec\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"01bef783-2c92-4b81-a266-c6c7aea68a0b\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"b8ffb534-0caf-4f24-ad66-0d99ac098196\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"3fddfcbd-cbe1-4f71-adff-181b4ee27344\",\n            \"user\": \"kiko\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"73361f07-1899-450e-b872-05fc6139badb\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"de4cb75e-ae4a-4e5c-8ff0-7cebbbb7f4f6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"40d570ae-21d9-4064-9ac2-ba85b9f9cdaa\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"22c8fd2b-4837-4ce6-be3e-47110c3cfeb9\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"MultipleChoice\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"e942c1e3-5ca1-432f-96d3-5bc43c4b5b72\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"0850c855-66fd-4f6b-a6eb-dc11f9984a06\",\n            \"user\": \"kiko\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"a3350aeb-0a1c-4730-8c8d-5119ef136a0f\",\n            \"user\": \"kiko\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"c5310890-5267-409e-bea6-fadf7d7b33c0\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"3427baee-0e13-4945-b83d-3e498feed0f5\",\n            \"user\": \"carlitos\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"6fc21061-02c8-4186-b644-eb6008293300\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"e2ae85f8-c7a3-45d7-be47-8c08351b7f16\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"e2419c75-cab3-46a5-8584-3b8da232b88b\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"d8cb479a-057a-422d-a35c-ad2d1b1204ab\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"fdb70791-b5f0-4048-9162-2543c1c34048\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"c0661746-f531-40ea-8a88-e55bc342f8d6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"0cbc3842-b2b1-413d-999f-f56cc1164f3d\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"649ce075-22ee-4e85-85b1-2aac99e4d56f\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"80c9d6d1-6aad-4826-b55e-f47e0e305d78\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"dcc57b48-78b6-4ab2-93a2-bb1ecc5a78b6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"235a30cf-aba0-4d0c-a495-da610ca3dd50\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"81fe0886-545a-4b7a-a194-b05c8b5a867a\",\n            \"user\": \"user\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"f2bc9602-8356-4083-a86b-ade2c564bcf9\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"b05e0c43-6642-4cce-8429-b4d700c230e4\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"GuessPhrase\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"e49f432a-5aa8-4b69-bb83-807c62ca429b\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"23777cfb-854b-40b4-8ddf-1809774a09d3\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"c0fcad3b-d7a6-4e94-bf73-59d6574f2942\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"27bd60cb-93e9-4096-a529-8e12b8f5e9b6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"159f2264-5da0-4315-9704-6974bbd9850e\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"d875989f-d681-44e6-b3bc-9c8bb54e10f1\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"a2b3ae7b-1fb3-4ce2-870f-93eea54595c2\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"78304156-ccc9-4937-98c6-f58804777161\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"ddd75cdb-48df-4323-ae26-bee0eb7cf41e\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"fe10cf5c-51c0-4562-bf1f-efecbf1d2671\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"ff351215-e2e6-4bb5-ba58-980cb352ecb6\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"1d2375ac-a724-4b07-9fdc-017f745676ec\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"GuessPhrase\",\n            \"game2\": \"MultipleChoice\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"4731d8fb-a1d8-40e7-bae6-f26d83a628e8\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"a24dc97f-f0c7-4f05-8af0-7ff3695ce129\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"OrderWord\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        },\n        {\n            \"id_game\": \"c2475890-8730-43e3-8347-7c2fc5ca65b2\",\n            \"user\": \"zaza\",\n            \"user2\": null,\n            \"userWin\": null,\n            \"game1\": \"MultipleChoice\",\n            \"game2\": \"OrderWord\",\n            \"game3\": \"GuessPhrase\",\n            \"points\": 0,\n            \"time_playing\": 0,\n            \"finish\": false\n        }\n    ]\n}"
+						}
+					]
 				}
 			]
 		},
@@ -2989,14 +3213,14 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{BASE_URL}}/v1/logout/{username}",
+							"raw": "{{BASE_URL}}/v1/logout/admin",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"v1",
 								"logout",
-								"{username}"
+								"admin"
 							]
 						}
 					},
@@ -4438,6 +4662,262 @@
 							"path": [
 								"v1",
 								"load-data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ranking",
+			"item": [
+				{
+					"name": "PartidasGanadas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingPartidasWin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingPartidasWin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "PartidasGanadas",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/users/v1/rankingPartidasWin",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users",
+										"v1",
+										"rankingPartidasWin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 16 Nov 2024 23:34:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"username\": \"pepe\",\n        \"partidas_win\": 3\n    },\n    {\n        \"username\": \"kiko\",\n        \"partidas_win\": 3\n    },\n    {\n        \"username\": \"facu\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"zaza\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"user\",\n        \"partidas_win\": 2\n    },\n    {\n        \"username\": \"carlitos\",\n        \"partidas_win\": 1\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "MayorPuntaje",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingPuntaje",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingPuntaje"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "MayorPuntaje",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/users/v1/rankingPuntaje",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users",
+										"v1",
+										"rankingPuntaje"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 17 Nov 2024 00:03:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"MULTIPLAYER\": [\n        {\n            \"username\": \"carlitos\",\n            \"criterio\": 5\n        },\n        {\n            \"username\": \"kiko\",\n            \"criterio\": 2\n        },\n        {\n            \"username\": \"pepe\",\n            \"criterio\": 3\n        },\n        {\n            \"username\": \"santi\",\n            \"criterio\": 4\n        },\n        {\n            \"username\": \"user\",\n            \"criterio\": 4\n        },\n        {\n            \"username\": \"zaza\",\n            \"criterio\": 2\n        }\n    ],\n    \"INDIVIDUAL\": [\n        {\n            \"username\": \"kiko\",\n            \"criterio\": 5\n        },\n        {\n            \"username\": \"zaza\",\n            \"criterio\": 19\n        },\n        {\n            \"username\": \"pepe\",\n            \"criterio\": 13\n        },\n        {\n            \"username\": \"carlitos\",\n            \"criterio\": 8\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "MenorTiempo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/v1/rankingTiempo",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"v1",
+								"rankingTiempo"
 							]
 						}
 					},

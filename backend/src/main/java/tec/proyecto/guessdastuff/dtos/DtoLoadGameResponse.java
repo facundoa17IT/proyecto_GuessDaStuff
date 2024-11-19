@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 public class DtoLoadGameResponse {
 
     private List<CategoryData> categories; // Lista de categorías con modos de juego
+    private String finalSlot1;
+    private String finalSlot2;
+    private String finalSlot3;
 
     @AllArgsConstructor
     @NoArgsConstructor
@@ -21,5 +24,4 @@ public class DtoLoadGameResponse {
         private String name;
         private List<String> gameModes;
     }
-
 }

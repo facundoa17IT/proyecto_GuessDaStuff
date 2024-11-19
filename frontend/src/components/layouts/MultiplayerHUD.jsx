@@ -3,21 +3,24 @@ import React from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import '../../styles/multiplayer-hud.css'
 
-const MultiplayerHUD = ({ host='Undefined', guest='Undefined' ,currentScore = 0, currentRound = 1, maxNumberOfRounds = 0 }) => {
+const MultiplayerHUD = ({ currentScore = 0 }) => {
+    const host = JSON.parse(localStorage.getItem("host")) || "Undefined";
+    const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
+
     return (
         <div className='player-hud' style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
             <div style={{ display: 'flex' }}>
                 <FaUserCircle style={{ marginRight: '10px', fontSize: '35px' }} />
             </div>
             <div style={{ color:'var(--player1-color)', display: 'flex', flexDirection: 'column' }}>
-                <b>{host}</b>
-                <small>Estado</small>
+                <b>{host.username}</b>
+                <small>Host - Id: {host.userId}</small>
                 <small>🧠 x 0</small>
             </div>
             <div style={{ margin: '15px' }}>vs</div>
             <div style={{ color:'var(--player2-color)', display: 'flex', flexDirection: 'column' }}>
-                <b>{guest}</b>
-                <small>Estado</small>
+                <b>{guest.username}</b>
+                <small>Guest - Id: {guest.userId}</small>
                 <small>🧠 x 0</small>
             </div>
             <div style={{ display: 'flex' }}>

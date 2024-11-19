@@ -20,7 +20,6 @@ import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse.GameModeInfo;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswer;
 import tec.proyecto.guessdastuff.dtos.DtoSendAnswerResponse;
 import tec.proyecto.guessdastuff.entities.DataGameMulti;
-import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GuessPhrase;
 import tec.proyecto.guessdastuff.entities.InfoGameMulti;
 import tec.proyecto.guessdastuff.entities.InfoGameMultiId;
@@ -235,6 +234,18 @@ public class MultiplayerService {
         dataGameMulti.setIdInfoGameMulti(idInfoGame); 
         dataGameMultiRepository.save(dataGameMulti);
         return dtoInitGameResponse;
+
+    }
+    
+    public void finishGameMulti(String idSocket, String idGame) {
+
+        InfoGameMultiId infoGameMultiId = new InfoGameMultiId();
+        infoGameMultiId.setId(idSocket);
+        infoGameMultiId.setIdDataGame(idGame);
+        infoGameMultiRepository.finishGameMulti(infoGameMultiId);
+    }
+    public void finishGame(String idSocket) {
+        dataGameMultiRepository.finishPlayGame(idSocket);
 
     }
     

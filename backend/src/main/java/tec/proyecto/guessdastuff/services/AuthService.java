@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.time.LocalDate;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -83,7 +84,16 @@ public class AuthService {
             .build();
     }
     
-    public DtoAuthResponse register(DtoRegisterRequest request) {
+    public DtoAuthResponse register(DtoRegisterRequest request) throws UserException {
+
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UserException("El nombre de usuario ya existe!");  
+        }
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserException("El email ingresado ya existe o no se puede ocupar.");  
+        }
+
         ERole[] rolValues = ERole.values(); // 0 = ROLE_USER | 1 = ROLE_ADMIN
         LocalDate birthdate = dateConverter.toLocalDate(request.getBirthday());
 

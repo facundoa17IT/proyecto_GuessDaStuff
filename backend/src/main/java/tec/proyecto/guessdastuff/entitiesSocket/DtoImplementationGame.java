@@ -13,4 +13,7 @@ public class DtoImplementationGame {
     private String status; //// INVITE_RULETA, // INVITE_IMPLEMENTATION
     private DtoLoadGameResponse ruletaGame; // INVITE_RULETA
     private DtoInitGameMultiResponse implementGame; // INVITE_IMPLEMENTATION
+    private String finalSlot1;
+    private String finalSlot2;
+    private String finalSlot3;
 }

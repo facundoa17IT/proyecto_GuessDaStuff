@@ -3,14 +3,12 @@ import React from 'react';
 
 /** Assets **/
 import { FaLock, FaLockOpen, FaInfoCircle, FaEdit } from "react-icons/fa";
-import { FaRegCirclePlay } from "react-icons/fa6";
+import { FaRegCirclePlay, FaCircleCheck } from "react-icons/fa6";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 import { MdChat } from "react-icons/md";
+import { ImCancelCircle } from "react-icons/im";
 
-import { FaCheckCircle } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";3
-import { FaCircleCheck } from "react-icons/fa6";
 // Icon Button Component
 export const IconButton = ({ icon: Icon, label, onClick }) => (
     <button
@@ -73,7 +71,7 @@ export const buttonMapping = {
         label: "Aceptar",
     },
     cancelBtn: {
-        icon: MdCancel,
+        icon: ImCancelCircle,
         label: "Cancelar",
     },
 };

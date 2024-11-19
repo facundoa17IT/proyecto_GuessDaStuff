@@ -21,7 +21,7 @@ public class DtoRegisterRequest {
     int role = 0;
 
     @Builder.Default
-    private String urlPerfil = "urlDelMacaco";
+    private String urlPerfil = "urlDoMacaco";
 
     private String country;
 

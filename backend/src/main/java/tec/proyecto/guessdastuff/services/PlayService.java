@@ -120,7 +120,7 @@ public class PlayService {
     }
 
     // Retornamos la respuesta con la lista de categorías y sus modos de juego
-    return new DtoLoadGameResponse(categoriesList);
+    return new DtoLoadGameResponse(categoriesList, null, null, null);
 }
 
     public DtoInitGameResponse initGame(DtoInitGameRequest dtoInitGameRequest) {

@@ -18,9 +18,6 @@ import { useRole } from '../contextAPI/AuthContext';
 /** Styles **/
 import '../styles/home.css'
 
-/** Utils **/
-import axiosInstance from '../utils/AxiosConfig';
-
 const HomePage = () => {
 	const { role } = useRole();
 
@@ -32,7 +29,7 @@ const HomePage = () => {
 	const handleStartGame = () => {
 		navigate('/start-game')
 	}
-	
+
 	const minimalistButtonStyle = {
 		padding: '0',
 		background: 'none',
@@ -42,6 +39,12 @@ const HomePage = () => {
 		width: '180px',
 		fontSize: 'medium'
 	}
+
+	useEffect(() => {
+		localStorage.removeItem("host");
+		localStorage.removeItem("guest");
+	}, []);
+
 
 	return (
 		<div className='home-page-wrapper'>
@@ -67,7 +70,7 @@ const HomePage = () => {
 					)
 				)}
 			</div>
-			{!isMobile && <div className='home-page-footer'>
+			{/* {!isMobile && <div className='home-page-footer'>
 				<div className='home-page-footer-container'>
 					<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 						<small style={{ marginBottom: '0' }}>Descarga la App</small>
@@ -75,7 +78,7 @@ const HomePage = () => {
 						<button style={minimalistButtonStyle}><span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><FaAppStoreIos fontSize={30} style={{ marginRight: '10px' }} />App Store</span></button>
 					</div>
 				</div>
-			</div>}
+			</div>} */}
 		</div>
 	);
 };

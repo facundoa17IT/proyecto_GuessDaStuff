@@ -6,7 +6,6 @@
     justify-content: center;
   }
   
-
   .containerPhrase {
     display: flex;
     justify-content: center;
@@ -25,4 +24,24 @@
     text-align: center;
     color: var(--link-color) !important;
     font-weight: bold;
+}
+
+.respuesta-correcta {
+  background-color: green;
+  color: white;
+}
+
+.respuesta-incorrecta {
+  background-color: red;
+  color: white;
+}
+
+.respuesta-correcta button {
+  background-color: green;
+  color: white;
+}
+
+.respuesta-incorrecta button {
+  background-color: red;
+  color: white;
 }

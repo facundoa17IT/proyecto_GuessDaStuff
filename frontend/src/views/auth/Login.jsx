@@ -16,7 +16,6 @@ import { SocketContext } from '../../contextAPI/SocketContext';
 export const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     
     const { connect } = useContext(SocketContext);
@@ -82,9 +81,13 @@ export const Login = () => {
         } catch (error) {
             console.error('Login failed:', error);
             if (error.response?.data) {
-                setError(error.response.data.message);
-                setMessage(error.response.data.message);
+                if(error.response.data?.message){
+                    setError(error.response.data.message);
                 console.log('Login failed: ', error.response.data.message);
+                }else {
+                    setError(error.response.data);
+                    console.log('Login failed: ', error.response.data);
+                }
             }
         }
     };
@@ -104,7 +107,7 @@ export const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <a style={{ marginBottom: '15px' }} href="restaurar contraseña">Restaurar Contraseña</a>
+             <a style={{ marginBottom: '15px' }} href="/forgot-password">Restaurar Contraseña</a>
         </Modal>
     );
 };

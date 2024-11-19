@@ -4,7 +4,7 @@ import { GiCancel } from "react-icons/gi";
 import { FaRegCheckCircle } from "react-icons/fa";
 import '../../styles/modal.css'
 
-const Modal = ({ showModal, onConfirm, closeModal, title, children }) => {
+const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConfirm, closeModal, title, children }) => {
     if (!showModal) return null;
 
     return (
@@ -18,8 +18,8 @@ const Modal = ({ showModal, onConfirm, closeModal, title, children }) => {
                     {children}
                 </div>
                 <div className='modal-footer'>
-                    <button onClick={closeModal} ><GiCancel style={{ fontSize: '30px', width: '80px' }} /></button>
-                    <button onClick={onConfirm}><FaRegCheckCircle style={{ fontSize: '30px', width: '80px' }} /></button>
+                    {!hideCloseBtn && <button onClick={closeModal} ><GiCancel style={{ fontSize: '30px', width: '80px' }} /></button>}
+                    {!hideConfirmBtn && <button onClick={onConfirm}><FaRegCheckCircle style={{ fontSize: '30px', width: '80px' }} /></button>}
                 </div>
             </div>
         </div>

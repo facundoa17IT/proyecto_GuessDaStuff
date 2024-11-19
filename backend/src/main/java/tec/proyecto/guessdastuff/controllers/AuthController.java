@@ -69,22 +69,15 @@ public class AuthController {
     }
 
     @PostMapping("/v1/register")
-    public ResponseEntity<DtoAuthResponse> register(@RequestBody DtoRegisterRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            DtoAuthResponse errorResponse = DtoAuthResponse.builder()
-                    .message("El nombre de usuario ya existe!")
-                    .build();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
-
+    public ResponseEntity<?> register(@RequestBody DtoRegisterRequest request) throws UserException {
         try {
             DtoAuthResponse response = authService.register(request);
             return ResponseEntity.ok(response);
         } catch (Exception exce) {
-            DtoAuthResponse errorResponse = DtoAuthResponse.builder()
+            /*DtoAuthResponse errorResponse = DtoAuthResponse.builder()
                     .message("User registration failed. Please try again.")
-                    .build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+                    .build();*/
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exce.getMessage());
         }
     }
 
