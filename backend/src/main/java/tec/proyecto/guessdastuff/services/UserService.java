@@ -1,10 +1,8 @@
 package tec.proyecto.guessdastuff.services;
 
+import java.util.*;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.UserConverter;
@@ -41,6 +40,9 @@ public class UserService {
 
     @Autowired
     JavaMailSender mailSender;
+
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     public DtoUserResponse findUserByUsername(String username) throws UserException{
 
@@ -78,7 +80,7 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> editUser(String username, DtoUserRequest dtoEditUser) throws UserException{
+    public ResponseEntity<?> editUser(String username, DtoUserRequest dtoEditUser, MultipartFile file) throws UserException, IOException{
 
         Optional<User> userOpt = userRepository.findByUsername(username);
         if(!userOpt.isPresent()){
@@ -87,8 +89,16 @@ public class UserService {
 
         User userEnt = userOpt.get();
 
-        userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
-        userEnt.setUrlPerfil(dtoEditUser.getUrlPerfil());
+        // Actualizar contraseña si se proporciona
+        if (dtoEditUser.getPassword() != null && !dtoEditUser.getPassword().isBlank()) {
+            userEnt.setPassword(passwordEncoder.encode(dtoEditUser.getPassword()));
+        }
+
+        // Si hay un archivo (imagen) que se recibe
+        if (file != null && !file.isEmpty()) {
+            String imageUrl = cloudinaryService.uploadImage(file);
+            userEnt.setUrlPerfil(imageUrl);
+        }
 
         userRepository.save(userEnt);
 
@@ -141,7 +151,7 @@ public class UserService {
             user.setResetToken(token);
             userRepository.save(user);
 
-            String resetUrl = "http://localhost:8080/auth/reset-password?token=" + token; // Luego modificar x la url correcta
+            String resetUrl = "http://localhost:5173/reset-password?token=" + token; // Luego modificar x la url correcta
             sendResetPasswordEmail(user.getEmail(), resetUrl);
         } else {
             throw new UserException("El usuario con el correo electrónico " + email + " no existe");
@@ -149,7 +159,7 @@ public class UserService {
     }
 
     // Envía el correo electrónico de restablecimiento de contraseña
-    private void sendResetPasswordEmail(String to, String resetUrl) {  // falta este 
+    private void sendResetPasswordEmail(String to, String resetUrl) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Password Reset Request");
@@ -205,4 +215,8 @@ public class UserService {
         return ResponseEntity.ok("El usuario " + username + " ha sido desbloqueado de forma exitosa!");
     }
 
+    public String getImageProfile(String username) throws UserException{
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt.get().getUrlPerfil();
+    }
 }
