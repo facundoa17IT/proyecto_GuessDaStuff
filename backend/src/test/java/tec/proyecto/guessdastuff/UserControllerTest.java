@@ -1,4 +1,5 @@
 // package tec.proyecto.guessdastuff;
+// package tec.proyecto.guessdastuff;
 
 // import static org.mockito.ArgumentMatchers.any;
 // import static org.mockito.ArgumentMatchers.eq;
@@ -89,6 +90,9 @@
 //                 .andExpect(content().string("User found"))
 //                 .andDo(MockMvcResultHandlers.print());
 
+//         // Verify interaction
+//         verify(userService, times(1)).findUserByUsername(username);
+//     }
 //         // Verify interaction
 //         verify(userService, times(1)).findUserByUsername(username);
 //     }
