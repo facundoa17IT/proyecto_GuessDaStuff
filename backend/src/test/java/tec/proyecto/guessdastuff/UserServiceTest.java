@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -22,7 +23,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.io.IOException; 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,6 +37,7 @@ import tec.proyecto.guessdastuff.enums.ERole;
 import tec.proyecto.guessdastuff.enums.EStatus;
 import tec.proyecto.guessdastuff.exceptions.UserException;
 import tec.proyecto.guessdastuff.repositories.UserRepository;
+import tec.proyecto.guessdastuff.services.CloudinaryService;
 import tec.proyecto.guessdastuff.services.UserService;
 
 @SpringBootTest
@@ -47,6 +51,9 @@ public class UserServiceTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Mock
+    private CloudinaryService cloudinaryService;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
@@ -157,7 +164,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void testeditUser() throws UserException {
+    void testeditUser() throws UserException, IOException {  // Añadimos IOException aquí
         var user = User.builder()
             .username("User 1")
             .password("1234")
@@ -169,28 +176,30 @@ public class UserServiceTest {
             .atCreate(LocalDateTime.now())
             .atUpdate(LocalDateTime.now())
             .build();
-
+    
         // Datos para la edición del usuario
         var dtoEditUser = new DtoUserRequest();
         dtoEditUser.setPassword("newPassword");
-        dtoEditUser.setUrlPerfil("newProfileUrl");
-
+        // Aquí no se toca el URL de perfil, ya que no estamos probando esa parte
+    
         // Configuración de mocks
         when(userRepo.findByUsername("User 1")).thenReturn(Optional.of(user));
         when(passwordEncoder.encode("newPassword")).thenReturn("encodedNewPassword");
-
+    
         // Ejecuta el método que deseas probar
-        ResponseEntity<?> response = userService.editUser("User 1", dtoEditUser);
-
+        ResponseEntity<?> response = userService.editUser("User 1", dtoEditUser, null);  // Pasamos null ya que no estamos usando MultipartFile
+    
         // Verificaciones
-           assertEquals("El usuario User 1 ha sido editado correctamente!", response.getBody());
-           verify(userRepo).save(user);  // Verifica que se llamó a `save`
-
+        assertEquals("El usuario User 1 ha sido editado correctamente!", response.getBody());
+        verify(userRepo).save(user);  // Verifica que se llamó a `save`
+    
         // Verifica que los datos se actualizaron
-        assertEquals("encodedNewPassword", user.getPassword());
-        assertEquals("newProfileUrl", user.getUrlPerfil());
-        assertEquals(LocalDate.now(), user.getAtUpdate().toLocalDate());
+        assertEquals("encodedNewPassword", user.getPassword());  // Verifica la contraseña
+        assertEquals(LocalDate.now(), user.getAtUpdate().toLocalDate());  // Verifica que la fecha de actualización se ha cambiado
     }
+    
+
+
 
     @Test
     void testDeleteUser() throws UserException {
@@ -309,14 +318,6 @@ public class UserServiceTest {
 
         assertEquals("El usuario con el correo electrónico nonexistent@example.com no existe", exception.getMessage());
     }
-/* 
-    @Test
-    void sendResetPasswordEmail(){ // falta
-
-
-
-    }
-    */
 
     @Test
     void testvalidatePasswordResetToken() {

@@ -1,4 +1,4 @@
-/*package tec.proyecto.guessdastuff;
+package tec.proyecto.guessdastuff;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,27 +6,33 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import tec.proyecto.guessdastuff.dtos.*;
 import tec.proyecto.guessdastuff.entities.*;
 import tec.proyecto.guessdastuff.repositories.*;
 import tec.proyecto.guessdastuff.services.MultiplayerService;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyFloat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class MultiplayerServiceTest {
 
     @Mock
     private DataGameMultiRepository dataGameMultiRepository;
+    
     @Mock
     private InfoGameMultiRepository infoGameMultiRepository;
+    
     @Mock
     private PlayRepository playRepository;
 
@@ -37,14 +43,33 @@ public class MultiplayerServiceTest {
     private DtoSendAnswer sendAnswerRequest;
     private DtoInitGameMultiRequest initGameRequest;
 
+    @Mock
+    private User userHost; 
+    @Mock
+    private User userGuest; 
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(userHost.getId()).thenReturn(1L); 
+        when(userHost.getUsername()).thenReturn("hostUser");
 
-        // Mockear las peticiones DTO
-        createMultiGameRequest = new DtoCreateMultiGameRequest();
-        createMultiGameRequest.setUserHost(new UserHost("1"));
-        createMultiGameRequest.setUserGuest(new UserGuest("2"));
+        when(userGuest.getId()).thenReturn(2L); 
+        when(userGuest.getUsername()).thenReturn("guestUser");
+
+
+        DtoCreateMultiGameRequest.PlayerOnline playerHost = new DtoCreateMultiGameRequest.PlayerOnline(
+            userHost.getUsername(), 
+            String.valueOf(userHost.getId())  
+        );
+
+        DtoCreateMultiGameRequest.PlayerOnline playerGuest = new DtoCreateMultiGameRequest.PlayerOnline(
+            userGuest.getUsername(), 
+            String.valueOf(userGuest.getId())  
+        );
+
+
+        createMultiGameRequest = new DtoCreateMultiGameRequest(playerHost, playerGuest);
 
         sendAnswerRequest = new DtoSendAnswer();
         sendAnswerRequest.setIdGame("game1");
@@ -53,57 +78,122 @@ public class MultiplayerServiceTest {
         sendAnswerRequest.setTime_playing(20f);
 
         initGameRequest = new DtoInitGameMultiRequest();
-        // Llenar initGameRequest con datos de ejemplo
     }
 
     @Test
     public void testCreateGame() {
-        // Preparar el objeto mock para el repositorio
         when(dataGameMultiRepository.save(any(DataGameMulti.class)))
             .thenReturn(new DataGameMulti());
 
         String gameId = multiplayerService.createGame(createMultiGameRequest);
 
-        // Verificar que el repositorio se llamó y que el resultado no es null
         verify(dataGameMultiRepository, times(1)).save(any(DataGameMulti.class));
-        assert gameId != null;
+        assertNotNull(gameId);
     }
 
     @Test
     public void testSendAnswer() {
-        // Configurar el mock para el repositorio
-        when(infoGameMultiRepository.updateDataGame(any(), anyString(), anyInt(), anyFloat()))
-            .thenReturn(1);
+        doNothing().when(infoGameMultiRepository).updateDataGame(any(), anyString(), anyInt(), anyFloat());
 
         DtoSendAnswerResponse response = multiplayerService.sendAnswer(sendAnswerRequest, "socket1");
 
-        // Verificar que la respuesta contiene los valores esperados
-        assert response.getIdGame().equals("game1");
-        assert response.getPoints() == 2; // Según la lógica de tiempo de respuesta
-        assert response.getIs_win() == true;
+        assertEquals("game1", response.getIdGame());
+        assertEquals(2, response.getPoints()); 
+        assertTrue(response.getIs_win());
+
         verify(infoGameMultiRepository, times(1)).updateDataGame(any(), anyString(), anyInt(), anyFloat());
     }
 
     @Test
     public void testStartGame() {
-        // Mockear la respuesta de los repositorios
-        when(playRepository.findMC(anyString())).thenReturn(new MultipleChoice());
-        when(playRepository.findOW(anyString())).thenReturn(new OrderWord());
-        when(playRepository.findGP(anyString())).thenReturn(new GuessPhrase());
+
+        DtoInitGameMultiRequest.ParCatMod mode1 = new DtoInitGameMultiRequest.ParCatMod(1, "Mode1");
+        DtoInitGameMultiRequest.ParCatMod mode2 = new DtoInitGameMultiRequest.ParCatMod(2, "Mode2");
+    
+        initGameRequest.setParCatMod(Arrays.asList(mode1, mode2));
+    
+
+        DataGameMulti mockDataGameMulti = new DataGameMulti();
+        mockDataGameMulti.setIdUser1("1");  
+        mockDataGameMulti.setIdUser2("2");  
+        
+        when(playRepository.findMC(anyInt())).thenReturn(new MultipleChoice());
+        when(playRepository.findOW(anyInt())).thenReturn(new OrderWord());
+        when(playRepository.findGP(anyInt())).thenReturn(new GuessPhrase());
+        when(dataGameMultiRepository.findById(anyString()))
+            .thenReturn(Optional.of(mockDataGameMulti));  
+    
+        DtoInitGameMultiResponse response = multiplayerService.startGame("game1", initGameRequest);
+    
+        assertNotNull(response);
+        assertNotNull(response.getGameModes());
+        assertEquals("game1", response.getIdGameMulti());
+        
+
+        assertEquals("1", response.getIdUserHost()); 
+    
+        assertEquals("2", response.getIdUserFriend());  
+    }
+
+    @Test
+    public void testFinishGameMulti() {
+        doNothing().when(infoGameMultiRepository).finishGameMulti(any(InfoGameMultiId.class));
+
+        multiplayerService.finishGameMulti("socket1", "game1");
+
+        verify(infoGameMultiRepository, times(1)).finishGameMulti(any(InfoGameMultiId.class));
+    }
+
+    @Test
+    public void testFinishGame() {
+        doNothing().when(dataGameMultiRepository).finishPlayGame(anyString());
+
+        multiplayerService.finishGame("socket1");
+
+        verify(dataGameMultiRepository, times(1)).finishPlayGame(anyString());
+    }
+
+    @Test
+    public void testStartGameWhenGameNotFound() {
+        initGameRequest.setParCatMod(Collections.emptyList());
+
+        when(dataGameMultiRepository.findById(anyString()))
+            .thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            multiplayerService.startGame("invalid_game_id", initGameRequest);
+        });
+    }
+
+
+    @Test
+    public void testStartGameWithNoModes() {
+        initGameRequest.setParCatMod(Arrays.asList());
         when(dataGameMultiRepository.findById(anyString()))
             .thenReturn(Optional.of(new DataGameMulti()));
 
         DtoInitGameMultiResponse response = multiplayerService.startGame("game1", initGameRequest);
-
-        // Verificar que la respuesta no sea nula y que contiene la información esperada
-        assert response != null;
-        assert response.getGameModes() != null;
-        assert response.getIdGameMulti().equals("game1");
-        assert response.getIdUserHost().equals("1");
-        assert response.getIdUserFriend().equals("2");
-        verify(playRepository, times(1)).findMC(anyString());
-        verify(playRepository, times(1)).findOW(anyString());
-        verify(playRepository, times(1)).findGP(anyString());
+        assertTrue(response.getGameModes().isEmpty());
     }
+
+    @Test
+    public void testCreateGameWithNullUser() {
+        createMultiGameRequest.setUserHost(null);
+        assertThrows(NullPointerException.class, () -> {
+            multiplayerService.createGame(createMultiGameRequest);
+        });
+    }
+
+    @Test
+    public void testStartGameWithInvalidGameId() {
+        initGameRequest.setParCatMod(Collections.emptyList());
+        when(dataGameMultiRepository.findById(anyString())).thenReturn(Optional.empty());
+        try {
+            DtoInitGameMultiResponse response = multiplayerService.startGame("invalid_game_id", initGameRequest);
+            assertNull(response);
+        } catch (NoSuchElementException e) {
+            assertTrue(e instanceof NoSuchElementException);
+        }
+    }
+    
 }
-*/
