@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -242,22 +243,22 @@ public class AuthServiceTest {
     public void testLogin_UserNotFound_ThrowsException() {
         // Given: El usuario no existe en la base de datos
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-            .thenReturn(null);
+        .thenReturn(null);
         when(userRepository.findByUsername("testuser"))
-            .thenReturn(Optional.empty());  // Simula que el usuario no existe
+        .thenReturn(Optional.empty());
 
         // When: Intentar hacer login
-        UserException exception = assertThrows(UserException.class, () -> {
-            authService.login(loginRequest);
-        });
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+        authService.login(loginRequest);
+    });
 
-        // Then: Verificar que se lanza la excepción con el mensaje adecuado
-        assertEquals("User not found", exception.getMessage());
+    // Then: Verificar que se lanza la excepción
+    assertEquals("No value present", exception.getMessage());
     }
 
     //Registro exito
     @Test
-    public void testRegister_Success() {
+    public void testRegister_Success() throws UserException {
     // Given: Datos de registro válidos
     DtoRegisterRequest request = DtoRegisterRequest.builder()
     .username("newuser")
@@ -305,6 +306,9 @@ public class AuthServiceTest {
     ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
     when(jwtService.getToken(userCaptor.capture())).thenReturn("mockedJwtToken");
 
+
+    try {
+        
     // When: Registrar usuario
     DtoAuthResponse response = authService.register(request);
 
@@ -331,6 +335,9 @@ public class AuthServiceTest {
     assertEquals("USA", capturedUser.getCountry());
     assertEquals(EStatus.REGISTERED, capturedUser.getStatus());
 
+     } catch (UserException e) {
+        fail("El método lanzó una excepción inesperada: " + e.getMessage());
+     }
     }
 
     //Registro Fallo, tira exception

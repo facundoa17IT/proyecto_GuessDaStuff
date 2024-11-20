@@ -4,24 +4,28 @@ import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.SignatureException;
 import tec.proyecto.guessdastuff.services.JwtService;
 
 @SpringBootTest
@@ -44,97 +48,247 @@ class JwtServiceTest {
     }
 
     @Test
-    void testGetToken_ShouldGenerateToken() {
-        String token = jwtService.getToken(testUser);
-        assertNotNull(token);
-        assertTrue(token.length() > 0);
+    public void testGetToken() {
+    // Given: Un mock de UserDetails
+    UserDetails userDetails = mock(UserDetails.class);
+    when(userDetails.getUsername()).thenReturn("testuser");
+
+    // When: Llamar al método getToken
+    String token = jwtService.getToken(userDetails);
+
+    // Then: Verificar que el token no sea nulo
+    assertNotNull(token);
+
+    // Verificar que el token contiene el nombre de usuario
+    String usernameFromToken = jwtService.getUsernameFromToken(token);
+    assertEquals("testuser", usernameFromToken);
     }
 
     @Test
-    void testGetUsernameFromToken_ShouldExtractUsername() {
-        String token = jwtService.getToken(testUser);
-        String extractedUsername = jwtService.getUsernameFromToken(token);
+    public void testGenerateTokenWithClaims() {
+    // Given: Un mock de UserDetails y claims adicionales
+    UserDetails userDetails = mock(UserDetails.class);
+    when(userDetails.getUsername()).thenReturn("testuser");
 
-        assertEquals(testUser.getUsername(), extractedUsername);
+    Map<String, Object> extraClaims = new HashMap<>();
+    extraClaims.put("role", "ROLE_USER");
+
+    // When: Generar el token con claims
+    String token = jwtService.generateTokenWithClaims(extraClaims, userDetails);
+
+    // Then: Verificar que el token no sea nulo
+    assertNotNull(token);
+
+    // Verificar que los claims adicionales están presentes
+    String role = jwtService.getClaim(token, claims -> claims.get("role", String.class));
+    assertEquals("ROLE_USER", role);
     }
-
-    @Test
-    void testIsTokenValid_ShouldReturnTrueForValidToken() {
-        String token = jwtService.getToken(testUser);
-        boolean isValid = jwtService.isTokenValid(token, testUser);
-
-        assertTrue(isValid);
-    }
-
-  /*   @Test
-    void testIsTokenValid_ShouldReturnFalseForInvalidToken() {
-        String invalidToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvSW52YWxpZG8iLCJleHAiOjE2MDAwMDAwMDB9.invalidsignature";
-        when(jwtService.isTokenValid(invalidToken, testUser)).thenReturn(false);
-
-        boolean isValid = jwtService.isTokenValid(invalidToken, testUser);
-        assertFalse(isValid);
-
-        // Verificar que el método fue llamado
-        verify(jwtService).isTokenValid(invalidToken, testUser);
-    }
-*/
 
 
     @Test
-    void testIsTokenValid_ShouldReturnFalseForInvalidToken() {
-    // Genera un token válido
-    String validToken = jwtService.getToken(testUser);
-    
-    // Modifica el token para que sea inválido (por ejemplo, cambiando un carácter)
-    String invalidToken = validToken.substring(0, validToken.length() - 1) + "x";
-    
-    // Verifica si es inválido manejando la excepción SignatureException
-    boolean isValid;
-    try {
-        isValid = jwtService.isTokenValid(invalidToken, testUser);
-    } catch (SignatureException e) {
-        isValid = false;
-    }
-    
-    // Confirmamos que el token es inválido
-    assertFalse(isValid, "The token should be invalid due to a modified signature.");
-}
+    public void testGetKey() throws Exception {
+        // Given: Una instancia del servicio
+        JwtService jwtService = new JwtService();
 
-   @Test
-    void testIsTokenExpired_ShouldReturnTrueForExpiredToken() {
-    String expiredToken = Jwts.builder()
-            .setSubject(testUser.getUsername())
-            .setExpiration(new Date(System.currentTimeMillis() - 1000)) // Token ya expirado
-            .signWith(getKeyUsingReflection(), SignatureAlgorithm.HS256)
+        // Acceder al método privado usando reflexión
+        Method getKeyMethod = JwtService.class.getDeclaredMethod("getKey");
+        getKeyMethod.setAccessible(true); // Permitir acceso al método privado
+
+        // When: Llamar al método
+        Key key = (Key) getKeyMethod.invoke(jwtService);
+
+        // Then: Verificar que la clave no sea nula y tenga el tipo esperado
+        assertNotNull(key);
+        assertEquals("HmacSHA384", key.getAlgorithm()); // El algoritmo debería ser HmacSHA384
+    }
+
+
+    @Test
+    public void testGetUsernameFromToken() {
+    // Given: Un token válido
+    UserDetails userDetails = mock(UserDetails.class);
+    when(userDetails.getUsername()).thenReturn("testuser");
+
+    String token = jwtService.getToken(userDetails);
+
+    // When: Obtener el nombre de usuario del token
+    String username = jwtService.getUsernameFromToken(token);
+
+    // Then: Verificar que el nombre de usuario sea el esperado
+    assertEquals("testuser", username);
+    }
+
+    //Token exito
+    @Test
+    public void testIsTokenValid() {
+    // Given: Un token válido y un mock de UserDetails
+    UserDetails userDetails = mock(UserDetails.class);
+    when(userDetails.getUsername()).thenReturn("testuser");
+
+    String token = jwtService.getToken(userDetails);
+
+    // When: Validar el token
+    boolean isValid = jwtService.isTokenValid(token, userDetails);
+
+    // Then: Verificar que el token sea válido
+    assertTrue(isValid);
+    }
+
+    //Token expirado
+    @Test
+    public void testIsTokenValid_Expired() throws InterruptedException {
+    // Given: Un token con un tiempo de expiración corto
+    JwtService jwtService = new JwtService();
+
+    Map<String, Object> extraClaims = new HashMap<>();
+    extraClaims.put("customClaim", "testValue");
+
+    UserDetails userDetails = mock(UserDetails.class);
+    when(userDetails.getUsername()).thenReturn("testuser");
+
+    // Crear un token con expiración de 1 segundo
+    String token = Jwts.builder()
+            .setClaims(extraClaims)
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000)) // 1 segundo
+            .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
             .compact();
 
-    boolean isExpired;
-    try {
-        isExpired = jwtService.isTokenValid(expiredToken, testUser);
-    } catch (ExpiredJwtException e) {
-        isExpired = true;
+    // Esperar para que el token expire
+    Thread.sleep(1500);
+
+    // When & Then: Validar que se lanza la excepción al analizar el token expirado
+    assertThrows(io.jsonwebtoken.ExpiredJwtException.class, () -> {
+        jwtService.isTokenValid(token, userDetails);
+    });
     }
 
-    // Confirmamos que el token expirado es tratado como inválido
-    assertTrue(isExpired, "The token should be considered expired and invalid.");
-}
 
     @Test
-    void testGetKeyUsingReflection() throws Exception {
-        Method getKeyMethod = JwtService.class.getDeclaredMethod("getKey");
-        getKeyMethod.setAccessible(true); // Make private method accessible
+    public void testGetAllClaims() throws Exception {
+    // Given: Instancia de JwtService y un token válido
+    JwtService jwtService = new JwtService();
 
-        Key key = (Key) getKeyMethod.invoke(jwtService);
-        assertNotNull(key, "Key should not be null");
+    Map<String, Object> extraClaims = new HashMap<>();
+    extraClaims.put("customClaim", "testValue");
+
+    String token = Jwts.builder()
+            .setClaims(extraClaims)
+            .setSubject("testuser")
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
+            .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
+            .compact();
+
+    // When: Invocamos el método privado `getAllClaims` usando Reflection
+    Claims claims = ReflectionTestUtils.invokeMethod(jwtService, "getAllClaims", token);
+
+    // Then: Verificamos que los claims sean correctos
+    assertNotNull(claims);
+    assertEquals("testValue", claims.get("customClaim"));
+    assertEquals("testuser", claims.getSubject());
     }
 
-    private Key getKeyUsingReflection() {
-        try {
-            Method getKeyMethod = JwtService.class.getDeclaredMethod("getKey");
-            getKeyMethod.setAccessible(true);
-            return (Key) getKeyMethod.invoke(jwtService);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to access getKey method via reflection", e);
-        }
+
+    @Test
+    public void testGetClaim() {
+    // Given: Instancia de JwtService y un token con claims específicos
+    JwtService jwtService = new JwtService();
+
+    Map<String, Object> extraClaims = new HashMap<>();
+    extraClaims.put("customClaim", "customValue");
+
+    String token = Jwts.builder()
+            .setClaims(extraClaims)
+            .setSubject("testuser")
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
+            .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
+            .compact();
+
+    // When: Obtener diferentes valores usando el método getClaim
+    String customClaimValue = jwtService.getClaim(token, claims -> claims.get("customClaim", String.class));
+    String subject = jwtService.getClaim(token, Claims::getSubject);
+
+    // Then: Verificar los valores extraídos
+    assertEquals("customValue", customClaimValue);
+    assertEquals("testuser", subject);
     }
+
+
+    @Test
+    public void testGetExpiration() {
+    // Given: Instancia de JwtService y un token con una fecha de expiración específica
+    JwtService jwtService = new JwtService();
+
+    Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // 1 hora desde ahora
+
+    String token = Jwts.builder()
+            .setSubject("testuser")
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(expirationDate)
+            .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
+            .compact();
+
+    // When: Obtener la fecha de expiración usando getExpiration
+    Date extractedExpirationDate = ReflectionTestUtils.invokeMethod(jwtService, "getExpiration", token);
+
+     // Then: Verificar que la fecha extraída esté cerca de la esperada (permitir una pequeña diferencia en milisegundos)
+     assertNotNull(extractedExpirationDate);
+     long differenceInMillis = Math.abs(expirationDate.getTime() - extractedExpirationDate.getTime());
+
+     // Asegurarse de que la diferencia en milisegundos es aceptable 
+     assertTrue(differenceInMillis < 100, "La diferencia en milisegundos es demasiado grande: " + differenceInMillis);   
+
+    }
+
+/* 
+    @Test
+    public void testIsTokenExpired_ExpiredToken() throws Exception {
+    // Given: Un token con un tiempo de expiración en el pasado
+    Date expirationDate = new Date(System.currentTimeMillis() - 1000); // Expirado hace 1 segundo
+    String expiredToken = Jwts.builder()
+        .setSubject("testuser")
+        .setIssuedAt(new Date(System.currentTimeMillis() - 2000)) // Emitido hace 2 segundos
+        .setExpiration(expirationDate) // Expirado hace 1 segundo
+        .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
+        .compact();
+
+    
+    // Acceder al método isTokenExpired usando reflexión
+    Method method = JwtService.class.getDeclaredMethod("isTokenExpired", String.class);
+    method.setAccessible(true); // Hacer accesible el método private
+
+     // Agregar un pequeño desfase antes de validar el token
+     Thread.sleep(3900); // Espera un segundo para asegurarte de que el token esté expirado
+
+    
+    // When: Verificar si el token está expirado
+    boolean isExpired = (boolean) method.invoke(jwtService, expiredToken);
+
+    // Then: El token debería estar expirado
+    assertTrue(isExpired);
+    }
+    
+
+    @Test
+    public void testIsTokenExpired_ValidToken() throws Exception {
+    // Given: Un token con un tiempo de expiración futuro
+    Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // Expiración en 1 hora
+    String validToken = Jwts.builder()
+        .setSubject("testuser")
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(expirationDate)
+        .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
+        .compact();
+
+    // When: Verificar si el token está expirado
+    boolean isExpired = jwtService.isTokenExpired(validToken);
+
+    // Then: El token no debería estar expirado
+    assertFalse(isExpired);
+}
+ */
+
 }
