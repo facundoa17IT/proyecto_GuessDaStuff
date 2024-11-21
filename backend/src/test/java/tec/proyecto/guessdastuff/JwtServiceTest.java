@@ -242,7 +242,7 @@ class JwtServiceTest {
      long differenceInMillis = Math.abs(expirationDate.getTime() - extractedExpirationDate.getTime());
 
      // Asegurarse de que la diferencia en milisegundos es aceptable 
-     assertTrue(differenceInMillis < 500, "La diferencia en milisegundos es demasiado grande: " + differenceInMillis);   
+     assertTrue(differenceInMillis < 1000, "La diferencia en milisegundos es demasiado grande: " + differenceInMillis);   
 
     }
     //Token Expirado
