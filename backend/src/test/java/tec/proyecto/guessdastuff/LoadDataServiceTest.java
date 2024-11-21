@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import tec.proyecto.guessdastuff.repositories.LoadDataRepository;
 import tec.proyecto.guessdastuff.services.LoadDataService;
 
@@ -12,13 +14,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-class LoadDataServiceTest {
+import static org.mockito.Mockito.*;
 
-    @InjectMocks
-    private LoadDataService loadDataService;
+@SpringBootTest
+class LoadDataServiceTest {
 
     @Mock
     private LoadDataRepository loadDataRepository;
+
+    @InjectMocks
+    private LoadDataService loadDataService;
 
     @BeforeEach
     void setUp() {
@@ -26,11 +31,18 @@ class LoadDataServiceTest {
     }
 
     @Test
-    void testLoadData_ShouldCallRepositoryMethodsAndReturnSuccessMessage() {
-        // Call the method
+    void testLoadData() {
+        doNothing().when(loadDataRepository).insertUsers();
+        doNothing().when(loadDataRepository).insertGameModes();
+        doNothing().when(loadDataRepository).insertCategories();
+        doNothing().when(loadDataRepository).insertMultipleMC();
+        doNothing().when(loadDataRepository).insertMultiplesOW();
+        doNothing().when(loadDataRepository).insertMultipleGP();
+
         String result = loadDataService.loadData();
 
-        // Verify that each repository method is called once
+        assertEquals("Data creada con exito", result);
+
         verify(loadDataRepository, times(1)).insertUsers();
         verify(loadDataRepository, times(1)).insertGameModes();
         verify(loadDataRepository, times(1)).insertCategories();
@@ -38,7 +50,6 @@ class LoadDataServiceTest {
         verify(loadDataRepository, times(1)).insertMultiplesOW();
         verify(loadDataRepository, times(1)).insertMultipleGP();
 
-        // Assert the return message
-        assertEquals("Data creada con exito", result);
+        verifyNoMoreInteractions(loadDataRepository);
     }
 }

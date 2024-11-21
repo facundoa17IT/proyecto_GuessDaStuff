@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -66,10 +69,7 @@ public class GameServiceTest {
 
     @BeforeEach
     public void setUp() throws NoSuchFieldException, IllegalAccessException {
-        // Use reflection to set values in Category
-        testCategory = new Category(); // Create an empty instance
-
-        // Set values via reflection (matching constructor parameters)
+        testCategory = new Category(); 
         Field idField = Category.class.getDeclaredField("id");
         idField.setAccessible(true);
         idField.set(testCategory, 1L);
@@ -83,13 +83,11 @@ public class GameServiceTest {
         statusField.set(testCategory, ECategoryStatus.EMPTY);
 
 
-        // Inicializar testGameMode
         testGameMode = new GameMode();
         Field gameModeNameField = GameMode.class.getDeclaredField("name");
         gameModeNameField.setAccessible(true);
         gameModeNameField.set(testGameMode, "MC");
 
-        // Establece otros campos necesarios de testGameMode si es necesario
     }
 
     @Test
@@ -125,9 +123,8 @@ public class GameServiceTest {
     public void testCreateOWIndividual_Success() throws GameModeException {
         DtoOrderWord dto = new DtoOrderWord("OW", 1L, "WORD", "Hint1", "Hint2", "Hint3");
 
-         // Cambiar el nombre del modo de juego a "OW" para este test
          GameMode testGameMode = new GameMode();
-        testGameMode.setName("OW"); // Assuming a setter exists
+        testGameMode.setName("OW");
 
 
     when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
@@ -141,18 +138,22 @@ public class GameServiceTest {
 
 
     @Test
-    public void testCreateGPIndividual_Success() throws GameModeException {
+    public void testCreateGPIndividual_Success() throws GameModeException, NoSuchFieldException, IllegalAccessException {
         DtoGuessPhrase dto = new DtoGuessPhrase("GP", 1L, "Guess this phrase", "CorrectWord", "Hint1", "Hint2", "Hint3");
-
+    
+        Field gameModeNameField = GameMode.class.getDeclaredField("name");
+        gameModeNameField.setAccessible(true);
+        gameModeNameField.set(testGameMode, "GP");
+    
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
         when(gameModeRepository.findByName("GP")).thenReturn(Optional.of(testGameMode));
-
+    
         ResponseEntity<?> response = gameService.createGPIndividual(dto);
-
+    
         assertEquals("La frase Guess this phrase se creó correctamente para la categoría Test Category y modo de juego GP", response.getBody());
         verify(gameRepository, times(1)).save(any(GuessPhrase.class));
-    }        
-
+    }
+    
     @Test
     public void testGetDataOfGameMode_Success_GuessPhrase() throws GameModeException {
         GuessPhrase guessPhrase = new GuessPhrase(1L, testGameMode, testCategory, "Phrase", "CorrectWord", "Hint1", "Hint2", "Hint3");
@@ -181,15 +182,72 @@ public class GameServiceTest {
     }
 
     @Test
-    public void testEditOrderWord_Success() {
+    public void testEditOrderWord_Success() throws NoSuchFieldException, IllegalAccessException {
         DtoOrderWord dto = new DtoOrderWord("OW", 1L, "NewWord", "Hint1", "Hint2", "Hint3");
         OrderWord orderWord = new OrderWord(1L, testGameMode, testCategory, "OldWord", "Old Hint1", "Old Hint2", "Old Hint3");
-
+    
+        Field gameModeNameField = GameMode.class.getDeclaredField("name");
+        gameModeNameField.setAccessible(true);
+        gameModeNameField.set(testGameMode, "OW");
+    
         when(gameRepository.findById(1L)).thenReturn(Optional.of(orderWord));
-
+    
         ResponseEntity<?> response = gameService.editOrderWord(1L, dto);
 
         assertEquals("El modo de juego OW con id 1 ha sido modificado correctamente!", response.getBody());
         verify(gameRepository, times(1)).save(orderWord);
     }
+
+    @Test
+    public void testListTitlesOfCategory_Failed() {
+
+        when(gameRepository.listTitlesOfCategory(1L)).thenReturn(new ArrayList<>());
+
+        Exception exception = assertThrows(GameModeException.class, () -> {
+            gameService.listTitlesOfCategory(1L);
+        });
+
+        assertEquals("Para la categoria ingresada no existen titulos", exception.getMessage());
+    }
+    @Test
+    public void testCreateMCIndividual_Failed() throws GameModeException {
+        DtoMultipleChoice dto = new DtoMultipleChoice("MC", 1L, "4", "1", "2", "3", "Hint1", "Hint2", "Hint3", "What is 2+2?");
+    
+        when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
+    
+        GameModeException exception = assertThrows(GameModeException.class, () -> {
+            gameService.createMCIndividual(dto);
+        });
+    
+        assertEquals("La categoria ingresada no existe", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(MultipleChoice.class));
+    }
+
+    @Test
+    public void testCreateOWIndividual_Failed() throws GameModeException {
+        DtoOrderWord dto = new DtoOrderWord("OW", 1L, "WORD", "Hint1", "Hint2", "Hint3");
+
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(testCategory));
+        when(gameModeRepository.findByName("OW")).thenReturn(Optional.empty());
+
+        GameModeException exception = assertThrows(GameModeException.class, () -> {
+            gameService.createOWIndividual(dto);
+        });
+
+        assertEquals("El modo de juego no existe", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(OrderWord.class));
+    }
+
+    @Test
+    public void testCreateGPIndividual_Failed() throws GameModeException {
+        DtoGuessPhrase dto = new DtoGuessPhrase("GP", 1L, "Guess this phrase", "CorrectWord", "Hint1", "Hint2", "Hint3");
+        when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
+        lenient().when(gameModeRepository.findByName("GP")).thenReturn(Optional.empty());
+        GameModeException exception = assertThrows(GameModeException.class, () -> {
+            gameService.createGPIndividual(dto);
+        });
+        assertEquals("La categoria ingresada no existe", exception.getMessage());  
+        verify(gameRepository, times(0)).save(any(GuessPhrase.class));
+    }
+    
 }
