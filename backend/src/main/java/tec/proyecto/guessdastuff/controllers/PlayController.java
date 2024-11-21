@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.cloudinary.http5.api.Response;
+
 import tec.proyecto.guessdastuff.services.*;
 import tec.proyecto.guessdastuff.dtos.*;
 
@@ -74,5 +78,13 @@ public class PlayController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-    
+    @GetMapping("/v1/resumeGame/{idGame}")
+    public ResponseEntity<DtoDataGameSingle> getResumeGame(@PathVariable String idGame){
+        try {
+            DtoDataGameSingle response = playService.getResumeGame(idGame);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } 
+    }
 }
