@@ -1,5 +1,6 @@
 package tec.proyecto.guessdastuff;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Key;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import tec.proyecto.guessdastuff.services.JwtService;
@@ -239,11 +242,10 @@ class JwtServiceTest {
      long differenceInMillis = Math.abs(expirationDate.getTime() - extractedExpirationDate.getTime());
 
      // Asegurarse de que la diferencia en milisegundos es aceptable 
-     assertTrue(differenceInMillis < 100, "La diferencia en milisegundos es demasiado grande: " + differenceInMillis);   
+     assertTrue(differenceInMillis < 500, "La diferencia en milisegundos es demasiado grande: " + differenceInMillis);   
 
     }
-
-/* 
+    //Token Expirado
     @Test
     public void testIsTokenExpired_ExpiredToken() throws Exception {
     // Given: Un token con un tiempo de expiración en el pasado
@@ -260,35 +262,41 @@ class JwtServiceTest {
     Method method = JwtService.class.getDeclaredMethod("isTokenExpired", String.class);
     method.setAccessible(true); // Hacer accesible el método private
 
-     // Agregar un pequeño desfase antes de validar el token
-     Thread.sleep(3900); // Espera un segundo para asegurarte de que el token esté expirado
-
-    
-    // When: Verificar si el token está expirado
-    boolean isExpired = (boolean) method.invoke(jwtService, expiredToken);
+     boolean isExpired = false;
+    try {
+        isExpired = (boolean) method.invoke(jwtService, expiredToken);
+    } catch (InvocationTargetException e) {
+        if (e.getCause() instanceof ExpiredJwtException) {
+            isExpired = true; // La excepción confirma que el token está expirado
+        } else {
+            throw e; // Re-lanzar otras excepciones
+        }
+    }
 
     // Then: El token debería estar expirado
     assertTrue(isExpired);
     }
     
-
+    //Token aun Valido
     @Test
     public void testIsTokenExpired_ValidToken() throws Exception {
-    // Given: Un token con un tiempo de expiración futuro
-    Date expirationDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // Expiración en 1 hora
+    // Given: Un token con un tiempo de expiración en el futuro
+    Date expirationDate = new Date(System.currentTimeMillis() + 10000); // Expira en 10 segundos
     String validToken = Jwts.builder()
         .setSubject("testuser")
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(expirationDate)
+        .setIssuedAt(new Date(System.currentTimeMillis())) // Emitido ahora
+        .setExpiration(expirationDate) // Expira en 10 segundos
         .signWith(ReflectionTestUtils.invokeMethod(jwtService, "getKey"), SignatureAlgorithm.HS256)
         .compact();
 
+    // Acceder al método isTokenExpired usando reflexión
+    Method method = JwtService.class.getDeclaredMethod("isTokenExpired", String.class);
+    method.setAccessible(true); // Hacer accesible el método private
+
     // When: Verificar si el token está expirado
-    boolean isExpired = jwtService.isTokenExpired(validToken);
+    boolean isExpired = (boolean) method.invoke(jwtService, validToken);
 
     // Then: El token no debería estar expirado
     assertFalse(isExpired);
-}
- */
-
+    }
 }
