@@ -31,7 +31,9 @@ public class GameConverter {
 
     public DtoMultipleChoice toDtoMultipleChoice(MultipleChoice mC){
 
-        DtoMultipleChoice dtoMultipleChoice = new DtoMultipleChoice( mC.getIdGameMode().getName(), mC.getIdCategory().getId(), mC.getRandomCorrectWord(),mC.getRandomWord1(),mC.getRandomWord2(),mC.getRandomWord3(), mC.getQuestion(),mC.getHint1(), mC.getHint2(), mC.getHint3());
+        DtoMultipleChoice dtoMultipleChoice = new DtoMultipleChoice(mC.getIdGameMode().getName(), mC.getIdCategory().getId(), mC.getRandomCorrectWord(), 
+                                                                    mC.getRandomWord3(), mC.getRandomWord2(), mC.getRandomWord1(), mC.getHint1(), 
+                                                                    mC.getHint2(), mC.getHint3(), mC.getQuestion());
         
         return dtoMultipleChoice;
     }
