@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tec.proyecto.guessdastuff.dtos.DtoCreateMultiGameRequest;
+import tec.proyecto.guessdastuff.dtos.DtoDataGameMulti;
+import tec.proyecto.guessdastuff.dtos.DtoDataGameSingle;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest.ParCatMod;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
@@ -247,6 +249,24 @@ public class MultiplayerService {
     public void finishGame(String idSocket) {
         dataGameMultiRepository.finishPlayGame(idSocket);
 
+    }
+    public DtoDataGameMulti getResumeGame(String idGame) {
+        DataGameMulti dataGameMulti = dataGameMultiRepository.getResumeGame(idGame);
+        DtoDataGameMulti resume = new DtoDataGameMulti();
+    
+        // Asignar los valores directamente desde el objeto DataGameSingle
+        resume.setId(dataGameMulti.getId());
+        resume.setIdUser1(dataGameMulti.getIdUser1());
+        resume.setIdUser2(dataGameMulti.getIdUser2());
+        resume.setIdUserWin(dataGameMulti.getIdUserWin());
+        resume.setIdInfoGameMulti(dataGameMulti.getIdInfoGameMulti());
+        resume.setFinish(dataGameMulti.isFinish());
+        resume.setUpdatedAt(dataGameMulti.getUpdatedAt());
+        resume.setCreatedAt(dataGameMulti.getCreatedAt());
+
+        List<InfoGameMulti> games = infoGameMultiRepository.getInfoGameById(dataGameMulti.getIdInfoGameMulti());
+        resume.setGames(games);
+        return resume;
     }
     
 }

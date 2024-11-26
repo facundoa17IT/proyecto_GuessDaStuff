@@ -55,13 +55,12 @@ export const SocketProvider = ({ children }) => {
     };
 
     const disconnect = (dtoUserOnline) => {
-        if (client.current) {
+        if (client.current && client.current.connected) {
             console.log("Usuario desconectado!");
             client.current.send('/app/leave', {}, JSON.stringify(dtoUserOnline));
-            client.current.disconnect();
-        }
-        else{
-            console.error("Error con el cliente STOMP");
+            client.current.disconnect(() => console.log("Desconexión exitosa"));
+        } else {
+            console.error("No hay conexión activa para desconectar.");
         }
     };
 

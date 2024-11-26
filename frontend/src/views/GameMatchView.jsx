@@ -30,7 +30,7 @@ const GameMatchView = () => {
     const navigate = useNavigate();
 
     const { implementationGameBody, setImplementationGameBody, setInvitation, setInvitationCount, unsubscribeFromGameSocket } = useContext(SocketContext);
-    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer } = useContext(LoadGameContext);
+    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer, hostWinsCount, setHostWinsCount, guestWinsCount, setGuestWinsCount } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -51,9 +51,6 @@ const GameMatchView = () => {
 
     const [characterDialogue, setCharacterDialogue] = useState("");
 
-    // Almacena username, userId, email
-    const userObj = JSON.parse(localStorage.getItem("userObj"));
-
     const [currentGameModeId, setCurrentGameModeId] = useState(null);
 
     const [winner, setWinner] = useState(null);
@@ -62,9 +59,13 @@ const GameMatchView = () => {
 
     const host = JSON.parse(localStorage.getItem("host")) || "Undefined";
     const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
+    const userObj = JSON.parse(localStorage.getItem("userObj")) || "Undefined";
 
     useEffect(() => {
         resetGameState();
+        setHostWinsCount(0);
+        setGuestWinsCount(0);
+
     }, []);
 
     useEffect(() => {
@@ -177,11 +178,13 @@ const GameMatchView = () => {
                     setIsModalOpen(true);
                     if (implementationGameBody.idUserWin == host.userId) {
                         setWinner(host.username);
-                        console.log("Ganador: " + host.username);
+                        // Sumar 1 punto al host
+                        setHostWinsCount(prevCount => prevCount + 1);
                     }
                     else {
                         setWinner(guest.username);
-                        console.log("Ganador: " + guest.username);
+                        // Sumar 1 punto al guest
+                        setGuestWinsCount(prevCount => prevCount + 1);
                     }
                     console.log("Ganador Id: " + implementationGameBody.idUserWin);
                 }
@@ -195,11 +198,13 @@ const GameMatchView = () => {
     }, [implementationGameBody]);
 
 
+
     const resetGameState = () => {
         setHints([]);
         setIsCorrectAnswer(null);
         setElapsedTime(0);
         setIsTimePlaying(false);
+
     };
 
     const handleTimeUpdate = (time) => {
@@ -226,7 +231,7 @@ const GameMatchView = () => {
     };
 
     const handleTimerComplete = async () => {
-        if(isMultiplayer) {
+        if (isMultiplayer) {
             try {
                 await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeId}`);
             }
@@ -247,8 +252,8 @@ const GameMatchView = () => {
             setIsGameFinished(true);
             setCurrentHeader("Partida Finalizada");
             setInitGameModes({});
-            setGameContent(renderFinishGameStats());
-            
+            //setGameContent(renderFinishGameStats());
+
             if (isMultiplayer) {
                 setImplementationGameBody(null);
                 setInvitationCount(0);
@@ -261,8 +266,8 @@ const GameMatchView = () => {
                 axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
             }
             setGameId(null);
-            localStorage.removeItem("host");
-            localStorage.removeItem("guest");
+            //localStorage.removeItem("host");
+            //localStorage.removeItem("guest");
         } catch (error) {
             console.error(error);
         }
@@ -372,65 +377,66 @@ const GameMatchView = () => {
             }
         }
     };
+    useEffect(() => {
+        if (isGameFinished) {
+            const isHost = userObj.userId === host.userId;
+            const isGuest = userObj.userId === guest.userId;
 
-    const renderFinishGameStats = () => {
+            let message = "😢 DERROTA 😢";
+            if (isHost && hostWinsCount > guestWinsCount) {
+                message = "🎉 ¡VICTORIA! 🎉";
+            } else if (isGuest && guestWinsCount > hostWinsCount) {
+                message = "🎉 ¡VICTORIA! 🎉";
+            } else if (hostWinsCount === guestWinsCount) {
+                message = "🤝 EMPATE 🤝";
+            }
+
+            setGameContent(renderFinishGameStats(message));
+
+        }
+    }, [isGameFinished]);
+
+    const renderFinishGameStats = (message) => {
         return (
-            <div className='stats-container'>
-                <h2 style={{ marginBottom: '15px' }}>Resumen de la partida</h2>
-                <div className='stats-container'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Modos de Juego</th>
-                                <th>Categoria</th>
-                                <th>Puntaje</th>
-                                <th>Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Modo 1</td>
-                                <td>Categoría 1</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Modo 2</td>
-                                <td>Categoría 2</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>Modo 3</td>
-                                <td>Categoría 3</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div className='stats-container'>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Puntaje Total</th>
-                                <th>Duración Total</th>
-                                <th>Posición Ranking</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>0/3</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div className="stats-container">
+                <p
+                    style={{
+                        fontWeight: "bold",
+                        fontSize: "36px",
+                        color: message.includes("VICTORIA")
+                            ? "#4CAF50"
+                            : message.includes("EMPATE")
+                                ? "#000"
+                                : "#8B0000",
+                    }}
+                >
+                    {message}
+                </p>
+                <p
+                    style={{
+                        fontWeight: "bold",
+                        fontSize: "26px",
+                    }}
+                >
+                    {host?.username || "Cargando..."} - Puntos: {hostWinsCount ?? 0}
+                </p>
+                <p
+                    style={{
+                        fontWeight: "bold",
+                        fontSize: "26px",
+                    }}
+                >
+                    {guest?.username || "Cargando..."} - Puntos: {guestWinsCount ?? 0}
+                </p>
                 <button onClick={() => navigate("/")}>Menu Principal</button>
             </div>
         );
-    }
+    };
+
+
+
+
+
 
     return (
         <>

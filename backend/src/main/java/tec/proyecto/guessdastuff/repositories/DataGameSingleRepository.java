@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
+import tec.proyecto.guessdastuff.dtos.DtoDataGameSingle;
 import tec.proyecto.guessdastuff.entities.DataGameSingle;
 
 @Repository
@@ -72,4 +73,10 @@ public interface DataGameSingleRepository extends JpaRepository<DataGameSingle, 
             ORDER BY SUM(time_playing)
             """, nativeQuery = true)
     List<Object[]> getRankingMenorTiempoSingle();
+
+
+    @Query(value = """
+        SELECT * FROM data_game_single WHERE id = :idGame
+        """, nativeQuery = true)
+    DataGameSingle getResumeGame(@Param("idGame") String idGame);
 }
