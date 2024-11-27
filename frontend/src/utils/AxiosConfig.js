@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an instance of Axios
 const axiosInstance = axios.create({
-  baseURL: 'http://proyectoguessdastuff-production.up.railway.app/api', // API base URL
+  baseURL: 'https://proyectoguessdastuff-production.up.railway.app/api', // API base URL
   headers: {
     'Content-Type': 'application/json', // change according header type accordingly
   },
