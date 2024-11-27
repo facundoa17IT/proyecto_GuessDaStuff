@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "serve dist -s -n -L -p $PORT"
   },
   "dependencies": {
     "@rjsf/core": "^5.22.1",
@@ -28,6 +29,7 @@
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.27.0",
     "react-spinners": "^0.14.1",
+    "serve": "^14.2.4",
     "sockjs-client": "^1.6.1",
     "typewriter-effect": "^2.21.0",
     "typewritter": "^1.0.9"
