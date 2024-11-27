@@ -269,4 +269,22 @@ public class PlayService {
     
         return dtoInitGameResponse;
     }
+
+    public DtoDataGameSingle getResumeGame(String idGame){
+        DataGameSingle dataGameSingle = dataGameSingleRepository.getResumeGame(idGame);
+        DtoDataGameSingle resume = new DtoDataGameSingle();
+
+        // Asignar los valores directamente desde el objeto DataGameSingle
+        resume.setId(dataGameSingle.getId());
+        resume.setIdUser(dataGameSingle.getIdUser());
+        resume.setIdDataGame1(dataGameSingle.getIdDataGame1());
+        resume.setIdDataGame2(dataGameSingle.getIdDataGame2());
+        resume.setIdDataGame3(dataGameSingle.getIdDataGame3());
+        resume.setPoints(dataGameSingle.getPoints());
+        resume.setTimePlaying(dataGameSingle.getTimePlaying());
+        resume.setTmstmpInit(dataGameSingle.getTmstmpInit());
+        resume.setTmstmpUpdate(dataGameSingle.getTmstmpUpdate());
+        resume.setFinish(dataGameSingle.isFinish());
+        return resume;
+    }
 }

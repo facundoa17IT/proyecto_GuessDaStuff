@@ -191,9 +191,10 @@ public class GameService {
         Optional<GameMode> gameModeOpt = gameModeRepository.findByName(EGameMode.MC.toString());
         GameMode gameModeEnt = gameModeOpt.orElseThrow(() -> new GameModeException("El modo de juego no existe"));
 
-        MultipleChoice mC = new MultipleChoice(null, gameModeEnt, categoryEntidad, dtoMultipleChoice.getRandomCorrectWord().toUpperCase(), dtoMultipleChoice.getRandomWord1().toUpperCase(), 
-        dtoMultipleChoice.getRandomWord2().toUpperCase(),dtoMultipleChoice.getRandomWord3().toUpperCase(),dtoMultipleChoice.getQuestion(), dtoMultipleChoice.getHint1(), dtoMultipleChoice.getHint2(), dtoMultipleChoice.getHint3());
-
+        MultipleChoice mC = new MultipleChoice(null, gameModeEnt, categoryEntidad, dtoMultipleChoice.getRandomWord3(), 
+                                               dtoMultipleChoice.getRandomCorrectWord(), dtoMultipleChoice.getRandomWord2(), 
+                                               dtoMultipleChoice.getRandomWord1(), dtoMultipleChoice.getQuestion(), dtoMultipleChoice.getHint1(), 
+                                               dtoMultipleChoice.getHint2(), dtoMultipleChoice.getHint3());
         gameRepository.save(mC);
 
         return ResponseEntity.ok("El titulo: " + dtoMultipleChoice.getQuestion() + ", se creo correctamente para la categoria " + categoryEntidad.getName() + 

@@ -237,6 +237,7 @@ export const AddTitle = () => {
         if (gameMode) {
             try {
                 const response = await axiosInstance.post(`/game-modes/v1/masive/${gameMode}`, formData, {
+                    requiresAuth: true, 
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },

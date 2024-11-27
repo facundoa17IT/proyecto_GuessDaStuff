@@ -12,6 +12,9 @@ export const LoadGameProvider = ({ children }) => {
     const [answer, setAnswer] = useState('');
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(null);
 
+    const [hostWinsCount, setHostWinsCount] = useState(0);
+    const [guestWinsCount, setGuestWinsCount] = useState(0);
+
     return (
         <LoadGameContext.Provider value={{
             loadGameData,selectedCategories,
@@ -20,7 +23,9 @@ export const LoadGameProvider = ({ children }) => {
             gameId, setGameId,
             isCorrectAnswer, setIsCorrectAnswer,
             answer, setAnswer,
-            isMultiplayer, setIsMultiplayer
+            isMultiplayer, setIsMultiplayer,
+            hostWinsCount, setHostWinsCount,
+            guestWinsCount, setGuestWinsCount
         }}>
             {children}
         </LoadGameContext.Provider>
