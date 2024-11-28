@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -43,6 +44,8 @@ public class UserService {
 
     @Autowired
     CloudinaryService cloudinaryService;
+
+    @Value("${base.url}") String baseUrl;
 
     public DtoUserResponse findUserByUsername(String username) throws UserException{
 
@@ -145,13 +148,14 @@ public class UserService {
     // Genera un enlace de restablecimiento de contraseña y envía un correo electrónico
     public void processforgot_password(String email) throws UserException{
         Optional<User> userOpt = userRepository.findByEmail(email);
+
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             String token = UUID.randomUUID().toString();
             user.setResetToken(token);
             userRepository.save(user);
-
-            String resetUrl = "http://localhost:5173/reset-password?token=" + token; // Luego modificar x la url correcta
+            
+            String resetUrl = baseUrl+"/reset-password?token="+ token; // Luego modificar x la url correcta
             sendResetPasswordEmail(user.getEmail(), resetUrl);
         } else {
             throw new UserException("El usuario con el correo electrónico " + email + " no existe");
