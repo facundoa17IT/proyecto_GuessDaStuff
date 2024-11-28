@@ -10,5 +10,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  server: {
+    // Configuración para manejar rutas en desarrollo
+    historyApiFallback: true,
+  },
   base: '/', // Esto asegura que las rutas relativas funcionen correctamente
 })
