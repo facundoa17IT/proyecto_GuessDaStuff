@@ -10,4 +10,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',
   },
+  base: '/', // Esto asegura que las rutas relativas funcionen correctamente
 })
