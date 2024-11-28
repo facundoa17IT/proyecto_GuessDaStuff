@@ -63,7 +63,7 @@ function AppRouter() {
                 <Route path={PUBLIC_ROUTES.REGISTER} element={<Register />} />
                 <Route path={PUBLIC_ROUTES.LOGIN} element={<Login />} />
                 <Route path={PUBLIC_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="reset-password" element={<ResetPassword />} />
 
                 {/* Player & Guess Routes */}
                 <Route path={PUBLIC_ROUTES.START_GAME} element={<StartGame />} />

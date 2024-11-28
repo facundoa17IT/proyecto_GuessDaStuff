@@ -28,7 +28,7 @@ export const PUBLIC_ROUTES = {
     SELECTION_PHASE: "/selection-phase",
     INIT_GAME: "/init-game",
     SINGLE_GAME_LOBBY: "single-game-lobby",
-    FORGOT_PASSWORD: '/forgot-password'
+    FORGOT_PASSWORD: 'forgot-password'
   
 }
 
