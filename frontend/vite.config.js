@@ -5,6 +5,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   define: {
-    global: 'window',  
-  }
+    global: 'window',
+  },
+  build: {
+    outDir: 'dist',
+  },
+  server: {
+    // Configuración para manejar rutas en desarrollo
+    historyApiFallback: true,
+  },
+  base: '/', // Esto asegura que las rutas relativas funcionen correctamente
 })

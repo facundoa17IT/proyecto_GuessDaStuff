@@ -1,6 +1,6 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 
 /** Components **/
 import Modal from '../../components/layouts/Modal';
@@ -107,7 +107,10 @@ export const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-             <a style={{ marginBottom: '15px' }} href="/forgot-password">Restaurar Contraseña</a>
+            {/* Cambiamos href por Link */}
+            <Link style={{ marginBottom: '15px' }} to="/forgot-password">
+                Restaurar Contraseña
+            </Link>
         </Modal>
     );
 };

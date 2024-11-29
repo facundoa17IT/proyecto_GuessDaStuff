@@ -29,7 +29,7 @@ export const SocketProvider = ({ children }) => {
     }, [invitationCollection]);
     
     const connect = (dtoUserOnline) => {
-        client.current = Stomp.over(() => new SockJS('http://localhost:8080/ws'));
+        client.current = Stomp.over(() => new SockJS('https://proyectoguessdastuff-production.up.railway.app/ws'));
 
         if (dtoUserOnline === null) {
             console.error("DtoUserOnline NULL");
