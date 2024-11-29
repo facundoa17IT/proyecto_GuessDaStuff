@@ -154,20 +154,20 @@ public class UserService {
             String token = UUID.randomUUID().toString();
             user.setResetToken(token);
             userRepository.save(user);
-            
-            String resetUrl = baseUrl+"/reset-password?token="+ token; // Luego modificar x la url correcta
-            sendResetPasswordEmail(user.getEmail(), resetUrl);
+
+            String resetToken = token;
+            sendResetPasswordEmail(user.getEmail(), resetToken);
         } else {
             throw new UserException("El usuario con el correo electrónico " + email + " no existe");
         }
     }
 
     // Envía el correo electrónico de restablecimiento de contraseña
-    private void sendResetPasswordEmail(String to, String resetUrl) {
+    private void sendResetPasswordEmail(String to, String resetToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject("Password Reset Request");
-        message.setText("Click the link to reset your password: " + resetUrl);
+        message.setText("Este es tu token para reestablecer la contraseña: " + resetToken);
         mailSender.send(message);
     }
 
