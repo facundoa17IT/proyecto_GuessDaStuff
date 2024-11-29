@@ -168,7 +168,6 @@ const Profile = () => {
                         <p>{userObj.email}</p>
                         <div style={{ marginTop: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
                             <button style={{ fontSize: 'small', width: '200px' }}><span><FaEdit style={{ marginRight: '5px' }} />Editar Perfil</span></button>
-                            <button style={{ fontSize: 'small', width: '200px' }}><ImExit style={{ marginRight: '5px' }} />Cerrar Sesion</button>
                             <button onClick={handleDeleteAccountClick} style={{ fontSize: 'small', width: '200px', backgroundColor: '#DC143C' }}><RiDeleteBin2Fill style={{ marginRight: '5px' }} />Eliminar Cuenta</button>
                         </div>
                     </div>

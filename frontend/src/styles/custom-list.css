@@ -7,7 +7,7 @@
     margin-top: 15px;
     border: 2px solid var(--border-color);
     border-radius: 8px;
-    height: 400px;
+    height: 45vh;
 }
 
 .list-header {
@@ -89,6 +89,6 @@
     }
 
     .list-container {
-        height: 310px;
+        height: 50vh;
     }
 }

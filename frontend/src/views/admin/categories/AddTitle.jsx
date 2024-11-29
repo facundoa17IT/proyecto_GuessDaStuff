@@ -49,13 +49,13 @@ export const AddTitle = () => {
                 }
             }
             else if (selectedAddType == "Masiva" && selectedItem) {
-                setModalContent(() => renderAddMasiveTitle());
+                const gameMode = getGameModeById(selectedItem.id);
+                setModalContent(() => renderAddMasiveTitle(gameMode));
             }
             else {
                 console.log("Error con el tipo de carga seleccionada!");
             }
         }
-        
     }, [selectedAddType, schema]);
 
     const initializeContent = async () => {
@@ -258,13 +258,32 @@ export const AddTitle = () => {
         setCanUploadFile(true);
     };
 
-    const renderAddMasiveTitle = () => {
+    const renderAddMasiveTitle = (gameMode) => {
+        let gameModeInfo;
+
+        if (gameMode){
+            if(gameMode === "OW"){
+                gameModeInfo = <p>Palabra | Pista1 | Pista2 | Pista3</p>
+            }
+            else if (gameMode === "MC") {
+                gameModeInfo = <p>PalabraCorrecta | PalabraAleatoria1 | PalabraAleatoria2 | PalabraAleatoria3 | Pregunta | Pista1 | Pista2 | Pista3</p>
+            }
+            else if (gameMode === "GP") {
+                gameModeInfo = <p>Frase | PalabraCorrecta | Pista1 | Pista2 | Pista3</p>
+            }
+            else {
+                console.error("Bad id Game Mode");
+            }
+        }
+
         return (
-            <>
+            <div>
                 {renderCategoryAndGameModeName()}
                 <p>Seleccione un archivo en formato csv o xlsx</p>
                 <input type="file" onChange={handleFileChange} />
-            </>
+                <h3>Columnas requeridas</h3>
+                {gameModeInfo}
+            </div>
         )
     }
 

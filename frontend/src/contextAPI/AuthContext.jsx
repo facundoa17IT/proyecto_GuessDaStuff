@@ -28,8 +28,12 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  const isGuest = () => {
+    return role === 'ROLE_GUESS';
+  }
+
   return (
-    <AuthContext.Provider value={{ role, setRole, userId, setUserId }}>
+    <AuthContext.Provider value={{ role, setRole, userId, setUserId, isGuest }}>
       {children}
     </AuthContext.Provider>
   );

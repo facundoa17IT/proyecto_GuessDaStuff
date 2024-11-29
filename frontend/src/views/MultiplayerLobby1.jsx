@@ -10,7 +10,7 @@ import WaitingLobby from '../components/layouts/WaitingLobby';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
-import { PLAYER_ROUTES } from '../utils/constants';
+import { PLAYER_ROUTES, ROLE } from '../utils/constants';
 import { invitationData, setInviteAction, setResponseIdGame, getRandomItem } from '../utils/Helpers';
 
 /** Context API **/
@@ -36,16 +36,15 @@ const MultiplayerLobby = () => {
     // Almacena username, userId, email
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    const [connectedUsers, setConnectedUsers] = useState(() => {
-        const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
-        return storedUsers || [];
-    });
+    const [connectedUsers, setConnectedUsers] = useState([]);
 
     //Se actualiza la lista cada vez que hay un cambio de usuario
     useEffect(() => {
-        setConnectedUsers(users);
-        filterSelfUsername();
-        console.log(users);
+        // Filter users whenever `users` changes
+        const updatedList = users.filter(
+            (item) => item.username !== userObj.username && item.status !== ROLE.ADMIN
+        );
+        setConnectedUsers(updatedList);
     }, [users]);
 
     // Limpiamos el local storage de host y guest
@@ -53,14 +52,15 @@ const MultiplayerLobby = () => {
         localStorage.removeItem("host");
 		localStorage.removeItem("guest");
         localStorage.setItem("host", JSON.stringify(userObj));
-        filterSelfUsername();
     }, []);
 
-    // Remueve el propio host de la lista de usuarios conectados
-    const filterSelfUsername = () => {
-        const updatedList = connectedUsers.filter(item => item.username !== userObj.username);
-        setConnectedUsers(updatedList);
-    }
+    // Filtra usuario propio y del tipo admin
+    // const filterUsers = () => {
+    //     const updatedList = connectedUsers.filter(
+    //         item => item.username !== userObj.username && item.status !== ROLE.ADMIN
+    //     );
+    //     setConnectedUsers(updatedList);
+    // };
 
     // 1)
     // Se envia la invitacion al persionar el boton de invitar

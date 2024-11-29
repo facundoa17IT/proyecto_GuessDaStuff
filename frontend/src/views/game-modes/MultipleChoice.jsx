@@ -4,12 +4,16 @@ import React, { useState, useEffect, useContext } from 'react';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
+/** Assets **/
+import { FaRegCheckCircle } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+
 /** Styles **/
 import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo }) => {
+const MultipleChoice = ({ MCinfo, hintButton }) => {
     const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -81,9 +85,18 @@ const MultipleChoice = ({ MCinfo }) => {
                 </div>
             </div>
 
-            <button className="confirmButton" onClick={confirmAnswer} disabled={confirmedAnswer !== null}>
-                Confirmar Opción
-            </button>
+            <div className="buttonRow">
+				{hintButton}
+				<button
+					className="confirmButton"
+					onClick={confirmAnswer}
+                    disabled={confirmedAnswer !== null}
+				>
+					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+						<FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Verificar
+					</span>
+				</button>
+            </div>
         </div>
     );
 };

@@ -278,25 +278,6 @@ fieldset{
   height: 100%;
 }
 
-.stats-container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 15px;
-}
-
-.stats-container table {
-  border-collapse: collapse;
-  width: 50%;
-}
-
-.stats-container th td {
-  border: 1px solid var(--border-color);
-  width: 25%;
-}
-
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
   /**/

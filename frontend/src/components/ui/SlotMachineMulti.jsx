@@ -141,16 +141,44 @@ const SlotMachineMulti = () => {
                 </div>
             </div>
 
-            <div className="results"> {/* Contenedor para mostrar los resultados */}
-                {results.length > 0 && (
-                    <ul>
-                        {results.slice().reverse().map((result, index) => (
-                            <li key={index}>
-                                {result.category}: {result.mode}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            <div className="results">
+                <table className="centered-table">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Modo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {results.length > 0 ? (
+                            results.slice().reverse().map((result, index) => {
+                                const mensajes = {
+                                    GP: "Adivina la Frase",
+                                    OW: "Ordena la Palabra",
+                                    MC: "Multiple Opcion"
+                                };
+
+                                const mensajePersonalizado = mensajes[result.mode];
+
+                                return (
+                                    <tr key={index}>
+                                        <td>{result.category}</td>
+                                        <td>{mensajePersonalizado || result.mode}</td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            // Mostrar tabla de 3x3 con signos de interrogación
+                            Array.from({ length: 3 }).map((_, rowIndex) => (
+                                <tr key={rowIndex}>
+                                    {Array.from({ length: 2 }).map((_, colIndex) => (
+                                        <td key={colIndex}>?</td>
+                                    ))}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
