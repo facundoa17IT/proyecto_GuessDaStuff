@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
-import tec.proyecto.guessdastuff.dtos.DtoDataGameSingle;
 import tec.proyecto.guessdastuff.entities.DataGameSingle;
 
 @Repository
