@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tec.proyecto.guessdastuff.dtos.DtoCreateMultiGameRequest;
 import tec.proyecto.guessdastuff.dtos.DtoDataGameMulti;
-import tec.proyecto.guessdastuff.dtos.DtoDataGameSingle;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameMultiResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoadGameResponse;

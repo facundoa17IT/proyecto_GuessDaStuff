@@ -9,9 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import tec.proyecto.guessdastuff.dtos.DtoDataGameMulti;
 import tec.proyecto.guessdastuff.entities.DataGameMulti;
-import tec.proyecto.guessdastuff.entities.DataGameSingle;
 
 @Repository
 public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, String> {
