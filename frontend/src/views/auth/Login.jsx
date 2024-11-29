@@ -94,7 +94,7 @@ export const Login = () => {
 
     return (
         <Modal onConfirm={login} showModal={true} closeModal={onClose} title="Iniciar Sesion">
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
             <input
                 type="text"
                 placeholder="Usuario"

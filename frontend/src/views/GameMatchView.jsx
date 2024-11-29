@@ -50,6 +50,7 @@ const GameMatchView = () => {
     const [hintButtonEnabled, setHintButtonEnabled] = useState(true);
 
     const [characterDialogue, setCharacterDialogue] = useState("");
+    const [currentCharacterSprite, setCurrentCharacterSprite] = useState('idle');
 
     const [currentGameModeId, setCurrentGameModeId] = useState(null);
 
@@ -67,10 +68,6 @@ const GameMatchView = () => {
         setGuestWinsCount(0);
 
     }, []);
-
-    useEffect(() => {
-        setCharacterDialogue(hints[currentHintIndex]);
-    }, [currentHintIndex]);
 
     // initGameModes se obtiene de LoadGame
     useEffect(() => {
@@ -107,6 +104,10 @@ const GameMatchView = () => {
     const defaultCharacterDialogue = () => {
         setCharacterDialogue("Puedo darte una pista!");
     }
+
+    useEffect(() => {
+        setCharacterDialogue(hints[currentHintIndex]);
+    }, [currentHintIndex]);
 
     // Guarda en la BD los datos de la ronda
     // Le avisa a los demas usuarios que el juego termino
@@ -156,11 +157,13 @@ const GameMatchView = () => {
             if (isCorrectAnswer) {
                 sendAnswer();
                 setCharacterDialogue("Muy bien!");
+                setCurrentCharacterSprite('correct');
                 toast.success('Respuesta Correcta!');
             }
             else {
                 toast.error('Respuesta Incorrecta!');
                 setCharacterDialogue("Intenta de nuevo!");
+                setCurrentCharacterSprite('wrong');
             }
         }
     }
@@ -204,7 +207,6 @@ const GameMatchView = () => {
         setIsCorrectAnswer(null);
         setElapsedTime(0);
         setIsTimePlaying(false);
-
     };
 
     const handleTimeUpdate = (time) => {
@@ -227,6 +229,7 @@ const GameMatchView = () => {
             defaultCharacterDialogue();
             setCurrentGameIndex(nextIndex);
             setIsTimePlaying(true);
+            setCurrentCharacterSprite('idle');
         }, 3000); // 3000 ms para esperar 3 segundos adicionales
     };
 
@@ -246,28 +249,24 @@ const GameMatchView = () => {
         try {
             setTimeout(() => {
                 setIsModalOpen(false);
-            }, 3000); // 3000 ms para esperar 3 segundos adicionales
 
-            console.log("Fin del juego!");
-            setIsGameFinished(true);
-            setCurrentHeader("Partida Finalizada");
-            setInitGameModes({});
-            //setGameContent(renderFinishGameStats());
+                console.log("Fin del juego!");
+                setIsGameFinished(true);
+                setCurrentHeader("Partida Finalizada");
+                setInitGameModes({});
+                setCurrentCharacterSprite('finish');
+            }, 3000); // 3000 ms para esperar 3 segundos adicionales
 
             if (isMultiplayer) {
                 setImplementationGameBody(null);
                 setInvitationCount(0);
                 setInvitation(null);
                 unsubscribeFromGameSocket();
-                setIsMultiplayer(false);
                 axiosInstance.post(`/game-multi/game/${gameId}/finish/0`);
             }
             else {
                 axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
             }
-            setGameId(null);
-            //localStorage.removeItem("host");
-            //localStorage.removeItem("guest");
         } catch (error) {
             console.error(error);
         }
@@ -323,7 +322,6 @@ const GameMatchView = () => {
                 disabled={!hintButtonEnabled}
             >
                 <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-
                     <FaRegQuestionCircle style={{ marginRight: "5px" }} name="help-outline" size={30} color={hintButtonEnabled ? "" : "gray"} />Ayuda
                 </span>
             </button>
@@ -348,15 +346,15 @@ const GameMatchView = () => {
                 switch (idModeGame) {
                     case 'OW':
                         setCurrentHeader("Ordena la Palabra");
-                        GameComponent = <OrderWord OWinfo={gameInfo} />;
+                        GameComponent = <OrderWord OWinfo={gameInfo} hintButton={renderHintButton()} />;
                         break;
                     case 'GP':
                         setCurrentHeader("Adivina la Frase");
-                        GameComponent = <GuessPhrase GPinfo={gameInfo} />;
+                        GameComponent = <GuessPhrase GPinfo={gameInfo} hintButton={renderHintButton()} />;
                         break;
                     case 'MC':
                         setCurrentHeader("Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} />;
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} hintButton={renderHintButton()} />;
                         break;
                     default:
                         GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -377,66 +375,112 @@ const GameMatchView = () => {
             }
         }
     };
+
+    const onMatchClosed = () => {
+        localStorage.removeItem("host");
+        localStorage.removeItem("guest");
+        setGameId(null);
+        navigate("/");
+    }
+
     useEffect(() => {
         if (isGameFinished) {
-            const isHost = userObj.userId === host.userId;
-            const isGuest = userObj.userId === guest.userId;
-
-            let message = "😢 DERROTA 😢";
-            if (isHost && hostWinsCount > guestWinsCount) {
-                message = "🎉 ¡VICTORIA! 🎉";
-            } else if (isGuest && guestWinsCount > hostWinsCount) {
-                message = "🎉 ¡VICTORIA! 🎉";
-            } else if (hostWinsCount === guestWinsCount) {
-                message = "🤝 EMPATE 🤝";
+            console.log(isMultiplayer);
+            if (isMultiplayer) {
+                setGameContent(renderFinishGameStats());
+                setIsMultiplayer(false);
             }
-
-            setGameContent(renderFinishGameStats(message));
-
+            else {
+                fetchFinalGameData();
+            }
         }
     }, [isGameFinished]);
 
-    const renderFinishGameStats = (message) => {
+    const fetchFinalGameData = async () => {
+        try {
+            const response = await axiosInstance.get(`/game-single/v1/resumeGame/${gameId}`);
+            console.log(response.data); // Log the resolved data
+            setGameContent(renderFinishGameStats(response.data));
+        } catch (error) {
+            console.error("Error fetching game resume:", error);
+        }
+    }
+
+    const renderMultiplayerGameResume = () => {
+        const isHost = userObj.userId === host.userId;
+        const isGuest = userObj.userId === guest.userId;
+
+        let message = "😢 DERROTA 😢";
+        if (isHost && hostWinsCount > guestWinsCount) {
+            message = "🎉 ¡VICTORIA! 🎉";
+        } else if (isGuest && guestWinsCount > hostWinsCount) {
+            message = "🎉 ¡VICTORIA! 🎉";
+        } else if (hostWinsCount === guestWinsCount) {
+            message = "🤝 EMPATE 🤝";
+        }
+
         return (
             <div className="stats-container">
-                <p
+                <h2
                     style={{
-                        fontWeight: "bold",
-                        fontSize: "36px",
                         color: message.includes("VICTORIA")
                             ? "#4CAF50"
                             : message.includes("EMPATE")
                                 ? "#000"
-                                : "#8B0000",
+                                : "red",
                     }}
                 >
                     {message}
-                </p>
-                <p
-                    style={{
-                        fontWeight: "bold",
-                        fontSize: "26px",
-                    }}
-                >
-                    {host?.username || "Cargando..."} - Puntos: {hostWinsCount ?? 0}
-                </p>
-                <p
-                    style={{
-                        fontWeight: "bold",
-                        fontSize: "26px",
-                    }}
-                >
-                    {guest?.username || "Cargando..."} - Puntos: {guestWinsCount ?? 0}
-                </p>
-                <button onClick={() => navigate("/")}>Menu Principal</button>
+                </h2>
+                <h3>
+                    <span style={{ color: 'var(--link-color)' }}>{host?.username || "Cargando..."}</span> - Puntos: 🧠 x {hostWinsCount ?? 0}
+                </h3>
+                <h3>
+                    <span style={{ color: 'var(--link-color)' }}>{guest?.username || "Cargando..."}</span> - Puntos: 🧠 x {guestWinsCount ?? 0}
+                </h3>
+            </div>
+        );
+    }
+
+    const renderSingleplayerGameResume = (response) => {
+        let score;
+        let timePlaying;
+
+        if (response) {
+            score = response.points;
+            timePlaying = response.timePlaying;
+        }
+
+        return (
+            <>
+                {response ? (
+                    <div>
+                        <h3>Puntaje Total: 🧠 x {score}</h3>
+                        <h3>Tiempo Total: {timePlaying} segundos</h3>
+                    </div>
+                ) : (
+                    <>No se pudo obtener la informacion</>
+                )}
+
+            </>
+        );
+    }
+
+    const renderFinishGameStats = (response) => {
+        const finalGameResume = isMultiplayer ? renderMultiplayerGameResume() : renderSingleplayerGameResume(response);
+
+        return (
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: '65%' }}>
+                    <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} />
+                    <div style={{ border: '2px solid var(--border-color)', borderRadius: '8px', padding: '25px', width: '50%' }}>
+                        {finalGameResume}
+                    </div>
+                </div>
+                <button onClick={onMatchClosed}>Menu Principal</button>
             </div>
         );
     };
-
-
-
-
-
 
     return (
         <>
@@ -447,8 +491,7 @@ const GameMatchView = () => {
                 leftHeader='Pistas'
                 leftContent={
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <BrainCharacter rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
-                        {renderHintButton()}
+                        <BrainCharacter spriteKey={currentCharacterSprite} rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
                     </div>
                 }
                 middleHeader={currentHeader}
@@ -473,7 +516,7 @@ const GameMatchView = () => {
             />
 
             <Modal showModal={isModalOpen} hideConfirmBtn={true} hideCloseBtn={true} title="Ronda Finalizada">
-                {winner && <h2>"{winner}" es el ganador de la ronda!</h2>}
+                {winner && <h2><span style={{ color: 'var(--link-color)' }}>"{winner}"</span> es el ganador de la ronda!</h2>}
                 {currentGameIndex < 2 && <h3>Preparate para la siguiente ronda!</h3>}
                 <ClockLoader size={80} />
             </Modal>

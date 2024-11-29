@@ -33,17 +33,17 @@ export const PUBLIC_ROUTES = {
 }
 
 export const ADMIN_ROUTES = {
-    CONTENT_MANAGEMENT: "admin/game-content-management",
-    ADD_CATEGORY: "admin/add-category",
-    CATEGORY_DETAILS: "admin/category-details",
-    EDIT_CATEGORY: "admin/edit-category",
-    DELETE_CATEGORY: "admin/delete/category",
-    ADD_TITLE: "admin/add-title",
-    USERS_MANAGEMENT: "admin/users-management",
-    USER_DETAILS: "admin/user-details",
-    BLOCK_USER: "admin/block-user",
-    UNBLOCK_USER: "admin/unblock-user",
-    DELETE_USER: "admin/delete-user"
+    CONTENT_MANAGEMENT: "/admin/game-content-management",
+    ADD_CATEGORY: "/admin/add-category",
+    CATEGORY_DETAILS: "/admin/category-details",
+    EDIT_CATEGORY: "/admin/edit-category",
+    DELETE_CATEGORY: "/admin/delete/category",
+    ADD_TITLE: "/admin/add-title",
+    USERS_MANAGEMENT: "/admin/users-management",
+    USER_DETAILS: "/admin/user-details",
+    BLOCK_USER: "/admin/block-user",
+    UNBLOCK_USER: "/admin/unblock-user",
+    DELETE_USER: "/admin/delete-user"
 }
 
 export const PLAYER_ROUTES = {

@@ -12,10 +12,10 @@ export const SocketProvider = ({ children }) => {
     const [implementationGameBody, setImplementationGameBody] = useState(null);
     const [usernameHost, setUsernameHost] = useState(null);
     const [gameId, setGameId] = useState(null);
+    const [gameSubscription, setGameSubscription] = useState(null);
 
     const client = useRef(null);
 
-    let gameSubscription = null;
 
     useEffect(() => {
         localStorage.setItem("connectedUsers", JSON.stringify(users));
@@ -66,12 +66,12 @@ export const SocketProvider = ({ children }) => {
 
     const suscribeToGameSocket = (gameId) => {
         if (client.current) {
-            client.current.subscribe(`/game/${gameId}/`, (message) => {
+            setGameSubscription(client.current.subscribe(`/game/${gameId}/`, (message) => {
                 const implementGame = JSON.parse(message.body);
                 console.log(implementGame);
                 setImplementationGameBody(implementGame);
                 console.warn("SOCKET -> /game/gameId/");
-            });
+            }));
         }
         else{
             console.error("Error con el cliente STOMP");
@@ -83,7 +83,7 @@ export const SocketProvider = ({ children }) => {
             // Llama al método unsubscribe para cancelar la suscripción
             gameSubscription.unsubscribe();
             console.info("Desuscripción exitosa del canal de juego");
-            gameSubscription = null;
+            setGameSubscription(null);
         } else {
             console.warn("No hay ninguna suscripción activa para desuscribirse");
         }
@@ -103,7 +103,8 @@ export const SocketProvider = ({ children }) => {
                 usernameHost, setUsernameHost,
                 gameId, setGameId,
                 suscribeToGameSocket,
-                unsubscribeFromGameSocket
+                unsubscribeFromGameSocket,
+                setGameSubscription
             }}
         >
             {children}

@@ -5,9 +5,8 @@
     border-radius: 8px;
     border: 2px solid var(--border-color);
     background-color: var(--background-color);
-    max-width: 100%;
     height: 60vh; /* probando */
-    margin: 0 300px;
+    margin: 3% 15%;
     justify-content: flex-start;
     padding-top: 25px;
     padding-bottom: 25px;
@@ -70,15 +69,22 @@
     top: 0px;
     left: 25px;
     padding: 10px;
-
 }
 
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
-    /***** Home Page Header *****/
-
     .main-game-layout-cointainer {
-        height: 75vh;
-        margin: 0 50px;
+        height: 73vh;
+        margin: 0 2%;
+    }
+}
+
+@media (max-width: 767px) {
+    .main-game-layout-cointainer {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        height: 93vh;
+        padding: 0;
     }
 }

@@ -16,6 +16,7 @@ export const Register = () => {
     const [email, setEmail] = useState('');
     const [country, setCountry] = useState('');
     const [birthday, setBirthday] = useState();
+    const [error, setError] = useState('');
 
     const handleDateChange = (date) => {
         setBirthday(date);
@@ -42,6 +43,12 @@ export const Register = () => {
     const register = async (event) => {
         event.preventDefault();
 
+        // Validar si todos los campos están completos
+        if (!username || !password || !email || !country || !birthday) {
+            setError("Por favor, completa todos los campos!");
+            return;
+        }
+
         // Formatear la fecha de cumpleaños usando el método auxiliar
         const formattedBirthday = formatDate(birthday);
         try {
@@ -62,6 +69,7 @@ export const Register = () => {
 
     return (
         <Modal showModal={true} onConfirm={register} closeModal={onClose} title="Registrarse">
+            {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: '325px', margin: '5px' }}>
                 <ReactFlagsSelect
                     selected={country}

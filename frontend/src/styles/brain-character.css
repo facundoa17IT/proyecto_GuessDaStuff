@@ -1,11 +1,11 @@
 /***** Brain Character (Mr. Helper) *****/
 
 .brain-character {
-    max-width: 120px;
+    /* width: 120px; */
 }
 
 .character-container {
-    margin-top: 5%;
+    margin: 3%;
 }
 
 .indexedStep {

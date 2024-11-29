@@ -115,11 +115,6 @@ const Navbar = () => {
                                             <BsCollectionPlayFill style={{ marginRight: '5px' }} />Partidas
                                         </Link>
                                     </li>
-                                    <li className="nav-item">
-                                        <Link to="" className="nav-links">
-                                            <PiChartBarFill style={{ marginRight: '5px' }} />Estadisticas
-                                        </Link>
-                                    </li>
                                 </>
                             )}
                         </>

@@ -22,8 +22,6 @@ const UsersManagment = () => {
     const customFilter = [
         { label: 'Admin', criteria: item => item.role === ROLE.ADMIN },
         { label: 'User', criteria: item => item.role === ROLE.USER },
-        { label: 'Blocked', criteria: item => item.status === STATUS.BLOCKED },
-        { label: 'Deleted', criteria: item => item.status === STATUS.DELETED },
     ];
 
     /** Register Admin */
@@ -120,7 +118,7 @@ const UsersManagment = () => {
                         getItemLabel={getPlayerName}
                         extraColumns={extraColumns}
                         customFilter={customFilter}
-                        buttons={['infoBtn', 'blockBtn', 'unblockBtn', 'deleteBtn']}
+                        buttons={['infoBtn']}
                         addNewEntry={true}
                         onAddNewEntry={() => setIsModalOpen(!isModalOpen)}
                         onButtonInteraction={handleUsersListInteraction}

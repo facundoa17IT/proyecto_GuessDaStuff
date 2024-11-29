@@ -9,6 +9,7 @@ import CustomList from '../../components/layouts/CustomList';
 /** Utils **/
 import axiosInstance from '../../utils/AxiosConfig';
 import { CATEGORY_STATUS } from '../../utils/constants';
+import { ADMIN_ROUTES } from '../../utils/constants';
 
 const GameContentManagement = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const GameContentManagement = () => {
     const categoryListId = "categoriesList";
     const [categories, setCategories] = useState([]);
     const getCategoryName = (category) => category.name;
-    const extraColumns = (item) => [item.description, item.status];
+    const extraColumns = (item) => [item.status];
     const customFilter = [
         { label: 'Initialized', criteria: item => item.status === CATEGORY_STATUS.INITIALIZED },
         { label: 'Empty', criteria: item => item.status === CATEGORY_STATUS.EMPTY },
@@ -55,17 +56,17 @@ const GameContentManagement = () => {
             switch (buttonKey) {
                 case 'infoBtn':
                     console.log('Show info for category');
-                    navigate("/admin/category-details")
+                    navigate(ADMIN_ROUTES.CATEGORY_DETAILS)
                     break;
 
                 case 'deleteBtn':
                     console.log('Delete category');
-                    navigate("/admin/delete-category");
+                    navigate(ADMIN_ROUTES.DELETE_CATEGORY);
                     break;
 
                 case 'editBtn':
                     console.log('Edit category');
-                    navigate("/admin/edit-category");
+                    navigate(ADMIN_ROUTES.EDIT_CATEGORY);
                     break;
 
                 default:
