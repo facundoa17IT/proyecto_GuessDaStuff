@@ -19,7 +19,7 @@ const GameMatchesManagement = () => {
     /** Game Matches List **/
     const gameMatchesListId = "gameMatchesList";
     const [gameMatches, setGameMatches] = useState([]);
-    const getGameId = (game) => game.tmstmpInit;
+    const getGameId = (game) => game.itemList;
     const extraColumns = (item) => [item.finish ? "Finished" : "Active"];
     const customFilter = [
         { label: 'Finished', criteria: item => item.finish === true },
@@ -31,17 +31,40 @@ const GameMatchesManagement = () => {
     // Fetch all categories
     const fetchGameMatches = async () => {
         try {
-            const response = await axiosInstance.get('/game-modes/v1', { requiresAuth: true });
-            console.log(response.data.partidas);
+            const responseIndividual = await axiosInstance.get('/game-modes/v1/allGamesIndividual', { requiresAuth: true });
+            const responseMulti = await axiosInstance.get('/game-modes/v1/allGamesMultiplayer', { requiresAuth: true });
 
-            const Finalizadas = response.data.partidas.Finalizadas;
-            const Activas = response.data.partidas.Activas;
+            console.log(responseIndividual.data);
 
-            //console.log(Finalizadas);
-            //console.log(Activas);
+            const FinalizadasIndividual = responseIndividual.data.Finalizadas;
+            const ActivasIndividual = responseIndividual.data.Activas;
+
+            const FinalizadasMulti = responseMulti.data.Finalizadas;
+            const ActivasMulti = responseMulti.data.Activas;
+
+            const finishIndividualModify = FinalizadasIndividual.map(partida => ({
+                ...partida, // Mantener los demás valores intactos
+                itemList: "Individual - " + partida.startDate // Reemplazar el id_game
+            }));
+
+            const activeIndividualModify = ActivasIndividual.map(partida => ({
+                ...partida, // Mantener los demás valores intactos
+                itemList: "Individual - " + partida.startDate // Reemplazar el id_game
+            }));
+
+            const finishMultiModify = FinalizadasMulti.map(partida => ({
+                ...partida, // Mantener los demás valores intactos
+                itemList: "Multiplayer - " + partida.startDate // Reemplazar el id_game
+            }));
+
+            const activeMultiModify = ActivasMulti.map(partida => ({
+                ...partida, // Mantener los demás valores intactos
+                itemList: "Multiplayer - " + partida.startDate // Reemplazar el id_game
+            }));
+
 
             // Combina ambas listas en un solo array
-            setGameMatches([...Finalizadas, ...Activas]);
+            setGameMatches([...finishIndividualModify, ...activeIndividualModify,...finishMultiModify,...activeMultiModify]);
         } catch (error) {
             console.error('Error fetching game matches:', error);
         }

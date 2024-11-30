@@ -56,10 +56,19 @@ public class GameController {
         }
     }
 
-    @GetMapping("/v1/allGames")
-    public ResponseEntity<?> listAllGames(){
+    @GetMapping("/v1/allGamesMultiplayer")
+    public ResponseEntity<?> listAllGamesMultiplayer(){
         try {
-            return ResponseEntity.ok(gameService.listAllGames());
+            return ResponseEntity.ok(gameService.listAllGamesMultiPlayer());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/v1/allGamesIndividual")
+    public ResponseEntity<?> listAllGamesIndividual(){
+        try {
+            return ResponseEntity.ok(gameService.listAllGamesIndividual());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

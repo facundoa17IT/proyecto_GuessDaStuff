@@ -3,6 +3,7 @@ package tec.proyecto.guessdastuff.services;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import tec.proyecto.guessdastuff.converters.DateConverter;
 import tec.proyecto.guessdastuff.converters.GameConverter;
-import tec.proyecto.guessdastuff.dtos.DtoAllGames;
+import tec.proyecto.guessdastuff.dtos.DtoAllGamesIndividual;
+import tec.proyecto.guessdastuff.dtos.DtoAllGamesMultiplayer;
 import tec.proyecto.guessdastuff.dtos.DtoGamesOfPlayer;
 import tec.proyecto.guessdastuff.dtos.DtoGamesOfPlayerResponse;
 import tec.proyecto.guessdastuff.dtos.DtoGuessPhrase;
@@ -68,6 +70,7 @@ public class GameService {
     @Autowired
     GameConverter gameConverter;
 
+
     public DtoListTitlesResponse listTitlesOfCategory(Long idCategory) throws GameModeException {
         List<Object[]> result = gameRepository.listTitlesOfCategory(idCategory);
     
@@ -110,15 +113,26 @@ public class GameService {
         return new DtoLoadPlaygameResponse(response);
     }
 
-    public Map<String, List<DtoAllGames>> listAllGames(){
+    public Map<String, List<DtoAllGamesMultiplayer>> listAllGamesMultiPlayer(){
         // Ejecutar las consultas
-        List<Object[]> singleGames = dataGameSingleRepository.findAllSingleGames();
         List<Object[]> multiplayerGames = dataGameMultiRepository.findAllMultiplayerGames();
 
         // Combinar y transformar los resultados
-        List<DtoAllGames> allGames = new ArrayList<>();
-        allGames.addAll(mapResults(singleGames));
-        allGames.addAll(mapResults(multiplayerGames));
+        List<DtoAllGamesMultiplayer> allGames = new ArrayList<>();
+        allGames.addAll(mapResultsMulti(multiplayerGames));
+
+        // Agrupar por isFinish
+        return allGames.stream()
+                .collect(Collectors.groupingBy(game -> game.isFinish() ? "Finalizadas" : "Activas"));
+    }
+
+    public Map<String, List<DtoAllGamesIndividual>> listAllGamesIndividual(){
+        // Ejecutar las consultas
+        List<Object[]> singleGames = dataGameSingleRepository.findAllSingleGames();
+
+        // Combinar y transformar los resultados
+        List<DtoAllGamesIndividual> allGames = new ArrayList<>();
+        allGames.addAll(mapResultsIndividual(singleGames));
 
         // Agrupar por isFinish
         return allGames.stream()
@@ -138,39 +152,6 @@ public class GameService {
         return partidasResponse;
 
 
-    }
-
-    private List<DtoGamesOfPlayer> mapToDto(List<Object[]> rows) {
-        List<DtoGamesOfPlayer> dtos = new ArrayList<>();
-        for (Object[] row : rows) {
-            dtos.add(new DtoGamesOfPlayer(
-                (String) row[0],              // id_game
-                (String) row[1],              // game1
-                (String) row[2],              // game2
-                (String) row[3],              // game3
-                (Integer) row[4],             // points
-                ((Number) row[5]).floatValue(), // time_playing
-                (String) row[6]               // user_win
-            ));
-        }
-        return dtos;
-    }
-
-    private List<DtoAllGames> mapResults(List<Object[]> results) {
-        return results.stream().map(row -> {
-            DtoAllGames dto = new DtoAllGames();
-            dto.setId_game((String) row[0]);
-            dto.setUser((String) row[1]);
-            dto.setUser2((String) row[2]);
-            dto.setUserWin((String) row[3]);
-            dto.setGame1((String) row[4]);
-            dto.setGame2((String) row[5]);
-            dto.setGame3((String) row[6]);
-            dto.setFinish(row[7] != null && Boolean.parseBoolean(row[7].toString()));
-            dto.setPoints(row[8] != null ? Integer.parseInt(row[8].toString()) : null);
-            dto.setTime_playing(row[9] != null ? Float.parseFloat(row[9].toString()) : 0);
-            return dto;
-        }).toList();
     }
 
     /***** INDIVIDUAL *****/
@@ -547,4 +528,53 @@ public class GameService {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Game mode not found");
     }
 
+    private List<DtoGamesOfPlayer> mapToDto(List<Object[]> rows) {
+        List<DtoGamesOfPlayer> dtos = new ArrayList<>();
+        for (Object[] row : rows) {
+            dtos.add(new DtoGamesOfPlayer(
+                (String) row[0],              // id_game
+                (String) row[1],              // game1
+                (String) row[2],              // game2
+                (String) row[3],              // game3
+                (Integer) row[4],             // points
+                ((Number) row[5]).floatValue(), // time_playing
+                (String) row[6]               // user_win
+            ));
+        }
+        return dtos;
+    }
+
+    private List<DtoAllGamesMultiplayer> mapResultsMulti(List<Object[]> results) {
+        return results.stream().map(row -> {
+            DtoAllGamesMultiplayer dto = new DtoAllGamesMultiplayer();
+            dto.setIdGame((String) row[0]);
+            dto.setUserHost((String) row[1]);
+            dto.setUserGuest((String) row[2]);
+            dto.setUserWin((String) row[3]);
+            dto.setGame1((String) row[4]);
+            dto.setGame2((String) row[5]);
+            dto.setGame3((String) row[6]);
+            dto.setFinish(row[7] != null && Boolean.parseBoolean(row[7].toString()));
+            dto.setPoints(row[8] != null ? Integer.parseInt(row[8].toString()) : null);
+            dto.setTimePlaying(row[9] != null ? Float.parseFloat(row[9].toString()) : 0);
+            dto.setStartDate((String) row[10]);
+            return dto;
+        }).toList();
+    }
+
+    private List<DtoAllGamesIndividual> mapResultsIndividual(List<Object[]> results) {
+        return results.stream().map(row -> {
+            DtoAllGamesIndividual dto = new DtoAllGamesIndividual();
+            dto.setIdGame((String) row[0]);
+            dto.setUser((String) row[1]);
+            dto.setGame1((String) row[2]);
+            dto.setGame2((String) row[3]);
+            dto.setGame3((String) row[4]);
+            dto.setFinish(row[5] != null && Boolean.parseBoolean(row[5].toString()));
+            dto.setPoints(row[6] != null ? Integer.parseInt(row[6].toString()) : null);
+            dto.setTimePlaying(row[7] != null ? Float.parseFloat(row[7].toString()) : 0);
+            dto.setStartDate(row[8] != null ? (String) row[8] : null);
+            return dto;
+        }).toList();
+    }
 }
