@@ -27,7 +27,7 @@ export const DeleteCategory = () => {
     const handleDeleteCategory = async () => {
         if (selectedItem?.name) {
             try {
-                await axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`, { requiresAuth: true });
+                await axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`, {}, { requiresAuth: true });
                 console.log("Categoría eliminada");
                 navigate(-1);
             } catch (error) {
