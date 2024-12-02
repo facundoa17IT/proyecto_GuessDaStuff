@@ -124,7 +124,7 @@ const StartGame = () => {
     return (
         <div>
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
-                <div className="start-game-modal">
+                <div>
                     <h2>Categorias</h2>
                     <div>
                         <div className="categories-container">

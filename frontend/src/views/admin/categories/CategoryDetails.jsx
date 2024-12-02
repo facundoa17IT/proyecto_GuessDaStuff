@@ -178,7 +178,7 @@ export const CategoryDetails = () => {
             else console.error("Error al seleccionar Game Mode");
 
             try {
-                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, {}, { requiresAuth: true });
+                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, formData, { requiresAuth: true });
                 console.log('Data edited successfully!', response.data);
                 setFormData({});
                 navigate(-1);

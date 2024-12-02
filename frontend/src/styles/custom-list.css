@@ -92,3 +92,9 @@
         height: 50vh;
     }
 }
+
+@media (min-width: 1300px) and (min-height: 790px) {
+    .list-container {
+        height: 56vh;
+    }
+}

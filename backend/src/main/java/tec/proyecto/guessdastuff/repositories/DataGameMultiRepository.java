@@ -63,7 +63,7 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
                    MAX(CASE WHEN gr.row_number = 1 THEN gr.game_type END) AS game1,
                    MAX(CASE WHEN gr.row_number = 2 THEN gr.game_type END) AS game2,
                    MAX(CASE WHEN gr.row_number = 3 THEN gr.game_type END) AS game3,
-                   m.is_finish, i.points, i.time_playing
+                   m.is_finish, i.points, i.time_playing, TO_CHAR(created_at::timestamp, 'DD/MM/YYYY') AS created_at
             FROM data_game_multi m
             INNER JOIN info_game_multi i ON m.id_info_game_multi = i.id
             INNER JOIN GameRows gr ON gr.id_info_game_multi = i.id

@@ -88,3 +88,10 @@
         padding: 0;
     }
 }
+
+@media (min-width: 1300px) and (min-height: 790px) {
+    .main-game-layout-cointainer {
+        margin: 0 50px;
+        height: 78vh;
+    }
+  }

@@ -69,3 +69,9 @@
     height: 85vh;
   }
 }
+
+@media (min-width: 1300px) and (min-height: 790px) {
+  .modal-content {
+    height: 70vh;
+  }
+}
