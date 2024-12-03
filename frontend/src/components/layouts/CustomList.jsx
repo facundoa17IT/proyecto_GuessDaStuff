@@ -171,15 +171,19 @@ const CustomList = ({
 
                                         {/* Dynamically accept item.icon, if empty use default icon, also accept img as icon */}
                                         <td style={{ display: 'flex', alignItems: 'center' }}>
-                                            {item.icon ? (
-                                                typeof item.icon === 'string' && item.icon.endsWith('.png') ? (
+                                            {item.urlPerfil ? (
+                                                typeof item.urlPerfil === 'string' && !item.urlPerfil.includes('urlDoMacaco') ? (
                                                     <img
-                                                        src={item.icon}
+                                                        src={item.urlPerfil}
                                                         alt={item.name}
-                                                        style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', }}
+                                                        style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', border: '2px solid var(--border-color)' }}
                                                     />
                                                 ) : (
-                                                    React.createElement(item.icon, { style: { marginRight: '10px', fontSize: '25px' } })
+                                                    <img
+                                                    src={DefaultIcon}
+                                                    alt={item.name}
+                                                    style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', border: '2px solid var(--border-color)' }}
+                                                />
                                                 )
                                             ) : (
                                                 <img

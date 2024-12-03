@@ -12,6 +12,8 @@ export const LoadGameProvider = ({ children }) => {
     const [answer, setAnswer] = useState('');
     const [isCorrectAnswer, setIsCorrectAnswer] = useState(null);
 
+    const [availableHints, setAvailableHints] = useState(true);
+
     const [hostWinsCount, setHostWinsCount] = useState(0);
     const [guestWinsCount, setGuestWinsCount] = useState(0);
 
@@ -25,7 +27,8 @@ export const LoadGameProvider = ({ children }) => {
             answer, setAnswer,
             isMultiplayer, setIsMultiplayer,
             hostWinsCount, setHostWinsCount,
-            guestWinsCount, setGuestWinsCount
+            guestWinsCount, setGuestWinsCount,
+            availableHints, setAvailableHints
         }}>
             {children}
         </LoadGameContext.Provider>

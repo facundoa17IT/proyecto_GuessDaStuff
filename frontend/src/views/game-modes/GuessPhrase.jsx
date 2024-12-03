@@ -1,19 +1,18 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
 
+/** Components **/
+import GameButtonRow from '../../components/layouts/GameButtonRow';
+
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
-
-/** Assets **/
-import { FaRegCheckCircle } from "react-icons/fa";
-import { IoMdCloseCircleOutline } from "react-icons/io";
 
 /** Style **/
 import '../../styles/guess-phrase.css';
 import '../../styles/game-mode.css';
 
-const GuessPhrase = ({ GPinfo, hintButton }) => {
-	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
+const GuessPhrase = ({ GPinfo, hintButton, showNextHint }) => {
+	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 	const { phrase, correct_word } = GPinfo;
 	const [userInput, setUserInput] = useState('');
 
@@ -59,26 +58,11 @@ const GuessPhrase = ({ GPinfo, hintButton }) => {
 				placeholder="Escribe tu respuesta"
 			/>
 
-			<div className="buttonRow">
-				<button
-					className="resetButton"
-					onClick={handleReset}
-				>
-					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						<IoMdCloseCircleOutline style={{ marginRight: "5px" }} name="help-outline" size={30} />Borrar
-					</span>
-				</button>
-				{hintButton}
-				<button
-					className="verifyButton"
-					style={{ width: 'fit-content' }}
-					onClick={handleCheckAnswer}
-				>
-					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						<FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Verificar
-					</span>
-				</button>
-			</div>
+			<GameButtonRow
+				handleHint={showNextHint}
+				handleReset={handleReset}
+				handleVerify={handleCheckAnswer}
+			/>
 		</div>
 	);
 };

@@ -16,7 +16,6 @@ export const SocketProvider = ({ children }) => {
 
     const client = useRef(null);
 
-
     useEffect(() => {
         localStorage.setItem("connectedUsers", JSON.stringify(users));
     }, [users]);
