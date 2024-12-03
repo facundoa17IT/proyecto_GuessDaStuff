@@ -15,9 +15,6 @@ import Modal from '../components/layouts/Modal';
 import toast from 'react-hot-toast';
 import { ClockLoader } from 'react-spinners';
 
-/** Assets */
-import { FaRegQuestionCircle } from "react-icons/fa";
-
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
 
@@ -30,7 +27,7 @@ const GameMatchView = () => {
     const navigate = useNavigate();
 
     const { implementationGameBody, setImplementationGameBody, setInvitation, setInvitationCount, unsubscribeFromGameSocket } = useContext(SocketContext);
-    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer, hostWinsCount, setHostWinsCount, guestWinsCount, setGuestWinsCount } = useContext(LoadGameContext);
+    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer, hostWinsCount, setHostWinsCount, guestWinsCount, setGuestWinsCount, availibleHints, setAvailableHints } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
@@ -47,7 +44,6 @@ const GameMatchView = () => {
     const [hints, setHints] = useState([]);
     const [currentHintIndex, setCurrentHintIndex] = useState(null);
     const [hintCounter, setHintCounter] = useState(3);
-    const [hintButtonEnabled, setHintButtonEnabled] = useState(true);
 
     const [characterDialogue, setCharacterDialogue] = useState("");
     const [currentCharacterSprite, setCurrentCharacterSprite] = useState('idle');
@@ -63,11 +59,43 @@ const GameMatchView = () => {
     const userObj = JSON.parse(localStorage.getItem("userObj")) || "Undefined";
 
     useEffect(() => {
-        resetGameState();
-        setHostWinsCount(0);
-        setGuestWinsCount(0);
+        if (hints.length > 0) {
+            console.table(hints);
+        }
+    }, [hints]);
 
+    useEffect(() => {
+        console.log("hint counter -> " + hintCounter);
+    }, [hintCounter]);
+
+    useEffect(() => {
+        if (currentHintIndex != null) {
+            console.log("current hint index -> " + currentHintIndex);
+        }
+    }, [currentHintIndex]);
+
+    useEffect(() => {
+        if (hintCounter === 0) {
+            setAvailableHints(false); // Desactiva el botón al llegar a cero
+            setCharacterDialogue("No hay mas pistas disponibles!");
+            console.log("NO HAY MAS PISTAS! -> " + hintCounter);
+        }
+    }, [hintCounter]);
+
+    useEffect(() => {
+        resetGameState();
+        console.log(availibleHints);
+        setAvailableHints(true);
+
+        if (isMultiplayer) {
+            setHostWinsCount(0);
+            setGuestWinsCount(0);
+        }
     }, []);
+
+    // useEffect(() => {
+    //     console.log(availibleHints); // da undefined
+    // }, [availibleHints]);
 
     // initGameModes se obtiene de LoadGame
     useEffect(() => {
@@ -102,7 +130,12 @@ const GameMatchView = () => {
     }, [isGameReady]);
 
     const defaultCharacterDialogue = () => {
-        setCharacterDialogue("Puedo darte una pista!");
+        if (hintCounter != 0) {
+            setCharacterDialogue("Puedo darte una pista!");
+        }
+        else {
+            setCharacterDialogue("No hay mas pistas disponibles!");
+        }
     }
 
     useEffect(() => {
@@ -200,13 +233,12 @@ const GameMatchView = () => {
         }
     }, [implementationGameBody]);
 
-
-
     const resetGameState = () => {
         setHints([]);
         setIsCorrectAnswer(null);
         setElapsedTime(0);
         setIsTimePlaying(false);
+        setCurrentHintIndex(null);
     };
 
     const handleTimeUpdate = (time) => {
@@ -220,7 +252,7 @@ const GameMatchView = () => {
         const nextIndex = currentGameIndex + 1;
 
         if (nextIndex >= gameKeys.length) {
-            handleFishGame();
+            handleFinishGame();
             return;
         }
 
@@ -245,7 +277,7 @@ const GameMatchView = () => {
         handleNextGameMode();
     }
 
-    const handleFishGame = async () => {
+    const handleFinishGame = async () => {
         try {
             setTimeout(() => {
                 setIsModalOpen(false);
@@ -273,60 +305,34 @@ const GameMatchView = () => {
     }
 
     const showNextHint = () => {
-        if (initGameModes && currentGameIndex < Object.keys(initGameModes).length && hintButtonEnabled) {
-            const gameKeys = Object.keys(initGameModes);
-            const currentGameKey = gameKeys[currentGameIndex];
-            const gameInfo = initGameModes[currentGameKey].infoGame[0]; // Asignamos de nuevo después de vaciar
+        const gameKeys = Object.keys(initGameModes);
+        const currentGameKey = gameKeys[currentGameIndex];
+        const gameInfo = initGameModes[currentGameKey].infoGame[0]; // Asignamos de nuevo después de vaciar
 
-            const { idModeGame } = gameInfo;
+        const { idModeGame } = gameInfo;
 
-            switch (idModeGame) {
-                case 'OW':
-                case 'GP':
-                case 'MC':
-                    setHints([gameInfo.hint1, gameInfo.hint2, gameInfo.hint3]);
-                    break;
-                default:
-            }
-
-            setCurrentHintIndex((prevIndex) => {
-                // Si es la primera interacción (está en null), lo pasamos a 0
-                if (prevIndex === null) {
-                    return 0;
-                }
-                // Incrementa el índice si no estamos en la última pista
-                if (prevIndex < hints.length - 1) {
-                    return prevIndex + 1;
-                }
-                // Si estamos en la última pista, mantenemos el índice
-                return prevIndex;
-            });
-
-            // Actualiza el contador de pistas
-            setHintCounter((prevCounter) => {
-                if (prevCounter > 1) {
-                    return prevCounter - 1;
-                } else {
-                    setHintButtonEnabled(false); // Desactiva el botón al llegar a cero
-                    return 0;
-                }
-            });
+        if (['OW', 'GP', 'MC'].includes(idModeGame)) {
+            setHints([gameInfo.hint1, gameInfo.hint2, gameInfo.hint3]);
         }
-    };
 
-    const renderHintButton = () => (
-        <div>
-            <button
-                style={{ width: 'fit-content' }}
-                onClick={showNextHint}
-                disabled={!hintButtonEnabled}
-            >
-                <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <FaRegQuestionCircle style={{ marginRight: "5px" }} name="help-outline" size={30} color={hintButtonEnabled ? "" : "gray"} />Ayuda
-                </span>
-            </button>
-        </div>
-    );
+        setCurrentHintIndex((prevIndex) => {
+            if (prevIndex === null) {
+                return 0;
+            }
+            else {
+                return prevIndex + 1;
+            }
+        });
+
+        // Actualiza el contador de pistas
+        setHintCounter((prevCounter) => {
+            if (prevCounter > 1) {
+                return prevCounter - 1;
+            } else {
+                return 0;
+            }
+        });
+    };
 
     // Renderizar el juego basado en el índice actual
     const renderGame = () => {
@@ -346,15 +352,15 @@ const GameMatchView = () => {
                 switch (idModeGame) {
                     case 'OW':
                         setCurrentHeader("Ordena la Palabra");
-                        GameComponent = <OrderWord OWinfo={gameInfo} hintButton={renderHintButton()} />;
+                        GameComponent = <OrderWord OWinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     case 'GP':
                         setCurrentHeader("Adivina la Frase");
-                        GameComponent = <GuessPhrase GPinfo={gameInfo} hintButton={renderHintButton()} />;
+                        GameComponent = <GuessPhrase GPinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     case 'MC':
                         setCurrentHeader("Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} hintButton={renderHintButton()} />;
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     default:
                         GameComponent = <p>Modo de juego no reconocido.</p>;
@@ -399,7 +405,7 @@ const GameMatchView = () => {
     const fetchFinalGameData = async () => {
         try {
             const response = await axiosInstance.get(`/game-single/v1/resumeGame/${gameId}`);
-            console.log(response.data); // Log the resolved data
+            console.log(response.data);
             setGameContent(renderFinishGameStats(response.data));
         } catch (error) {
             console.error("Error fetching game resume:", error);
@@ -491,7 +497,12 @@ const GameMatchView = () => {
                 leftHeader='Pistas'
                 leftContent={
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <BrainCharacter spriteKey={currentCharacterSprite} rerenderKey={characterDialogue} autoStart={isGameReady} words={characterDialogue} />
+                        <BrainCharacter
+                            spriteKey={currentCharacterSprite}
+                            rerenderKey={characterDialogue}
+                            autoStart={isGameReady}
+                            words={characterDialogue}
+                        />
                     </div>
                 }
                 middleHeader={currentHeader}
@@ -501,7 +512,7 @@ const GameMatchView = () => {
                     <>
                         {isMultiplayer && <MultiplayerHUD />}
                         <h3 style={{ marginBottom: '0' }}>Ronda {currentGameIndex + 1}</h3>
-                        <p>Pistas disponibles: {hintButtonEnabled ? hintCounter : 0}</p>
+                        <p>Pistas disponibles: {hintCounter || 0}</p>
                         {!isGameFinished && <CircleTimer
                             key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
                             isLooping={true}

@@ -1,6 +1,9 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
 
+/** Components **/
+import GameButtonRow from '../../components/layouts/GameButtonRow';
+
 /** Utils **/
 import { shuffleArray } from '../../utils/Helpers';
 
@@ -10,13 +13,14 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 /** Assets **/
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 /** Style **/
 import '../../styles/order-word.css'; // Importa el archivo CSS
 import '../../styles/game-mode.css';
 
-const OrderWord = ({ OWinfo, hintButton }) => {
-	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
+const OrderWord = ({ OWinfo, hintButton, showNextHint }) => {
+	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 	const { word } = OWinfo;
 	const [selectedOrder, setSelectedOrder] = useState([[]]);
 	const [shuffledLetters, setShuffledLetters] = useState([]);
@@ -97,26 +101,11 @@ const OrderWord = ({ OWinfo, hintButton }) => {
 				))}
 			</div>
 
-			<div className="buttonRow">
-				<button
-					className="resetButton"
-					onClick={handleReset}
-				>
-					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						<IoMdCloseCircleOutline style={{ marginRight: "5px" }} name="help-outline" size={30} />Borrar
-					</span>
-				</button>
-				{hintButton}
-				<button
-					className="verifyButton"
-					style={{ width: 'fit-content' }}
-					onClick={handleVerify}
-				>
-					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						<FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Verificar
-					</span>
-				</button>
-			</div>
+			<GameButtonRow
+				handleHint={showNextHint}
+				handleReset={handleReset}
+				handleVerify={handleVerify}
+			/>
 		</div>
 	);
 };

@@ -50,7 +50,7 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
                     </div>
                 </div>
             )}
-            <img className="brain-character" style={{}} src={currentSprite} alt="Brain Character" />
+            <img className="brain-character" src={currentSprite} alt="Brain Character" />
         </div>
     );
 };

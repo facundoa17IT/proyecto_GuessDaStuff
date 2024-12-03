@@ -1,26 +1,22 @@
 /** React **/
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
-import axiosInstance from '../../utils/AxiosConfig';
 import { SocketContext } from '../../contextAPI/SocketContext';
 
 /** Utils **/
+import axiosInstance from '../../utils/AxiosConfig';
 import { PLAYER_ROUTES } from '../../utils/constants';
 
 /** Style **/
 import '../../styles/slot-machine.css';
 
-const SlotMachineMulti = () => {
-    const location = useLocation();
+const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame }) => {
     const navigate = useNavigate();
 
     const { userId } = useRole();  // Access the setRole function from the context
-
-    const { ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame } = location.state || {};
-
 
     const { usernameHost } = useContext(SocketContext);
 
@@ -84,9 +80,6 @@ const SlotMachineMulti = () => {
                 mode: finalSlot3,
                 id: ruletaGame.categories[2].id
             };
-            console.log(finalSlot1);
-            console.log(finalSlot2);
-            console.log(finalSlot3);
 
             // Establecer los resultados en el estado
             const resultsArray = [result1, result2, result3];
@@ -184,4 +177,4 @@ const SlotMachineMulti = () => {
     );
 };
 
-export default SlotMachineMulti; // Exportar el componente
+export default SlotMachineMulti;

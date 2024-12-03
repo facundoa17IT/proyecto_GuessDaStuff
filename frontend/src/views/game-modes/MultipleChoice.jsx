@@ -1,20 +1,24 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
 
+/** Components **/
+import GameButtonRow from '../../components/layouts/GameButtonRow';
+
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
 /** Assets **/
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 /** Styles **/
 import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo, hintButton }) => {
-    const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
+const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
+    const { setAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
@@ -85,18 +89,10 @@ const MultipleChoice = ({ MCinfo, hintButton }) => {
                 </div>
             </div>
 
-            <div className="buttonRow">
-				{hintButton}
-				<button
-					className="confirmButton"
-					onClick={confirmAnswer}
-                    disabled={confirmedAnswer !== null}
-				>
-					<span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						<FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Verificar
-					</span>
-				</button>
-            </div>
+            <GameButtonRow
+                handleHint={showNextHint}
+                handleVerify={confirmAnswer}
+            />
         </div>
     );
 };

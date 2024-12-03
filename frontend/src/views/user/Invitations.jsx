@@ -10,7 +10,7 @@ import { ClipLoader } from 'react-spinners';
 
 /** Utils **/
 import { invitationData, setInviteResponse } from '../../utils/Helpers';
-import { PLAYER_ROUTES } from '../../utils/constants';
+import { PUBLIC_ROUTES } from '../../utils/constants';
 
 /** Context API **/
 import { SocketContext } from '../../contextAPI/SocketContext';
@@ -86,7 +86,7 @@ const Invitations = () => {
         if (implementationGameBody) {
             if (implementationGameBody.status === "INVITE_RULETA") {
                 setTimeout(() => {
-                    navigate(PLAYER_ROUTES.SLOT_MACHINE, {
+                    navigate(PUBLIC_ROUTES.SELECTION_PHASE, {
                         state: {
                             ruletaGame: implementationGameBody.ruletaGame,
                             finalSlot1: implementationGameBody.finalSlot1,

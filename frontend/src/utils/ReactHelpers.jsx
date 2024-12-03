@@ -7,17 +7,19 @@ export const renderListItemDetails = (selectedItem) => {
 				<ul style={{ textAlign: "left" }}>
 					{Object.entries(selectedItem).map(([key, value]) => (
 						<li key={key}>
-							{key === "icon" ? (
+							{key === "urlPerfil" ? (
 								<span>
 									<strong>{key}:</strong>
-									{typeof value === "string" && value.endsWith(".png") ? (
+									{typeof value === "string" && !value.includes("urlDoMacaco") ? (
 										<img
 											src={value}
 											alt={key}
 											style={{ width: "30px", height: "30px", marginLeft: "10px" }}
 										/>
 									) : (
-										React.createElement(value, { style: { marginLeft: "10px", fontSize: "30px" } })
+										<span style={{ marginLeft: "10px", fontSize: "16px" }}>
+											Default
+										</span>
 									)}
 								</span>
 							) : (

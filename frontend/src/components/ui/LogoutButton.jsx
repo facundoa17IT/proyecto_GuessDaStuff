@@ -35,9 +35,6 @@ const LogoutButton = () => {
         }
     };
     
-    
-    
-
     return (
         <button onClick={logOut}>
             <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

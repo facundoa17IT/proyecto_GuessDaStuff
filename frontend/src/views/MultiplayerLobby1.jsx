@@ -10,7 +10,7 @@ import WaitingLobby from '../components/layouts/WaitingLobby';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
-import { PLAYER_ROUTES, ROLE } from '../utils/constants';
+import { PUBLIC_ROUTES, ROLE } from '../utils/constants';
 import { invitationData, setInviteAction, setResponseIdGame, getRandomItem } from '../utils/Helpers';
 
 /** Context API **/
@@ -179,7 +179,7 @@ const MultiplayerLobby = () => {
         if (implementationGameBody) {
             if (implementationGameBody.status === "INVITE_RULETA") {
                 setTimeout(() => {
-                    navigate(PLAYER_ROUTES.SLOT_MACHINE, {
+                    navigate(PUBLIC_ROUTES.SELECTION_PHASE, {
                         state: {
                             ruletaGame: implementationGameBody.ruletaGame,
                             finalSlot1: implementationGameBody.finalSlot1,
