@@ -5,8 +5,8 @@
     border-radius: 8px;
     border: 2px solid var(--border-color);
     background-color: var(--background-color);
-    height: 60vh; /* probando */
-    margin: 3% 15%;
+    margin: 1rem calc(min(1rem, 1rem + 0.02 * 100vw)); /* 1rem vertical, dinámico horizontal */
+    height: calc(100vh - 0.2 * 100vw); /* Aumenta la altura cuando el ancho disminuye */
     justify-content: flex-start;
     padding-top: 25px;
     padding-bottom: 25px;
@@ -47,16 +47,20 @@
 }
 
 .middle-div {
-    flex-grow: 2;    /* Grow more than other flex siblings */
-    flex-shrink: 1;  /* Allow shrinking if necessary */
-    flex-basis: 0;   /* Start from 0 width, and grow from there */
+    flex-grow: 2;
+    /* Grow more than other flex siblings */
+    flex-shrink: 1;
+    /* Allow shrinking if necessary */
+    flex-basis: 0;
+    /* Start from 0 width, and grow from there */
 }
 
 .left-div {
     border-right: 2px solid var(--border-color);
     flex-grow: 1;
     flex-basis: 0;
-    position: relative; /* For back button */
+    position: relative;
+    /* For back button */
 }
 
 .right-div {
@@ -64,6 +68,7 @@
     flex-grow: 1;
     flex-basis: 0;
 }
+
 .back-btn {
     position: absolute;
     top: 0px;
@@ -71,27 +76,43 @@
     padding: 10px;
 }
 
-/* Styles for screens up to 1366px wide */
-@media (max-width: 1366px) {
+/** Max Resolution 24 **/
+@media (min-width: 1700px){
     .main-game-layout-cointainer {
-        height: 73vh;
-        margin: 0 2%;
+        margin: 1rem 15rem;
     }
 }
 
-@media (max-width: 767px) {
+/** Medium Resoloution 15 **/
+@media (min-width: 1250px){
+    .main-game-layout-cointainer {
+       height: 74vh;;
+       margin: 0;
+    }
+}
+
+/** Design Breakpoint**/
+@media (max-width: 1150px) and (min-height: 550px){
     .main-game-layout-cointainer {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        height: 93vh;
-        padding: 0;
+        overflow-x: hidden;
+        height: 83vh;
+        margin: 0;
+    }
+
+    .left-div,
+    .middle-div,
+    .right-div {
+        border: none;
     }
 }
 
-@media (min-width: 1300px) and (min-height: 790px) {
+/** Hidden Navbar Breakpoint**/
+@media (max-width: 765px){
     .main-game-layout-cointainer {
-        margin: 0 50px;
-        height: 78vh;
+        height: 98vh;
+        padding: 0;
     }
-  }
+}

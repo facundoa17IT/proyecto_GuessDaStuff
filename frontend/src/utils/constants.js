@@ -1,5 +1,3 @@
-import { m } from "framer-motion";
-
 export const STATUS = {
     ONLINE: "ONLINE",
     OFFLINE: "OFFLINE",
@@ -54,4 +52,10 @@ export const PLAYER_ROUTES = {
     SLOT_MACHINE: '/slot-machine-multi',
     RANKING: '/ranking',
     LOAD_GAME: '/load-game'
+}
+
+export const GAME_SETTINGS = {
+    TIME: 30,
+    MAX_HINTS: 3,
+    MAX_ROUNDS: 3
 }

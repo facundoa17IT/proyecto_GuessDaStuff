@@ -22,7 +22,6 @@ const GameButtonRow = ({handleHint, handleReset, handleVerify}) => {
             </button>
 
             <button
-                style={{ width: 'fit-content' }}
                 onClick={handleHint}
                 disabled={!availableHints}
             >
@@ -33,7 +32,6 @@ const GameButtonRow = ({handleHint, handleReset, handleVerify}) => {
 
             <button
                 className="verifyButton"
-                style={{ width: 'fit-content' }}
                 onClick={handleVerify}
             >
                 <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>

@@ -1,6 +1,7 @@
 .ow-container {
     gap:10px;
     position: relative;
+    width: 350px;
   }
   
   .selectedOrderContainer {
@@ -41,4 +42,17 @@
     width: fit-content;
     font-size: 25px;
     border: none;
+  }
+
+  @media (max-width: 400px) {
+    .selectedOrderContainer {
+      margin-top: 20px;
+      width: 85%;
+      min-height: 60px;
+    }
+    
+    .buttonContainer {
+      margin-top: 20px;
+      width:85%;
+    }
   }

@@ -1,6 +1,5 @@
 .mc-container {
     gap: 10px;
-    /* margin-top: -30px; */
 }
 
 .optionsContainer {
@@ -8,8 +7,8 @@
     flex-wrap: wrap;
     gap: 10px;
     width: 600px;
-    justify-items: center; /* Centers buttons horizontally */
-    align-items: center;   /* Centers buttons vertically */
+    justify-items: center;
+    align-items: center;
     padding-left: 8px;
 }
 
@@ -25,7 +24,7 @@
 
 .optionText {
     color: var(--border-color);
-    font-size: 18px;
+    font-size: clamp(1rem, 2vw, 1.2rem); /* Texto legible en cualquier pantalla */
 }
 
 .selectedOption {
@@ -58,4 +57,13 @@
     margin-top: 20px;
     font-size: 18px;
     font-weight: bold;
+}
+
+/** Design Breakpoint**/
+@media (max-width: 670px) {
+    .optionsContainer {
+        flex-direction: column;
+        width: 85%;
+    }
+
 }

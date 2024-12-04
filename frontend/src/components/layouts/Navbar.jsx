@@ -24,7 +24,7 @@ import { useRole } from '../../contextAPI/AuthContext'
 import { SocketContext } from '../../contextAPI/SocketContext';
 
 const Navbar = () => {
-    const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 765px)' });
 
     const { role } = useRole();  // Access the role from context
 

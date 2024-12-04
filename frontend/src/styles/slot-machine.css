@@ -61,40 +61,6 @@
   }
 }
 
-.spin-button {
-  padding: 10px 20px;
-  /* Espaciado interno del botón */
-  font-size: 1.5rem;
-  /* Tamaño de fuente para el texto del botón */
-  background-color: #ffcc00;
-  /* Color de fondo del botón */
-  border: none;
-  /* Sin borde para el botón */
-  border-radius: 10px;
-  /* Bordes redondeados para el botón */
-  cursor: pointer;
-  /* Cambia el cursor a una mano al pasar sobre el botón */
-}
-
-.spin-button:disabled {
-  background-color: #cccccc;
-  /* Color de fondo del botón deshabilitado */
-  cursor: not-allowed;
-  /* Cambia el cursor a un símbolo de no permitido al pasar sobre el botón deshabilitado */
-}
-
-.spin-button:hover:not(:disabled) {
-  background-color: #ff9900;
-  /* Color de fondo del botón al pasar el cursor (solo si no está deshabilitado) */
-}
-
-.message {
-  font-size: 1.5rem;
-  /* Tamaño de fuente para el mensaje, si se usa */
-  margin-top: 20px;
-  /* Espacio superior para el mensaje */
-}
-
 .results {
   display: flex;
   justify-content: center;
@@ -118,5 +84,15 @@
 @media (max-width: 1366px) {
   .results {
     margin-top: 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .slot {
+    padding: 5px;
+  }
+
+  .centered-table {
+    width: 85%; /* Ajusta el ancho de la tabla */
   }
 }

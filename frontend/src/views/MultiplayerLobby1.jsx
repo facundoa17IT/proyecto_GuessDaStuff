@@ -127,6 +127,8 @@ const MultiplayerLobby = () => {
                 userGuest: userGuest
             };
 
+            console.log(createGameBody);
+
             const response = await axiosInstance.post('/game-multi/v1/create/', createGameBody, { requiresAuth: true });
             console.log(response.data);
             console.log("Partida creada! -> " + `idGame: ${JSON.stringify(response.data, null, 2)}`);
@@ -155,7 +157,7 @@ const MultiplayerLobby = () => {
     // 4) si el usario acepta la partida me suscribo al canal del juego y le envio al invitado el id de la partida
     // Se ejecuta cuando obtengo el valor de gameId
     useEffect(() => {
-        if (gameId !== null) {
+        if (gameId != null) {
             setResponseIdGame(gameId, "Se ha enviado el id de la partida");
             client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
             suscribeToGameSocket(gameId);
