@@ -119,7 +119,7 @@ const MultiplayerLobby = () => {
 
             const userGuest = {
                 username: selectedItem.username,
-                userId: selectedItem.id
+                userId: selectedItem.userId
             };
 
             const createGameBody = {

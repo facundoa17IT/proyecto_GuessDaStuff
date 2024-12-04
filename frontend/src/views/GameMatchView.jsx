@@ -49,8 +49,10 @@ const GameMatchView = () => {
     const [currentCharacterSprite, setCurrentCharacterSprite] = useState('idle');
 
     const [currentGameModeId, setCurrentGameModeId] = useState(null);
+    const [currentGameModeNumericId, setCurrentGameModeNumericId] = useState(null);
 
     const [winner, setWinner] = useState(null);
+    const [finalWinnerId, setFinalWinnerId] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -141,6 +143,22 @@ const GameMatchView = () => {
     useEffect(() => {
         setCharacterDialogue(hints[currentHintIndex]);
     }, [currentHintIndex]);
+
+    useEffect(() => {
+        if (finalWinnerId != null) {
+            handleFishMultiplayerGame();
+        }
+    }, [finalWinnerId]);
+
+    const handleFishMultiplayerGame = async () => {
+        try{
+            console.log("EL ID GANADOR FINAL ES -> " + finalWinnerId);
+            axiosInstance.post(`/game-multi/game/${gameId}/finish/0`, finalWinnerId);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
     // Guarda en la BD los datos de la ronda
     // Le avisa a los demas usuarios que el juego termino
@@ -268,7 +286,7 @@ const GameMatchView = () => {
     const handleTimerComplete = async () => {
         if (isMultiplayer) {
             try {
-                await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeId}`);
+                await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeNumericId}`, '0');
             }
             catch (error) {
                 console.error(error);
@@ -279,26 +297,25 @@ const GameMatchView = () => {
 
     const handleFinishGame = async () => {
         try {
+            if (isMultiplayer) {
+                handleFinalWinner();
+                setImplementationGameBody(null);
+                setInvitationCount(0);
+                setInvitation(null);
+                unsubscribeFromGameSocket();
+            }
+            else {
+                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
+            }
+
             setTimeout(() => {
                 setIsModalOpen(false);
-
                 console.log("Fin del juego!");
                 setIsGameFinished(true);
                 setCurrentHeader("Partida Finalizada");
                 setInitGameModes({});
                 setCurrentCharacterSprite('finish');
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
-
-            if (isMultiplayer) {
-                setImplementationGameBody(null);
-                setInvitationCount(0);
-                setInvitation(null);
-                unsubscribeFromGameSocket();
-                axiosInstance.post(`/game-multi/game/${gameId}/finish/0`);
-            }
-            else {
-                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
-            }
         } catch (error) {
             console.error(error);
         }
@@ -342,11 +359,12 @@ const GameMatchView = () => {
 
         if (!isGameFinished) {
             if (gameInfo) {
-                const { idModeGame } = gameInfo;
+                const { id, idModeGame } = gameInfo;
 
                 let GameComponent;
 
                 setCurrentGameModeId(idModeGame);
+                setCurrentGameModeNumericId(id);
 
                 // Cambiamos el componente según el modo de juego
                 switch (idModeGame) {
@@ -401,6 +419,19 @@ const GameMatchView = () => {
             }
         }
     }, [isGameFinished]);
+
+    const handleFinalWinner = () => {
+        const isHost = userObj.userId === host.userId;
+        const isGuest = userObj.userId === guest.userId;
+
+        if (isHost && hostWinsCount > guestWinsCount) {
+            setFinalWinnerId(host.userId);
+        } else if (isGuest && guestWinsCount > hostWinsCount) {
+            setFinalWinnerId(guest.userId);
+        } else if (hostWinsCount === guestWinsCount) {
+            setFinalWinnerId(0);
+        }
+    }
 
     const fetchFinalGameData = async () => {
         try {
