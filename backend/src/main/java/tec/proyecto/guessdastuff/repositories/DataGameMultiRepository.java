@@ -16,8 +16,8 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
 
     @Modifying
     @Transactional
-    @Query("UPDATE DataGameMulti d SET d.isFinish = true, d.idUserWin = '0' WHERE d.id = ?1")
-    void finishPlayGame(String idGameMulti);
+    @Query("UPDATE DataGameMulti d SET d.isFinish = true, d.idUserWin = :idUserWin WHERE d.id = :idGameMulti")
+    void finishPlayGame(@Param("idGameMulti") String idGameMulti, @Param("idUserWin") String idUserWin);
     
 
     @Query(value = """
@@ -111,6 +111,6 @@ public interface DataGameMultiRepository extends JpaRepository<DataGameMulti, St
     @Query(value = """
         SELECT * FROM data_game_multi WHERE id = :idGame
         """, nativeQuery = true)
-        DataGameMulti getResumeGame(@Param("idGame") String idGame);
+    DataGameMulti getResumeGame(@Param("idGame") String idGame);
     
 }

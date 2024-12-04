@@ -20,7 +20,7 @@
 }
 
 .containerPhrase p{
-    font-size: 24px;
+  font-size: clamp(1rem, 5vw, 1.5rem); /* Texto legible en cualquier pantalla */
     text-align: center;
     color: var(--link-color) !important;
     font-weight: bold;
@@ -51,4 +51,16 @@
 .respuesta-incorrecta button {
   background-color: red;
   color: white;
+}
+
+@media (max-width: 535px) {
+  .buttonRow {
+      flex-direction: column-reverse;
+  }
+  .containerPhrase {
+    padding: 15px;
+    width: 85%;
+    height: 80px;
+    margin: 5px;
+  }
 }

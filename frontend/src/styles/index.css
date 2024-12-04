@@ -129,9 +129,7 @@ textarea {
 .left-div.collapsed,
 .right-div.collapsed {
   width: 50px;
-  /* Adjust the width when collapsed */
   overflow: hidden;
-  /* Hide overflowing content */
 }
 
 .main-game-layout-container {
@@ -174,7 +172,7 @@ button {
   transition: transform 0.25s, border-color 0.25s, letter-spacing 0.25s;
 }
 
-button:hover:not(:disabled,.data-picker-icon-btn,
+button:hover:not(:disabled, .data-picker-icon-btn,
   .ReactFlagsSelect-module_selectBtn__19wW7) {
   transform: scale(105%);
   cursor: pointer;
@@ -185,7 +183,7 @@ button:hover:not(:disabled,.data-picker-icon-btn,
   box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
 }
 
-button:active:not(:disabled,.data-picker-icon-btn,
+button:active:not(:disabled, .data-picker-icon-btn,
   .ReactFlagsSelect-module_selectBtn__19wW7) {
   transform: scale(50%);
   transition: transform 0.25s;
@@ -251,6 +249,7 @@ button:disabled:not(.optionButton) {
   border: 2px solid var(--border-color);
   border-radius: 10px;
 }
+
 .ReactFlagsSelect-module_selectBtn__19wW7 {
   background-color: white !important;
   border: 2px solid var(--border-color) !important;
@@ -263,14 +262,16 @@ button:disabled:not(.optionButton) {
 }
 
 /** JSON Form**/
-fieldset{
+fieldset {
   border-color: var(--border-color);
   border-radius: 8px;
 }
-.form-control{
+
+.form-control {
   width: 250px !important;
   font-size: medium !important;
 }
+
 /****/
 
 .border-container {
@@ -284,32 +285,47 @@ fieldset{
   height: 100%;
 }
 
+.final-game-resume-container {
+  margin: 15px;
+  text-align: left !important;
+}
+
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
+
   /**/
-  .list-external-footer{
-      margin: 10px;
+  .list-external-footer {
+    margin: 10px;
   }
-.modal-content {
-  height: 85vh;
-}
 
   /**/
   th,
   td {
-      padding: 2px;
-      text-align: center;
+    padding: 2px;
+    text-align: center;
   }
 
   h1 {
-      font-size: 2.1em;
-      margin-bottom: 15px;
+    font-size: 2.1em;
+    margin-bottom: 15px;
   }
 
   .config-container {
-      /* width: 300px; */
-      max-width: 40vw;
-      height: 70vh;
-      overflow: auto;
+    /* width: 300px; */
+    max-width: 40vw;
+    height: 70vh;
+    overflow: auto;
+  }
+}
+
+/** Hidden Navbar Breakpoint **/
+@media (max-width: 1150px) {
+  .final-game-resume {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .final-game-resume-container {
+    width: 16rem !important;
   }
 }

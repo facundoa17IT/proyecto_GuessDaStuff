@@ -126,7 +126,7 @@ const StartGame = () => {
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
                 <div>
                     <h2>Categorias</h2>
-                    <div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
                         <div className="categories-container">
                             {!loading ? (
                                 categories.map((category) => (

@@ -17,13 +17,13 @@
   border: 2px solid var(--border-color);
   border-radius: 8px;
   width: 400px;
-  max-width: 80vw;
+  /* max-width: 80vw; */
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 70%;
   /* Allows for dynamic height based on content */
 }
 
@@ -64,14 +64,15 @@
   margin: 5px 0px 5px 0px !important;
 }
 
-@media (max-width: 1366px) {
+@media (max-width: 1400px) and (max-height: 700px) {
   .modal-content {
-    height: 85vh;
+    height: 85%;
   }
 }
 
-@media (min-width: 1300px) and (min-height: 790px) {
+@media (max-width: 450px) {
   .modal-content {
-    height: 70vh;
+    height: 90%;
+    width: 85%;
   }
 }

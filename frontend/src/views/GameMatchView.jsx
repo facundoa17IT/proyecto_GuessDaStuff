@@ -1,6 +1,7 @@
 /** React **/
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 /** Components **/
 import MainGameLayout from '../components/layouts/MainGamelayout';
@@ -17,6 +18,7 @@ import { ClockLoader } from 'react-spinners';
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
+import { GAME_SETTINGS } from '../utils/constants';
 
 /** Context API **/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
@@ -33,9 +35,9 @@ const GameMatchView = () => {
     const [currentHeader, setCurrentHeader] = useState('');
     const [gameContent, setGameContent] = useState(null);
     const [currentGameIndex, setCurrentGameIndex] = useState(null);
-    const TIME = 30;
+
     const [elapsedTime, setElapsedTime] = useState(0);
-    const [timeRemaining, setTimeRemaining] = useState(TIME);
+    const [timeRemaining, setTimeRemaining] = useState(GAME_SETTINGS.TIME);
     const [isTimePlaying, setIsTimePlaying] = useState(false);
 
     const [isGameReady, setIsGameReady] = useState(false);
@@ -43,14 +45,16 @@ const GameMatchView = () => {
 
     const [hints, setHints] = useState([]);
     const [currentHintIndex, setCurrentHintIndex] = useState(null);
-    const [hintCounter, setHintCounter] = useState(3);
+    const [hintCounter, setHintCounter] = useState(GAME_SETTINGS.MAX_HINTS);
 
     const [characterDialogue, setCharacterDialogue] = useState("");
     const [currentCharacterSprite, setCurrentCharacterSprite] = useState('idle');
 
     const [currentGameModeId, setCurrentGameModeId] = useState(null);
+    const [currentGameModeNumericId, setCurrentGameModeNumericId] = useState(null);
 
     const [winner, setWinner] = useState(null);
+    const [finalWinnerId, setFinalWinnerId] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,21 +62,8 @@ const GameMatchView = () => {
     const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
     const userObj = JSON.parse(localStorage.getItem("userObj")) || "Undefined";
 
-    useEffect(() => {
-        if (hints.length > 0) {
-            console.table(hints);
-        }
-    }, [hints]);
-
-    useEffect(() => {
-        console.log("hint counter -> " + hintCounter);
-    }, [hintCounter]);
-
-    useEffect(() => {
-        if (currentHintIndex != null) {
-            console.log("current hint index -> " + currentHintIndex);
-        }
-    }, [currentHintIndex]);
+    const isDesignBreakpoint = useMediaQuery({ query: '(max-width: 1150px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 535px)' });
 
     useEffect(() => {
         if (hintCounter === 0) {
@@ -84,14 +75,19 @@ const GameMatchView = () => {
 
     useEffect(() => {
         resetGameState();
-        console.log(availibleHints);
         setAvailableHints(true);
 
         if (isMultiplayer) {
-            setHostWinsCount(0);
-            setGuestWinsCount(0);
+            resetMultiplayerState();
         }
     }, []);
+
+    const resetMultiplayerState = () => {
+        setHostWinsCount(0);
+        setGuestWinsCount(0);
+        setFinalWinnerId(null);
+        setWinner(null);
+    }
 
     // useEffect(() => {
     //     console.log(availibleHints); // da undefined
@@ -101,8 +97,8 @@ const GameMatchView = () => {
     useEffect(() => {
         if (Object.keys(initGameModes).length > 0) {
             setCurrentGameIndex(0);
+            //console.log(initGameModes);
         }
-        console.log(initGameModes);
     }, [initGameModes]);
 
     // Se actualiza el contenido del juego cada vez que cambie el índice
@@ -141,6 +137,22 @@ const GameMatchView = () => {
     useEffect(() => {
         setCharacterDialogue(hints[currentHintIndex]);
     }, [currentHintIndex]);
+
+    useEffect(() => {
+        if (finalWinnerId != null) {
+            handleFishMultiplayerGame();
+        }
+    }, [finalWinnerId]);
+
+    const handleFishMultiplayerGame = async () => {
+        try{
+            console.log("EL ID GANADOR FINAL ES -> " + finalWinnerId);
+            axiosInstance.post(`/game-multi/game/${gameId}/finish/0`, finalWinnerId);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
     // Guarda en la BD los datos de la ronda
     // Le avisa a los demas usuarios que el juego termino
@@ -268,7 +280,7 @@ const GameMatchView = () => {
     const handleTimerComplete = async () => {
         if (isMultiplayer) {
             try {
-                await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeId}`);
+                await axiosInstance.post(`/game-multi/game/${gameId}/finish/${currentGameModeNumericId}`, '0');
             }
             catch (error) {
                 console.error(error);
@@ -279,26 +291,25 @@ const GameMatchView = () => {
 
     const handleFinishGame = async () => {
         try {
+            if (isMultiplayer) {
+                handleFinalWinner();
+                setImplementationGameBody(null);
+                setInvitationCount(0);
+                setInvitation(null);
+                unsubscribeFromGameSocket();
+            }
+            else {
+                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
+            }
+
             setTimeout(() => {
                 setIsModalOpen(false);
-
                 console.log("Fin del juego!");
                 setIsGameFinished(true);
                 setCurrentHeader("Partida Finalizada");
                 setInitGameModes({});
                 setCurrentCharacterSprite('finish');
             }, 3000); // 3000 ms para esperar 3 segundos adicionales
-
-            if (isMultiplayer) {
-                setImplementationGameBody(null);
-                setInvitationCount(0);
-                setInvitation(null);
-                unsubscribeFromGameSocket();
-                axiosInstance.post(`/game-multi/game/${gameId}/finish/0`);
-            }
-            else {
-                axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
-            }
         } catch (error) {
             console.error(error);
         }
@@ -342,11 +353,12 @@ const GameMatchView = () => {
 
         if (!isGameFinished) {
             if (gameInfo) {
-                const { idModeGame } = gameInfo;
+                const { id, idModeGame } = gameInfo;
 
                 let GameComponent;
 
                 setCurrentGameModeId(idModeGame);
+                setCurrentGameModeNumericId(id);
 
                 // Cambiamos el componente según el modo de juego
                 switch (idModeGame) {
@@ -394,6 +406,7 @@ const GameMatchView = () => {
             console.log(isMultiplayer);
             if (isMultiplayer) {
                 setGameContent(renderFinishGameStats());
+                resetMultiplayerState();
                 setIsMultiplayer(false);
             }
             else {
@@ -401,6 +414,19 @@ const GameMatchView = () => {
             }
         }
     }, [isGameFinished]);
+
+    const handleFinalWinner = () => {
+        const isHost = userObj.userId === host.userId;
+        const isGuest = userObj.userId === guest.userId;
+
+        if (isHost && hostWinsCount > guestWinsCount) {
+            setFinalWinnerId(host.userId);
+        } else if (isGuest && guestWinsCount > hostWinsCount) {
+            setFinalWinnerId(guest.userId);
+        } else if (hostWinsCount === guestWinsCount) {
+            setFinalWinnerId('0');
+        }
+    }
 
     const fetchFinalGameData = async () => {
         try {
@@ -427,7 +453,7 @@ const GameMatchView = () => {
 
         return (
             <div className="stats-container">
-                <h2
+                <h1
                     style={{
                         color: message.includes("VICTORIA")
                             ? "#4CAF50"
@@ -437,12 +463,12 @@ const GameMatchView = () => {
                     }}
                 >
                     {message}
-                </h2>
+                </h1>
                 <h3>
-                    <span style={{ color: 'var(--link-color)' }}>{host?.username || "Cargando..."}</span> - Puntos: 🧠 x {hostWinsCount ?? 0}
+                    <span style={{ color: 'var(--link-color)' }}>{host?.username || "Cargando..."}</span> 🧠 x {hostWinsCount ?? 0}
                 </h3>
                 <h3>
-                    <span style={{ color: 'var(--link-color)' }}>{guest?.username || "Cargando..."}</span> - Puntos: 🧠 x {guestWinsCount ?? 0}
+                    <span style={{ color: 'var(--link-color)' }}>{guest?.username || "Cargando..."}</span> 🧠 x {guestWinsCount ?? 0}
                 </h3>
             </div>
         );
@@ -461,8 +487,8 @@ const GameMatchView = () => {
             <>
                 {response ? (
                     <div>
-                        <h3>Puntaje Total: 🧠 x {score}</h3>
-                        <h3>Tiempo Total: {timePlaying} segundos</h3>
+                        <h3><span style={{ color: 'var(--link-color)' }}>Puntaje Total:</span> 🧠 x {score}</h3>
+                        <h3><span style={{ color: 'var(--link-color)' }}>Tiempo Total:</span> {timePlaying} segundos</h3>
                     </div>
                 ) : (
                     <>No se pudo obtener la informacion</>
@@ -477,9 +503,9 @@ const GameMatchView = () => {
 
         return (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: '65%' }}>
+                <div className='final-game-resume' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: '100%' }}>
                     <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} />
-                    <div style={{ border: '2px solid var(--border-color)', borderRadius: '8px', padding: '25px', width: '50%' }}>
+                    <div className='final-game-resume-container' >
                         {finalGameResume}
                     </div>
                 </div>
@@ -493,26 +519,54 @@ const GameMatchView = () => {
             <MainGameLayout
                 canGoBack={false}
                 hideLeftPanel={isGameFinished}
-                hideRightPanel={isGameFinished}
-                leftHeader='Pistas'
+                hideRightPanel={isGameFinished || isDesignBreakpoint}
+                leftHeader={isDesignBreakpoint ? '' : 'Pistas'}
                 leftContent={
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <BrainCharacter
-                            spriteKey={currentCharacterSprite}
-                            rerenderKey={characterDialogue}
-                            autoStart={isGameReady}
-                            words={characterDialogue}
-                        />
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        {isDesignBreakpoint && isMultiplayer && <MultiplayerHUD />}
+                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                            <div style={{ display: 'flex', flexGrow: '1', justifyContent: 'center', alignItems: 'center' }}>
+                                <BrainCharacter
+                                    spriteKey={currentCharacterSprite}
+                                    rerenderKey={characterDialogue}
+                                    autoStart={isGameReady}
+                                    words={characterDialogue}
+                                />
+                            </div>
+                            {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
+                                <div>
+                                    <p><b style={{ color: 'var(--link-color)' }}>Ronda</b></p>
+                                    <p><b>{currentGameIndex + 1}/{GAME_SETTINGS.MAX_ROUNDS}</b></p>
+                                    <p><b style={{ color: 'var(--link-color)' }}>Pistas disponibles</b></p>
+                                    <p><b>{hintCounter || 0}/{GAME_SETTINGS.MAX_HINTS}</b></p>
+                                </div>
+                                {!isGameFinished && <CircleTimer
+                                    key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
+                                    isLooping={true}
+                                    loopDelay={0.5}
+                                    isPlaying={isTimePlaying}
+                                    duration={10}
+                                    onTimeUpdate={handleTimeUpdate}
+                                    onTimerComplete={handleTimerComplete}
+                                    size={isMobile ? 130 : 150}
+                                />}
+                            </div>}
+                        </div>
                     </div>
                 }
                 middleHeader={currentHeader}
                 middleContent={gameContent}
                 rightHeader='Stats'
                 rightContent={
-                    <>
+                    <div style={{ maxWidth: '90%' }}>
                         {isMultiplayer && <MultiplayerHUD />}
-                        <h3 style={{ marginBottom: '0' }}>Ronda {currentGameIndex + 1}</h3>
-                        <p>Pistas disponibles: {hintCounter || 0}</p>
+                        <div>
+                            <p><b style={{ color: 'var(--link-color)' }}>Ronda</b></p>
+                            <p><b>{currentGameIndex + 1}/{GAME_SETTINGS.MAX_ROUNDS}</b></p>
+                            <p><b style={{ color: 'var(--link-color)' }}>Pistas disponibles</b></p>
+                            <p style={{marginBottom:'0px'}}><b>{hintCounter || 0}/{GAME_SETTINGS.MAX_HINTS}</b></p>
+                        </div>
+                        <br />
                         {!isGameFinished && <CircleTimer
                             key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
                             isLooping={true}
@@ -522,7 +576,7 @@ const GameMatchView = () => {
                             onTimeUpdate={handleTimeUpdate}
                             onTimerComplete={handleTimerComplete}
                         />}
-                    </>
+                    </div>
                 }
             />
 
