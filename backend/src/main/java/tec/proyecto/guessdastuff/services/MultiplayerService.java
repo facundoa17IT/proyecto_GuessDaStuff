@@ -32,10 +32,13 @@ import tec.proyecto.guessdastuff.repositories.PlayRepository;
 
 @Service
 public class MultiplayerService {
+
     @Autowired
     private DataGameMultiRepository dataGameMultiRepository;
+
     @Autowired
     private InfoGameMultiRepository infoGameMultiRepository;
+
     @Autowired
     private PlayRepository playRepository;
     
@@ -49,44 +52,29 @@ public class MultiplayerService {
 
         return newDataGameMulti.getId(); // Retornar el juego creado
     }
-    // cuando llega aca sabemos que si viene un usuario es porque el mismo gano el juego. 
-    // si el tiempo es mayor a 30 quiere decir que nadie gano. 
+
     public DtoSendAnswerResponse sendAnswer(DtoSendAnswer dtoSendAnswer, String idSocket) {
-        int points = 0;
-        float timePlaying = dtoSendAnswer.getTime_playing(); 
+
+        int points = 1;
+        float timePlaying = dtoSendAnswer.getTime_playing();
 
         DtoSendAnswerResponse dtoSendAnswerResponse = new DtoSendAnswerResponse();
         dtoSendAnswerResponse.setIdGame(dtoSendAnswer.getIdGame());
         dtoSendAnswerResponse.setIdGameMulti(dtoSendAnswer.getIdGameMulti());
-        dtoSendAnswerResponse.setIs_win(false);
-        if (timePlaying <= 30){
-            if (timePlaying != 0){
-                if (timePlaying < 8) {
-                    points = 5;
-                } else if (timePlaying < 15) {
-                    points = 4;
-                } else if (timePlaying < 20) {
-                    points = 3;
-                } else if (timePlaying < 25) {
-                    points = 2;
-                } else if (timePlaying <= 30) {
-                    points = 1;
-                }
-            }
-            dtoSendAnswerResponse.setIdUserWin(dtoSendAnswer.getIdUserWin());
-            dtoSendAnswerResponse.setIs_win(true);
-        }
+        dtoSendAnswerResponse.setIs_win(true);
+        dtoSendAnswerResponse.setIdUserWin(dtoSendAnswer.getIdUserWin());
         dtoSendAnswerResponse.setPoints(points);
-        InfoGameMultiId infoGameMultiId = new InfoGameMultiId();
-        infoGameMultiId.setId(dtoSendAnswer.getIdGameMulti());
-        infoGameMultiId.setIdDataGame(dtoSendAnswer.getIdGame());
-        infoGameMultiRepository.updateDataGame(infoGameMultiId, dtoSendAnswer.getIdUserWin(), points, timePlaying);
-        
-    return dtoSendAnswerResponse;
+
+        Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(dtoSendAnswer.getIdGameMulti());
+        String idInfoGameMulti = optionalGame.get().getIdInfoGameMulti();
+
+        infoGameMultiRepository.updateDataGame(idInfoGameMulti, dtoSendAnswer.getIdGame(), dtoSendAnswer.getIdUserWin(), points, timePlaying);
+
+        return dtoSendAnswerResponse;
     }
+
      // Iniciar la partida
     public DtoInitGameMultiResponse startGame(String gameId, DtoInitGameMultiRequest dtoInitGameMultiRequest){
-
 
         List<ParCatMod> parCatModeList = dtoInitGameMultiRequest.getParCatMod();
     
@@ -240,15 +228,16 @@ public class MultiplayerService {
     
     public void finishGameMulti(String idSocket, String idGame) {
 
-        InfoGameMultiId infoGameMultiId = new InfoGameMultiId();
-        infoGameMultiId.setId(idSocket);
-        infoGameMultiId.setIdDataGame(idGame);
-        infoGameMultiRepository.finishGameMulti(infoGameMultiId);
-    }
-    public void finishGame(String idSocket) {
-        dataGameMultiRepository.finishPlayGame(idSocket);
+        Optional<DataGameMulti> optionalGame = dataGameMultiRepository.findById(idSocket);
+        String idInfoGameMulti = optionalGame.get().getIdInfoGameMulti();
 
+        infoGameMultiRepository.finishGameMulti(idInfoGameMulti, idGame);
     }
+    
+    public void finishGame(String idSocket, String idUserWin) {
+        dataGameMultiRepository.finishPlayGame(idSocket, idUserWin);
+    }
+    
     public DtoDataGameMulti getResumeGame(String idGame) {
         DataGameMulti dataGameMulti = dataGameMultiRepository.getResumeGame(idGame);
         DtoDataGameMulti resume = new DtoDataGameMulti();

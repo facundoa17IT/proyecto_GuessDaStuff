@@ -14,15 +14,22 @@ import tec.proyecto.guessdastuff.entities.InfoGameMultiId;
 
 @Repository
 public interface InfoGameMultiRepository extends JpaRepository<InfoGameMulti, InfoGameMultiId> {
-    @Modifying
-    @Transactional
-    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = ?2, d.points = ?3, d.timePlaying = ?4 WHERE d.infoGameMultiId = ?1")
-    void updateDataGame(InfoGameMultiId infoGameMultiId, String idUserWin, int points, float timePlaying);
 
     @Modifying
     @Transactional
-    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.points = 0, d.timePlaying = 30 WHERE d.infoGameMultiId.id = ?1")
-    void finishGameMulti(InfoGameMultiId infoGameMultiId);
+    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.idUserWin = :idUserWin, d.points = :points, d.timePlaying = :timePlaying " +
+        "WHERE d.infoGameMultiId.id = :infoGameMultiId AND d.infoGameMultiId.idDataGame = :idDataGame")
+    void updateDataGame(@Param("infoGameMultiId") String infoGameMultiId, 
+                        @Param("idDataGame") String idDataGame,  
+                        @Param("idUserWin") String idUserWin,  
+                        @Param("points") int points, 
+                        @Param("timePlaying") float timePlaying);
+
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE InfoGameMulti d SET d.isFinish = true, d.points = 0, d.timePlaying = 30, d.idUserWin = '0' WHERE d.infoGameMultiId.id = :infoGameMultiId AND d.infoGameMultiId.idDataGame = :idDataGame")
+    void finishGameMulti(@Param("infoGameMultiId") String infoGameMultiId, @Param("idDataGame") String idDataGame);
 
     @Query(value = """
     SELECT * FROM info_game_multi WHERE id = :idInfo LIMIT 3
