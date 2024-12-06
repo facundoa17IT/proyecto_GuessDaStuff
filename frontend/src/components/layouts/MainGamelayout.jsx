@@ -1,7 +1,8 @@
-import React from 'react';
-//import BackButton from '../ui/BackButton'
-//import PropTypes from 'prop-types';
-import '../../styles/main-game-layout.css'
+import React, { useEffect, useRef, useState } from 'react';
+import '../../styles/main-game-layout.css';
+import { SlSizeFullscreen } from "react-icons/sl";
+import { BsWindowFullscreen } from "react-icons/bs";
+
 const MainGameLayout = ({
     leftContent,
     middleContent,
@@ -11,42 +12,73 @@ const MainGameLayout = ({
     rightHeader = "-",
     middleFlexGrow = 2,
     extraClass,
-    //canGoBack = true,
     hideLeftPanel = false,
     hideRightPanel = false,
 }) => {
+    const containerRef = useRef(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        const onFullscreenChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener("fullscreenchange", onFullscreenChange);
+
+        return () => {
+            document.removeEventListener("fullscreenchange", onFullscreenChange);
+        };
+    }, []);
+
+    const enterFullscreen = () => {
+        if (containerRef.current) {
+            if (containerRef.current.requestFullscreen) {
+                containerRef.current.requestFullscreen();
+            } else if (containerRef.current.mozRequestFullScreen) { // Firefox
+                containerRef.current.mozRequestFullScreen();
+            } else if (containerRef.current.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                containerRef.current.webkitRequestFullscreen();
+            } else if (containerRef.current.msRequestFullscreen) { // IE/Edge
+                containerRef.current.msRequestFullscreen();
+            }
+        }
+    };
+
+    const exitFullscreen = () => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    };
+
     return (
-        <div className={`main-game-layout-cointainer`}>
-            {!hideLeftPanel && <div className="left-div">
-                <h1>{leftHeader}</h1>
-                {leftContent}
-                {/* {canGoBack && <BackButton />} */}
-            </div>}
+        <div className="main-game-layout-cointainer" ref={containerRef}>
+            {!hideLeftPanel && (
+                <div className="left-div">
+                    <h1>{leftHeader}</h1>
+                    {leftContent}
+                </div>
+            )}
             <div className={`middle-div ${extraClass}`} style={{ flexGrow: middleFlexGrow }}>
                 <h1>{middleHeader}</h1>
                 {middleContent}
             </div>
-            {!hideRightPanel && <div className="right-div">
-                <h1>{rightHeader}</h1>
-                {rightContent}
-            </div>}
+            {!hideRightPanel && (
+                <div className="right-div">
+                    <h1>{rightHeader}</h1>
+                    {rightContent}
+                    <button className='fullscreen-btn' onClick={isFullscreen ? exitFullscreen : enterFullscreen}>
+                        {isFullscreen ? <BsWindowFullscreen /> : <SlSizeFullscreen />}
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
-
-// MainGameLayout.propTypes = {
-//     leftContent: PropTypes.node,
-//     middleContent: PropTypes.node,
-//     rightContent: PropTypes.node,
-//     middleHeader: PropTypes.string,
-//     leftHeader: PropTypes.string,
-//     rightHeader: PropTypes.string,
-//     middleFlexGrow: PropTypes.number,
-//     extraClass: PropTypes.string,
-//     //canGoBack: PropTypes.bool,
-//     hideLeftPanel: PropTypes.bool,
-//     hideRightPanel: PropTypes.bool,
-// };
-
 
 export default MainGameLayout;

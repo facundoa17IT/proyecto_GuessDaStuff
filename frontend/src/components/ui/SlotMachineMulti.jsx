@@ -29,10 +29,10 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
     }, []);
 
     // Estado para almacenar el valor de cada slot
-    const [slot1, setSlot1] = useState("?");
-    const [slot2, setSlot2] = useState("?");
-    const [slot3, setSlot3] = useState("?");
-
+    const [slot1, setSlot1] = useState("❓");
+    const [slot2, setSlot2] = useState("❓");
+    const [slot3, setSlot3] = useState("❓");
+    
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;

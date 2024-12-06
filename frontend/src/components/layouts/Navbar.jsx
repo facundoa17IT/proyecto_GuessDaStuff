@@ -22,6 +22,7 @@ import '../../styles/navbar.css';
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
 import { SocketContext } from '../../contextAPI/SocketContext';
+import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
 const Navbar = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 765px)' });
@@ -29,6 +30,7 @@ const Navbar = () => {
     const { role } = useRole();  // Access the role from context
 
     const { invitation, setInvitation, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection } = useContext(SocketContext);
+    const { isGameView } = useContext(LoadGameContext);
     
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
@@ -52,7 +54,7 @@ const Navbar = () => {
         }
     }, [invitation]);
 
-    if (isMobile) return null;
+    if (isMobile || isGameView) return null;
 
     return (
         <nav className="navbar">

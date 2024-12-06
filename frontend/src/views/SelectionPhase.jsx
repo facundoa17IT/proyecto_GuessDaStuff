@@ -1,5 +1,5 @@
 /** React **/
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
 /** Components **/
@@ -13,7 +13,11 @@ import { LoadGameContext } from '../contextAPI/LoadGameContext';
 const SelectionPhase = () => {
 	const location = useLocation();
 	const { ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame } = location.state || {};
-	const { isMultiplayer } = useContext(LoadGameContext);
+	const { isMultiplayer, setIsGameView } = useContext(LoadGameContext);
+
+	useEffect(() => {
+        setIsGameView(true);
+    }, []);
 
 	return (
 		<MainGameLayout
