@@ -7,11 +7,12 @@
     background-color: var(--background-color);
     margin: 1rem calc(min(1rem, 1rem + 0.02 * 100vw));
     /* 1rem vertical, dinámico horizontal */
-    height: calc(100vh - 0.2 * 100vw);
+    height: calc(100vh - 0.17 * 100vw);
     /* Aumenta la altura cuando el ancho disminuye */
     justify-content: flex-start;
     padding-top: 25px;
     padding-bottom: 25px;
+    box-sizing: border-box;
 }
 
 .main-game-layout-cointainer h1 {

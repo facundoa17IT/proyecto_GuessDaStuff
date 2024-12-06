@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import '../../styles/main-game-layout.css';
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsWindowFullscreen } from "react-icons/bs";
+import { LoadGameContext } from '../../contextAPI/LoadGameContext'
 
 const MainGameLayout = ({
     leftContent,
@@ -17,6 +18,8 @@ const MainGameLayout = ({
 }) => {
     const containerRef = useRef(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const { isGameView } = useContext(LoadGameContext);
 
     useEffect(() => {
         const onFullscreenChange = () => {
@@ -72,9 +75,9 @@ const MainGameLayout = ({
                 <div className="right-div">
                     <h1>{rightHeader}</h1>
                     {rightContent}
-                    <button className='fullscreen-btn' onClick={isFullscreen ? exitFullscreen : enterFullscreen}>
+                    {isGameView &&<button className='fullscreen-btn' onClick={isFullscreen ? exitFullscreen : enterFullscreen}>
                         {isFullscreen ? <BsWindowFullscreen /> : <SlSizeFullscreen />}
-                    </button>
+                    </button>}
                 </div>
             )}
         </div>
