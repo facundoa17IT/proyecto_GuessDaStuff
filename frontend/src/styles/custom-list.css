@@ -7,7 +7,7 @@
     margin-top: 15px;
     border: 2px solid var(--border-color);
     border-radius: 8px;
-    height: 45vh;
+    height: calc(45vh - 1rem);
 }
 
 .list-header {
@@ -69,15 +69,8 @@
     padding: 0;
 }
 
-.list-external-footer a:hover{
-    color: var(--secondary-bg-color);
-    transform: scale(105%);
-    cursor: pointer;
-    font-weight: 700;
-    letter-spacing: 0.08rem;
-    transition: transform 0.25s, letter-spacing 0.25s;
-    font-style: oblique;
-    /* box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px; */
+.list-external-footer button:hover{
+    box-shadow: none !important;
 }
 
 /****** Responsive *****/

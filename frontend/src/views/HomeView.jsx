@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AppLogo from '../components/ui/AppLogo'
 import { FaRegPlayCircle, FaTools, FaAppStoreIos } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
+import { BsInfoCircle } from "react-icons/bs";
 
 /** Components **/
 import MobileHomeView from '../views/MobileHomeView';
@@ -64,6 +65,11 @@ const HomePage = () => {
 							<button onClick={handleStartGame}>
 								<span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 									<FaRegPlayCircle fontSize={30} style={{ marginRight: '5px' }} />Iniciar Partida
+								</span>
+							</button>
+							<button onClick={()=>navigate("/instrucciones")}>
+								<span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+									<BsInfoCircle fontSize={30} style={{ marginRight: '5px' }} />Instrucciones
 								</span>
 							</button>
 							{role !== 'ROLE_GUESS' && <LogoutButton />}
