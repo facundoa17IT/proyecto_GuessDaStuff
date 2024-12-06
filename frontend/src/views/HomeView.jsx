@@ -1,5 +1,5 @@
 /** React **/
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,13 +14,14 @@ import LogoutButton from '../components/ui/LogoutButton'
 
 /** Context API**/
 import { useRole } from '../contextAPI/AuthContext';
+import { LoadGameContext } from '../contextAPI/LoadGameContext';
 
 /** Styles **/
 import '../styles/home.css'
 
 const HomePage = () => {
 	const { role } = useRole();
-
+	const { setIsGameView } = useContext(LoadGameContext);
 	//const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 	const isMobile = false;
 
@@ -43,8 +44,8 @@ const HomePage = () => {
 	useEffect(() => {
 		localStorage.removeItem("host");
 		localStorage.removeItem("guest");
+		setIsGameView(false);
 	}, []);
-
 
 	return (
 		<div className='home-page-wrapper'>

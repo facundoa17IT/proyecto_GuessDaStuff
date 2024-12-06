@@ -6,6 +6,8 @@ import idle from '../../assets/idle_brain.png'
 import finishGame from '../../assets/finish-game-brain.png'
 import correctAnswer from '../../assets/correct-answer-brain.png'
 import wrongAnswer from '../../assets/wrong-answer-brain.png'
+import hint from '../../assets/hint-brain.png'
+import timeout from '../../assets/timeout-brain.png'
 
 /** Assets */
 import HintGlobe from '../../assets/hint-globe.png'
@@ -20,8 +22,10 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
     // Define available sprites
     const sprites = {
         idle: idle,
+        hint: hint,
         correct: correctAnswer,
         wrong: wrongAnswer,
+        timeout: timeout,
         finish: finishGame,
     };
 

@@ -16,25 +16,17 @@
 
 .slot {
   font-size: 2.5rem;
-  /* Tamaño de fuente para el contenido de cada slot */
   padding: 10px;
-  /* Espaciado interno alrededor del contenido del slot */
   border: 2px solid var(--border-color);
   border-radius: 8px;
   margin: 0 10px;
   /* Margen lateral entre los slots */
   width: 80px;
-  /* Ancho fijo para cada slot */
   height: 80px;
-  /* Altura fija para cada slot */
   overflow: hidden;
-  /* Oculta el contenido que sobresale del slot */
   display: flex;
-  /* Utiliza un contenedor flex para alinear el contenido dentro del slot */
   align-items: center;
-  /* Centra verticalmente el contenido dentro del slot */
   justify-content: center;
-  /* Centra horizontalmente el contenido dentro del slot */
 }
 
 .reel {

@@ -135,7 +135,10 @@ const GameMatchView = () => {
     }
 
     useEffect(() => {
-        setCharacterDialogue(hints[currentHintIndex]);
+        if(currentHintIndex != null){
+            setCurrentCharacterSprite('hint');
+            setCharacterDialogue(hints[currentHintIndex]);
+        }
     }, [currentHintIndex]);
 
     useEffect(() => {
@@ -286,6 +289,8 @@ const GameMatchView = () => {
                 console.error(error);
             }
         }
+        setCharacterDialogue("Tiempo fuera!");
+        setCurrentCharacterSprite('timeout');
         handleNextGameMode();
     }
 
@@ -363,15 +368,15 @@ const GameMatchView = () => {
                 // Cambiamos el componente según el modo de juego
                 switch (idModeGame) {
                     case 'OW':
-                        setCurrentHeader("Ordena la Palabra");
+                        setCurrentHeader("🔁 Ordena la Palabra");
                         GameComponent = <OrderWord OWinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     case 'GP':
-                        setCurrentHeader("Adivina la Frase");
+                        setCurrentHeader("🔤 Adivina la Frase");
                         GameComponent = <GuessPhrase GPinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     case 'MC':
-                        setCurrentHeader("Multiple Opcion");
+                        setCurrentHeader("🔢 Multiple Opcion");
                         GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} />;
                         break;
                     default:
@@ -391,6 +396,13 @@ const GameMatchView = () => {
                     </div>
                 );
             }
+        }
+        else {
+            return (
+                <div>
+                    <ScaleLoader color="var(--link-color)" height={30} width={15} loading={true} />
+                </div>
+            );
         }
     };
 
@@ -487,8 +499,10 @@ const GameMatchView = () => {
             <>
                 {response ? (
                     <div>
-                        <h3><span style={{ color: 'var(--link-color)' }}>Puntaje Total:</span> 🧠 x {score}</h3>
-                        <h3><span style={{ color: 'var(--link-color)' }}>Tiempo Total:</span> {timePlaying} segundos</h3>
+                        <h3 style={{ color: 'var(--link-color)' }}>Puntaje Total</h3>
+                        <h3>🧠 x {score}</h3>
+                        <h3 style={{ color: 'var(--link-color)' }}>Tiempo Total</h3>
+                        <h3>{timePlaying} seg</h3>
                     </div>
                 ) : (
                     <>No se pudo obtener la informacion</>
@@ -515,7 +529,7 @@ const GameMatchView = () => {
     };
 
     return (
-        <>
+        <div className='content-wrapper'>
             <MainGameLayout
                 canGoBack={false}
                 hideLeftPanel={isGameFinished}
@@ -545,7 +559,7 @@ const GameMatchView = () => {
                                     isLooping={true}
                                     loopDelay={0.5}
                                     isPlaying={isTimePlaying}
-                                    duration={10}
+                                    duration={timeRemaining}
                                     onTimeUpdate={handleTimeUpdate}
                                     onTimerComplete={handleTimerComplete}
                                     size={isMobile ? 130 : 150}
@@ -585,7 +599,7 @@ const GameMatchView = () => {
                 {currentGameIndex < 2 && <h3>Preparate para la siguiente ronda!</h3>}
                 <ClockLoader size={80} />
             </Modal>
-        </>
+        </div>
     );
 };
 
