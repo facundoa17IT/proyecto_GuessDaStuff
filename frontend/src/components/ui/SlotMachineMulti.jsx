@@ -28,6 +28,38 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
         }, 1000);
     }, []);
 
+    const gameModeIcons = {
+        GP: "🔤",
+        OW: "🔁",
+        MC: "🔢"
+    };
+
+    // Asocia cada modo de juego con su emoji correspondiente
+    const mapGameModesToPairs = (gameModes) => {
+        return gameModes
+            .filter(mode => gameModeIcons[mode]) // Filter valid modes
+            .map(mode => ({ mode, emoji: gameModeIcons[mode] })); // Create pairs
+    };
+    
+    // Coleccion de modos de juego
+    const gameModes1 = ruletaGame.categories[0].gameModes || [];
+    const gameModes2 = ruletaGame.categories[1].gameModes || [];
+    const gameModes3 = ruletaGame.categories[2].gameModes || [];
+    
+    const gameModePairs1 = mapGameModesToPairs(gameModes1);
+    const gameModePairs2 = mapGameModesToPairs(gameModes2);
+    const gameModePairs3 = mapGameModesToPairs(gameModes3);
+
+    const getRandomEmoji = (gamePairs) => {
+        if (!gamePairs || gamePairs.length === 0) return null; // Manejar casos vacíos o inválidos
+        const randomIndex = Math.floor(Math.random() * gamePairs.length); // Índice aleatorio
+        return gamePairs[randomIndex].emoji; // Retornar solo el emoji del par aleatorio
+    };
+
+    const getEmojiByKey = (key) => {
+        return gameModeIcons[key] || null; // Retorna el emoji o null si la clave no existe
+    };
+
     // Estado para almacenar el valor de cada slot
     const [slot1, setSlot1] = useState("❓");
     const [slot2, setSlot2] = useState("❓");
@@ -37,11 +69,6 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;
 
-    // Función para obtener un elemento aleatorio de un array
-    const getRandomItem = (array) => {
-        return array[Math.floor(Math.random() * array.length)];
-    };
-
     // Función para hacer girar los slots
     const spin = () => {
         setIsSpinning(true); // Establece el estado de giro a verdadero
@@ -49,9 +76,9 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
 
         // Simulación del giro de los slots
         let spinInterval = setInterval(() => {
-            setSlot1(getRandomItem(ruletaGame.categories[0].gameModes)); // Cambia el slot 1 a un modo aleatorio
-            setSlot2(getRandomItem(ruletaGame.categories[1].gameModes)); // Cambia el slot 2 a un modo aleatorio
-            setSlot3(getRandomItem(ruletaGame.categories[2].gameModes)); // Cambia el slot 3 a un modo aleatorio
+            setSlot1(getRandomEmoji(gameModePairs1)); // Cambia el slot 1 a un modo aleatorio
+            setSlot2(getRandomEmoji(gameModePairs2)); // Cambia el slot 2 a un modo aleatorio
+            setSlot3(getRandomEmoji(gameModePairs3)); // Cambia el slot 3 a un modo aleatorio
         }, spinDuration * 0.05); // Intervalo entre cambios
 
         // Detener el giro después de spinDuration
@@ -59,9 +86,9 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
             clearInterval(spinInterval); // Detiene el intervalo de giro
 
             // Se asignan los  valores hardcodeados
-            setSlot1(finalSlot1);
-            setSlot2(finalSlot2);
-            setSlot3(finalSlot3);
+            setSlot1(getEmojiByKey(finalSlot1)); // Establece el valor final del slot 1
+            setSlot2(getEmojiByKey(finalSlot2)); // Establece el valor final del slot 2
+            setSlot3(getEmojiByKey(finalSlot3)); // Establece el valor final del slot 3
 
             // Crear objetos de resultado para cada slot
             const result1 = {

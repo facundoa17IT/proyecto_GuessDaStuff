@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
 :root {
-  /****** Global Variables (Default Classic Color Theme) *****/
+  /****** Global Variables *****/
 
   --player1-color: #4169E1;
   --player2-color: #DC143C;
@@ -296,6 +296,10 @@ fieldset {
   text-align: left !important;
 }
 
+.home-page-body button{
+  width: 250px !important;
+}
+
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
 
@@ -325,13 +329,21 @@ fieldset {
 }
 
 /** Hidden Navbar Breakpoint **/
-@media (max-width: 1150px) {
+@media (max-width: 1150px) , (min-height: 800px) {
   .final-game-resume {
     flex-direction: column;
     margin-bottom: 0;
   }
+}
 
-  .final-game-resume-container {
-    width: 16rem !important;
+/** Mobile **/
+@media (max-width: 850px) {
+  .app-logo-vertical {
+    background-image: url('../assets/GDS-brain-icon.png');
+    width: 80px;
+  /* height: 120px; */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   }
 }

@@ -77,4 +77,14 @@
     border: none;
     border-radius: 0;
   }
+
+  .modal-body {
+    height: 70%;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
 }

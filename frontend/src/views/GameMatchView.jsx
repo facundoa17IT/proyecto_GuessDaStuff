@@ -229,12 +229,10 @@ const GameMatchView = () => {
                     setIsModalOpen(true);
                     if (implementationGameBody.idUserWin == host.userId) {
                         setWinner(host.username);
-                        // Sumar 1 punto al host
                         setHostWinsCount(prevCount => prevCount + 1);
                     }
                     else {
                         setWinner(guest.username);
-                        // Sumar 1 punto al guest
                         setGuestWinsCount(prevCount => prevCount + 1);
                     }
                     console.log("Ganador Id: " + implementationGameBody.idUserWin);
@@ -298,10 +296,10 @@ const GameMatchView = () => {
         try {
             if (isMultiplayer) {
                 handleFinalWinner();
-                setImplementationGameBody(null);
                 setInvitationCount(0);
                 setInvitation(null);
                 unsubscribeFromGameSocket();
+                setImplementationGameBody(null);
             }
             else {
                 axiosInstance.post(`/game-single/v1/finish-play-game/${gameId}`);
