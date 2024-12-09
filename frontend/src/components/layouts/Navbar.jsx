@@ -32,7 +32,7 @@ const Navbar = () => {
 
     const { invitation, setInvitation, invitationCount, setInvitationCount, invitationCollection, setInvitationCollection } = useContext(SocketContext);
     const { isGameView } = useContext(LoadGameContext);
-    
+
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
     const handleInvitationInteraction = (invitation) => {
@@ -41,13 +41,13 @@ const Navbar = () => {
                 setInvitationCount(invitationCount + 1);
                 setInvitationCollection([...invitationCollection, invitation]);
                 setInvitation(null);
-                toast('Has recibido una nueva invitacion!', {icon:'📩'});
+                toast('Has recibido una nueva invitacion!', { icon: '📩' });
             }
         } else {
             console.error("Invalid Invitation");
         }
     };
-    
+
     useEffect(() => {
         if (invitation) {
             handleInvitationInteraction(invitation);
@@ -69,12 +69,12 @@ const Navbar = () => {
                         <>
                             <li className="nav-item">
                                 <Link to={PUBLIC_ROUTES.LOGIN} className="nav-links">
-                                <ImEnter className='navbar-icon' />{isMobile ? <></> : <>Iniciar Sesion</>}
+                                    <ImEnter className='navbar-icon' />{isMobile ? <></> : <>Iniciar Sesion</>}
                                 </Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={PUBLIC_ROUTES.REGISTER} className="nav-links">
-                                <FaAddressCard className='navbar-icon' />{isMobile ? <></> : <>Registrarse</>}
+                                    <FaAddressCard className='navbar-icon' />{isMobile ? <></> : <>Registrarse</>}
                                 </Link>
                             </li>
                         </>
@@ -104,17 +104,17 @@ const Navbar = () => {
                                 <>
                                     <li className="nav-item">
                                         <Link to={ADMIN_ROUTES.CONTENT_MANAGEMENT} className="nav-links">
-                                            <BsDatabaseFillGear style={{ marginRight: '5px' }} />Contenido
+                                            <BsDatabaseFillGear className='navbar-icon' />{isMobile ? <></> : <>Contenido</>}
                                         </Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link to={ADMIN_ROUTES.USERS_MANAGEMENT} className="nav-links">
-                                            <FaUserCog style={{ marginRight: '5px' }} />Usuarios
+                                            <FaUserCog className='navbar-icon' />{isMobile ? <></> : <>Usuarios</>}
                                         </Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link to="admin/game-matches-management" className="nav-links">
-                                            <BsCollectionPlayFill style={{ marginRight: '5px' }} />Partidas
+                                            <BsCollectionPlayFill className='navbar-icon' />{isMobile ? <></> : <>Partidas</>}
                                         </Link>
                                     </li>
                                 </>
