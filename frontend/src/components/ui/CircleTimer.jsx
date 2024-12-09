@@ -34,7 +34,6 @@ const CircleTimer = ({size=150, isLooping = false, loopDelay = 0 , isPlaying, du
             onTimerComplete();
             return { shouldRepeat: isLooping, delay: loopDelay } // repeat animation in 1.5 seconds
           }}
-          //onComplete={onTimerComplete} // Use the onComplete prop passed from the parent
           size={size}
         >
           {renderTime}

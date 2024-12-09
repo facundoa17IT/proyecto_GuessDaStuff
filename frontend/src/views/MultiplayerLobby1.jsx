@@ -54,14 +54,6 @@ const MultiplayerLobby = () => {
         localStorage.setItem("host", JSON.stringify(userObj));
     }, []);
 
-    // Filtra usuario propio y del tipo admin
-    // const filterUsers = () => {
-    //     const updatedList = connectedUsers.filter(
-    //         item => item.username !== userObj.username && item.status !== ROLE.ADMIN
-    //     );
-    //     setConnectedUsers(updatedList);
-    // };
-
     // 1)
     // Se envia la invitacion al persionar el boton de invitar
     const handleLobbyListInteraction = (listId, buttonKey, item) => {

@@ -23,6 +23,11 @@
     margin-right: auto;
 }
 
+.navbar-icon {
+    margin-right: 5px;
+    font-size: 1.5rem;
+}
+
 .navbar select {
     outline: none;
     font-size: large;
@@ -68,4 +73,11 @@
     transition: transform 0.25s, letter-spacing 0.25s;
     font-style: oblique;
     color: var(--text-color);
+}
+
+/** Design Breakpoint **/
+@media (max-width: 630px) {
+    .navbar-icon {
+        font-size: 1.8rem;
+    }
 }

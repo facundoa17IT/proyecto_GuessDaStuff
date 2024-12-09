@@ -1,8 +1,16 @@
+/** React **/
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import '../../styles/main-game-layout.css';
+import { useMediaQuery } from 'react-responsive';
+
+/** Assets **/
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsWindowFullscreen } from "react-icons/bs";
+
+/** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext'
+
+/** Style **/
+import '../../styles/main-game-layout.css';
 
 const MainGameLayout = ({
     leftContent,
@@ -20,6 +28,8 @@ const MainGameLayout = ({
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const { isGameView } = useContext(LoadGameContext);
+
+    const isMobile = useMediaQuery({ query: '(max-width: 450px)' });
 
     useEffect(() => {
         const onFullscreenChange = () => {
@@ -60,7 +70,15 @@ const MainGameLayout = ({
     };
 
     return (
-        <div className="main-game-layout-cointainer" ref={containerRef}>
+        <div className="main-game-layout-cointainer"
+            style={{
+                height: isGameView
+                    ? 'calc(100dvh - 2rem)'
+                    : (isMobile && isGameView)
+                        ? '100dvh'
+                        : 'calc(100dvh - 2rem - 80px)'
+            }}
+            ref={containerRef}>
             {!hideLeftPanel && (
                 <div className="left-div">
                     <h1>{leftHeader}</h1>
@@ -75,7 +93,7 @@ const MainGameLayout = ({
                 <div className="right-div">
                     <h1>{rightHeader}</h1>
                     {rightContent}
-                    {isGameView &&<button className='fullscreen-btn' onClick={isFullscreen ? exitFullscreen : enterFullscreen}>
+                    {isGameView && <button className='fullscreen-btn' onClick={isFullscreen ? exitFullscreen : enterFullscreen}>
                         {isFullscreen ? <BsWindowFullscreen /> : <SlSizeFullscreen />}
                     </button>}
                 </div>

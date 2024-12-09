@@ -38,7 +38,7 @@ const LogoutButton = () => {
     return (
         <button onClick={logOut}>
             <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <ImExit style={{ marginRight: '5px' }} />Cerrar Sesion
+                <ImExit fontSize={30} style={{ marginRight: '5px' }} />Cerrar Sesion
             </span>
         </button>
     )
