@@ -39,7 +39,8 @@
   box-sizing: border-box;
 } */
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -48,21 +49,12 @@ html, body {
 
 /***** Home Page Header *****/
 
-.home-page-header {
-  /* position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 400px;
-  width: 100%; */
-}
-
 .home-page-header button {
   margin-top: 35px;
 }
 
-.word-output {
-  font-size: 5em;
+.home-page-body button {
+  width: 250px !important;
 }
 
 /***** App Logos ******/
@@ -93,10 +85,6 @@ a {
   font-weight: 500;
   text-decoration: inherit;
   color: var(--link-color);
-}
-
-a:hover {
-  cursor: pointer;
 }
 
 div {
@@ -133,8 +121,8 @@ textarea {
 }
 
 .content-wrapper {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .content-wrapper:fullscreen {
@@ -142,6 +130,7 @@ textarea {
   color: white;
   padding: 20px;
 }
+
 /* input[type="file"] {
   display: none;
 } */
@@ -178,17 +167,6 @@ button {
   transition: transform 0.25s, border-color 0.25s, letter-spacing 0.25s;
 }
 
-button:hover:not(:disabled, .data-picker-icon-btn,
-  .ReactFlagsSelect-module_selectBtn__19wW7) {
-  transform: scale(105%);
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 0.08rem;
-  transition: transform 0.25s, letter-spacing 0.25s;
-  font-style: oblique;
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-}
-
 button:active:not(:disabled, .data-picker-icon-btn,
   .ReactFlagsSelect-module_selectBtn__19wW7) {
   transform: scale(50%);
@@ -199,20 +177,6 @@ button:disabled:not(.optionButton) {
   background-color: gray;
   color: darkgray;
   border-color: darkgray;
-}
-
-.form-group {
-  margin: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--link-color);
-  /**/
-  /* border: 2px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1vw;
-  max-width: 25vw; */
 }
 
 .words-footer {
@@ -229,19 +193,39 @@ button:disabled:not(.optionButton) {
   background-repeat: no-repeat;
 }
 
-.chip:hover {
-  transform: scale(105%);
-  cursor: pointer;
-  font-weight: 700;
-  letter-spacing: 0.08rem;
-  transition: transform 0.25s, letter-spacing 0.25s;
-  font-style: oblique;
+/***** Hover *****/
+
+@media (hover: hover) {
+  a:hover {
+    cursor: pointer;
+  }
+
+  button:hover:not(:disabled, .data-picker-icon-btn,
+    .ReactFlagsSelect-module_selectBtn__19wW7) {
+    transform: scale(105%);
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.08rem;
+    transition: transform 0.25s, letter-spacing 0.25s;
+    font-style: oblique;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  }
+
+  .chip:hover {
+    transform: scale(105%);
+    cursor: pointer;
+    font-weight: 700;
+    letter-spacing: 0.08rem;
+    transition: transform 0.25s, letter-spacing 0.25s;
+    font-style: oblique;
+  }
 }
 
 /***** Custom Scrollbar *****/
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 /* Track */
@@ -260,7 +244,6 @@ button:disabled:not(.optionButton) {
   background-color: white !important;
   border: 2px solid var(--border-color) !important;
   border-radius: 8px !important;
-  background-color: white;
   color: black;
   font-size: large !important;
   font-weight: bold !important;
@@ -296,19 +279,13 @@ fieldset {
   text-align: left !important;
 }
 
-.home-page-body button{
-  width: 250px !important;
-}
-
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
 
-  /**/
   .list-external-footer {
     margin: 10px;
   }
 
-  /**/
   th,
   td {
     padding: 2px;
@@ -328,22 +305,32 @@ fieldset {
   }
 }
 
-/** Hidden Navbar Breakpoint **/
-@media (max-width: 1150px) , (min-height: 800px) {
+/** Design Breakpoint **/
+@media (max-width: 1150px),
+(min-height: 800px) {
   .final-game-resume {
     flex-direction: column;
     margin-bottom: 0;
   }
 }
 
-/** Mobile **/
+/** Navbar Design Breakpoint  **/
 @media (max-width: 850px) {
   .app-logo-vertical {
+    background-image: url('../assets/GDS-vertical-logo-compact2.png');
+    width: 130px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .app-logo-vertical {
     background-image: url('../assets/GDS-brain-icon.png');
-    width: 80px;
-  /* height: 120px; */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+    width: 68px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }

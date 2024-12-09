@@ -73,10 +73,8 @@ const MainGameLayout = ({
         <div className="main-game-layout-cointainer"
             style={{
                 height: isGameView
-                    ? 'calc(100dvh - 2rem)'
-                    : (isMobile && isGameView)
-                        ? '100dvh'
-                        : 'calc(100dvh - 2rem - 80px)'
+                    ? (isMobile ? '100dvh' : 'calc(100dvh - 2rem)')
+                    : (isMobile ? 'calc(100dvh - 80px)' : 'calc(100dvh - 2rem - 80px)')
             }}
             ref={containerRef}>
             {!hideLeftPanel && (

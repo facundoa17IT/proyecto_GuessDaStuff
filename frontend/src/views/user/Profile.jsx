@@ -248,7 +248,8 @@ const Profile = () => {
                 closeModal={() => setIsModalOpenEliminar(!isModalOpenEliminar)} // Si cancela, cierra sin acción
                 title="Confirmar eliminación"
             >
-                <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+                <h2>¿Estás seguro de que deseas <span style={{color:'red'}}>eliminar </span>tu cuenta?</h2>
+                <h3 style={{color:'gray'}}>Esta acción no se puede deshacer.</h3>
             </Modal>
             <Modal
                 showModal={isProfileModalOpen}

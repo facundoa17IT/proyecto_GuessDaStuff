@@ -38,7 +38,7 @@ export const DeleteCategory = () => {
     
 
     return (
-        <Modal onConfirm={handleDeleteCategory} showModal={true} closeModal={onClose} title={"Agregar Categoria"}>
+        <Modal onConfirm={handleDeleteCategory} showModal={true} closeModal={onClose} title=''>
             {selectedItem && <h2>Desea eliminar la categoria "<span style={{color:'red'}}>{selectedItem.name}</span>"?</h2>}
         </Modal>
     );

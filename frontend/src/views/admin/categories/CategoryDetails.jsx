@@ -61,7 +61,8 @@ export const CategoryDetails = () => {
             <>
                 {renderListItemDetails(selectedItem)}
                 <button onClick={() => handleListTitles()}>Titulos</button>
-            </>)
+            </>
+        )
     }, []);
 
     // Update modal edit categories form
@@ -74,35 +75,32 @@ export const CategoryDetails = () => {
 
     const renderTitlesOfCategory = () => {
         return (
-            <div>
-                <h2>Titulos</h2>
-                <div style={{ border: '2px solid var(--border-color)', borderRadius: '8px', height: '255px', overflowY: 'auto', overflowX: 'hidden' }}>
-                    {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
-                        <div key={gameModeKey}>
-                            <h3>{gameModeKey}</h3>
-                            <ul style={{ textAlign: 'left', listStyleType: 'none' }}>
-                                {categoryTitles.titlesOfCategory[gameModeKey].map((item, index) => (
-                                    <li
-                                        key={item.id}
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: '10px'
-                                        }}
-                                    >
-                                        <span>{item.title}</span>
-                                        <IconButton
-                                            icon={FaEdit}
-                                            label={'Editar'}
-                                            onClick={() => handleEditClick(gameModeKey, index, item)}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+            <div style={{ overflowY: 'auto', overflowX: 'hidden' }}>
+                {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
+                    <div key={gameModeKey}>
+                        <h3 style={{ margin: '1rem', backgroundColor: 'var(--secondary-bg-color)', color: 'white' }}>{gameModeKey}</h3>
+                        <ul style={{ textAlign: 'left' }}>
+                            {categoryTitles.titlesOfCategory[gameModeKey].map((item, index) => (
+                                <li
+                                    key={item.id}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        marginBottom: '10px'
+                                    }}
+                                >
+                                    <span style={{ width: '80%' }}>{item.title}</span>
+                                    <IconButton
+                                        icon={FaEdit}
+                                        label={'Editar'}
+                                        onClick={() => handleEditClick(gameModeKey, index, item)}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         );
     };
@@ -205,7 +203,7 @@ export const CategoryDetails = () => {
     };
 
     return (
-        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles">
+        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
             <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
                 {modalContent}
             </div>
