@@ -10,7 +10,9 @@ import { gameModesSchemas } from '../../../utils/JsonSchemas'
 import Modal from '../../../components/layouts/Modal';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-
+import { BsInfoCircle } from "react-icons/bs";
+import { TiArrowRightThick } from "react-icons/ti";
+import { FaArrowRightLong } from "react-icons/fa6";
 /** Context API **/
 import { ListContext } from '../../../contextAPI/ListContext';
 
@@ -40,10 +42,10 @@ export const AddTitle = () => {
 
     // Update modal with category titles list
     useEffect(() => {
-        if (selectedAddType !== ''){
+        if (selectedAddType !== '') {
             if (selectedAddType == "Individual" && selectedItem) {
                 setJsonSchemaForm();
-    
+
                 if (schema) {
                     setModalContent(() => renderAddIndividualTitleForm());
                 }
@@ -70,7 +72,7 @@ export const AddTitle = () => {
     useEffect(() => {
         initializeContent();
     }, []);
-    
+
 
     // Trigger upload on button click 
     useEffect(() => {
@@ -108,13 +110,14 @@ export const AddTitle = () => {
     };
 
     const setJsonSchemaForm = () => {
-    const gameMode = getGameModeById(selectedItem?.id);
-    if (gameMode) {
-        setSchema(gameModesSchemas[gameMode]);
-    }
-};
+        const gameMode = getGameModeById(selectedItem?.id);
+        if (gameMode) {
+            setSchema(gameModesSchemas[gameMode]);
+        }
+    };
 
     const onClose = () => {
+        setSelectedAddType('');
         setIsModalOpen(!isModalOpen);
         navigate(-1);
     }
@@ -132,7 +135,7 @@ export const AddTitle = () => {
     const handleAddGameModoToCategory = async ({ formData }) => {
         console.log(formData);
         const gameMode = getGameModeById(selectedItem?.id);
-    
+
         if (gameMode) {
             try {
                 const response = await axiosInstance.post(`/game-modes/v1/individual/${gameMode}`, formData, { requiresAuth: true });
@@ -150,10 +153,10 @@ export const AddTitle = () => {
             <div style={{ height: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
                 {!schema && <div>
                     {/* Menú desplegable */}
-                    <h2>Modo de juego</h2>
+                    <h2>Categoria</h2>
                     <select
                         id="dropdown"
-                        value={selectedAvailableCategory || ""}
+                        value={selectedAvailableCategory}
                         onChange={handleAvailableCategorySelection}
                         style={{
                             marginTop: '25px',
@@ -168,9 +171,9 @@ export const AddTitle = () => {
                             textAlign: 'center',
                         }}
                     >
-                        <option value="" disabled>Selecciona una Categoria</option>
+                        <option value="" disabled>Selecciona una categoria</option>
                         {availableCategories.map((opcion, index) => (
-                           <option key={opcion.id} value={String(opcion.id)}>{opcion.name}</option>
+                            <option key={opcion.id} value={String(opcion.id)}>{opcion.name}</option>
                         ))}
                     </select>
 
@@ -178,7 +181,7 @@ export const AddTitle = () => {
                     <div style={{ marginTop: '25px' }}>
                         <h2>Tipo de carga</h2>
                         <div style={{ marginTop: '25px' }}>
-                            <label>
+                            <label style={{ cursor: 'pointer', color: 'var(--link-color)', fontWeight: 'bold' }}>
                                 <input
                                     type="radio"
                                     name="modo"
@@ -188,7 +191,7 @@ export const AddTitle = () => {
                                 />
                                 Individual
                             </label>
-                            <label style={{ marginLeft: '20px' }}>
+                            <label style={{ marginLeft: '20px', cursor: 'pointer', color: 'var(--link-color)', fontWeight: 'bold' }}>
                                 <input
                                     type="radio"
                                     name="modo"
@@ -208,19 +211,20 @@ export const AddTitle = () => {
     const renderAddIndividualTitleForm = () => {
         return (
             <>
-            {renderCategoryAndGameModeName()}
-            <div style={{height: '250px',overflowY: 'auto', overflowX: 'hidden'}}>
-                <Form
-                    className='form'
-                    schema={schema}
-                    uiSchema={uiSchema}
-                    formData={formData}
-                    onChange={(e) => setFormData(e.formData)} // Update local state on change
-                    onSubmit={handleAddGameModoToCategory}
-                    validator={validator}
-                >
-                </Form>
-            </div>
+                {renderCategoryAndGameModeName()}
+                <small style={{ margin: '0.5rem', color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Completa todos los campos y presiona el boton de Submit.</small>
+                <div style={{ height: '250px', overflowY: 'auto', overflowX: 'hidden', width: '100%' }}>
+                    <Form
+                        className='form'
+                        schema={schema}
+                        uiSchema={uiSchema}
+                        formData={formData}
+                        onChange={(e) => setFormData(e.formData)} // Update local state on change
+                        onSubmit={handleAddGameModoToCategory}
+                        validator={validator}
+                    >
+                    </Form>
+                </div>
             </>
         );
     }
@@ -229,15 +233,15 @@ export const AddTitle = () => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("idCategory", idCategory);
-    
+
         console.log('Selected file:', file.name);
-  
+
         const gameMode = getGameModeById(selectedItem?.id);
-    
+
         if (gameMode) {
             try {
                 const response = await axiosInstance.post(`/game-modes/v1/masive/${gameMode}`, formData, {
-                    requiresAuth: true, 
+                    requiresAuth: true,
                     headers: {
                         "Content-Type": "multipart/form-data",
                     },
@@ -249,7 +253,7 @@ export const AddTitle = () => {
             }
         }
     };
-    
+
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
     };
@@ -261,8 +265,8 @@ export const AddTitle = () => {
     const renderAddMasiveTitle = (gameMode) => {
         let gameModeInfo;
 
-        if (gameMode){
-            if(gameMode === "OW"){
+        if (gameMode) {
+            if (gameMode === "OW") {
                 gameModeInfo = <p>Palabra | Pista1 | Pista2 | Pista3</p>
             }
             else if (gameMode === "MC") {
@@ -277,42 +281,45 @@ export const AddTitle = () => {
         }
 
         return (
-            <div>
+            <div style={{ height: '100%', width: '100%' }}>
                 {renderCategoryAndGameModeName()}
-                <p>Seleccione un archivo en formato csv o xlsx</p>
-                <input type="file" onChange={handleFileChange} />
+                <div style={{ margin: '1rem', padding: '25px', boxSizing: 'border-box', border: '2px solid var(--border-color)', borderRadius: '8px' }}>
+                    <small style={{ color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Seleccione un archivo en formato csv o xlsx</small>
+                    <input style={{ margin: '0.5rem' }} type="file" onChange={handleFileChange} />
+                </div>
                 <h3>Columnas requeridas</h3>
                 {gameModeInfo}
             </div>
         )
     }
 
+
     const renderCategoryAndGameModeName = () => {
         const selectedCategory = availableCategories.find(
             (category) => category.id === Number(selectedAvailableCategory)
         );
-    
+
         if (selectedCategory) {
             console.log(`Selected category: ${selectedCategory.name}`);
         }
-    
+
         return (
-            <div>
+            <div style={{ width: '100%' }}>
                 {selectedItem && selectedCategory ? (
-                    <table style={{ width: "100%", borderCollapse: "collapse", marginBottom:'15px' }}>
-                        <thead>
-                            <tr>
-                                <th style={{ width: "40%", border: "1px solid black", padding: "5px" }}>Categoría</th>
-                                <th style={{ width: "40%", border: "1px solid black", padding: "5px" }}>Modo de Juego</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style={{ border: "1px solid black", padding: "5px" }}>{selectedCategory.name}</td>
-                                <td style={{ border: "1px solid black", padding: "5px" }}>{selectedItem.name}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3 style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '0',
+                        color: 'var(--link-color)'
+                    }}
+                    >
+                        {selectedItem.name}
+                        <span style={{ color: 'var(--text-color)',display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center', }}><FaArrowRightLong fontSize={20} style={{ margin: '8px' }} /></span>
+                        {selectedCategory.name}
+                    </h3>
                 ) : (
                     <p>Category not found</p>
                 )}
@@ -321,10 +328,8 @@ export const AddTitle = () => {
     }
 
     return (
-        <Modal onConfirm={selectedAddType==="Masiva" ? handleUpload : onClose} showModal={true} closeModal={onClose} title={"Agregar Titulo"}>
-            <div style={{ height: '350px' }}>
-                {modalContent}
-            </div>
+        <Modal hideConfirmBtn={selectedAddType === "Individual"} onConfirm={selectedAddType === "Masiva" ? handleUpload : onClose} showModal={true} closeModal={onClose} title={"Agregar Titulo"}>
+            {modalContent}
         </Modal>
     );
 };

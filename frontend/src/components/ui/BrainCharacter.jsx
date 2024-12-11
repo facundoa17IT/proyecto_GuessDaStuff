@@ -12,13 +12,16 @@ import timeout from '../../assets/timeout-brain.png'
 /** Assets */
 import HintGlobe from '../../assets/hint-globe.png'
 
+/** Animation **/
+import ScaleTransition from '../anim/ScaleTransiton';
+import HorizontalSlideTransition from '../anim/HorizontalSlideTransition';
 /** Component**/
 import Typewriter from 'typewriter-effect';
 
 /** Style **/
 import '../../styles/brain-character.css'
 
-const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, spriteKey = 'idle' }) => {
+const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, spriteKey = 'idle', width = 'auto' }) => {
     // Define available sprites
     const sprites = {
         idle: idle,
@@ -35,8 +38,9 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
     return (
         <div className="character-container">
             {!hideDialogue && (
+                <ScaleTransition key={words}>
                 <div className="globe-hint-container">
-                    <img src={HintGlobe} alt="Globe" className="globe-hint-background" />
+                        <img src={HintGlobe} alt="Globe" className="globe-hint-background" />
                     <div className="globe-hint-text">
                         <Typewriter
                             options={{
@@ -46,15 +50,18 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
                             }}
                             onInit={(typewriter) => {
                                 typewriter
-                                    .typeString(words)
-                                    .start();
+                                .typeString(words)
+                                .start();
                             }}
                             key={rerenderKey} // Ensures re-render with new words
-                        />
+                            />
                     </div>
                 </div>
+                </ScaleTransition>
             )}
-            <img className="brain-character" src={currentSprite} alt="Brain Character" />
+            <HorizontalSlideTransition key={spriteKey}>
+                <img className="brain-character" src={currentSprite} alt="Brain Character" style={{width: `${width}`}} />
+            </HorizontalSlideTransition>
         </div>
     );
 };

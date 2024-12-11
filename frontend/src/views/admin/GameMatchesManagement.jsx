@@ -107,9 +107,7 @@ const GameMatchesManagement = () => {
             />
 
             <Modal showModal={isModalOpen} onConfirm={() => setIsModalOpen(!isModalOpen)} closeModal={() => setIsModalOpen(!isModalOpen)} title="Detalles" innerOutline={true}>
-                <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
-                    {renderListItemDetails(selectedItem)}
-                </div>
+                {renderListItemDetails(selectedItem)}
             </Modal >
         </>
     );

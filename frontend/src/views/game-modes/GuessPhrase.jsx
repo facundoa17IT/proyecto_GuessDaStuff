@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 /** Components **/
 import GameButtonRow from '../../components/layouts/GameButtonRow';
-
+import ScaleTransition from '../../components/anim/ScaleTransiton';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
@@ -44,11 +44,13 @@ const GuessPhrase = ({ GPinfo, hintButton, showNextHint }) => {
 	return (
 		<div className="game-mode-container gp-container">
 			<div className="containerPhrase">
-				{phrase ? (
-					<p>{phrase}</p>
-				) : (
-					<p>Este juego aún no fue implementado.</p>
-				)}
+				<ScaleTransition>
+					{phrase ? (
+						<p>{phrase}</p>
+					) : (
+						<p>Este juego aún no fue implementado.</p>
+					)}
+				</ScaleTransition>
 			</div>
 
 			<input

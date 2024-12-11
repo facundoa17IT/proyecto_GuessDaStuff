@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 /** Components **/
 import GameButtonRow from '../../components/layouts/GameButtonRow';
-
+import ScaleTransition from '../../components/anim/ScaleTransiton';
 /** Utils **/
 import { shuffleArray } from '../../utils/Helpers';
 
@@ -89,17 +89,19 @@ const OrderWord = ({ OWinfo, hintButton, showNextHint }) => {
 				))}
 			</div>
 
+			<ScaleTransition>
 			<div className="buttonContainer">
 				{shuffledLetters.map((letterObj, index) => (
 					<button
-						key={`${letterObj.id}-${index}`}
-						className="button"
-						onClick={() => handleLetterPress(letterObj)}
+					key={`${letterObj.id}-${index}`}
+					className="button"
+					onClick={() => handleLetterPress(letterObj)}
 					>
-						{letterObj.letter}
+					{letterObj.letter}
 					</button>
 				))}
 			</div>
+			</ScaleTransition>
 
 			<GameButtonRow
 				handleHint={showNextHint}

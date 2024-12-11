@@ -10,6 +10,7 @@ import validator from '@rjsf/validator-ajv8';
 
 /** Assets **/
 import { FaEdit } from 'react-icons/fa';
+import { FaListUl } from "react-icons/fa";
 
 /** Utils **/
 import axiosInstance from '../../../utils/AxiosConfig';
@@ -60,7 +61,7 @@ export const CategoryDetails = () => {
         setModalContent(
             <>
                 {renderListItemDetails(selectedItem)}
-                <button onClick={() => handleListTitles()}>Titulos</button>
+                <button style={{width:'fit-content', fontSize:'medium'}} onClick={handleListTitles}><FaListUl style={{marginRight:'5px'}}/>Listar Titulos</button>
             </>
         )
     }, []);
@@ -75,7 +76,7 @@ export const CategoryDetails = () => {
 
     const renderTitlesOfCategory = () => {
         return (
-            <div style={{ overflowY: 'auto', overflowX: 'hidden' }}>
+            <div style={{ overflowY: 'auto', overflowX: 'hidden', border:'2px solid var(--border-color)', borderRadius:'8px' }}>
                 {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
                     <div key={gameModeKey}>
                         <h3 style={{ margin: '1rem', backgroundColor: 'var(--secondary-bg-color)', color: 'white' }}>{gameModeKey}</h3>
@@ -204,9 +205,7 @@ export const CategoryDetails = () => {
 
     return (
         <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
-            <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
-                {modalContent}
-            </div>
+            {modalContent}
         </Modal >
     );
 };

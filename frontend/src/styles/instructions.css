@@ -24,6 +24,10 @@
     color: var(--link-color);
 }
 
+.info-container img {
+    object-fit: contain;
+}
+
 /** Design Breakpoint**/
 /* @media (max-width: 1550px) and (min-height: 550px) {
     .main-game-layout-cointainer {
@@ -43,7 +47,7 @@
         border: none;
     }
 } */
-.img-col-2-container {
+.img-container {
     width: 100%;
     height: 300px;
     display: flex;
@@ -68,16 +72,13 @@
         font-size: 1rem;
     }
 
-    .img-col-2-container {
+    .img-container {
         height: 200px;
+        margin-bottom: 0;
     }
 
     .info-container button{
         margin-bottom: 1rem;
-    }
-
-    .img-col-2-container {
-        margin-bottom: 0;
     }
 
     .img-col-1, .img-col-2, .img-col-3 {
