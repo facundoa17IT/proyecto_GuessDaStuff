@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 /** Components **/
 import GameButtonRow from '../../components/layouts/GameButtonRow';
-
+import ScaleTransition from '../../components/anim/ScaleTransiton';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
@@ -59,7 +59,9 @@ const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
     return (
         <div className="game-mode-container mc-container">
             <div className="containerPhrase">
-                <p>{question}</p>
+                <ScaleTransition>
+                    <p>{question}</p>
+                </ScaleTransition>
             </div>
 
             <div className='optionsWrapper'>
@@ -82,7 +84,9 @@ const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
                                     ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOptionText' : ''}`
                                 }
                             >
-                                {option}
+                                <ScaleTransition>
+                                    {option}
+                                </ScaleTransition>
                             </span>
                         </button>
                     ))}

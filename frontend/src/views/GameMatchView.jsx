@@ -13,8 +13,11 @@ import BrainCharacter from '../components/ui/BrainCharacter';
 import { ScaleLoader } from 'react-spinners';
 import MultiplayerHUD from '../components/layouts/MultiplayerHUD';
 import Modal from '../components/layouts/Modal';
+import SmallModal from '../components/layouts/SmallModal';
 import toast from 'react-hot-toast';
 import { ClockLoader } from 'react-spinners';
+import GameStats from '../components/layouts/GameStats';
+import BasicVerticalSlide from '../components/anim/BasicVerticalSlide';
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
@@ -24,6 +27,7 @@ import { GAME_SETTINGS } from '../utils/constants';
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
 import { useRole } from '../contextAPI/AuthContext'
 import { SocketContext } from '../contextAPI/SocketContext';
+import ScaleTransition from '../components/anim/ScaleTransiton';
 
 const GameMatchView = () => {
     const navigate = useNavigate();
@@ -64,6 +68,7 @@ const GameMatchView = () => {
 
     const isDesignBreakpoint = useMediaQuery({ query: '(max-width: 1150px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 535px)' });
+    const isLargeScreen = useMediaQuery({ query: '(min-width: 1600px)' });
 
     useEffect(() => {
         if (hintCounter === 0) {
@@ -135,7 +140,7 @@ const GameMatchView = () => {
     }
 
     useEffect(() => {
-        if(currentHintIndex != null){
+        if (currentHintIndex != null) {
             setCurrentCharacterSprite('hint');
             setCharacterDialogue(hints[currentHintIndex]);
         }
@@ -148,7 +153,7 @@ const GameMatchView = () => {
     }, [finalWinnerId]);
 
     const handleFishMultiplayerGame = async () => {
-        try{
+        try {
             console.log("EL ID GANADOR FINAL ES -> " + finalWinnerId);
             axiosInstance.post(`/game-multi/game/${gameId}/finish/0`, finalWinnerId);
         }
@@ -462,7 +467,7 @@ const GameMatchView = () => {
         }
 
         return (
-            <div className="stats-container">
+            <div className='game-resume-container'>
                 <h1
                     style={{
                         color: message.includes("VICTORIA")
@@ -494,7 +499,7 @@ const GameMatchView = () => {
         }
 
         return (
-            <>
+            <div className='game-resume-container'>
                 {response ? (
                     <div>
                         <h3 style={{ color: 'var(--link-color)' }}>Puntaje Total</h3>
@@ -506,7 +511,7 @@ const GameMatchView = () => {
                     <>No se pudo obtener la informacion</>
                 )}
 
-            </>
+            </div>
         );
     }
 
@@ -515,13 +520,15 @@ const GameMatchView = () => {
 
         return (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <div className='final-game-resume' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'fit-content', width: '100%' }}>
-                    <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} />
-                    <div className='final-game-resume-container' >
-                        {finalGameResume}
-                    </div>
+                <div className='final-game-resume'>
+                    <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} width={isMobile ? '80%' : isLargeScreen ? '100%' : '60%'} />
+                    <ScaleTransition>
+                        <div className='final-game-resume-container' >
+                            {finalGameResume}
+                        </div>
+                    </ScaleTransition>
+                    <button onClick={onMatchClosed}>Menu Principal</button>
                 </div>
-                <button onClick={onMatchClosed}>Menu Principal</button>
             </div>
         );
     };
@@ -543,16 +550,16 @@ const GameMatchView = () => {
                                     rerenderKey={characterDialogue}
                                     autoStart={isGameReady}
                                     words={characterDialogue}
+                                    hideDialogue={!isGameReady}
+                                    width={isMobile ? '' : 'auto'}
                                 />
                             </div>
                             {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
-                                <div>
-                                    <p><b style={{ color: 'var(--link-color)' }}>Ronda</b></p>
-                                    <p><b>{currentGameIndex + 1}/{GAME_SETTINGS.MAX_ROUNDS}</b></p>
-                                    <p><b style={{ color: 'var(--link-color)' }}>Pistas disponibles</b></p>
-                                    <p><b>{hintCounter || 0}/{GAME_SETTINGS.MAX_HINTS}</b></p>
-                                </div>
-                                {!isGameFinished && <CircleTimer
+                                <GameStats
+                                    currentGameIndex={currentGameIndex}
+                                    hintCounter={hintCounter}
+                                />
+                                <CircleTimer
                                     key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
                                     isLooping={true}
                                     loopDelay={0.5}
@@ -560,8 +567,8 @@ const GameMatchView = () => {
                                     duration={timeRemaining}
                                     onTimeUpdate={handleTimeUpdate}
                                     onTimerComplete={handleTimerComplete}
-                                    size={isMobile ? 130 : 150}
-                                />}
+                                    size={isMobile ? 100 : 150}
+                                />
                             </div>}
                         </div>
                     </div>
@@ -572,14 +579,12 @@ const GameMatchView = () => {
                 rightContent={
                     <div style={{ maxWidth: '90%' }}>
                         {isMultiplayer && <MultiplayerHUD />}
-                        <div>
-                            <p><b style={{ color: 'var(--link-color)' }}>Ronda</b></p>
-                            <p><b>{currentGameIndex + 1}/{GAME_SETTINGS.MAX_ROUNDS}</b></p>
-                            <p><b style={{ color: 'var(--link-color)' }}>Pistas disponibles</b></p>
-                            <p style={{marginBottom:'0px'}}><b>{hintCounter || 0}/{GAME_SETTINGS.MAX_HINTS}</b></p>
-                        </div>
+                        <GameStats
+                            currentGameIndex={currentGameIndex}
+                            hintCounter={hintCounter}
+                        />
                         <br />
-                        {!isGameFinished && <CircleTimer
+                        <CircleTimer
                             key={currentGameIndex} // El timer se reinicia cada vez que se cambia el index
                             isLooping={true}
                             loopDelay={0.5}
@@ -587,16 +592,16 @@ const GameMatchView = () => {
                             duration={timeRemaining}
                             onTimeUpdate={handleTimeUpdate}
                             onTimerComplete={handleTimerComplete}
-                        />}
+                        />
                     </div>
                 }
             />
 
-            <Modal showModal={isModalOpen} hideConfirmBtn={true} hideCloseBtn={true} title="Ronda Finalizada">
-                {winner && <h2><span style={{ color: 'var(--link-color)' }}>"{winner}"</span> es el ganador de la ronda!</h2>}
+            <SmallModal showModal={isModalOpen} title="">
+                {winner && <h2><span style={{ color: 'var(--link-color)' }}>"{winner}"</span> es el ganador!</h2>}
                 {currentGameIndex < 2 && <h3>Preparate para la siguiente ronda!</h3>}
                 <ClockLoader size={80} />
-            </Modal>
+            </SmallModal>
         </div>
     );
 };

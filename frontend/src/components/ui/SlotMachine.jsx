@@ -181,12 +181,12 @@ const SlotMachine = () => {
                                     MC: "Multiple Opcion"
                                 };
 
-                                const mensajePersonalizado = mensajes[result.mode];
+                                const gameModeFullName = mensajes[result.mode];
 
                                 return (
                                     <tr key={index}>
                                         <td>{result.category}</td>
-                                        <td>{mensajePersonalizado || result.mode}</td>
+                                        <td>{gameModeFullName || result.mode}</td>
                                     </tr>
                                 );
                             })

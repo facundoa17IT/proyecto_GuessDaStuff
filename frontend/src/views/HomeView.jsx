@@ -9,6 +9,9 @@ import { FaRegPlayCircle, FaTools, FaAppStoreIos } from "react-icons/fa";
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { BsInfoCircle } from "react-icons/bs";
 
+/** Anim **/
+import HorizontalSlideTransition from '../components/anim/HorizontalSlideTransition';
+
 /** Components **/
 import MobileHomeView from '../views/MobileHomeView';
 import LogoutButton from '../components/ui/LogoutButton'
@@ -52,7 +55,9 @@ const HomePage = () => {
 		<div className='home-page-wrapper'>
 			<div className='home-page-header'>
 				{role === 'ROLE_ADMIN' && <h2><FaTools style={{ marginRight: '5px' }} />GDS Admin Panel</h2>}
-				<AppLogo />
+				<HorizontalSlideTransition>
+					<AppLogo />
+				</HorizontalSlideTransition>
 			</div>
 			<div className='home-page-body'>
 				{isMobile ? (

@@ -31,9 +31,7 @@ export const UserDetails = () => {
 
     return (
         <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
-            <div style={{ width:'100%', height: '100%', overflowY: 'auto', overflowX: 'hidden', }}>
-                {modalContent}
-            </div>
+            {modalContent}
         </Modal >
     );
 };

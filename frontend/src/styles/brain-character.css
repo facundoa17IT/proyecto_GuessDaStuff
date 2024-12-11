@@ -1,5 +1,6 @@
 .brain-character {
     /* width: 80%; */
+    object-fit: contain;
 }
 
 .character-container {
