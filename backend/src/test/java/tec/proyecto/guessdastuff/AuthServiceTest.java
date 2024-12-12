@@ -76,14 +76,11 @@ public class AuthServiceTest {
 
     private User testUser;
     private DtoLoginRequest loginRequest;
-    private DtoRegisterRequest registerRequest;
-
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.openMocks(this);  // Initializes mocks
         authService = new AuthService(userRepository, jwtService, passwordEncoder, authenticationManager, dateConverter);
-        //authService = new AuthService(userRepository, jwtService, null, authenticationManager, null);  // Pass mocked dependencies
-        registerRequest = new DtoRegisterRequest("testuser", "password123", "testuser@example.com", 0, "url", "USA", new DtoDate(1, 1, 2000));
+        new DtoRegisterRequest("testuser", "password123", "testuser@example.com", 0, "url", "USA", new DtoDate(1, 1, 2000));
         // Configura el mock de dateConverter para que devuelva una fecha específica
         lenient().when(dateConverter.toLocalDate(any(DtoDate.class))).thenReturn(LocalDate.of(2000, 1, 1));
         
@@ -356,8 +353,7 @@ public class AuthServiceTest {
     
     LocalDate birthdate = LocalDate.of(2000, 1, 1);
 
-    // Creación manual de la instancia User
-    User userToSave = User.builder()
+    User.builder()
         .username(request.getUsername())
         .password("encodedPassword") // La contraseña ya codificada
         .email(request.getEmail())
@@ -466,15 +462,6 @@ public class AuthServiceTest {
         assertEquals(2, result.size()); // La lista debe contener dos elementos
         assertTrue(result.contains(user1)); // Debe contener al usuario1
         assertTrue(result.contains(user2)); // Debe contener al usuario2
-    }
-
-    // Utility method for String -> DtoDate conversion
-    private DtoDate parseStringToDtoDate(String dateStr) {
-    String[] parts = dateStr.split("-"); // Split the date by "-"
-    int anio = Integer.parseInt(parts[0]);  // Year
-    int mes = Integer.parseInt(parts[1]);   // Month
-    int dia = Integer.parseInt(parts[2]);   // Day
-    return new DtoDate(anio, mes, dia);     // Return the DtoDate object
     }
 
     @Test

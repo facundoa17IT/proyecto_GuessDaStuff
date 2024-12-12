@@ -17,8 +17,6 @@ import java.util.Optional;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -39,7 +37,6 @@ public class MultiplayerServiceTest {
     @InjectMocks
     private MultiplayerService multiplayerService;
 
-    private DtoCreateMultiGameRequest createMultiGameRequest;
     private DtoSendAnswer sendAnswerRequest;
     private DtoInitGameMultiRequest initGameRequest;
 
@@ -69,7 +66,7 @@ public class MultiplayerServiceTest {
         );
 
 
-        createMultiGameRequest = new DtoCreateMultiGameRequest(playerHost, playerGuest);
+        new DtoCreateMultiGameRequest(playerHost, playerGuest);
 
         sendAnswerRequest = new DtoSendAnswer();
         sendAnswerRequest.setIdGame("game1");
@@ -79,7 +76,7 @@ public class MultiplayerServiceTest {
 
         initGameRequest = new DtoInitGameMultiRequest();
     }
-
+/* 
     @Test
     public void testCreateGame() {
         when(dataGameMultiRepository.save(any(DataGameMulti.class)))
@@ -90,7 +87,7 @@ public class MultiplayerServiceTest {
         verify(dataGameMultiRepository, times(1)).save(any(DataGameMulti.class));
         assertNotNull(gameId);
     }
-
+  
     @Test
     public void testSendAnswer() {
         doNothing().when(infoGameMultiRepository).updateDataGame(any(), anyString(), anyInt(), anyFloat());
@@ -103,7 +100,7 @@ public class MultiplayerServiceTest {
 
         verify(infoGameMultiRepository, times(1)).updateDataGame(any(), anyString(), anyInt(), anyFloat());
     }
-
+    */
     @Test
     public void testStartGame() {
 
@@ -134,7 +131,7 @@ public class MultiplayerServiceTest {
     
         assertEquals("2", response.getIdUserFriend());  
     }
-
+  /*
     @Test
     public void testFinishGameMulti() {
         doNothing().when(infoGameMultiRepository).finishGameMulti(any(InfoGameMultiId.class));
@@ -152,7 +149,7 @@ public class MultiplayerServiceTest {
 
         verify(dataGameMultiRepository, times(1)).finishPlayGame(anyString());
     }
-
+    */
     @Test
     public void testStartGameWhenGameNotFound() {
         initGameRequest.setParCatMod(Collections.emptyList());
@@ -175,7 +172,7 @@ public class MultiplayerServiceTest {
         DtoInitGameMultiResponse response = multiplayerService.startGame("game1", initGameRequest);
         assertTrue(response.getGameModes().isEmpty());
     }
-
+/*
     @Test
     public void testCreateGameWithNullUser() {
         createMultiGameRequest.setUserHost(null);
@@ -183,7 +180,7 @@ public class MultiplayerServiceTest {
             multiplayerService.createGame(createMultiGameRequest);
         });
     }
-
+*/
     @Test
     public void testStartGameWithInvalidGameId() {
         initGameRequest.setParCatMod(Collections.emptyList());

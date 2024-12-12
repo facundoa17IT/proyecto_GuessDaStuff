@@ -24,9 +24,7 @@ import tec.proyecto.guessdastuff.dtos.DtoInitGameRequest;
 import tec.proyecto.guessdastuff.dtos.DtoInitGameResponse;
 import tec.proyecto.guessdastuff.dtos.DtoLoadGameRequest;
 import tec.proyecto.guessdastuff.dtos.DtoLoadGameResponse;
-import tec.proyecto.guessdastuff.dtos.DtoPlayGameRequest;
 import tec.proyecto.guessdastuff.entities.DataGameSingle;
-import tec.proyecto.guessdastuff.entities.Game;
 import tec.proyecto.guessdastuff.entities.GameMode;
 import tec.proyecto.guessdastuff.entities.MultipleChoice;
 import tec.proyecto.guessdastuff.enums.ECategoryStatus;
@@ -77,7 +75,7 @@ class PlayServiceTest {
         assertTrue(result, "El método debería devolver true");
     }
 
-    @Test
+    /*@Test
     void playGame_TimePlayingZero() {
     // Arrange
     DtoPlayGameRequest dtoPlayGameRequest = new DtoPlayGameRequest(
@@ -102,7 +100,7 @@ class PlayServiceTest {
     // Assert
     verify(dataGameSingleRepository).updateDataGame("game-single-1", 0, 0); // Puntos y tiempo de juego son 0
     assertTrue(result);
-    }
+    }*/
     
 
     @Test

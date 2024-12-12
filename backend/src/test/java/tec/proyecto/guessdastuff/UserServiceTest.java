@@ -23,11 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException; 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tec.proyecto.guessdastuff.dtos.DtoAdmin;
 import tec.proyecto.guessdastuff.dtos.DtoUserRequest;
@@ -48,9 +45,6 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository userRepo;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Mock
     private CloudinaryService cloudinaryService;
