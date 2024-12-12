@@ -319,8 +319,11 @@ fieldset {
   height: 100%;
 }
 
-.motion-div{
-  display: inline-block;
+.motion-div, .scale-transition-motion-div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .game-resume-container{

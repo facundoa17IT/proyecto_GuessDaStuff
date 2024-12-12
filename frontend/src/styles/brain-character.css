@@ -1,10 +1,11 @@
 .brain-character {
-    /* width: 80%; */
+    width: 100%;
     object-fit: contain;
 }
 
 .character-container {
     margin: 3%;
+    min-width: 300px;
 }
 
 /***** Hint Globe *****/
@@ -39,22 +40,20 @@
     position: absolute;
     top: 40%;
     left: 50%;
-    /* Center the text */
     transform: translate(-50%, -50%);
     color: black;
     font-size: clamp(1.2rem, 2vw, 1.6rem); /* Texto legible en cualquier pantalla */
     text-align: center;
     font-weight: bold;
-    /* Makes the text layer fit within the container width */
-    width: 90%;
-    /* Text layer above the background */
+    width: 70%;
     z-index: 2;
-    /* Allows text to wrap within the width */
     white-space: normal;
-    /* Ensures text breaks correctly */
     overflow-wrap: break-word;
 }
-
+/* 
+.Typewriter{
+    width: 80%;
+} */
 .globe-hint-img {
     position: absolute;
     top: 40%;
@@ -63,3 +62,18 @@
     height: 80px;
     z-index: 2;
 }
+
+@media (max-width: 650px) {
+    .character-container {
+        min-width: 250px;
+    }
+  }
+
+/** mobile **/
+
+@media (max-width: 450px) {
+    .character-container {
+        min-width: 200px;
+    }
+  }
+

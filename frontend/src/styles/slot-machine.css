@@ -1,8 +1,6 @@
 .slot-machine-container {
   text-align: center;
   /* Centra el texto dentro del contenedor */
-  margin-top: 50px;
-  /* Espacio superior del contenedor */
 }
 
 .slot-machine {
