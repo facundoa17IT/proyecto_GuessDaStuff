@@ -1,44 +1,55 @@
-// package tec.proyecto.guessdastuff;
+package tec.proyecto.guessdastuff;
 
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.MockitoAnnotations;
-// import tec.proyecto.guessdastuff.repositories.LoadDataRepository;
-// import tec.proyecto.guessdastuff.services.LoadDataService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import static org.mockito.Mockito.times;
-// import static org.mockito.Mockito.verify;
+import tec.proyecto.guessdastuff.repositories.LoadDataRepository;
+import tec.proyecto.guessdastuff.services.LoadDataService;
 
-// class LoadDataServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-//     @InjectMocks
-//     private LoadDataService loadDataService;
+import static org.mockito.Mockito.*;
 
-//     @Mock
-//     private LoadDataRepository loadDataRepository;
+@SpringBootTest
+class LoadDataServiceTest {
 
-//     @BeforeEach
-//     void setUp() {
-//         MockitoAnnotations.openMocks(this);
-//     }
+    @Mock
+    private LoadDataRepository loadDataRepository;
 
-//     @Test
-//     void testLoadData_ShouldCallRepositoryMethodsAndReturnSuccessMessage() {
-//         // Call the method
-//         String result = loadDataService.loadData();
+    @InjectMocks
+    private LoadDataService loadDataService;
 
-//         // Verify that each repository method is called once
-//         verify(loadDataRepository, times(1)).insertUsers();
-//         verify(loadDataRepository, times(1)).insertGameModes();
-//         verify(loadDataRepository, times(1)).insertCategories();
-//         verify(loadDataRepository, times(1)).insertMultipleMC();
-//         verify(loadDataRepository, times(1)).insertMultiplesOW();
-//         verify(loadDataRepository, times(1)).insertMultipleGP();
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-//         // Assert the return message
-//         assertEquals("Data creada con exito", result);
-//     }
-// }
+    @Test
+    void testLoadData() {
+        doNothing().when(loadDataRepository).insertUsers();
+        doNothing().when(loadDataRepository).insertGameModes();
+        doNothing().when(loadDataRepository).insertCategories();
+        doNothing().when(loadDataRepository).insertMultipleMC();
+        doNothing().when(loadDataRepository).insertMultiplesOW();
+        doNothing().when(loadDataRepository).insertMultipleGP();
+
+        String result = loadDataService.loadData();
+
+        assertEquals("Data creada con exito", result);
+
+        verify(loadDataRepository, times(1)).insertUsers();
+        verify(loadDataRepository, times(1)).insertGameModes();
+        verify(loadDataRepository, times(1)).insertCategories();
+        verify(loadDataRepository, times(1)).insertMultipleMC();
+        verify(loadDataRepository, times(1)).insertMultiplesOW();
+        verify(loadDataRepository, times(1)).insertMultipleGP();
+
+        verifyNoMoreInteractions(loadDataRepository);
+    }
+}
