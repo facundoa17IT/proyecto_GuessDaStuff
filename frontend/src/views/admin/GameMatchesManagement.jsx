@@ -86,7 +86,7 @@ const GameMatchesManagement = () => {
     };
 
     return (
-        <>
+        <div>
             <MainGameLayout
                 canGoBack={false}
                 hideLeftPanel={true}
@@ -109,7 +109,7 @@ const GameMatchesManagement = () => {
             <Modal showModal={isModalOpen} onConfirm={() => setIsModalOpen(!isModalOpen)} closeModal={() => setIsModalOpen(!isModalOpen)} title="Detalles" innerOutline={true}>
                 {renderListItemDetails(selectedItem)}
             </Modal >
-        </>
+        </div>
     );
 };
 

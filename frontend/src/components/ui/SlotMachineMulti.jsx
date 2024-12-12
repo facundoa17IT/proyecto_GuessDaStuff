@@ -2,6 +2,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import BrainCharacter from './BrainCharacter';
+
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
 import { SocketContext } from '../../contextAPI/SocketContext';
@@ -22,11 +24,7 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
 
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    useEffect(() => {
-        setTimeout(() => {
-            spin();
-        }, 1000);
-    }, []);
+    const [characterSprite, setCharacterSprite] = useState('thinking');
 
     const gameModeIcons = {
         GP: "🔤",
@@ -69,6 +67,12 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;
 
+    useEffect(() => {
+        setTimeout(() => {
+            spin();
+        }, 1000);
+    }, []);
+
     // Función para hacer girar los slots
     const spin = () => {
         setIsSpinning(true); // Establece el estado de giro a verdadero
@@ -85,6 +89,8 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
         setTimeout(() => {
             clearInterval(spinInterval); // Detiene el intervalo de giro
 
+            setCharacterSprite('start');
+            
             // Se asignan los  valores hardcodeados
             setSlot1(getEmojiByKey(finalSlot1)); // Establece el valor final del slot 1
             setSlot2(getEmojiByKey(finalSlot2)); // Establece el valor final del slot 2
@@ -136,6 +142,7 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
+            <BrainCharacter spriteKey={characterSprite} hideDialogue={true}/>
             <div className="slot-machine"> {/* Contenedor de los slots */}
 
                 {/* Tercer slot */}

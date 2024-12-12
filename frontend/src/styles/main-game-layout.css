@@ -38,6 +38,7 @@
     flex-direction: column;
     align-items: center;
     padding: 25px;
+    box-sizing: border-box;
     /* Allows each div to grow equally */
     /* flex-grow: 1; */
     /* flex-basis: 0; /*Ensures all divs start at the same width, ignoring content */

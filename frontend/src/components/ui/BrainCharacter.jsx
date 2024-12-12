@@ -3,6 +3,8 @@ import React from 'react';
 
 /** Sprites **/
 import idle from '../../assets/idle_brain.png'
+import thinking from '../../assets/thinking-brain.png'
+import startGame from '../../assets/start-game-brain.png'
 import finishGame from '../../assets/finish-game-brain.png'
 import correctAnswer from '../../assets/correct-answer-brain.png'
 import wrongAnswer from '../../assets/wrong-answer-brain.png'
@@ -24,6 +26,8 @@ import '../../styles/brain-character.css'
 const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, spriteKey = 'idle', width = 'auto' }) => {
     // Define available sprites
     const sprites = {
+        start: startGame,
+        thinking: thinking,
         idle: idle,
         hint: hint,
         correct: correctAnswer,
@@ -40,7 +44,7 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
             {!hideDialogue && (
                 <ScaleTransition key={words}>
                 <div className="globe-hint-container">
-                        <img src={HintGlobe} alt="Globe" className="globe-hint-background" />
+                    <img src={HintGlobe} alt="Globe" className="globe-hint-background" />
                     <div className="globe-hint-text">
                         <Typewriter
                             options={{
@@ -60,7 +64,8 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
                 </ScaleTransition>
             )}
             <HorizontalSlideTransition key={spriteKey}>
-                <img className="brain-character" src={currentSprite} alt="Brain Character" style={{width: `${width}`}} />
+            {/* style={{width: `${width}`}} */}
+                <img className="brain-character" src={currentSprite} alt="Brain Character"  />
             </HorizontalSlideTransition>
         </div>
     );

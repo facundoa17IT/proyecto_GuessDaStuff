@@ -1,5 +1,8 @@
 .list-wrapper {
     height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* O row si quieres alinearlos horizontalmente */
 }
 
 .list-container {
@@ -7,12 +10,10 @@
     flex-direction: column; /*row*/
     justify-content: flex-start; /*center*/
     align-items: center;
-    width: 100%;
     margin-top: 15px;
     border: 2px solid var(--border-color);
     border-radius: 8px;
-    /* height: calc(45vh - 1rem); */
-    height: 80%;
+    height: calc(100dvh - 325px); /** 325px = Navbar + Main Game Layout Header + List Header**/
 }
 
 .list-header {
@@ -44,7 +45,8 @@
     align-items: center;
     /* margin: 10px; */
     transition: transform 0.25s, letter-spacing 0.25s;
-    height: 35px;
+    /* height: 35px; */
+    flex: 1;
     border-top: 2px solid var(--border-color);
     width: 100%;
     background: none;
@@ -56,7 +58,6 @@
     flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
-    /* margin: 10px; */
     transition: transform 0.25s, letter-spacing 0.25s;
     height: 35px;
 }
@@ -76,23 +77,4 @@
 
 .list-external-footer button:hover{
     box-shadow: none !important;
-}
-
-/****** Responsive *****/
-
-@media (max-width: 1366px) {
-
-    .list-external-footer{
-        margin: 10px;
-    }
-
-    .list-body {
-        max-height: 220px;
-    }
-}
-
-@media (max-width: 450px) {
-    .list-body {        
-        max-height: 260px;
-    }
 }

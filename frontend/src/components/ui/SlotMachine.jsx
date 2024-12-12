@@ -2,6 +2,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import BrainCharacter from './BrainCharacter';
+
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useRole } from '../../contextAPI/AuthContext'
@@ -17,12 +19,8 @@ const SlotMachine = () => {
     const { userId } = useRole();  // Access the setRole function from the context
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        setTimeout(() => {
-            spin();
-        }, 1000);
-    }, []);
+    
+    const [characterSprite, setCharacterSprite] = useState('thinking');
 
     const gameModeIcons = {
         GP: "🔤",
@@ -70,6 +68,12 @@ const SlotMachine = () => {
         return array[Math.floor(Math.random() * array.length)];
     };
 
+    useEffect(() => {
+        setTimeout(() => {
+            spin();
+        }, 1000);
+    }, []);
+
     // Función para hacer girar los slots
     const spin = () => {
         setIsSpinning(true); // Establece el estado de giro a verdadero
@@ -85,6 +89,8 @@ const SlotMachine = () => {
         // Detener el giro después de spinDuration
         setTimeout(() => {
             clearInterval(spinInterval); // Detiene el intervalo de giro
+
+            setCharacterSprite('start');
 
             // Selecciona el modo final para cada slot
             const finalSlot1 = getRandomItem(gameModes1);
@@ -140,6 +146,10 @@ const SlotMachine = () => {
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+
+            <BrainCharacter spriteKey={characterSprite} hideDialogue={true}/>
+        </div>
             <div className="slot-machine"> {/* Contenedor de los slots */}
 
                 {/* Tercer slot */}
