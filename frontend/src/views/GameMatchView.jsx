@@ -291,6 +291,23 @@ const GameMatchView = () => {
             catch (error) {
                 console.error(error);
             }
+        }else{
+            try {
+                const gameKeys = Object.keys(initGameModes);
+                const currentGameKey = gameKeys[currentGameIndex];
+                const gameInfo = initGameModes[currentGameKey].infoGame[0];
+                const { id } = gameInfo; // game mode id
+
+                await axiosInstance.post("/game-single/v1/play-game", {
+                    idGameSingle: gameId,
+                    idUser: userId,
+                    response: '',
+                    idGame: id, // game mode id
+                    time_playing: 30
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
         setCharacterDialogue("Tiempo fuera!");
         setCurrentCharacterSprite('timeout');
