@@ -1,11 +1,14 @@
 /** React **/
 import React, { useState } from 'react';
 import axiosInstance from '../../utils/AxiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     const handleForgotPassword = async (event) => {
         event.preventDefault();
@@ -37,7 +40,11 @@ const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <button type="submit">Enviar</button>
+                <button onClick={() => { 
+                    setTimeout(() => {
+                        navigate("/reset-password")
+                    }, 2000) 
+                }} type="submit">Enviar</button>
             </form>
         </div>
     );

@@ -1,51 +1,73 @@
 /** React **/
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 /** Context API **/
 import { useRole } from '../../contextAPI/AuthContext'
-import axiosInstance from '../../utils/AxiosConfig';
 import { SocketContext } from '../../contextAPI/SocketContext';
 
 /** Utils **/
+import axiosInstance from '../../utils/AxiosConfig';
 import { PLAYER_ROUTES } from '../../utils/constants';
 
 /** Style **/
 import '../../styles/slot-machine.css';
 
-const SlotMachineMulti = () => {
-    const location = useLocation();
+const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame }) => {
     const navigate = useNavigate();
 
     const { userId } = useRole();  // Access the setRole function from the context
-
-    const { ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame } = location.state || {};
-
 
     const { usernameHost } = useContext(SocketContext);
 
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
     useEffect(() => {
-        //console.log(`loadGameData: ${JSON.stringify(loadGameData, null, 2)}`);
-        console.log("user id slot machine -> " + userId);
         setTimeout(() => {
             spin();
         }, 1000);
     }, []);
 
+    const gameModeIcons = {
+        GP: "🔤",
+        OW: "🔁",
+        MC: "🔢"
+    };
+
+    // Asocia cada modo de juego con su emoji correspondiente
+    const mapGameModesToPairs = (gameModes) => {
+        return gameModes
+            .filter(mode => gameModeIcons[mode]) // Filter valid modes
+            .map(mode => ({ mode, emoji: gameModeIcons[mode] })); // Create pairs
+    };
+    
+    // Coleccion de modos de juego
+    const gameModes1 = ruletaGame.categories[0].gameModes || [];
+    const gameModes2 = ruletaGame.categories[1].gameModes || [];
+    const gameModes3 = ruletaGame.categories[2].gameModes || [];
+    
+    const gameModePairs1 = mapGameModesToPairs(gameModes1);
+    const gameModePairs2 = mapGameModesToPairs(gameModes2);
+    const gameModePairs3 = mapGameModesToPairs(gameModes3);
+
+    const getRandomEmoji = (gamePairs) => {
+        if (!gamePairs || gamePairs.length === 0) return null; // Manejar casos vacíos o inválidos
+        const randomIndex = Math.floor(Math.random() * gamePairs.length); // Índice aleatorio
+        return gamePairs[randomIndex].emoji; // Retornar solo el emoji del par aleatorio
+    };
+
+    const getEmojiByKey = (key) => {
+        return gameModeIcons[key] || null; // Retorna el emoji o null si la clave no existe
+    };
+
     // Estado para almacenar el valor de cada slot
-    const [slot1, setSlot1] = useState(ruletaGame.categories[0].gameModes[0]); // Inicializa con el primer modo de la primera categoría
-    const [slot2, setSlot2] = useState(ruletaGame.categories[1].gameModes[0]); // Inicializa con el primer modo de la segunda categoría
-    const [slot3, setSlot3] = useState(ruletaGame.categories[2].gameModes[0]); // Inicializa con el primer modo de la tercera categoría
+    const [slot1, setSlot1] = useState("❓");
+    const [slot2, setSlot2] = useState("❓");
+    const [slot3, setSlot3] = useState("❓");
+    
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;
-
-    // Función para obtener un elemento aleatorio de un array
-    const getRandomItem = (array) => {
-        return array[Math.floor(Math.random() * array.length)];
-    };
 
     // Función para hacer girar los slots
     const spin = () => {
@@ -54,9 +76,9 @@ const SlotMachineMulti = () => {
 
         // Simulación del giro de los slots
         let spinInterval = setInterval(() => {
-            setSlot1(getRandomItem(ruletaGame.categories[0].gameModes)); // Cambia el slot 1 a un modo aleatorio
-            setSlot2(getRandomItem(ruletaGame.categories[1].gameModes)); // Cambia el slot 2 a un modo aleatorio
-            setSlot3(getRandomItem(ruletaGame.categories[2].gameModes)); // Cambia el slot 3 a un modo aleatorio
+            setSlot1(getRandomEmoji(gameModePairs1)); // Cambia el slot 1 a un modo aleatorio
+            setSlot2(getRandomEmoji(gameModePairs2)); // Cambia el slot 2 a un modo aleatorio
+            setSlot3(getRandomEmoji(gameModePairs3)); // Cambia el slot 3 a un modo aleatorio
         }, spinDuration * 0.05); // Intervalo entre cambios
 
         // Detener el giro después de spinDuration
@@ -64,9 +86,9 @@ const SlotMachineMulti = () => {
             clearInterval(spinInterval); // Detiene el intervalo de giro
 
             // Se asignan los  valores hardcodeados
-            setSlot1(finalSlot1);
-            setSlot2(finalSlot2);
-            setSlot3(finalSlot3);
+            setSlot1(getEmojiByKey(finalSlot1)); // Establece el valor final del slot 1
+            setSlot2(getEmojiByKey(finalSlot2)); // Establece el valor final del slot 2
+            setSlot3(getEmojiByKey(finalSlot3)); // Establece el valor final del slot 3
 
             // Crear objetos de resultado para cada slot
             const result1 = {
@@ -84,9 +106,6 @@ const SlotMachineMulti = () => {
                 mode: finalSlot3,
                 id: ruletaGame.categories[2].id
             };
-            console.log(finalSlot1);
-            console.log(finalSlot2);
-            console.log(finalSlot3);
 
             // Establecer los resultados en el estado
             const resultsArray = [result1, result2, result3];
@@ -141,19 +160,47 @@ const SlotMachineMulti = () => {
                 </div>
             </div>
 
-            <div className="results"> {/* Contenedor para mostrar los resultados */}
-                {results.length > 0 && (
-                    <ul>
-                        {results.slice().reverse().map((result, index) => (
-                            <li key={index}>
-                                {result.category}: {result.mode}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            <div className="results">
+                <table className="centered-table">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Modo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {results.length > 0 ? (
+                            results.slice().reverse().map((result, index) => {
+                                const mensajes = {
+                                    GP: "Adivina la Frase",
+                                    OW: "Ordena la Palabra",
+                                    MC: "Multiple Opcion"
+                                };
+
+                                const mensajePersonalizado = mensajes[result.mode];
+
+                                return (
+                                    <tr key={index}>
+                                        <td>{result.category}</td>
+                                        <td>{mensajePersonalizado || result.mode}</td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            // Mostrar tabla de 3x3 con signos de interrogación
+                            Array.from({ length: 3 }).map((_, rowIndex) => (
+                                <tr key={rowIndex}>
+                                    {Array.from({ length: 2 }).map((_, colIndex) => (
+                                        <td key={colIndex}>?</td>
+                                    ))}
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
 };
 
-export default SlotMachineMulti; // Exportar el componente
+export default SlotMachineMulti;

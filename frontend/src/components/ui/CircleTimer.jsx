@@ -16,9 +16,9 @@ const renderTime = ({ remainingTime }) => {
   );
 };
 
-const CircleTimer = ({isLooping = false, loopDelay = 0 , isPlaying, duration = 10, onTimerComplete = () => {}, onTimeUpdate = () => {}}) => {
+const CircleTimer = ({size=150, isLooping = false, loopDelay = 0 , isPlaying, duration = 10, onTimerComplete = () => {}, onTimeUpdate = () => {}}) => {
   return (
-    <div style={{display:'flex', justifyContent:'center', alignItems:'center', margin:'15px'}}>
+    <div style={{display:'flex', justifyContent:'center', alignItems:'center', margin:'5px'}}>
       <div className="timer-wrapper">
         <CountdownCircleTimer
           isPlaying={isPlaying}
@@ -34,8 +34,7 @@ const CircleTimer = ({isLooping = false, loopDelay = 0 , isPlaying, duration = 1
             onTimerComplete();
             return { shouldRepeat: isLooping, delay: loopDelay } // repeat animation in 1.5 seconds
           }}
-          //onComplete={onTimerComplete} // Use the onComplete prop passed from the parent
-          size={150}
+          size={size}
         >
           {renderTime}
         </CountdownCircleTimer>

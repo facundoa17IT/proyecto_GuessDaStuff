@@ -56,7 +56,7 @@ const LoadGame = () => {
         if (!isMultiplayer) {
             if (Object.keys(initGameBody).length > 0) {
                 initializeSingleplayerGame();
-                console.log(`Slot: ${JSON.stringify(initGameBody, null, 2)}`);
+                // console.log(`Slot: ${JSON.stringify(initGameBody, null, 2)}`);
             }
         }
     }, [initGameBody]); // Este valor se actualiza luego de ejecutar SlotMachine (singleplayer)

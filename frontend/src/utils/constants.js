@@ -1,5 +1,3 @@
-import { m } from "framer-motion";
-
 export const STATUS = {
     ONLINE: "ONLINE",
     OFFLINE: "OFFLINE",
@@ -28,22 +26,22 @@ export const PUBLIC_ROUTES = {
     SELECTION_PHASE: "/selection-phase",
     INIT_GAME: "/init-game",
     SINGLE_GAME_LOBBY: "single-game-lobby",
-    FORGOT_PASSWORD: '/forgot-password'
+    FORGOT_PASSWORD: 'forgot-password'
   
 }
 
 export const ADMIN_ROUTES = {
-    CONTENT_MANAGEMENT: "admin/game-content-management",
-    ADD_CATEGORY: "admin/add-category",
-    CATEGORY_DETAILS: "admin/category-details",
-    EDIT_CATEGORY: "admin/edit-category",
-    DELETE_CATEGORY: "admin/delete/category",
-    ADD_TITLE: "admin/add-title",
-    USERS_MANAGEMENT: "admin/users-management",
-    USER_DETAILS: "admin/user-details",
-    BLOCK_USER: "admin/block-user",
-    UNBLOCK_USER: "admin/unblock-user",
-    DELETE_USER: "admin/delete-user"
+    CONTENT_MANAGEMENT: "/admin/game-content-management",
+    ADD_CATEGORY: "/admin/add-category",
+    CATEGORY_DETAILS: "/admin/category-details",
+    EDIT_CATEGORY: "/admin/edit-category",
+    DELETE_CATEGORY: "/admin/delete/category",
+    ADD_TITLE: "/admin/add-title",
+    USERS_MANAGEMENT: "/admin/users-management",
+    USER_DETAILS: "/admin/user-details",
+    BLOCK_USER: "/admin/block-user",
+    UNBLOCK_USER: "/admin/unblock-user",
+    DELETE_USER: "/admin/delete-user"
 }
 
 export const PLAYER_ROUTES = {
@@ -54,4 +52,10 @@ export const PLAYER_ROUTES = {
     SLOT_MACHINE: '/slot-machine-multi',
     RANKING: '/ranking',
     LOAD_GAME: '/load-game'
+}
+
+export const GAME_SETTINGS = {
+    TIME: 30,
+    MAX_HINTS: 3,
+    MAX_ROUNDS: 3
 }

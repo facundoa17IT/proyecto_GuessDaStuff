@@ -10,7 +10,7 @@ import WaitingLobby from '../components/layouts/WaitingLobby';
 
 /** Utils **/
 import axiosInstance from "../utils/AxiosConfig";
-import { PLAYER_ROUTES } from '../utils/constants';
+import { PUBLIC_ROUTES, ROLE } from '../utils/constants';
 import { invitationData, setInviteAction, setResponseIdGame, getRandomItem } from '../utils/Helpers';
 
 /** Context API **/
@@ -36,16 +36,15 @@ const MultiplayerLobby = () => {
     // Almacena username, userId, email
     const userObj = JSON.parse(localStorage.getItem("userObj"));
 
-    const [connectedUsers, setConnectedUsers] = useState(() => {
-        const storedUsers = JSON.parse(localStorage.getItem("connectedUsers"));
-        return storedUsers || [];
-    });
+    const [connectedUsers, setConnectedUsers] = useState([]);
 
     //Se actualiza la lista cada vez que hay un cambio de usuario
     useEffect(() => {
-        setConnectedUsers(users);
-        filterSelfUsername();
-        console.log(users);
+        // Filter users whenever `users` changes
+        const updatedList = users.filter(
+            (item) => item.username !== userObj.username && item.status !== ROLE.ADMIN
+        );
+        setConnectedUsers(updatedList);
     }, [users]);
 
     // Limpiamos el local storage de host y guest
@@ -53,14 +52,7 @@ const MultiplayerLobby = () => {
         localStorage.removeItem("host");
 		localStorage.removeItem("guest");
         localStorage.setItem("host", JSON.stringify(userObj));
-        filterSelfUsername();
     }, []);
-
-    // Remueve el propio host de la lista de usuarios conectados
-    const filterSelfUsername = () => {
-        const updatedList = connectedUsers.filter(item => item.username !== userObj.username);
-        setConnectedUsers(updatedList);
-    }
 
     // 1)
     // Se envia la invitacion al persionar el boton de invitar
@@ -119,13 +111,15 @@ const MultiplayerLobby = () => {
 
             const userGuest = {
                 username: selectedItem.username,
-                userId: selectedItem.id
+                userId: selectedItem.userId
             };
 
             const createGameBody = {
                 userHost: userHost,
                 userGuest: userGuest
             };
+
+            console.log(createGameBody);
 
             const response = await axiosInstance.post('/game-multi/v1/create/', createGameBody, { requiresAuth: true });
             console.log(response.data);
@@ -155,7 +149,7 @@ const MultiplayerLobby = () => {
     // 4) si el usario acepta la partida me suscribo al canal del juego y le envio al invitado el id de la partida
     // Se ejecuta cuando obtengo el valor de gameId
     useEffect(() => {
-        if (gameId !== null) {
+        if (gameId != null) {
             setResponseIdGame(gameId, "Se ha enviado el id de la partida");
             client.current.send(`/topic/lobby/${invitation.userIdGuest}`, {}, JSON.stringify(invitationData));
             suscribeToGameSocket(gameId);
@@ -179,7 +173,7 @@ const MultiplayerLobby = () => {
         if (implementationGameBody) {
             if (implementationGameBody.status === "INVITE_RULETA") {
                 setTimeout(() => {
-                    navigate(PLAYER_ROUTES.SLOT_MACHINE, {
+                    navigate(PUBLIC_ROUTES.SELECTION_PHASE, {
                         state: {
                             ruletaGame: implementationGameBody.ruletaGame,
                             finalSlot1: implementationGameBody.finalSlot1,

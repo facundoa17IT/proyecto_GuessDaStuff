@@ -6,18 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import Modal from '../components/layouts/Modal';
 import toast from 'react-hot-toast';
 import { ClipLoader } from 'react-spinners';
+import { FaRandom } from "react-icons/fa";
 
 /** Utils **/
 import axiosInstance from '../utils/AxiosConfig';
 
 /** Context API**/
 import { LoadGameContext } from '../contextAPI/LoadGameContext';
+import { useRole } from '../contextAPI/AuthContext'
 
 /** Style **/
 import '../styles/start-game.css';
 
 const StartGame = () => {
     const { setLoadGameData, selectedCategories, setSelectedCategories, setIsMultiplayer } = useContext(LoadGameContext);
+    const { role, isGuest } = useRole();  // Access the setRole function from the context
+
     const [categories, setCategories] = useState([]);
     const [selectedGameMode, setSelectedGameMode] = useState('');
     const [loading, setLoading] = useState(true);
@@ -73,6 +77,9 @@ const StartGame = () => {
 
     useEffect(() => {
         fetchActiveCategories();
+        if(isGuest){
+            setSelectedGameMode(gameType[0]); // single
+        }
     }, []);
 
     useEffect(() => {
@@ -117,9 +124,9 @@ const StartGame = () => {
     return (
         <div>
             <Modal showModal={true} onConfirm={handleConfirm} closeModal={handleCloseModal} title={''}>
-                <div className="start-game-modal">
+                <div>
                     <h2>Categorias</h2>
-                    <div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
                         <div className="categories-container">
                             {!loading ? (
                                 categories.map((category) => (
@@ -135,27 +142,29 @@ const StartGame = () => {
                         </div>
                         <div className="category-selection-info">
                             <small>Total Seleccionadas: {selectedCategories.length}</small>
-                            <button className="random-selection-btn" onClick={selectRandomCategories}>Seleccion Aleatoria</button>
+                            <button className="random-selection-btn" onClick={selectRandomCategories}><span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FaRandom fontSize={15} style={{ marginRight: '5px' }} />Seleccion Aleatoria</span></button>
                         </div>
                     </div>
-                    <div style={{ margin: '20px' }}></div>
-                    <h2>Estilo de Juego</h2>
-                    <div className="game-type-container">
-                        {gameType.map((gt) => (
-                            <div className="game-type-option" key={gt}>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="gt-options"
-                                        value={gt}
-                                        onChange={(e) => setSelectedGameMode(e.target.value)}
-                                        required
-                                    />
-                                    {gt}player
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+                    {role != "ROLE_GUESS" && <>
+                        <div style={{ margin: '5px' }}></div>
+                        <h2>Estilo de Juego</h2>
+                        <div className="game-type-container">
+                            {gameType.map((gt) => (
+                                <div className="game-type-option" key={gt}>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            name="gt-options"
+                                            value={gt}
+                                            onChange={(e) => setSelectedGameMode(e.target.value)}
+                                            required
+                                        />
+                                        {gt}player
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                    </>}
                 </div>
             </Modal>
         </div>

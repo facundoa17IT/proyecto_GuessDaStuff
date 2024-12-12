@@ -16,6 +16,7 @@ import StartGame from '../views/StartGame';
 import SelectionPhase from '../views/SelectionPhase';
 import GameMatchView from '../views/GameMatchView';
 import LoadGame from '../views/LoadGame';
+import Instrucciones from '../views/Instrucciones';
 
 /** Player **/
 import MultiplayerLobby1 from '../views/MultiplayerLobby1';
@@ -63,12 +64,13 @@ function AppRouter() {
                 <Route path={PUBLIC_ROUTES.REGISTER} element={<Register />} />
                 <Route path={PUBLIC_ROUTES.LOGIN} element={<Login />} />
                 <Route path={PUBLIC_ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="reset-password" element={<ResetPassword />} />
 
                 {/* Player & Guess Routes */}
                 <Route path={PUBLIC_ROUTES.START_GAME} element={<StartGame />} />
                 <Route path={PUBLIC_ROUTES.SELECTION_PHASE} element={<SelectionPhase />} />
                 <Route path={PUBLIC_ROUTES.INIT_GAME} element={<GameMatchView />} />
+                <Route path={"instrucciones"} element={<Instrucciones />} />
 
                 {/* Player Routes */}
                 <Route path={PLAYER_ROUTES.MULTIPLAYER_LOBBY} element={<MultiplayerLobby1 />} />

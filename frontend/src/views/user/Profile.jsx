@@ -45,12 +45,23 @@ const Profile = () => {
 
     const { setRole, setUserId } = useRole();  // Access the role from context
 
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // Estado para el modal de perfil
+
+    const [selectedImage, setSelectedImage] = useState(null);
+
     // Manejador para abrir el modal de confirmación
     const handleDeleteAccountClick = () => {
         setIsModalOpenEliminar(true);
     };
 
     const { disconnect } = useContext(SocketContext);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    };
 
     // Manejador para la respuesta del modal
     const handleResponse = async () => {
@@ -73,6 +84,14 @@ const Profile = () => {
         } catch (error) {
             console.error('Error al eliminar la cuenta:', error);
             alert('Hubo un error al eliminar la cuenta. Inténtalo nuevamente.');
+        }
+    };
+
+    // Función para manejar la selección de una nueva imagen
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedImage(file);
         }
     };
 
@@ -140,6 +159,31 @@ const Profile = () => {
         }
     };
 
+    const handleSaveProfile = async () => {
+        if (!selectedImage) {
+            alert("Por favor selecciona una imagen.");
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append("file", selectedImage);
+        
+        try {
+            const response = await axiosInstance.put(`/users/v1/edit/${userObj.username}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                requiresAuth: true,
+            });
+            alert("Perfil actualizado con éxito.");
+            setIsProfileModalOpen(false);
+            fetchProfileImage(); // Actualizar la imagen de perfil
+        } catch (error) {
+            console.error("Error al actualizar el perfil:", error);
+            alert("Hubo un error al actualizar el perfil. Inténtalo nuevamente.");
+        }
+    };
+
     return (
         <>
             <MainGameLayout
@@ -167,8 +211,13 @@ const Profile = () => {
                         <h1 style={{ marginBottom: '0px' }}>{userObj.username}</h1>
                         <p>{userObj.email}</p>
                         <div style={{ marginTop: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-                            <button style={{ fontSize: 'small', width: '200px' }}><span><FaEdit style={{ marginRight: '5px' }} />Editar Perfil</span></button>
-                            <button style={{ fontSize: 'small', width: '200px' }}><ImExit style={{ marginRight: '5px' }} />Cerrar Sesion</button>
+                        <button
+                            style={{ fontSize: 'small', width: '200px' }}
+                            onClick={() => setIsProfileModalOpen(true)}
+                        >
+                            <FaEdit style={{ marginRight: '5px' }} />
+                            Editar Perfil
+                        </button>
                             <button onClick={handleDeleteAccountClick} style={{ fontSize: 'small', width: '200px', backgroundColor: '#DC143C' }}><RiDeleteBin2Fill style={{ marginRight: '5px' }} />Eliminar Cuenta</button>
                         </div>
                     </div>
@@ -199,8 +248,44 @@ const Profile = () => {
                 closeModal={() => setIsModalOpenEliminar(!isModalOpenEliminar)} // Si cancela, cierra sin acción
                 title="Confirmar eliminación"
             >
-                <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+                <h2>¿Estás seguro de que deseas <span style={{color:'red'}}>eliminar </span>tu cuenta?</h2>
+                <h3 style={{color:'gray'}}>Esta acción no se puede deshacer.</h3>
             </Modal>
+            <Modal
+                showModal={isProfileModalOpen}
+                onConfirm={handleSaveProfile}
+                closeModal={() => setIsProfileModalOpen(false)}
+                title="Editar Perfil"
+            >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <label htmlFor="profileImageInput">
+                        {selectedImage ? (
+                            <img
+                                src={URL.createObjectURL(selectedImage)}
+                                alt="Previsualización"
+                                style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }}
+                            />
+                        ) : (
+                            <FaUserCircle style={{ fontSize: '100px' }} />
+                        )}
+                    </label>
+                    <input
+                        id="profileImageInput"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
+                    />
+                    <button
+                        onClick={() => document.getElementById('profileImageInput').click()}
+                        style={{ fontSize: 'small', width: '200px' }}
+                    >
+                        Seleccionar Imagen
+                    </button>
+                </div>
+            </Modal>
+
+
         </>
     );
 };

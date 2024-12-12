@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 
-import tec.proyecto.guessdastuff.dtos.DtoDataGameSingle;
 import tec.proyecto.guessdastuff.entities.DataGameSingle;
 
 @Repository
@@ -42,9 +41,8 @@ public interface DataGameSingleRepository extends JpaRepository<DataGameSingle, 
     List<Object[]> findIndividualGamesOfPlayer(@Param("userId") String userId);
 
     @Query(value = """
-        SELECT s.id AS id_game, u.username AS user, NULL AS user2, NULL AS userWin, 
-               g1.dtype AS game1, g2.dtype AS game2, g3.dtype AS game3, 
-               s.is_finish, s.points, s.time_playing
+        SELECT s.id AS id_game, u.username AS user, g1.dtype AS game1, g2.dtype AS game2, g3.dtype AS game3, 
+               s.is_finish, s.points, s.time_playing, TO_CHAR(tmstmp_init::timestamp, 'DD/MM/YYYY') AS tmstmp_init
         FROM data_game_single s
         INNER JOIN games g1 ON s.id_data_game1 = CAST(g1.id AS TEXT) 
         INNER JOIN games g2 ON s.id_data_game2 = CAST(g2.id AS TEXT) 

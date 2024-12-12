@@ -16,25 +16,17 @@
 
 .slot {
   font-size: 2.5rem;
-  /* Tamaño de fuente para el contenido de cada slot */
   padding: 10px;
-  /* Espaciado interno alrededor del contenido del slot */
   border: 2px solid var(--border-color);
   border-radius: 8px;
   margin: 0 10px;
   /* Margen lateral entre los slots */
   width: 80px;
-  /* Ancho fijo para cada slot */
   height: 80px;
-  /* Altura fija para cada slot */
   overflow: hidden;
-  /* Oculta el contenido que sobresale del slot */
   display: flex;
-  /* Utiliza un contenedor flex para alinear el contenido dentro del slot */
   align-items: center;
-  /* Centra verticalmente el contenido dentro del slot */
   justify-content: center;
-  /* Centra horizontalmente el contenido dentro del slot */
 }
 
 .reel {
@@ -61,55 +53,38 @@
   }
 }
 
-.spin-button {
-  padding: 10px 20px;
-  /* Espaciado interno del botón */
-  font-size: 1.5rem;
-  /* Tamaño de fuente para el texto del botón */
-  background-color: #ffcc00;
-  /* Color de fondo del botón */
-  border: none;
-  /* Sin borde para el botón */
-  border-radius: 10px;
-  /* Bordes redondeados para el botón */
-  cursor: pointer;
-  /* Cambia el cursor a una mano al pasar sobre el botón */
-}
-
-.spin-button:disabled {
-  background-color: #cccccc;
-  /* Color de fondo del botón deshabilitado */
-  cursor: not-allowed;
-  /* Cambia el cursor a un símbolo de no permitido al pasar sobre el botón deshabilitado */
-}
-
-.spin-button:hover:not(:disabled) {
-  background-color: #ff9900;
-  /* Color de fondo del botón al pasar el cursor (solo si no está deshabilitado) */
-}
-
-.message {
-  font-size: 1.5rem;
-  /* Tamaño de fuente para el mensaje, si se usa */
-  margin-top: 20px;
-  /* Espacio superior para el mensaje */
-}
-
 .results {
-  margin-top: 20px;
-  /* Espacio superior para el contenedor de resultados */
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
 }
 
-.results ul {
-  list-style-type: none;
-  /* Elimina los puntos de la lista */
-  padding: 0;
-  /* Elimina el espaciado interno del contenedor de la lista */
+.centered-table {
+  border-collapse: collapse;
+  width: 50%; /* Ajusta el ancho de la tabla */
+  table-layout: fixed; /* Hace que las columnas tengan el mismo ancho */
+  text-align: center; /* Centra el contenido de las celdas */
+  border: 1px solid var(--border-color); /* Bordes para la tabla */
 }
 
-.results li {
-  font-size: 1.5rem;
-  /* Tamaño de fuente para los elementos de la lista de resultados */
-  margin: 5px 0;
-  /* Espaciado entre los elementos de la lista */
+.centered-table th, 
+.centered-table td {
+  border: 1px solid var(--border-color); /* Bordes entre celdas */
+  padding: 10px;
+}
+
+@media (max-width: 1366px) {
+  .results {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 450px) {
+  .slot {
+    padding: 5px;
+  }
+
+  .centered-table {
+    width: 85%; /* Ajusta el ancho de la tabla */
+  }
 }

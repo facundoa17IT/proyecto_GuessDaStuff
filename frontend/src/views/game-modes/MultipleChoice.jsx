@@ -1,16 +1,24 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
 
+/** Components **/
+import GameButtonRow from '../../components/layouts/GameButtonRow';
+import ScaleTransition from '../../components/anim/ScaleTransiton';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
+
+/** Assets **/
+import { FaRegCheckCircle } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { FaRegQuestionCircle } from "react-icons/fa";
 
 /** Styles **/
 import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo }) => {
-    const { setAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
+const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
+    const { setAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [confirmedAnswer, setConfirmedAnswer] = useState(null);
@@ -51,7 +59,9 @@ const MultipleChoice = ({ MCinfo }) => {
     return (
         <div className="game-mode-container mc-container">
             <div className="containerPhrase">
-                <p>{question}</p>
+                <ScaleTransition>
+                    <p>{question}</p>
+                </ScaleTransition>
             </div>
 
             <div className='optionsWrapper'>
@@ -74,16 +84,19 @@ const MultipleChoice = ({ MCinfo }) => {
                                     ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOptionText' : ''}`
                                 }
                             >
-                                {option}
+                                <ScaleTransition>
+                                    {option}
+                                </ScaleTransition>
                             </span>
                         </button>
                     ))}
                 </div>
             </div>
 
-            <button className="confirmButton" onClick={confirmAnswer} disabled={confirmedAnswer !== null}>
-                Confirmar Opción
-            </button>
+            <GameButtonRow
+                handleHint={showNextHint}
+                handleVerify={confirmAnswer}
+            />
         </div>
     );
 };

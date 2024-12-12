@@ -27,7 +27,7 @@ export const DeleteCategory = () => {
     const handleDeleteCategory = async () => {
         if (selectedItem?.name) {
             try {
-                await axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`, { requiresAuth: true });
+                await axiosInstance.put(`/v1/categories/delete/${selectedItem.name}`, {}, { requiresAuth: true });
                 console.log("Categoría eliminada");
                 navigate(-1);
             } catch (error) {
@@ -38,7 +38,7 @@ export const DeleteCategory = () => {
     
 
     return (
-        <Modal onConfirm={handleDeleteCategory} showModal={true} closeModal={onClose} title={"Agregar Categoria"}>
+        <Modal onConfirm={handleDeleteCategory} showModal={true} closeModal={onClose} title=''>
             {selectedItem && <h2>Desea eliminar la categoria "<span style={{color:'red'}}>{selectedItem.name}</span>"?</h2>}
         </Modal>
     );

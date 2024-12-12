@@ -1,6 +1,9 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
 
+/** Components **/
+import GameButtonRow from '../../components/layouts/GameButtonRow';
+import ScaleTransition from '../../components/anim/ScaleTransiton';
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
@@ -8,8 +11,8 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import '../../styles/guess-phrase.css';
 import '../../styles/game-mode.css';
 
-const GuessPhrase = ({ GPinfo }) => {
-	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer } = useContext(LoadGameContext);
+const GuessPhrase = ({ GPinfo, hintButton, showNextHint }) => {
+	const { setAnswer, isCorrectAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 	const { phrase, correct_word } = GPinfo;
 	const [userInput, setUserInput] = useState('');
 
@@ -41,11 +44,13 @@ const GuessPhrase = ({ GPinfo }) => {
 	return (
 		<div className="game-mode-container gp-container">
 			<div className="containerPhrase">
-				{phrase ? (
-					<p>{phrase}</p>
-				) : (
-					<p>Este juego aún no fue implementado.</p>
-				)}
+				<ScaleTransition>
+					{phrase ? (
+						<p>{phrase}</p>
+					) : (
+						<p>Este juego aún no fue implementado.</p>
+					)}
+				</ScaleTransition>
 			</div>
 
 			<input
@@ -55,10 +60,11 @@ const GuessPhrase = ({ GPinfo }) => {
 				placeholder="Escribe tu respuesta"
 			/>
 
-			<div className="buttonRow">
-				<button className="resetButton" onClick={handleReset}>Borrar</button>
-				<button className="verifyButton" onClick={handleCheckAnswer}>Verificar</button>
-			</div>
+			<GameButtonRow
+				handleHint={showNextHint}
+				handleReset={handleReset}
+				handleVerify={handleCheckAnswer}
+			/>
 		</div>
 	);
 };

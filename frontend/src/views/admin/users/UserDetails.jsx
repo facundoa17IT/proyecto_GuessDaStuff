@@ -30,10 +30,8 @@ export const UserDetails = () => {
     }, []);
 
     return (
-        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles">
-            <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
-                {modalContent}
-            </div>
+        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
+            {modalContent}
         </Modal >
     );
 };

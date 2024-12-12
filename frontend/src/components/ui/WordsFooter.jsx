@@ -1,8 +1,11 @@
 import React from 'react';
+import VerticalSlideTransition from '../anim/VerticalSlideTransition';
 
 const WordsFooter = () => {
     return (
-        <div className='words-footer' />
+        <VerticalSlideTransition>
+            <div className='words-footer' />
+        </VerticalSlideTransition>
     );
 };
 

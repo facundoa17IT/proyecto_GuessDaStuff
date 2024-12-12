@@ -1,5 +1,6 @@
 /** React **/
 import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 /** Style **/
 import '../../styles/custom-list.css'
@@ -14,6 +15,7 @@ import { FaSearch, FaFilter, FaSort } from 'react-icons/fa';
 
 /** Sub Components **/
 import { IconButton, buttonMapping } from "../layouts/ItemListButtons"
+import Dropdown from '../ui/Dropdown';
 
 /** Context API **/
 import { ListContext } from '../../contextAPI/ListContext';
@@ -34,11 +36,13 @@ const CustomList = ({
     customSort = [],     // Accept custom sort function
     onButtonInteraction, // New prop
 }) => {
-    const { setSelectedItem, setSelectedBtn, setSelectedListId} = useContext(ListContext);
+    const { setSelectedItem, setSelectedBtn, setSelectedListId } = useContext(ListContext);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedFilter, setSelectedFilter] = useState(defaultFilter);
     const [sortOption, setSortOption] = useState(defaultSort); // Default sort by item label (ascending)
+
+    const isDesignBreakpoint = useMediaQuery({ query: '(max-width: 650px)' });
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -54,7 +58,7 @@ const CustomList = ({
 
     const filteredSortedList = useMemo(() => {
         let filteredList = [...listContent];
-        
+
         // Filter the list based on search query
         if (searchQuery) {
             filteredList = filteredList.filter((item) =>
@@ -136,7 +140,7 @@ const CustomList = ({
                             style={{ width: '50%', height: '100%', border: '2px solid var(--border-color)', borderRadius: '8px', padding: '3px' }}
                         >
                             {/* Render sorting options dynamically */}
-                            {[  
+                            {[
                                 { label: 'Ninguno', value: 'none' },
                                 { label: '(A-Z)', value: 'label-asc' },
                                 { label: '(Z-A)', value: 'label-desc' },
@@ -171,15 +175,19 @@ const CustomList = ({
 
                                         {/* Dynamically accept item.icon, if empty use default icon, also accept img as icon */}
                                         <td style={{ display: 'flex', alignItems: 'center' }}>
-                                            {item.icon ? (
-                                                typeof item.icon === 'string' && item.icon.endsWith('.png') ? (
+                                            {item.urlPerfil ? (
+                                                typeof item.urlPerfil === 'string' && !item.urlPerfil.includes('urlDoMacaco') ? (
                                                     <img
-                                                        src={item.icon}
+                                                        src={item.urlPerfil}
                                                         alt={item.name}
-                                                        style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', }}
+                                                        style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', border: '2px solid var(--border-color)' }}
                                                     />
                                                 ) : (
-                                                    React.createElement(item.icon, { style: { marginRight: '10px', fontSize: '25px' } })
+                                                    <img
+                                                        src={DefaultIcon}
+                                                        alt={item.name}
+                                                        style={{ marginRight: '10px', width: '30px', height: '30px', borderRadius: '50%', border: '2px solid var(--border-color)' }}
+                                                    />
                                                 )
                                             ) : (
                                                 <img
@@ -199,18 +207,30 @@ const CustomList = ({
                                         ))}
 
                                         {/* Dynamically render buttons with custom icon and action */}
-                                        <td>
-                                            {buttons.map((buttonKey, i) => (
-                                                buttonMapping[buttonKey] ? (
-                                                    <IconButton
-                                                        key={i}
-                                                        icon={buttonMapping[buttonKey].icon}
-                                                        label={buttonMapping[buttonKey].label}
-                                                        onClick={() => handleButtonClick(item, buttonKey)}
-                                                    />
-                                                ) : null
-                                            ))}
-                                        </td>
+                                        {buttons.length > 0 &&<td>
+                                            {!isDesignBreakpoint ? (
+                                                buttons.map((buttonKey, i) => (
+                                                    buttonMapping[buttonKey] ? (
+                                                        <IconButton
+                                                            key={buttonKey}
+                                                            icon={buttonMapping[buttonKey].icon}
+                                                            label={buttonMapping[buttonKey].label}
+                                                            onClick={() => handleButtonClick(item, buttonKey)}
+                                                        />
+                                                    ) : null
+                                                ))
+                                            ) : (
+                                                    <Dropdown
+                                                    options={buttons.map((buttonKey) => ({
+                                                        key: buttonKey,
+                                                        label: buttonMapping[buttonKey]?.label,
+                                                        icon: buttonMapping[buttonKey]?.icon,
+                                                        onClick: () => handleButtonClick(item, buttonKey),
+                                                    }))}
+                                                />
+                                            )}
+                                        </td>}
+
                                     </tr>
                                 ))
                             ) : (

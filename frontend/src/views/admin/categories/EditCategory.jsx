@@ -52,7 +52,7 @@ export const EditCategory = () => {
     };
 
     return (
-        <Modal onConfirm={handleEditCategory} showModal={true} closeModal={onClose} title={title}>
+        <Modal onConfirm={handleEditCategory} showModal={true} closeModal={onClose} title='Editar Categoria'>
             <input disabled style={{backgroundColor:'#abb2b9'}} type="text" placeholder="Nombre" value={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
             <textarea
                 placeholder="Descripcion"

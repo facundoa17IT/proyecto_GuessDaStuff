@@ -1,27 +1,10 @@
-/***** Brain Character (Mr. Helper) *****/
-
 .brain-character {
-    max-width: 120px;
+    /* width: 80%; */
+    object-fit: contain;
 }
 
 .character-container {
-    margin-top: 5%;
-}
-
-.indexedStep {
-    color: white;
-    width: 25px;
-    height: 25px;
-    font-size: 12px;
-    background-color: rgba(211, 211, 211, 0.8);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.indexedStep.accomplished {
-    background-color: rgba(0, 116, 217, 1);
+    margin: 3%;
 }
 
 /***** Hint Globe *****/
@@ -59,7 +42,7 @@
     /* Center the text */
     transform: translate(-50%, -50%);
     color: black;
-    font-size: 25px;
+    font-size: clamp(1.2rem, 2vw, 1.6rem); /* Texto legible en cualquier pantalla */
     text-align: center;
     font-weight: bold;
     /* Makes the text layer fit within the container width */

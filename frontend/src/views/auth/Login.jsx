@@ -1,6 +1,6 @@
 /** React **/
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 
 /** Components **/
 import Modal from '../../components/layouts/Modal';
@@ -94,7 +94,7 @@ export const Login = () => {
 
     return (
         <Modal onConfirm={login} showModal={true} closeModal={onClose} title="Iniciar Sesion">
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
             <input
                 type="text"
                 placeholder="Usuario"
@@ -107,7 +107,10 @@ export const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-             <a style={{ marginBottom: '15px' }} href="/forgot-password">Restaurar Contraseña</a>
+            {/* Cambiamos href por Link */}
+            <Link style={{ marginBottom: '15px' }} to="/forgot-password">
+                Restaurar Contraseña
+            </Link>
         </Modal>
     );
 };

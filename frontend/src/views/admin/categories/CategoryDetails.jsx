@@ -10,6 +10,7 @@ import validator from '@rjsf/validator-ajv8';
 
 /** Assets **/
 import { FaEdit } from 'react-icons/fa';
+import { FaListUl } from "react-icons/fa";
 
 /** Utils **/
 import axiosInstance from '../../../utils/AxiosConfig';
@@ -60,8 +61,9 @@ export const CategoryDetails = () => {
         setModalContent(
             <>
                 {renderListItemDetails(selectedItem)}
-                <button onClick={() => handleListTitles()}>Titulos</button>
-            </>)
+                <button style={{width:'fit-content', fontSize:'medium'}} onClick={handleListTitles}><FaListUl style={{marginRight:'5px'}}/>Listar Titulos</button>
+            </>
+        )
     }, []);
 
     // Update modal edit categories form
@@ -74,35 +76,32 @@ export const CategoryDetails = () => {
 
     const renderTitlesOfCategory = () => {
         return (
-            <div>
-                <h2>Titulos</h2>
-                <div style={{ border: '2px solid var(--border-color)', borderRadius: '8px', height: '255px', overflowY: 'auto', overflowX: 'hidden' }}>
-                    {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
-                        <div key={gameModeKey}>
-                            <h3>{gameModeKey}</h3>
-                            <ul style={{ textAlign: 'left', listStyleType: 'none' }}>
-                                {categoryTitles.titlesOfCategory[gameModeKey].map((item, index) => (
-                                    <li
-                                        key={item.id}
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginBottom: '10px'
-                                        }}
-                                    >
-                                        <span>{item.title}</span>
-                                        <IconButton
-                                            icon={FaEdit}
-                                            label={'Editar'}
-                                            onClick={() => handleEditClick(gameModeKey, index, item)}
-                                        />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+            <div style={{ overflowY: 'auto', overflowX: 'hidden', border:'2px solid var(--border-color)', borderRadius:'8px' }}>
+                {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
+                    <div key={gameModeKey}>
+                        <h3 style={{ margin: '1rem', backgroundColor: 'var(--secondary-bg-color)', color: 'white' }}>{gameModeKey}</h3>
+                        <ul style={{ textAlign: 'left' }}>
+                            {categoryTitles.titlesOfCategory[gameModeKey].map((item, index) => (
+                                <li
+                                    key={item.id}
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        marginBottom: '10px'
+                                    }}
+                                >
+                                    <span style={{ width: '80%' }}>{item.title}</span>
+                                    <IconButton
+                                        icon={FaEdit}
+                                        label={'Editar'}
+                                        onClick={() => handleEditClick(gameModeKey, index, item)}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
             </div>
         );
     };
@@ -178,7 +177,7 @@ export const CategoryDetails = () => {
             else console.error("Error al seleccionar Game Mode");
 
             try {
-                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, {}, { requiresAuth: true });
+                const response = await axiosInstance.put(`/game-modes/v1/${gameMode}/${selectedGameModeId}`, formData, { requiresAuth: true });
                 console.log('Data edited successfully!', response.data);
                 setFormData({});
                 navigate(-1);
@@ -205,10 +204,8 @@ export const CategoryDetails = () => {
     };
 
     return (
-        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles">
-            <div style={{ height: '350px', overflowY: 'auto', overflowX: 'hidden' }}>
-                {modalContent}
-            </div>
+        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
+            {modalContent}
         </Modal >
     );
 };
