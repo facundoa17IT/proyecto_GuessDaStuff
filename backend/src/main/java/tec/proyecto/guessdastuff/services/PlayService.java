@@ -45,57 +45,63 @@ public class PlayService {
     }
     
     public boolean playGame(DtoPlayGameRequest dtoPlayGameRequest){
-    //esto va a la tabla DataGame
-    Game result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
-    int points = 0;
-    float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
+        //esto va a la tabla DataGame
+        Game result = playRepository.getResultPlayGame(dtoPlayGameRequest.getIdGame());
+        int points = 0;
+        float timePlaying = dtoPlayGameRequest.getTime_playing(); // Obtener el tiempo de respuesta
 
-    if (timePlaying != 0){
-        // Calcular puntos según el tiempo de respuesta
-        if (timePlaying < 8) {
-            points = 5;
-        } else if (timePlaying < 15) {
-            points = 4;
-        } else if (timePlaying < 20) {
-            points = 3;
-        } else if (timePlaying < 25) {
-            points = 2;
-        } else if (timePlaying <= 30) {
-            points = 1;
-        }
-         // Acceso unificado a los elementos del resultado
+        if (timePlaying != 0){
+            // Calcular puntos según el tiempo de respuesta
+            if (timePlaying < 8) {
+                points = 5;
+            } else if (timePlaying < 15) {
+                points = 4;
+            } else if (timePlaying < 20) {
+                points = 3;
+            } else if (timePlaying < 25) {
+                points = 2;
+            } else if (timePlaying <= 30) {
+                points = 1;
+            }
+            // Acceso unificado a los elementos del resultado
 
-        if ("GP".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            GuessPhrase guessPhrase = (GuessPhrase) result;  
-            if (guessPhrase.getCorrectWord().equals(dtoPlayGameRequest.getResponse())){
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
-        } else if ("OW".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            OrderWord orderWord = (OrderWord) result; 
-            if (orderWord.getWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
-        } else if ("MC".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
-            MultipleChoice multipleChoice = (MultipleChoice) result;
-            if (multipleChoice.getRandomCorrectWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
-                // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
-                dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-                return true;
-            } else 
-            return false;
+            if ("GP".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+                GuessPhrase guessPhrase = (GuessPhrase) result;  
+                if (guessPhrase.getCorrectWord().equals(dtoPlayGameRequest.getResponse())){
+                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                    return true;
+                } else if (timePlaying == 30){
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                }
+                return false;
+            } else if ("OW".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+                OrderWord orderWord = (OrderWord) result; 
+                if (orderWord.getWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
+                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                    return true;
+                } else if (timePlaying == 30){
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                } 
+                return false;
+            } else if ("MC".equals(result.getIdGameMode().getName())){ // Asegúrate de que el índice sea correcto
+                MultipleChoice multipleChoice = (MultipleChoice) result;
+                if (multipleChoice.getRandomCorrectWord().equals(dtoPlayGameRequest.getResponse())){ // Asegúrate de que el índice sea correcto 
+                    // Actualizar la tabla data_game_single sumando puntos y tiempo de juego
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                    return true;
+                } else if (timePlaying == 30){
+                    dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+                } 
+                return false;
+            }
+        } else {
+            //dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
+            return true;
         }
-    } else {
-        dataGameSingleRepository.updateDataGame(dtoPlayGameRequest.getIdGameSingle(), points, timePlaying);
-        return true; //
-    }
-    //si es incorrecto;
-    return false; // Retornar false si es incorrecto
+        //si es incorrecto;
+        return false; // Retornar false si es incorrecto
    }
 
     public DtoLoadGameResponse loadGame(DtoLoadGameRequest dtoLoadGameRequest) {
