@@ -65,14 +65,16 @@
   margin: 5px 0px 5px 0px !important;
 }
 
-@media (max-width: 1400px) and (max-height: 700px) {
+@media (min-width: 1400px) and (min-height: 650px) {
   .modal-content {
-    height: 85%;
+    height: 75%;
   }
+}
 
-  /* .modal-body {
-    max-height: 300px;
-  } */
+@media (max-width: 1400px) and (max-height: 650px) {
+  .modal-content {
+    height: 95%;
+  }
 }
 
 @media (max-width: 450px) {

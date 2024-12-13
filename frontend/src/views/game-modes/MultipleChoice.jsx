@@ -21,7 +21,7 @@ import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
+const MultipleChoice = ({ MCinfo, showNextHint,handleWrongAnswer }) => {
     const { setAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -45,10 +45,15 @@ const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
             console.warn("Este juego aún no fue implementado.");
             return;
         }
-
         try {
             setAnswer(selectedAnswer);
             const isCorrect = selectedAnswer === randomCorrectWord;
+            if (!isCorrect) {
+                setTimeout(() => {
+                    handleWrongAnswer();
+                    return;
+                }, 1000);
+            }
             console.log(isCorrect ? "Correcto!" : "Incorrecto!");
             setIsCorrectAnswer(isCorrect);
         } catch (error) {

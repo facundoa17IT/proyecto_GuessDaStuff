@@ -397,7 +397,7 @@ const GameMatchView = () => {
                         break;
                     case 'MC':
                         setCurrentHeader("🔢 Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} />;
+                        GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} handleWrongAnswer={handleNextGameMode} />;
                         break;
                     default:
                         GameComponent = <p>Modo de juego no reconocido.</p>;
