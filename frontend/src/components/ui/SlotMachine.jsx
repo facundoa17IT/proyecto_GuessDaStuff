@@ -5,8 +5,6 @@ import { useMediaQuery } from 'react-responsive';
 
 import BrainCharacter from './BrainCharacter';
 
-import BrainCharacter from './BrainCharacter';
-
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useRole } from '../../contextAPI/AuthContext'
