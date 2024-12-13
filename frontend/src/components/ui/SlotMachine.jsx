@@ -5,6 +5,8 @@ import { useMediaQuery } from 'react-responsive';
 
 import BrainCharacter from './BrainCharacter';
 
+import BrainCharacter from './BrainCharacter';
+
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { useRole } from '../../contextAPI/AuthContext'
@@ -149,7 +151,9 @@ const SlotMachine = () => {
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
+
             <BrainCharacter spriteKey={characterSprite} hideDialogue={true} width={isMediumDevice ? '60%' : '100%'} />
+              
             <div className="slot-machine"> {/* Contenedor de los slots */}
 
                 {/* Tercer slot */}
