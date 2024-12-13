@@ -29,7 +29,7 @@ const MainGameLayout = ({
 
     const { isGameView } = useContext(LoadGameContext);
 
-    const isMobile = useMediaQuery({ query: '(max-width: 450px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 850px)' });
 
     useEffect(() => {
         const onFullscreenChange = () => {

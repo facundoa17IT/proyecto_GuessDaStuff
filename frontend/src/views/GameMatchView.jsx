@@ -68,7 +68,7 @@ const GameMatchView = () => {
 
     const isDesignBreakpoint = useMediaQuery({ query: '(max-width: 1150px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 535px)' });
-    const isLargeScreen = useMediaQuery({ query: '(min-width: 1600px)' });
+    const isMediumDevice = useMediaQuery({ query: '(min-width: 450px) and (max-height: 700px)' });
 
     useEffect(() => {
         if (hintCounter === 0) {
@@ -538,8 +538,7 @@ const GameMatchView = () => {
         return (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='final-game-resume'>
-                {/* width={isMobile ? '80%' : isLargeScreen ? '100%' : '60%'} */}
-                    <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true}  />
+                    <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} width={isMediumDevice ? '80%' : '100%'} />
                     <ScaleTransition>
                         <div className='final-game-resume-container' >
                             {finalGameResume}
@@ -559,7 +558,7 @@ const GameMatchView = () => {
                 hideRightPanel={isGameFinished || isDesignBreakpoint}
                 leftHeader={isDesignBreakpoint ? '' : 'Pistas'}
                 leftContent={
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ paddingTop:'15px', display: 'flex', flexDirection: 'column', width: '100%' }}>
                         {isDesignBreakpoint && isMultiplayer && <MultiplayerHUD />}
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                             <div style={{ display: 'flex', flexGrow: '1', justifyContent: 'center', alignItems: 'center' }}>
@@ -569,7 +568,6 @@ const GameMatchView = () => {
                                     autoStart={isGameReady}
                                     words={characterDialogue}
                                     hideDialogue={!isGameReady}
-                                    //width={'100%'}
                                 />
                             </div>
                             {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>

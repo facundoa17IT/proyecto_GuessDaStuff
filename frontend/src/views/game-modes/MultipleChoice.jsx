@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 /** Components **/
 import GameButtonRow from '../../components/layouts/GameButtonRow';
 import ScaleTransition from '../../components/anim/ScaleTransiton';
+
 /** Context API **/
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
@@ -11,6 +12,9 @@ import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaRegQuestionCircle } from "react-icons/fa";
+
+/** Utils **/
+import { shuffleArray } from '../../utils/Helpers';
 
 /** Styles **/
 import "../../styles/multiple-choice.css"
@@ -25,13 +29,16 @@ const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
 
     const { question, randomCorrectWord, randomWord1, randomWord2, randomWord3 } = MCinfo;
 
+    const allOptions = [randomCorrectWord, randomWord1, randomWord2, randomWord3];
+    const [shuffledOptions, setShuffledOptions] = useState([]);
+
     useEffect(() => {
         setSelectedAnswer(null);
         setConfirmedAnswer(null);
         setAnswer('');
+        const shuffledWords = shuffleArray(allOptions);
+        setShuffledOptions(shuffledWords);
     }, [MCinfo]);
-
-    const allOptions = [randomCorrectWord, randomWord1, randomWord2, randomWord3];
 
     const handleCheckAnswer = async (selectedAnswer) => {
         if (!randomCorrectWord) {
@@ -66,7 +73,7 @@ const MultipleChoice = ({ MCinfo, hintButton, showNextHint }) => {
 
             <div className='optionsWrapper'>
                 <div className="optionsContainer">
-                    {allOptions.map((option, index) => (
+                    {shuffledOptions.map((option, index) => (
                         <button
                             key={index}
                             className={

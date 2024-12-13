@@ -67,7 +67,7 @@
 
 @media (max-width: 1400px) and (max-height: 700px) {
   .modal-content {
-    height: 70%;
+    height: 85%;
   }
 
   /* .modal-body {
