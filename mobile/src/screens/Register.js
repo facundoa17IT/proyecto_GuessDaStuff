@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { buttonStyles } from "../styles/buttons";
 import { textStyles } from "../styles/texts";
 import { registrarse } from "../CallsAPI";
+import BackImage from '../styles/BackImage';
+import { useNavigation } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -9,39 +11,32 @@ import {
   Pressable,
   Image,
   Alert,
-  ImageBackground,
+  View, 
 } from "react-native";
 
 const logo = require("../../assets/GDSsimplelogo.png");
-const fondo = require("../../assets/fondo_mobile.jpeg");
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  // const [profileImage, setProfileImage] = useState(null);
+  const [country, setCountry] = useState("");
+  const [birthdayYear, setBirthdayYear] = useState("");
+  const [birthdayMonth, setBirthdayMonth] = useState("");
+  const [birthdayDay, setBirthdayDay] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
     username: "",
+    country: "",
+    birthday: "",
   });
 
-  // const handlePickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   if (!result.canceled) {
-  //     setProfileImage(result.uri);
-  //   }
-  // };
+  const navigation = useNavigation(); // Usamos useNavigation para acceder a la navegación
 
   const validateFields = () => {
     let isValid = true;
-    let newErrors = { email: "", password: "", username: "" };
+    let newErrors = { email: "", password: "", username: "", country: "", birthday: "" };
 
     if (!email) {
       newErrors.email = "Este campo es requerido";
@@ -55,22 +50,50 @@ export default function Register() {
       newErrors.username = "Este campo es requerido";
       isValid = false;
     }
+    if (!country) {
+      newErrors.country = "Este campo es requerido";
+      isValid = false;
+    }
+    if (!birthdayYear || !birthdayMonth || !birthdayDay) {
+      newErrors.birthday = "La fecha de cumpleaños es requerida";
+      isValid = false;
+    }
 
     setErrors(newErrors);
     return isValid;
   };
 
+    // Método auxiliar para formatear la fecha
+    const formatDate = (date) => {
+        if (!date) return null; // Manejo de fecha nula
+
+        const parsedDate = new Date(date);
+        return {
+            anio: parsedDate.getFullYear(),
+            mes: parsedDate.getMonth() + 1,  // Los meses en JavaScript van de 0 a 11, por eso se suma 1
+            dia: parsedDate.getDate()
+        };
+    };
+
   const handleRegister = async () => {
     if (validateFields()) {
-      const result = await registrarse(username, email, password);
+      const birthday = {
+        anio: parseInt(birthdayYear),
+        mes: parseInt(birthdayMonth),
+        dia: parseInt(birthdayDay),
+      };
+
+      const result = await registrarse(username, email, password, country, birthday);
       if (result) {
         Alert.alert("Registro exitoso", `Email: ${email}\nUsername: ${username}`);
+        // Redirigir al Login después de un registro exitoso
+        navigation.navigate('Login');
       }
     }
   };
 
   return (
-    <ImageBackground source={fondo} resizeMode="cover" style={styles.container}>
+    <BackImage>
       <Image source={logo} resizeMode="contain" style={styles.logo} />
       <Text style={textStyles.title}>Registrarse</Text>
 
@@ -82,9 +105,7 @@ export default function Register() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      {errors.email ? (
-        <Text style={styles.errorText}>{errors.email}</Text>
-      ) : null}
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
       <TextInput
         style={styles.input}
@@ -93,9 +114,7 @@ export default function Register() {
         onChangeText={setPassword}
         secureTextEntry
       />
-      {errors.password ? (
-        <Text style={styles.errorText}>{errors.password}</Text>
-      ) : null}
+      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
       <TextInput
         style={styles.input}
@@ -103,23 +122,46 @@ export default function Register() {
         value={username}
         onChangeText={setUsername}
       />
-      {errors.username ? (
-        <Text style={styles.errorText}>{errors.username}</Text>
-      ) : null}
-      
-{/* 
-      <Pressable style={buttonStyles.buttonfullwidth} onPress={handlePickImage}>
-        <Text style={styles.buttonText}>Seleccionar imagen de perfil</Text>
-      </Pressable> */}
+      {errors.username && <Text style={styles.errorText}>{errors.username}</Text>}
 
-      {/* {profileImage && (
-        <Image source={{ uri: profileImage }} style={styles.image} />
-      )} */}
+      <TextInput
+        style={styles.input}
+        placeholder="País"
+        value={country}
+        onChangeText={setCountry}
+      />
+      {errors.country && <Text style={styles.errorText}>{errors.country}</Text>}
+
+      {/* Agrupar campos de fecha */}
+      <View style={styles.dateContainer}>
+        <TextInput
+          style={styles.dateInput}
+          placeholder="Año"
+          value={birthdayYear}
+          onChangeText={setBirthdayYear}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.dateInput}
+          placeholder="Mes"
+          value={birthdayMonth}
+          onChangeText={setBirthdayMonth}
+          keyboardType="numeric"
+        />
+        <TextInput
+          style={styles.dateInput}
+          placeholder="Día"
+          value={birthdayDay}
+          onChangeText={setBirthdayDay}
+          keyboardType="numeric"
+        />
+      </View>
+      {errors.birthday && <Text style={styles.errorText}>{errors.birthday}</Text>}
 
       <Pressable style={buttonStyles.buttonfullwidth} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Registrarse</Text>
+        <Text style={styles.buttontext}>Registrarse</Text>
       </Pressable>
-    </ImageBackground>
+    </BackImage>
   );
 }
 
@@ -136,13 +178,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    width: "100%",
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    backgroundColor: '#FFF',
+    borderWidth: 3,
+    borderRadius: 5,
+    borderColor: '#653532',
+    width: '100%',
+    padding: 10,
     marginBottom: 10,
-    paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    fontSize: 20,
   },
   errorText: {
     color: "black",
@@ -151,32 +194,32 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%",
   },
-  button: {
-    backgroundColor: "brown",
-    padding: 15,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 15,
-    width: "100%",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
+  buttontext: {
+    color: "#FFF",
+    fontSize: 19,
     textAlign: "center",
     fontWeight: "bold",
   },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: 20,
-    marginBottom: 20,
-  },
   logo: {
-    width: "90%",
+    width: 300,
     height: 200,
-    marginTop: 20,
-    marginBottom: 80,
+    marginTop: -50,
+    marginBottom: 50,
     borderRadius: 25,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  dateInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+    marginHorizontal: 5, // Espacio entre inputs
   },
 });

@@ -1,11 +1,11 @@
 import React from 'react';
 
-/** Assets **/
+/ Assets /
 import AppLogo from '../ui/AppLogo'
 import { GiCancel } from "react-icons/gi";
 import { FaRegCheckCircle } from "react-icons/fa";
 
-/** Style **/
+/ Style /
 import '../../styles/modal.css'
 
 const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConfirm, closeModal, title, children }) => {
@@ -16,9 +16,9 @@ const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConf
             <div className="modal-content">
                 <div className='modal-header'>
                     <AppLogo enableAnim={false} width={'300px'} height={'50px'} bgImg={'var(--app-vertical-logo)'} />
-                    <div style={{width:'100%', padding:'0.5rem', boxSizing:'border-box'}}>
+                    {title != '' &&<div style={{width:'100%', padding:'0.5rem', boxSizing:'border-box'}}>
                         <h2 style={{ marginTop: '5px' }}>{title}</h2>
-                    </div>
+                    </div>}
                 </div>
                 <div className="modal-body">
                     {children}
