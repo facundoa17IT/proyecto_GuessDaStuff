@@ -122,6 +122,15 @@
     }
 }
 
+/** Tablet **/
+@media (max-width: 850px) {
+    .main-game-layout-cointainer {
+        width: 100vw;
+        border-radius: 0;
+        margin: 0;
+        border: none;
+    }
+}
 /** Mobile **/
 @media (max-width: 450px) {
     .main-game-layout-cointainer {

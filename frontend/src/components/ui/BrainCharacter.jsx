@@ -23,7 +23,7 @@ import Typewriter from 'typewriter-effect';
 /** Style **/
 import '../../styles/brain-character.css'
 
-const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, spriteKey = 'idle', width = 'auto' }) => {
+const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialogue = false, spriteKey = 'idle', width = '100%' }) => {
     // Define available sprites
     const sprites = {
         start: startGame,
@@ -64,8 +64,9 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
                 </ScaleTransition>
             )}
             <HorizontalSlideTransition key={spriteKey}>
-            {/* style={{width: `${width}`}} */}
-                <img className="brain-character" src={currentSprite} alt="Brain Character"  />
+              
+                <img className="brain-character" src={currentSprite} alt="Brain Character" style={{width: width}} />
+
             </HorizontalSlideTransition>
         </div>
     );

@@ -1,6 +1,9 @@
 /** React **/
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
+
+import BrainCharacter from './BrainCharacter';
 
 import BrainCharacter from './BrainCharacter';
 
@@ -19,7 +22,9 @@ const SlotMachine = () => {
     const { userId } = useRole();  // Access the setRole function from the context
 
     const navigate = useNavigate();
-    
+
+    const isMediumDevice = useMediaQuery({ query: '(min-width: 450px) and (max-height: 700px)' });
+
     const [characterSprite, setCharacterSprite] = useState('thinking');
 
     const gameModeIcons = {
@@ -27,19 +32,19 @@ const SlotMachine = () => {
         OW: "🔁",
         MC: "🔢"
     };
-    
+
     // Asocia cada modo de juego con su emoji correspondiente
     const mapGameModesToPairs = (gameModes) => {
         return gameModes
             .filter(mode => gameModeIcons[mode]) // Filter valid modes
             .map(mode => ({ mode, emoji: gameModeIcons[mode] })); // Create pairs
     };
-    
+
     // Coleccion de modos de juego
     const gameModes1 = loadGameData.categories[0].gameModes || [];
     const gameModes2 = loadGameData.categories[1].gameModes || [];
     const gameModes3 = loadGameData.categories[2].gameModes || [];
-    
+
     const gameModePairs1 = mapGameModesToPairs(gameModes1);
     const gameModePairs2 = mapGameModesToPairs(gameModes2);
     const gameModePairs3 = mapGameModesToPairs(gameModes3);
@@ -58,7 +63,7 @@ const SlotMachine = () => {
     const [slot1, setSlot1] = useState("❓");
     const [slot2, setSlot2] = useState("❓");
     const [slot3, setSlot3] = useState("❓");
-    
+
     const [isSpinning, setIsSpinning] = useState(false); // Estado para controlar si la máquina está girando
     const [results, setResults] = useState([]); // Estado para almacenar los resultados de los slots
     const spinDuration = 1500;
@@ -146,10 +151,9 @@ const SlotMachine = () => {
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 
-            <BrainCharacter spriteKey={characterSprite} hideDialogue={true}/>
-        </div>
+            <BrainCharacter spriteKey={characterSprite} hideDialogue={true} width={isMediumDevice ? '60%' : '100%'} />
+              
             <div className="slot-machine"> {/* Contenedor de los slots */}
 
                 {/* Tercer slot */}

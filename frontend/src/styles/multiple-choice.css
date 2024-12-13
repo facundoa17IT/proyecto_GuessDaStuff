@@ -24,7 +24,7 @@
 
 .optionText {
     color: var(--border-color);
-    font-size: clamp(1rem, 2vw, 1.2rem); /* Texto legible en cualquier pantalla */
+    font-size: clamp(1.15rem, 2vw, 1.2rem); /* Texto legible en cualquier pantalla */
 }
 
 .selectedOption {

@@ -330,6 +330,9 @@ fieldset {
   width: 400px;
   border: 3px double var(--link-color);
   border-radius: 8px;
+  line-height: 2.5rem;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .final-game-resume {
@@ -337,8 +340,13 @@ fieldset {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
+
+.final-game-resume h3 {
+  margin: 0;
+}
+
 
 /* Styles for screens up to 1366px wide */
 @media (max-width: 1366px) {
