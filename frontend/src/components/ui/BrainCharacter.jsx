@@ -64,7 +64,9 @@ const BrainCharacter = ({ rerenderKey, words = "", autoStart = false, hideDialog
                 </ScaleTransition>
             )}
             <HorizontalSlideTransition key={spriteKey}>
+              
                 <img className="brain-character" src={currentSprite} alt="Brain Character" style={{width: width}} />
+
             </HorizontalSlideTransition>
         </div>
     );

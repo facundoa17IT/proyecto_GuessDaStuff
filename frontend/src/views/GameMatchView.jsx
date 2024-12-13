@@ -538,7 +538,9 @@ const GameMatchView = () => {
         return (
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <div className='final-game-resume'>
+
                     <BrainCharacter spriteKey={currentCharacterSprite} hideDialogue={true} width={isMediumDevice ? '80%' : '100%'} />
+
                     <ScaleTransition>
                         <div className='final-game-resume-container' >
                             {finalGameResume}
@@ -568,6 +570,7 @@ const GameMatchView = () => {
                                     autoStart={isGameReady}
                                     words={characterDialogue}
                                     hideDialogue={!isGameReady}
+
                                 />
                             </div>
                             {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
