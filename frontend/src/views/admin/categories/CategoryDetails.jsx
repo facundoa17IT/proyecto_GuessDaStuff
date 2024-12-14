@@ -76,7 +76,7 @@ export const CategoryDetails = () => {
 
     const renderTitlesOfCategory = () => {
         return (
-            <div style={{ overflowY: 'auto', overflowX: 'hidden', border:'2px solid var(--border-color)', borderRadius:'8px' }}>
+            <div style={{ overflowY: 'auto', overflowX: 'hidden', border:'2px solid var(--border-color)', borderRadius:'8px', width:'98%' }}>
                 {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
                     <div key={gameModeKey}>
                         <h3 style={{ margin: '1rem', backgroundColor: 'var(--secondary-bg-color)', color: 'white' }}>{gameModeKey}</h3>
@@ -204,7 +204,7 @@ export const CategoryDetails = () => {
     };
 
     return (
-        <Modal onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
+        <Modal hideConfirmBtn={categoryTitles != null} onConfirm={onClose} showModal={true} closeModal={onClose} title="Detalles" innerOutline={true}>
             {modalContent}
         </Modal >
     );

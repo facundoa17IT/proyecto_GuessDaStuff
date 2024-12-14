@@ -33,12 +33,15 @@ const GameMatchView = () => {
     const navigate = useNavigate();
 
     const { implementationGameBody, setImplementationGameBody, setInvitation, setInvitationCount, unsubscribeFromGameSocket } = useContext(SocketContext);
-    const { gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer, hostWinsCount, setHostWinsCount, guestWinsCount, setGuestWinsCount, availibleHints, setAvailableHints } = useContext(LoadGameContext);
+    const { loadGameData, gameId, setGameId, initGameModes, setInitGameModes, isCorrectAnswer, setIsCorrectAnswer, answer, isMultiplayer, setIsMultiplayer, hostWinsCount, setHostWinsCount, guestWinsCount, setGuestWinsCount, availibleHints, setAvailableHints } = useContext(LoadGameContext);
     const { userId } = useRole();  // Access the setRole function from the context
 
     const [currentHeader, setCurrentHeader] = useState('');
     const [gameContent, setGameContent] = useState(null);
     const [currentGameIndex, setCurrentGameIndex] = useState(null);
+
+    const [currentCategoryName, setCurrentCategoryName] = useState(null);
+    const [currentCategoryIndex, setCurrentCategoryIndex] = useState(2);
 
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(GAME_SETTINGS.TIME);
@@ -125,6 +128,7 @@ const GameMatchView = () => {
     useEffect(() => {
         if (isGameReady) {
             defaultCharacterDialogue();
+            renderCategoryName(currentCategoryIndex);
             console.log("Inicia el juego!");
             setIsTimePlaying(true);
         }
@@ -151,6 +155,11 @@ const GameMatchView = () => {
             handleFishMultiplayerGame();
         }
     }, [finalWinnerId]);
+
+    const renderCategoryName = (index) => {
+        console.log(loadGameData);
+        setCurrentCategoryName(loadGameData.categories[index].name);
+    }
 
     const handleFishMultiplayerGame = async () => {
         try {
@@ -280,8 +289,16 @@ const GameMatchView = () => {
             setCurrentGameIndex(nextIndex);
             setIsTimePlaying(true);
             setCurrentCharacterSprite('idle');
+            setCurrentCategoryIndex(currentCategoryIndex - 1);
         }, 3000); // 3000 ms para esperar 3 segundos adicionales
     };
+
+    useEffect(() => {
+        if (currentCategoryIndex >= 0) {
+            console.log("CATEGORY INDEX -> " + currentCategoryIndex);
+            renderCategoryName(currentCategoryIndex);
+        }
+    }, [currentCategoryIndex]);
 
     const handleTimerComplete = async () => {
         if (isMultiplayer) {
@@ -560,10 +577,10 @@ const GameMatchView = () => {
                 hideRightPanel={isGameFinished || isDesignBreakpoint}
                 leftHeader={isDesignBreakpoint ? '' : 'Pistas'}
                 leftContent={
-                    <div style={{ paddingTop:'15px', display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ paddingTop: isMobile ? '0' : '15px' , display: 'flex', flexDirection: 'column', width: '100%' }}>
                         {isDesignBreakpoint && isMultiplayer && <MultiplayerHUD />}
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                            <div style={{ display: 'flex', flexGrow: '1', justifyContent: 'center', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', flexGrow: '1', justifyContent: 'center', alignItems: 'flex-end' }}>
                                 <BrainCharacter
                                     spriteKey={currentCharacterSprite}
                                     rerenderKey={characterDialogue}
@@ -575,6 +592,7 @@ const GameMatchView = () => {
                             </div>
                             {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
                                 <GameStats
+                                    currentcategoryName={currentCategoryName}
                                     currentGameIndex={currentGameIndex}
                                     hintCounter={hintCounter}
                                 />
@@ -599,6 +617,7 @@ const GameMatchView = () => {
                     <div style={{ maxWidth: '90%' }}>
                         {isMultiplayer && <MultiplayerHUD />}
                         <GameStats
+                            currentcategoryName={currentCategoryName}
                             currentGameIndex={currentGameIndex}
                             hintCounter={hintCounter}
                         />

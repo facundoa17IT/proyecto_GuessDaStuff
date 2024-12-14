@@ -1,10 +1,10 @@
 .brain-character {
     width: 100%;
     object-fit: contain;
+    aspect-ratio: 16 / 9;
 }
 
 .character-container {
-    margin: 1%;
     min-width: 300px;
 }
 
@@ -27,6 +27,7 @@
     position: relative;
     height: auto;
     overflow: hidden;
+    margin: 0 1rem 0;
 }
 
 .globe-hint-background {
@@ -42,10 +43,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
     color: black;
-    font-size: clamp(1.2rem, 2vw, 1.6rem); /* Texto legible en cualquier pantalla */
+    font-size: clamp(1rem, 4vw, 1.8rem); /* Texto legible en cualquier pantalla */
     text-align: center;
     font-weight: bold;
-    width: 70%;
+    width: 90%;
     z-index: 2;
     white-space: normal;
     overflow-wrap: break-word;
@@ -63,6 +64,11 @@
     z-index: 2;
 }
 
+@media (max-width: 1400px) {
+    .globe-hint-text {
+        font-size: clamp(1.2rem, 2vw, 1.6rem); /* Texto legible en cualquier pantalla */
+    }
+  }
 @media (max-width: 650px) {
     .character-container {
         min-width: 250px;

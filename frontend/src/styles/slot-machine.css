@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 3px;
+  gap: 15px;
 }
 
 .slot-machine {
@@ -70,9 +70,16 @@
   padding: 10px;
 }
 
-@media (max-width: 1366px) {
-  .results {
-    margin-top: 20px;
+@media ((min-width: 1350px) and (min-height: 700px)) {
+  .slot-machine-container {
+    gap: 35px;
+  }
+}
+
+
+@media ((min-width: 1800px)) {
+  .slot-machine-container {
+    gap: 55px;
   }
 }
 
@@ -86,6 +93,10 @@
 @media (max-width: 850px) {
   .centered-table {
     width: 85%; /* Ajusta el ancho de la tabla */
+  }
+
+  .slot-machine-container {
+    gap: 25px;
   }
 }
 

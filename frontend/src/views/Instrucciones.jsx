@@ -61,7 +61,6 @@ const Instrucciones = () => {
             leftHeader='Fase de Seleccion'
             leftContent={
                 <div className='info-container'>
-                    {/* <img className='img-col-1' src={Ruleta} alt="Brain Character" /> */}
                     <div className='img-container'>
                         <img
                             className='img-col-1' style={{ width: '100%' }}
@@ -103,7 +102,6 @@ const Instrucciones = () => {
             rightHeader='Partida'
             rightContent={
                 <div className='info-container'>
-                    {/* <img className='img-col-3' src={Brain} alt="Brain Character" /> */}
                     <div className='img-container'>
                         <img
                             className='img-col-3' style={{ width: '100%' }}

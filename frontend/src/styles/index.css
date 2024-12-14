@@ -307,6 +307,20 @@ fieldset {
 }
 
 /****/
+.game-stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 5px;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+
+.game-stats p{
+  margin: 0;
+}
 
 .border-container {
   display: flex;
@@ -319,7 +333,7 @@ fieldset {
   height: 100%;
 }
 
-.motion-div, .scale-transition-motion-div{
+.motion-div, .scale-transition-motion-div, .horizontal-slide-motion-div{
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -340,16 +354,21 @@ fieldset {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .final-game-resume h3 {
   margin: 0;
 }
 
+@media ((min-width: 1800px)) {
+  .final-game-resume {
+    gap: 55px;
+  }
+}
 
 /* Styles for screens up to 1366px wide */
-@media (max-width: 1366px) {
+@media (max-width: 1400px) {
 
   .list-external-footer {
     margin: 10px;
@@ -382,6 +401,8 @@ fieldset {
   }
 }
 
+
+/** Mobile **/
 @media (max-width: 400px) {
   .app-logo-vertical {
     background-image: url('../assets/GDS-brain-icon.png');

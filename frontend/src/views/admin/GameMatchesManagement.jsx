@@ -28,47 +28,62 @@ const GameMatchesManagement = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Fetch all categories
+    // Fetch all matches
     const fetchGameMatches = async () => {
         try {
             const responseIndividual = await axiosInstance.get('/game-modes/v1/allGamesIndividual', { requiresAuth: true });
             const responseMulti = await axiosInstance.get('/game-modes/v1/allGamesMultiplayer', { requiresAuth: true });
-
-            console.log(responseIndividual.data);
-
-            const FinalizadasIndividual = responseIndividual.data.Finalizadas;
-            const ActivasIndividual = responseIndividual.data.Activas;
-
-            const FinalizadasMulti = responseMulti.data.Finalizadas;
-            const ActivasMulti = responseMulti.data.Activas;
-
-            const finishIndividualModify = FinalizadasIndividual.map(partida => ({
-                ...partida, // Mantener los demás valores intactos
-                itemList: "Individual - " + partida.startDate // Reemplazar el id_game
-            }));
-
-            const activeIndividualModify = ActivasIndividual.map(partida => ({
-                ...partida, // Mantener los demás valores intactos
-                itemList: "Individual - " + partida.startDate // Reemplazar el id_game
-            }));
-
-            const finishMultiModify = FinalizadasMulti.map(partida => ({
-                ...partida, // Mantener los demás valores intactos
-                itemList: "Multiplayer - " + partida.startDate // Reemplazar el id_game
-            }));
-
-            const activeMultiModify = ActivasMulti.map(partida => ({
-                ...partida, // Mantener los demás valores intactos
-                itemList: "Multiplayer - " + partida.startDate // Reemplazar el id_game
-            }));
-
-
-            // Combina ambas listas en un solo array
-            setGameMatches([...finishIndividualModify, ...activeIndividualModify,...finishMultiModify,...activeMultiModify]);
+    
+            const FinalizadasIndividual = responseIndividual.data.Finalizadas || [];
+            const ActivasIndividual = responseIndividual.data.Activas || [];
+            const FinalizadasMulti = responseMulti.data.Finalizadas || [];
+            const ActivasMulti = responseMulti.data.Activas || [];
+    
+            // Aplica `.map()` solo si el arreglo tiene elementos
+            const finishIndividualModify = FinalizadasIndividual.length > 0 
+                ? FinalizadasIndividual.map(partida => ({
+                    ...partida,
+                    itemList: "Individual - " + partida.startDate
+                })) 
+                : [];
+            
+            const activeIndividualModify = ActivasIndividual.length > 0 
+                ? ActivasIndividual.map(partida => ({
+                    ...partida,
+                    itemList: "Individual - " + partida.startDate
+                })) 
+                : [];
+            
+            const finishMultiModify = FinalizadasMulti.length > 0 
+                ? FinalizadasMulti.map(partida => ({
+                    ...partida,
+                    itemList: "Multiplayer - " + partida.startDate
+                })) 
+                : [];
+            
+            const activeMultiModify = ActivasMulti.length > 0 
+                ? ActivasMulti.map(partida => ({
+                    ...partida,
+                    itemList: "Multiplayer - " + partida.startDate
+                })) 
+                : [];
+    
+            // Combina todas las listas en un solo array
+            const combinedMatches = [
+                ...finishIndividualModify,
+                ...activeIndividualModify,
+                ...finishMultiModify,
+                ...activeMultiModify
+            ];
+    
+            // Actualiza el estado solo si hay partidas
+            setGameMatches(combinedMatches);
+    
         } catch (error) {
-            console.error('Error fetching game matches:', error);
+            console.error('Error fetching game matches:', error.response);
         }
     };
+    
 
     useEffect(() => {
         fetchGameMatches();
