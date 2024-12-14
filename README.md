@@ -1,64 +1,129 @@
-# GuessDaStuff
+# Proyecto: GuessDaStuff - Tecnologo 2024
 
-Este proyecto es un juego multiplataforma que utiliza varias tecnologías modernas, incluyendo Java con Spring Boot, WebSocket, React Native para dispositivos móviles, React para la web, PostgreSQL para la base de datos, y se despliega en Railway y Vercel.
+GuessDaStuff! es un juego de adivinanzas multi-temáticas desarrollado como parte de la asignatura Proyecto de la carrera Tecnólogo en Informática. El proyecto busca fomentar el entretenimiento y la agilidad mental, ofreciendo modos de juego individuales y multijugador en plataformas web y móviles.
 
-## Estructura del Proyecto
+## Tabla de Contenidos
+1. [Descripción General](#descripción-general)
+2. [Estructura del Repositorio](#estructura-del-repositorio)
+3. [Requisitos Previos](#requisitos-previos)
+4. [Instrucciones de Instalación](#instrucciones-de-instalación)
+5. [Guía de Uso](#guía-de-uso)
+6. [Detalles Técnicos](#detalles-técnicos)
+7. [Contribuciones](#contribuciones)
+8. [Autores](#autores)
+9. [Licencia](#licencia)
 
-El proyecto está organizado en varias carpetas principales:
+---
 
-- **`backend/`**: Contiene el código fuente del backend en Spring Boot.
-- **`frontend/`**: Contiene el código fuente del frontend en React.
-- **`mobile/`**: Contiene el código fuente mobile en React Native.
-- **`database/`**: Contiene scripts y configuraciones para la base de datos.
-- **`deploy/`**: Contiene configuraciones y scripts para el despliegue en Railway y Vercel.
+## Descripción General
+GuessDaStuff! es una plataforma diseñada para ofrecer una experiencia atractiva y competitiva a través de adivinanzas en diversos temas. La aplicación soporta modos de juego individual y multijugador, con las siguientes características principales:
+- Experiencia interactiva y educativa.
+- Accesible en plataformas web y móviles.
+- Escalabilidad y mantenibilidad gracias al uso de tecnologías modernas.
 
-## Estructura de Ramas
+### Perfiles de Usuario
+1. **Administrador**: Gestión de usuarios, categorías y títulos; acceso exclusivo vía web.
+2. **Jugador**: Participación en partidas, acceso a rankings y estadísticas.
+3. **Invitado**: Acceso limitado para explorar la aplicación y jugar partidas individuales.
 
-El repositorio utiliza una estructura de ramas basada en Git Flow para gestionar el desarrollo y el mantenimiento del proyecto. A continuación se describe el propósito de cada rama:
+---
 
-### Ramas Principales
+## Estructura del Repositorio
+```plaintext
+/
+├── .vscode/          # Configuración del editor Visual Studio Code
+├── backend/          # Código fuente del backend
+├── frontend/         # Código fuente del frontend
+├── mobile/           # Aplicación móvil
+├── .gitignore        # Archivos y carpetas ignoradas por Git
+├── README.md         # Este archivo
+├── Railway.toml      # Configuración para Railway
+├── package-lock.json # Dependencias de Node.js
+```
 
-- **`main`**:
-  - **Propósito**: Esta es la rama principal que contiene el código en producción. Debe estar siempre en un estado estable y libre de errores críticos.
-  - **Uso**: Solo se fusionan en esta rama las características y correcciones que han sido completamente desarrolladas y probadas.
+### Descripción de las Carpetas
+- **backend**: Contiene la lógica del servidor utilizando Java y Spring Boot.
+- **frontend**: Código para la interfaz web desarrollado con React.
+- **mobile**: Aplicación móvil creada con React Native.
 
-- **`develop`**:
-  - **Propósito**: Rama de desarrollo donde se integran las nuevas características y se realizan pruebas.
-  - **Uso**: Fusiona aquí las ramas de características y correcciones. Esta rama puede ser desplegada en un entorno de staging para pruebas finales antes de pasar a producción.
+---
 
-### Ramas de Características
+## Requisitos Previos
+Antes de iniciar, asegúrate de tener instalados los siguientes programas y herramientas:
+- Node.js v20+
+- Java 17+
+- Android Studio (para desarrollo móvil)
+- PostgreSQL (para la base de datos)
+- Docker (opcional para desplegar el entorno completo)
 
-- **`feature/*`**:
-  - **Propósito**: Ramas dedicadas al desarrollo de nuevas funcionalidades o mejoras.
-  - **Ejemplos**: `feature/user-authentication`, `feature/game-logic`, `feature/chat-system`
-  - **Uso**: Crea una nueva rama `feature` para cada nueva funcionalidad. Después de completar el desarrollo y realizar pruebas, fusiona esta rama en `develop`.
+---
 
-### Ramas de Corrección de Errores
+## Instrucciones de Instalación
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/usuario/GuessDaStuff.git
+   cd GuessDaStuff
+   ```
 
-- **`bugfix/*`**:
-  - **Propósito**: Ramas para solucionar errores específicos que no son críticos y están en la rama `develop`.
-  - **Ejemplos**: `bugfix/fix-login-error`, `bugfix/correct-score-calculation`
-  - **Uso**: Crea una nueva rama `bugfix` para cada problema que necesites resolver. Después de solucionar el error, fusiona la rama `bugfix` en `develop`.
+2. Configura las dependencias del backend:
+   ```bash
+   cd backend
+   ./mvnw install
+   ./mvnw spring-boot:run
+   ```
 
-### Ramas de Corrección Urgente
+3. Configura las dependencias del frontend:
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
 
-- **`hotfix/*`**:
-  - **Propósito**: Ramas para solucionar problemas críticos en producción que requieren una corrección inmediata.
-  - **Ejemplos**: `hotfix/security-patch`, `hotfix/critical-bug`
-  - **Uso**: Crea una nueva rama `hotfix` a partir de `main` para corregir problemas urgentes. Después de solucionar el problema, fusiona la rama `hotfix` en `main` y `develop`.
+4. Configura la aplicación móvil:
+   ```bash
+   cd mobile
+   npm install
+   npx react-native run-android
+   ```
 
-### Ramas de Preparación de Versiones
+---
 
-- **`release/*`**:
-  - **Propósito**: Ramas para preparar nuevas versiones del software.
-  - **Ejemplos**: `release/v1.0.0`, `release/v1.1.0`
-  - **Uso**: Cuando estés listo para una nueva versión, crea una rama `release` a partir de `develop`. Utiliza esta rama para realizar pruebas finales y correcciones menores. Una vez lista, fusiónala en `main` y `develop`.
+## Guía de Uso
+1. Inicia el servidor backend para manejar las APIs y la lógica del negocio.
+2. Inicia el frontend para la aplicación web.
+3. Inicia la aplicación móvil en un emulador o dispositivo físico.
+4. Regístrate como usuario o inicia sesión para acceder a las funcionalidades completas.
 
-## Despliegue
+---
 
-- **Railway**: Utilizado para desplegar el backend en Spring Boot y la base de datos PostgreSQL.
-- **Vercel**: Utilizado para desplegar la aplicación web en React.
+## Detalles Técnicos
+- **Tecnologías utilizadas**:
+  - Backend: Java, Spring Boot, PostgreSQL.
+  - Frontend: React, WebSockets.
+  - Móvil: React Native.
+- **Arquitectura**:
+  - Basada en una arquitectura en capas (presentación, negocio, datos).
+  - Despliegue en Railway para backend y base de datos.
+  - Almacenamiento de imágenes de perfil en Cloudinary.
+- **Base de datos**: PostgreSQL.
 
-## Contribuir
+---
 
-Para contribuir al proyecto, por favor sigue el flujo de trabajo de ramas descrito anteriormente. Crea ramas `feature`, `bugfix`, `hotfix` o `release` según corresponda, y realiza pull requests para fusionar tus cambios.
+## Contribuciones
+Este repositorio es el resultado de un proyecto de tesis, pero estamos abiertos a recibir sugerencias o mejoras. Si deseas contribuir, sigue estos pasos:
+1. Haz un fork del repositorio.
+2. Crea una nueva rama para tus cambios (`git checkout -b feature/nueva-funcion`).
+3. Realiza un pull request.
+
+---
+
+## Autores
+- Mateo Tambasco 
+- Agustín López 
+- Facundo Aparicio
+- Nicolás Lepore
+- Leandro Rodríguez
+- Santiago Pavan 
+- Santiago Tutzo
+- Angelo Giroldi
+
