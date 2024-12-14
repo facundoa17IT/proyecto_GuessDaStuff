@@ -120,6 +120,7 @@ const SlotMachine = () => {
                 mode: finalSlot3,
                 id: loadGameData.categories[2].id
             };
+            //const categories = [loadGameData.categories[0].name, loadGameData.categories[1].name, loadGameData.categories[2].name]
 
             // Establecer los resultados en el estado
             const resultsArray = [result1, result2, result3];

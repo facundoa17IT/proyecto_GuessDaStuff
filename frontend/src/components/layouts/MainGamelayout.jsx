@@ -79,7 +79,7 @@ const MainGameLayout = ({
             ref={containerRef}>
             {!hideLeftPanel && (
                 <div className="left-div">
-                    <h1>{leftHeader}</h1>
+                    {leftHeader != '' && <h1>{leftHeader}</h1>}
                     {leftContent}
                 </div>
             )}
