@@ -126,7 +126,7 @@ const UsersManagment = () => {
                 }
             />
 
-            <Modal showModal={isModalOpen} onConfirm={handleAdminRegister} closeModal={() => setIsModalOpen(!isModalOpen)} title="Registrar Admin">
+            <Modal showModal={isModalOpen} onConfirm={handleAdminRegister} closeModal={() => setIsModalOpen(!isModalOpen)} title="Registrar Admin" innerOutline={true}>
                 <FaTools fontSize={50} style={{ margin: '25px' }} />
                 <input type="text" placeholder="Usuario" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />

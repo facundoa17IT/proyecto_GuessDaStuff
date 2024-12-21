@@ -150,7 +150,10 @@ export const AddTitle = () => {
 
     const renderAddTitleToCategory = () => {
         return (
-            <div style={{ height: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
+            <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
+                <div style={{ margin: '1rem', padding: '15px', boxSizing: 'border-box', border: '3px double var(--border-color)', borderRadius: '8px' }}>
+                    <small style={{ color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Agrega el modo de juego seleccionado a una categoria especifica.</small>
+                </div>
                 {!schema && <div>
                     {/* Menú desplegable */}
                     <h2>Categoria</h2>
@@ -210,22 +213,22 @@ export const AddTitle = () => {
 
     const renderAddIndividualTitleForm = () => {
         return (
-            <>
+            <div style={{height:'100%'}}>
                 {renderCategoryAndGameModeName()}
-                <small style={{ margin: '0.5rem', color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Completa todos los campos y presiona el boton de Submit.</small>
-                <div style={{ height: '250px', overflowY: 'auto', overflowX: 'hidden', width: '100%' }}>
-                    <Form
-                        className='form'
-                        schema={schema}
-                        uiSchema={uiSchema}
-                        formData={formData}
-                        onChange={(e) => setFormData(e.formData)} // Update local state on change
-                        onSubmit={handleAddGameModoToCategory}
-                        validator={validator}
-                    >
-                    </Form>
+                <div style={{ margin: '1rem', padding: '15px', boxSizing: 'border-box', border: '3px double var(--border-color)', borderRadius: '8px' }}>
+                    <small style={{ color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Completa todos los campos y presiona el boton de Submit.</small>
                 </div>
-            </>
+                <Form
+                    className='form'
+                    schema={schema}
+                    uiSchema={uiSchema}
+                    formData={formData}
+                    onChange={(e) => setFormData(e.formData)} // Update local state on change
+                    onSubmit={handleAddGameModoToCategory}
+                    validator={validator}
+                >
+                </Form>
+            </div>
         );
     }
 
@@ -283,10 +286,10 @@ export const AddTitle = () => {
         return (
             <div style={{ height: '100%', width: '100%' }}>
                 {renderCategoryAndGameModeName()}
-                <div style={{ margin: '1rem', padding: '25px', boxSizing: 'border-box', border: '2px solid var(--border-color)', borderRadius: '8px' }}>
+                <div style={{ margin: '1rem', padding: '15px', boxSizing: 'border-box', border: '3px double var(--border-color)', borderRadius: '8px' }}>
                     <small style={{ color: 'var(--link-color)' }}><BsInfoCircle fontSize={15} style={{ marginRight: '5px' }} />Seleccione un archivo en formato csv o xlsx</small>
-                    <input style={{ margin: '0.5rem' }} type="file" onChange={handleFileChange} />
                 </div>
+                <input style={{ margin: '0.5rem' }} type="file" onChange={handleFileChange} />
                 <h3>Columnas requeridas</h3>
                 {gameModeInfo}
             </div>
@@ -304,20 +307,19 @@ export const AddTitle = () => {
         }
 
         return (
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%'}}>
                 {selectedItem && selectedCategory ? (
                     <h3 style={{
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        margin: '0',
-                        color: 'var(--link-color)'
+                        margin: '0'
                     }}
                     >
                         {selectedItem.name}
                         <span style={{ color: 'var(--text-color)',display: 'flex',
                         justifyContent: 'center',
-                        alignItems: 'center', }}><FaArrowRightLong fontSize={20} style={{ margin: '8px' }} /></span>
+                        alignItems: 'center', }}><FaArrowRightLong fontSize={20} style={{ margin: '8px', color: 'var(--link-color)' }} /></span>
                         {selectedCategory.name}
                     </h3>
                 ) : (
@@ -328,7 +330,7 @@ export const AddTitle = () => {
     }
 
     return (
-        <Modal hideConfirmBtn={selectedAddType === "Individual"} onConfirm={selectedAddType === "Masiva" ? handleUpload : onClose} showModal={true} closeModal={onClose} title={"Agregar Titulo"}>
+        <Modal hideConfirmBtn={selectedAddType === "Individual"} onConfirm={selectedAddType === "Masiva" ? handleUpload : onClose} showModal={true} closeModal={onClose} title={""}>
             {modalContent}
         </Modal>
     );

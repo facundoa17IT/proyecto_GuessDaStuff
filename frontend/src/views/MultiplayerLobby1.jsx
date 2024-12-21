@@ -207,7 +207,7 @@ const MultiplayerLobby = () => {
                         listId={"lobbyList"}
                         listContent={connectedUsers}
                         getItemLabel={getPlayerName}
-                        buttons={['inviteBtn', 'infoBtn']}
+                        buttons={['inviteBtn']}
                         onButtonInteraction={handleLobbyListInteraction}
                     />
                 }

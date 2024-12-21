@@ -1,15 +1,20 @@
 import React from 'react';
 
-/ Assets /
+/** Assets **/
 import AppLogo from '../ui/AppLogo'
 import { GiCancel } from "react-icons/gi";
 import { FaRegCheckCircle } from "react-icons/fa";
 
-/ Style /
+/** Style **/
 import '../../styles/modal.css'
 
-const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConfirm, closeModal, title, children }) => {
+const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConfirm, closeModal, title, children, innerOutline = false }) => {
     if (!showModal) return null;
+
+    // Estilo inline basado en innerOutline
+    const modalBodyStyle = innerOutline
+        ? { border: '2px solid var(--border-color)', borderRadius: '8px' }
+        : { border: 'none' };
 
     return (
         <div className="modal-overlay">
@@ -20,7 +25,7 @@ const Modal = ({ hideConfirmBtn = false, hideCloseBtn = false, showModal, onConf
                         <h2 style={{ marginTop: '5px' }}>{title}</h2>
                     </div>}
                 </div>
-                <div className="modal-body">
+                <div className="modal-body" style={modalBodyStyle}>
                     {children}
                 </div>
                 <div className='modal-footer'>

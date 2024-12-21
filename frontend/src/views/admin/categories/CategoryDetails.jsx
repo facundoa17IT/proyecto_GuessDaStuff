@@ -76,11 +76,11 @@ export const CategoryDetails = () => {
 
     const renderTitlesOfCategory = () => {
         return (
-            <div style={{ overflowY: 'auto', overflowX: 'hidden', border:'2px solid var(--border-color)', borderRadius:'8px', width:'98%' }}>
+            <div style={{ height:'100%', width:'98%' }}>
                 {categoryTitles && Object.keys(categoryTitles.titlesOfCategory).map((gameModeKey) => (
                     <div key={gameModeKey}>
                         <h3 style={{ margin: '1rem', backgroundColor: 'var(--secondary-bg-color)', color: 'white' }}>{gameModeKey}</h3>
-                        <ul style={{ textAlign: 'left' }}>
+                        <ul style={{ textAlign: 'left', paddingLeft:'25px' }}>
                             {categoryTitles.titlesOfCategory[gameModeKey].map((item, index) => (
                                 <li
                                     key={item.id}
@@ -152,18 +152,16 @@ export const CategoryDetails = () => {
 
     const renderEditTitleForm = () => {
         return (
-            <div>
-                <Form
-                    className='form'
-                    schema={schema}
-                    uiSchema={uiSchema}
-                    formData={formData}
-                    onChange={(e) => setFormData(e.formData)} // Update local state on change
-                    onSubmit={handleEditTitle}
-                    validator={validator}
-                >
-                </Form>
-            </div>
+            <Form
+                className='json-form'
+                schema={schema}
+                uiSchema={uiSchema}
+                formData={formData}
+                onChange={(e) => setFormData(e.formData)} // Update local state on change
+                onSubmit={handleEditTitle}
+                validator={validator}
+            >
+            </Form>
         );
     }
 

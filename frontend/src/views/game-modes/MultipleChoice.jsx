@@ -21,7 +21,7 @@ import "../../styles/multiple-choice.css"
 import '../../styles/game-mode.css';
 
 // Componente de Multiple Choice
-const MultipleChoice = ({ MCinfo, showNextHint,handleWrongAnswer }) => {
+const MultipleChoice = ({ MCinfo, showNextHint, handleWrongAnswer }) => {
     const { setAnswer, setIsCorrectAnswer, availableHints } = useContext(LoadGameContext);
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -76,38 +76,37 @@ const MultipleChoice = ({ MCinfo, showNextHint,handleWrongAnswer }) => {
                 </ScaleTransition>
             </div>
 
-            <div className='optionsWrapper'>
-                <div className="optionsContainer">
-                    {shuffledOptions.map((option, index) => (
-                        <button
-                            key={index}
-                            className={
-                                `optionButton ${selectedAnswer === option ? 'selectedOption' : ''} 
+            <div className="optionsContainer">
+                {shuffledOptions.map((option, index) => (
+                    <button
+                        key={index}
+                        className={
+                            `optionButton ${selectedAnswer === option ? 'selectedOption' : ''} 
                                 ${confirmedAnswer && option === randomCorrectWord ? 'correctOption' : ''} 
                                 ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOption' : ''}`
-                            }
-                            onClick={() => setSelectedAnswer(option)}
-                            disabled={confirmedAnswer !== null}
-                        >
-                            <span
-                                className={
-                                    `optionText ${selectedAnswer === option ? 'selectedOptionText' : ''} 
+                        }
+                        onClick={() => setSelectedAnswer(option)}
+                        disabled={confirmedAnswer !== null}
+                    >
+                        <span
+                            className={
+                                `optionText ${selectedAnswer === option ? 'selectedOptionText' : ''} 
                                     ${confirmedAnswer && option === randomCorrectWord ? 'correctOptionText' : ''} 
                                     ${confirmedAnswer && selectedAnswer === option && selectedAnswer !== randomCorrectWord ? 'incorrectOptionText' : ''}`
-                                }
-                            >
-                                <ScaleTransition>
-                                    {option}
-                                </ScaleTransition>
-                            </span>
-                        </button>
-                    ))}
-                </div>
+                            }
+                        >
+                            <ScaleTransition>
+                                {option}
+                            </ScaleTransition>
+                        </span>
+                    </button>
+                ))}
             </div>
 
             <GameButtonRow
                 handleHint={showNextHint}
                 handleVerify={confirmAnswer}
+                hideReset={true}
             />
         </div>
     );

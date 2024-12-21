@@ -69,6 +69,8 @@ const GameMatchView = () => {
     const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
     const userObj = JSON.parse(localStorage.getItem("userObj")) || "Undefined";
 
+    const categories = JSON.parse(localStorage.getItem("categories") || []);
+
     const isDesignBreakpoint = useMediaQuery({ query: '(max-width: 1150px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 535px)' });
     const isMediumDevice = useMediaQuery({ query: '(min-width: 450px) and (max-height: 700px)' });
@@ -128,9 +130,9 @@ const GameMatchView = () => {
     useEffect(() => {
         if (isGameReady) {
             defaultCharacterDialogue();
-            renderCategoryName(currentCategoryIndex);
             console.log("Inicia el juego!");
             setIsTimePlaying(true);
+            renderCategoryName(currentCategoryIndex);
         }
     }, [isGameReady]);
 
@@ -157,8 +159,7 @@ const GameMatchView = () => {
     }, [finalWinnerId]);
 
     const renderCategoryName = (index) => {
-        console.log(loadGameData);
-        setCurrentCategoryName(loadGameData.categories[index].name);
+        setCurrentCategoryName(categories[index]);
     }
 
     const handleFishMultiplayerGame = async () => {
@@ -393,50 +394,41 @@ const GameMatchView = () => {
         const currentGameKey = gameKeys[currentGameIndex];
         const gameInfo = initGameModes[currentGameKey]?.infoGame[0]; // Asegúrate de que gameInfo exista
 
-        if (!isGameFinished) {
-            if (gameInfo) {
-                const { id, idModeGame } = gameInfo;
+        if (gameInfo) {
+            const { id, idModeGame } = gameInfo;
 
-                let GameComponent;
+            let GameComponent;
 
-                setCurrentGameModeId(idModeGame);
-                setCurrentGameModeNumericId(id);
+            setCurrentGameModeId(idModeGame);
+            setCurrentGameModeNumericId(id);
 
-                // Cambiamos el componente según el modo de juego
-                switch (idModeGame) {
-                    case 'OW':
-                        setCurrentHeader("🔁 Ordena la Palabra");
-                        GameComponent = <OrderWord OWinfo={gameInfo} showNextHint={showNextHint} />;
-                        break;
-                    case 'GP':
-                        setCurrentHeader("🔤 Adivina la Frase");
-                        GameComponent = <GuessPhrase GPinfo={gameInfo} showNextHint={showNextHint} />;
-                        break;
-                    case 'MC':
-                        setCurrentHeader("🔢 Multiple Opcion");
-                        GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} handleWrongAnswer={handleNextGameMode} />;
-                        break;
-                    default:
-                        GameComponent = <p>Modo de juego no reconocido.</p>;
-                }
-
-                return (
-                    <div>
-                        {GameComponent}
-                    </div>
-                );
-            } else {
-                return (
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-                        <h1>No hay contenido disponible</h1>
-                        <ScaleLoader color="var(--link-color)" height={30} width={15} loading={true} />
-                    </div>
-                );
+            // Cambiamos el componente según el modo de juego
+            switch (idModeGame) {
+                case 'OW':
+                    setCurrentHeader("🔁 Ordena la Palabra");
+                    GameComponent = <OrderWord OWinfo={gameInfo} showNextHint={showNextHint} />;
+                    break;
+                case 'GP':
+                    setCurrentHeader("🔤 Adivina la Frase");
+                    GameComponent = <GuessPhrase GPinfo={gameInfo} showNextHint={showNextHint} />;
+                    break;
+                case 'MC':
+                    setCurrentHeader("🔢 Multiple Opcion");
+                    GameComponent = <MultipleChoice MCinfo={gameInfo} showNextHint={showNextHint} handleWrongAnswer={handleNextGameMode} />;
+                    break;
+                default:
+                    GameComponent = <p>Modo de juego no reconocido.</p>;
             }
-        }
-        else {
+
             return (
                 <div>
+                    {GameComponent}
+                </div>
+            );
+        } else {
+            return (
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                    <h1>No hay contenido disponible</h1>
                     <ScaleLoader color="var(--link-color)" height={30} width={15} loading={true} />
                 </div>
             );
@@ -572,12 +564,11 @@ const GameMatchView = () => {
     return (
         <div className='content-wrapper'>
             <MainGameLayout
-                canGoBack={false}
                 hideLeftPanel={isGameFinished}
                 hideRightPanel={isGameFinished || isDesignBreakpoint}
                 leftHeader={isDesignBreakpoint ? '' : 'Pistas'}
                 leftContent={
-                    <div style={{ paddingTop: isMobile ? '0' : '15px' , display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ paddingTop: isMobile ? '0' : '15px' , display: 'flex', justifyContent:'center', alignItems:'center', flexDirection: 'column', width: '100%' }}>
                         {isDesignBreakpoint && isMultiplayer && <MultiplayerHUD />}
                         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
                             <div style={{ display: 'flex', flexGrow: '1', justifyContent: 'center', alignItems: 'flex-end' }}>
@@ -592,7 +583,6 @@ const GameMatchView = () => {
                             </div>
                             {isDesignBreakpoint && <div style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}>
                                 <GameStats
-                                    currentcategoryName={currentCategoryName}
                                     currentGameIndex={currentGameIndex}
                                     hintCounter={hintCounter}
                                 />
@@ -611,13 +601,17 @@ const GameMatchView = () => {
                     </div>
                 }
                 middleHeader={currentHeader}
-                middleContent={gameContent}
+                middleContent={
+                    <>
+                        {!isGameFinished && <h2 style={{margin:'5px'}}>&#171; {currentCategoryName} &#187;</h2>}
+                        {gameContent}
+                    </>
+                }
                 rightHeader='Stats'
                 rightContent={
-                    <div style={{ maxWidth: '90%' }}>
+                    <div style={{ width:'100%', display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center' }}>
                         {isMultiplayer && <MultiplayerHUD />}
                         <GameStats
-                            currentcategoryName={currentCategoryName}
                             currentGameIndex={currentGameIndex}
                             hintCounter={hintCounter}
                         />

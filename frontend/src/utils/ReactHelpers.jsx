@@ -2,7 +2,7 @@ import React from "react";
 
 export const renderListItemDetails = (selectedItem) => {
 	return (
-		<div style={{padding:'0.5rem', boxSizing:'border-box', border:'2px solid var(--border-color)', borderRadius:'8px', width:'100%'}}>
+		<div style={{width:'100%', height:'100%', overflowY:'auto'}}>
 			{selectedItem && (
 				<ul style={{ textAlign: "left" }}>
 					{Object.entries(selectedItem).map(([key, value]) => (
