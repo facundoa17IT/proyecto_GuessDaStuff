@@ -134,7 +134,7 @@ h1 {
 }
 
 h2 {
-  font-size: calc(1em + 0.5vw);
+  font-size: calc(1.2em + 0.5vw);
   line-height: 1.1;
   margin: 30px 0px 30px 0px;
 }
@@ -167,11 +167,7 @@ textarea {
   padding: 20px;
 }
 
-/* input[type="file"] {
-  display: none;
-} */
-
-.custom-file-upload {
+/* .custom-file-upload {
   margin-left: 10px;
   padding: 0px;
   border-radius: 8px;
@@ -182,13 +178,13 @@ textarea {
   font-weight: bold;
   text-align: center;
   cursor: pointer;
-}
+} */
 
 input #file-upload-button {
   background: var(--secondary-bg-color) !important;
 }
 
-button {
+button, .custom-file-upload {
   color: var(--secondary-text-color);
   margin: 5px;
   border-radius: 8px;
@@ -286,27 +282,43 @@ button:disabled:not(.optionButton) {
   justify-content: center !important;
 }
 
-/** JSON Form**/
+/***** JSON Form *****/
+
 fieldset {
   border: none;
   border-radius: 8px;
-  width: 90%;
+  width: 95%;
+}
+.json-form {
+  height: 100%;
+  width: 100%;
 }
 
+.control-label {
+  font-weight: bold;
+  color: var(--link-color);
+}
+
+/** Input Fields **/
 .form-control {
   width: 250px !important;
   font-size: medium !important;
-  margin-bottom: 15px !important;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin: 15px !important;
 }
 
-.form-group {
+/* .form-group {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
+} */
 
-/****/
+/*****/
+
 .game-stats {
   display: flex;
   flex-direction: column;

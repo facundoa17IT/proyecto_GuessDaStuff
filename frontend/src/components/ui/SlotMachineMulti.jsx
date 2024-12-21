@@ -1,6 +1,7 @@
 /** React **/
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import BrainCharacter from './BrainCharacter';
 
@@ -18,6 +19,8 @@ import '../../styles/slot-machine.css';
 const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGame }) => {
     const navigate = useNavigate();
 
+    const isMediumDevice = useMediaQuery({ query: '(min-width: 450px) and (max-height: 700px)' });
+    
     const { userId } = useRole();  // Access the setRole function from the context
 
     const { usernameHost } = useContext(SocketContext);
@@ -113,6 +116,9 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
                 id: ruletaGame.categories[2].id
             };
 
+            const categories = [result1.category, result2.category, result3.category];
+            localStorage.setItem("categories", JSON.stringify(categories));
+
             // Establecer los resultados en el estado
             const resultsArray = [result1, result2, result3];
             setResults(resultsArray);
@@ -142,7 +148,7 @@ const SlotMachineMulti = ({ ruletaGame, finalSlot1, finalSlot2, finalSlot3, idGa
 
     return (
         <div className="slot-machine-container"> {/* Contenedor principal de la máquina tragamonedas */}
-            <BrainCharacter spriteKey={characterSprite} hideDialogue={true}/>
+            <BrainCharacter spriteKey={characterSprite} hideDialogue={true} width={isMediumDevice ? '60%' : '100%'}/>
             <div className="slot-machine"> {/* Contenedor de los slots */}
 
                 {/* Tercer slot */}

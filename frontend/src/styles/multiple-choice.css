@@ -63,7 +63,7 @@
 @media (max-width: 670px) {
     .optionsContainer {
         flex-direction: column;
-        width: 85%;
+        width: 100%;
     }
 
 }

@@ -1,11 +1,9 @@
 import React from 'react';
 import { GAME_SETTINGS } from '../../utils/constants';
 
-const GameStats = ({ currentGameIndex, hintCounter, currentcategoryName }) => {
+const GameStats = ({ currentGameIndex, hintCounter }) => {
     return (
         <div className='game-stats'>
-            <p><b style={{ color: 'var(--link-color)' }}>Categoria</b></p>
-            <p><b>{currentcategoryName}</b></p>
             <p><b style={{ color: 'var(--link-color)' }}>Ronda</b></p>
             <p><b>{currentGameIndex + 1}/{GAME_SETTINGS.MAX_ROUNDS}</b></p>
             <p><b style={{ color: 'var(--link-color)' }}>Pistas disponibles</b></p>

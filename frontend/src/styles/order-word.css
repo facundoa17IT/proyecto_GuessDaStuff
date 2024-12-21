@@ -44,7 +44,8 @@
     border: none;
   }
 
-  @media (max-width: 400px) {
+  /** Mobile **/
+  @media (max-width: 450px) {
     .selectedOrderContainer {
       margin-top: 20px;
       width: 85%;
@@ -53,6 +54,6 @@
     
     .buttonContainer {
       margin-top: 20px;
-      width:85%;
+      width: 100%;
     }
   }

@@ -1,4 +1,7 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
+
+/** Hooks **/
+import useResponsiveBreakpoint from '../../hooks/useResponsiveBreakpoint';
 
 /** Assets **/
 import { FaRegCheckCircle } from "react-icons/fa";
@@ -7,26 +10,28 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 
 import { LoadGameContext } from '../../contextAPI/LoadGameContext';
 
-const GameButtonRow = ({handleHint, handleReset, handleVerify}) => {
+const GameButtonRow = ({ handleHint, handleReset, handleVerify, hideReset = false }) => {
     const { availableHints } = useContext(LoadGameContext);
+
+    const { isDesignBreakpoint, isMobile, isMediumDevice } = useResponsiveBreakpoint();
 
     return (
         <div className="buttonRow">
-            <button
+            {!hideReset && <button
                 className="resetButton"
                 onClick={handleReset}
             >
                 <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <IoMdCloseCircleOutline style={{ marginRight: "5px" }} name="help-outline" size={30} />Borrar
+                    <IoMdCloseCircleOutline style={{ marginRight: "5px" }} name="help-outline" size={30} />{isMobile ? "" : "Borrar"}
                 </span>
-            </button>
+            </button>}
 
             <button
                 onClick={handleHint}
                 disabled={!availableHints}
             >
                 <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <FaRegQuestionCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Ayuda
+                    <FaRegQuestionCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />{isMobile ? "" : "Ayuda"}
                 </span>
             </button>
 
@@ -35,7 +40,7 @@ const GameButtonRow = ({handleHint, handleReset, handleVerify}) => {
                 onClick={handleVerify}
             >
                 <span style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />Verificar
+                    <FaRegCheckCircle style={{ marginRight: "5px" }} name="help-outline" size={30} />{isMobile ? "" : "Verificar"}
                 </span>
             </button>
         </div>

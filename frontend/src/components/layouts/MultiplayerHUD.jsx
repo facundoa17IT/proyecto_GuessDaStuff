@@ -8,7 +8,7 @@ const MultiplayerHUD = ({ currentScore = 0 }) => {
     const guest = JSON.parse(localStorage.getItem("guest")) || "Undefined";
 
     return (
-        <div className='player-hud' style={{ display: 'flex', textAlign: 'center', justifyContent: 'center', alignItems: 'center' }}>
+        <div className='player-hud'>
             <div style={{ display: 'flex' }}>
                 <FaUserCircle style={{ marginRight: '10px', fontSize: '35px' }} />
             </div>

@@ -1,6 +1,11 @@
 .player-hud {
-    border: 2px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 3px double var(--link-color);
     border-radius: 8px;
     padding: 15px;
-    width: 95%;
+    width: 100%;
+    margin: 5px;
 }
